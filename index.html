@@ -375,6 +375,7 @@
             align-items: center; justify-content: center; padding: 24px; }
         .hof-modal-box {
             position: relative; width: 100%; max-width: 540px;
+            max-height: 88vh;
             background: rgba(11,30,61,0.97);
             border: 1px solid rgba(223,180,75,0.3); border-radius: 20px;
             box-shadow: 0 25px 80px rgba(0,0,0,0.8), 0 0 60px rgba(223,180,75,0.1);
@@ -388,7 +389,7 @@
         .hof-modal-sub { color: #a1b7d6; font-size: 12px; margin: 0; }
         .hof-close-btn { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #94a3b8; cursor: pointer; font-size: 14px; padding: 0; width: auto; transition: all 0.2s; }
         .hof-close-btn:hover { background: rgba(255,255,255,0.12); color: #fff; transform: none; box-shadow: none; }
-        .hof-modal-list { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 8px; }
+        .hof-modal-list { padding: 0 20px 20px 20px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex: 1; min-height: 0; }
         .hof-modal-row {
             display: flex; align-items: center; gap: 12px;
             padding: 10px 12px; border-radius: 14px; cursor: default;
@@ -707,6 +708,81 @@
 .ad-button:active { transform: translateY(2px); box-shadow: 0 2px 0 #b8860b; }
 
 .ad-hidden { transform: scale(0) rotate(20deg); opacity: 0; pointer-events: none; }   
+
+        /* ===================================================
+           MOBILE RESPONSIVE FIXES
+           =================================================== */
+
+        /* --- ตารางคะแนน: เลื่อนซ้าย-ขวาได้บนมือถือ --- */
+        .standings-scroll-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .standings-scroll-wrap table { min-width: 480px; }
+
+        @media (max-width: 768px) {
+            body { padding: 10px 10px 60px 10px; }
+
+            /* หัวข้อหลัก */
+            h1 { font-size: 26px; letter-spacing: 1px; }
+            .fc-logo-badge { font-size: 11px; }
+            .fc-header { padding: 20px 0 15px 0; }
+            .fc-card { padding: 16px 12px; }
+            h2 { font-size: 16px; }
+
+            /* ตาราง standings: ให้เลื่อนซ้าย-ขวาได้ */
+            #standings-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 460px; }
+            th, td { padding: 10px 7px; font-size: 12px; }
+
+            /* Match row: ทำให้พอดีจอมือถือ */
+            .match-row { padding: 10px 6px; gap: 4px; }
+            .match-team { width: 37%; gap: 6px; padding: 4px; }
+            .match-score { width: 26%; }
+            .match-team .t-name { display: none; }
+            .match-team .p-name { font-size: 12px; line-height: 1.2; }
+
+            /* โลโก้ทีมในตารางแข่ง */
+            #fixtures-area .match-team img.club-img { width: 36px; height: 36px; }
+            #fixtures-area .match-team img.flag-img { width: 36px; height: 24px; }
+            img.club-img { width: 32px; height: 32px; }
+            img.flag-img { width: 36px; height: 24px; }
+
+            /* กล่องสกอร์ */
+            .score-view-box { font-size: 16px; padding: 5px 10px; min-width: 72px; }
+            .score-input { width: 50px; height: 38px; font-size: 17px; }
+            .match-score .btn-secondary { font-size: 11px; padding: 5px 8px; }
+
+            /* ชื่อผู้เล่นในตารางคะแนน */
+            .p-name { font-size: 14px; }
+            .player-team-box { gap: 10px; }
+
+            /* ปุ่ม */
+            button { font-size: 13px; padding: 12px 16px; }
+            .btn-container { flex-direction: column; }
+
+            /* HOF modal บนมือถือ: แสดงจากล่างขึ้น */
+            #hof-modal { padding: 0; align-items: flex-end; }
+            .hof-modal-box {
+                max-width: 100%;
+                max-height: 90vh;
+                border-radius: 20px 20px 0 0;
+            }
+
+            /* Round title */
+            .round-title { font-size: 12px; padding: 10px 12px; }
+
+            /* Ad banner: ซ่อนบนมือถือ */
+            #friend-ad-banner { display: none !important; }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 20px; }
+            .match-team { width: 36%; gap: 4px; }
+            .match-score { width: 28%; }
+            #fixtures-area .match-team img.club-img { width: 28px; height: 28px; }
+            #fixtures-area .match-team img.flag-img { width: 28px; height: 19px; }
+            .match-team .p-name { font-size: 11px; }
+            .score-view-box { font-size: 14px; padding: 5px 6px; min-width: 58px; }
+            .score-input { width: 42px; height: 34px; font-size: 15px; }
+            .fc-card { padding: 12px 10px; }
+        }
     </style>
 </head>
 <body>
@@ -880,6 +956,7 @@
             </div>
 
             <h2 class="title-standings">📊 TOURNAMENT STANDINGS</h2>
+            <div style="overflow-x:auto; -webkit-overflow-scrolling:touch;">
             <table id="standings-table">
                 <thead>
                     <tr>
@@ -897,6 +974,7 @@
                 </thead>
                 <tbody></tbody>
             </table>
+            </div>
 
             <div id="cup-bracket-area" style="display:none;" class="cup-bracket-section"></div>
 
@@ -1076,6 +1154,11 @@ const ADMIN_PASS = "sffc26";
 // ===== ใส่ imgbb API Key ของคุณตรงนี้ =====
 // สมัครฟรีที่ https://api.imgbb.com แล้วกด "Get API Key"
 const IMGBB_API_KEY = "28a0c276f498b1564af7d2593f320d96";
+
+// ===== ลิงก์เดียว: ใส่ ID ทัวร์นาเมนต์ของคุณตรงนี้ =====
+// วิธีหา ID: เปิดเว็บแล้วดูที่ URL บาร์ ส่วน ?id=XXXXXXXX
+// เมื่อใส่แล้ว ลิงก์ GitHub Pages ปกติจะโหลดทัวร์นาเมนต์นี้เสมอ
+const FIXED_BIN_ID = "6a298092f5f4af5e29d8e8c4";
 
 const clubMap = {
     'mancity': 'https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg', 'manchestercity': 'https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg',
@@ -3171,11 +3254,14 @@ function resetLeagueHard() {
 
 function userCopyShareLink() {
     let linkPath = document.getElementById("spectator-link-path").textContent;
+    if (!linkPath && FIXED_BIN_ID) {
+        linkPath = window.location.origin + window.location.pathname;
+    }
     if (linkPath) {
         navigator.clipboard.writeText(linkPath).then(() => {
             alert("📤 คัดลอกลิงก์หน้าทัวร์นาเมนต์เรียบร้อยแล้ว! สามารถนำไปแชร์ต่อให้เพื่อนๆ สมัครเข้าร่วมได้เลยครับ");
         }).catch(() => {
-            alert("❌ ไม่สามารถคัดลอกลิงก์อัตโนมัติได้ กรุณาก๊อปปี้จากช่อง URL บนบราวเซอร์ของคุณแทน");
+            prompt("📋 คัดลอกลิงก์นี้ไปแชร์ให้เพื่อน:", linkPath);
         });
     } else {
         alert("⚠️ ตัวระบุยังดึงคีย์ลิงก์ออนไลน์ไม่สมบูรณ์ กรุณารอสักครู่แล้วกดใหม่อีกครั้งครับ");
@@ -3189,35 +3275,50 @@ function initFirstTimeCloudBin() {
     })
     .then(res => res.json()).then(data => {
         state.binId = data.metadata.id; localStorage.setItem('wc_online_bin_id', state.binId);
-        window.location.search = "?id=" + state.binId;
+        if (!FIXED_BIN_ID) window.location.search = "?id=" + state.binId;
     });
+}
+
+function _loadBinData(idToLoad) {
+    state.binId = idToLoad;
+    localStorage.setItem('wc_online_bin_id', idToLoad);
+    showStatus("⏳ กำลังโหลดข้อมูลทัวร์นาเมนต์...", true);
+    fetch(`https://api.jsonbin.io/v3/b/${idToLoad}/latest`, { headers: { "X-Master-Key": BIN_MASTER_KEY } }).then(res => res.json())
+    .then(resData => {
+        let r = resData.record; state.teams = r.teams || []; state.matches = r.matches || []; state.hallOfFame = r.hallOfFame || {}; state.defendingChampId = r.defendingChampId || null; state.season = r.season || 3;
+        state.tournamentStarted = r.tournamentStarted || false;
+        state.titleW1 = r.titleW1 || "WORLD"; state.titleW2 = r.titleW2 || "CUP"; state.titleW3 = r.titleW3 || "TOURNAMENT";
+        state.tournamentDetails = r.tournamentDetails || ""; state.discordUrl = r.discordUrl || "https://discord.gg/ESMDUce5pf"; state.bgImageUrl = r.bgImageUrl || "";
+        state.colors = r.colors || { w1: "#ffffff", w2: "#dfb44b", w3: "#ffffff", h2Standings: "#dfb44b", h2Fixtures: "#dfb44b", h2Fame: "#dfb44b", h2Details: "#dfb44b", bgColor: "#051126" };
+        state.tournamentFormat = r.tournamentFormat || "league";
+        state.cupConfig = r.cupConfig || { roundFormat: 'single', finalFormat: 'single', thirdPlace: false, consolation: false };
+        state.cupChampionId = r.cupChampionId || null;
+        state.consolationChampionId = r.consolationChampionId || null;
+        _restoreEvidenceFromLocal();
+        const shareBase = FIXED_BIN_ID
+            ? (window.location.origin + window.location.pathname)
+            : (window.location.origin + window.location.pathname + "?id=" + state.binId);
+        document.getElementById("spectator-link-path").textContent = shareBase;
+        showStatus("☁️ ดึงข้อมูลออนไลน์เรียบร้อย"); renderHeader(); renderLeague(); refreshUIState();
+    }).catch(() => showStatus("❌ โหลดข้อมูลออนไลน์ไม่สำเร็จ"));
 }
 
 window.onload = function() {
     initTeamAutocomplete();
 
-    const urlParams = new URLSearchParams(window.location.search); const idParam = urlParams.get('id');
-    if (idParam) {
-        state.binId = idParam; localStorage.setItem('wc_online_bin_id', idParam); showStatus("⏳ กำลังโหลดข้อมูลทัวร์นาเมนต์...", true);
-        fetch(`https://api.jsonbin.io/v3/b/${idParam}/latest`, { headers: { "X-Master-Key": BIN_MASTER_KEY } }).then(res => res.json())
-        .then(resData => {
-            let r = resData.record; state.teams = r.teams || []; state.matches = r.matches || []; state.hallOfFame = r.hallOfFame || {}; state.defendingChampId = r.defendingChampId || null; state.season = r.season || 3;
-            state.tournamentStarted = r.tournamentStarted || false;
-            state.titleW1 = r.titleW1 || "WORLD"; state.titleW2 = r.titleW2 || "CUP"; state.titleW3 = r.titleW3 || "TOURNAMENT";
-            state.tournamentDetails = r.tournamentDetails || ""; state.discordUrl = r.discordUrl || "https://discord.gg/ESMDUce5pf"; state.bgImageUrl = r.bgImageUrl || "";
-            state.colors = r.colors || { w1: "#ffffff", w2: "#dfb44b", w3: "#ffffff", h2Standings: "#dfb44b", h2Fixtures: "#dfb44b", h2Fame: "#dfb44b", h2Details: "#dfb44b", bgColor: "#051126" };
-            state.tournamentFormat = r.tournamentFormat || "league";
-            state.cupConfig = r.cupConfig || { roundFormat: 'single', finalFormat: 'single', thirdPlace: false, consolation: false };
-            state.cupChampionId = r.cupChampionId || null;
-            state.consolationChampionId = r.consolationChampionId || null;
-            _restoreEvidenceFromLocal();
-            document.getElementById("spectator-link-path").textContent = window.location.origin + window.location.pathname + "?id=" + state.binId;
-            showStatus("☁️ ดึงข้อมูลออนไลน์เรียบร้อย"); renderHeader(); renderLeague(); refreshUIState();
-        }).catch(() => showStatus("❌ โหลดข้อมูลออนไลน์ไม่สำเร็จ"));
+    if (FIXED_BIN_ID) {
+        // โหมดลิงก์เดียว: ใช้ ID ที่ฝังไว้เสมอ ไม่สนใจ URL params
+        _loadBinData(FIXED_BIN_ID);
     } else {
-        const cachedId = localStorage.getItem('wc_online_bin_id');
-        if (cachedId) window.location.search = "?id=" + cachedId;
-        else initFirstTimeCloudBin();
+        const urlParams = new URLSearchParams(window.location.search);
+        const idParam = urlParams.get('id');
+        if (idParam) {
+            _loadBinData(idParam);
+        } else {
+            const cachedId = localStorage.getItem('wc_online_bin_id');
+            if (cachedId) window.location.search = "?id=" + cachedId;
+            else initFirstTimeCloudBin();
+        }
     }
 };
 
