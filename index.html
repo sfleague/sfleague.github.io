@@ -770,7 +770,93 @@
 
             /* Ad banner: ซ่อนบนมือถือ */
             #friend-ad-banner { display: none !important; }
+
+            /* ── Admin HOF table บนมือถือ ── */
+            .admin-hof-table { font-size: 12px; min-width: 480px; }
+            .admin-hof-table th, .admin-hof-table td { padding: 7px 5px; }
+            .admin-hof-table input[type="number"],
+            .admin-hof-table input[type="text"] {
+                font-size: 14px; padding: 6px 4px;
+                min-width: 42px; height: 36px;
+            }
+            .btn-save-hof { font-size: 14px; padding: 11px 20px; }
+            .btn-danger-small { font-size: 13px; padding: 9px 14px; min-height: 36px; }
         }
+
+        /* ── Score Entry Modal ── */
+        #score-entry-modal { display:none; position:fixed; inset:0; z-index:2500;
+            background:rgba(0,0,0,0.88); backdrop-filter:blur(8px);
+            align-items:center; justify-content:center; padding:20px; }
+        #score-entry-modal.open { display:flex; }
+        .se-modal-box {
+            position:relative; width:100%; max-width:420px;
+            background:rgba(9,22,48,0.98);
+            border:1px solid rgba(34,197,94,0.35); border-radius:18px;
+            box-shadow:0 25px 70px rgba(0,0,0,0.8), 0 0 50px rgba(34,197,94,0.08);
+            overflow:hidden;
+        }
+        .se-modal-top { height:2px; background:linear-gradient(90deg,transparent,#22c55e,transparent); }
+        .se-modal-head { display:flex; align-items:center; justify-content:space-between;
+            padding:16px 20px 14px; border-bottom:1px solid rgba(255,255,255,0.07); }
+        .se-modal-title { font-family:'Orbitron',sans-serif; font-size:13px; font-weight:800;
+            color:#22c55e; text-transform:uppercase; letter-spacing:2px; }
+        .se-modal-close { background:none; border:none; color:#6a88a8; font-size:20px;
+            cursor:pointer; line-height:1; padding:0; transition:color 0.2s; }
+        .se-modal-close:hover { color:#fff; transform:none; box-shadow:none; }
+        .se-modal-body { padding:20px; }
+        .se-matchup { display:flex; align-items:center; gap:10px; margin-bottom:18px;
+            background:rgba(5,15,30,0.6); border-radius:10px; padding:14px 12px; }
+        .se-team { flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:5px; text-align:center; }
+        .se-team-logo { width:44px; height:44px; object-fit:contain; border-radius:6px; }
+        .se-team-logo.flag { height:29px; width:44px; object-fit:cover; border-radius:4px; }
+        .se-team-name { font-size:13px; font-weight:700; color:#e8f0ff; white-space:nowrap;
+            overflow:hidden; text-overflow:ellipsis; max-width:120px; }
+        .se-player-name { font-size:11px; color:#5a7898; }
+        .se-vs { font-family:'Orbitron',sans-serif; font-size:11px; color:#3a5070;
+            font-weight:700; flex-shrink:0; }
+        .se-score-row { display:flex; align-items:center; justify-content:center;
+            gap:12px; margin-bottom:16px; }
+        .se-score-inp { flex:1; max-width:90px; padding:10px 6px;
+            background:rgba(5,14,28,0.85); border:1px solid rgba(30,58,100,0.8);
+            border-radius:10px; color:#fff; font-size:30px; font-weight:800;
+            font-family:'Orbitron',sans-serif; text-align:center; }
+        .se-score-inp:focus { outline:none; border-color:#22c55e; box-shadow:0 0 10px rgba(34,197,94,0.2); }
+        .se-dash { font-family:'Orbitron',sans-serif; font-size:22px; color:#2a4060; }
+        .se-evidence-row { display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
+            margin-bottom:16px; }
+        .se-confirm-btn { width:100%; padding:13px; background:linear-gradient(90deg,#16a34a,#15803d);
+            border:none; border-radius:10px; color:#fff; font-size:14px; font-weight:800;
+            cursor:pointer; font-family:'Prompt',sans-serif; letter-spacing:.5px;
+            margin-bottom:8px; transition:opacity 0.15s; }
+        .se-confirm-btn:hover { opacity:0.88; transform:none; box-shadow:none; }
+        .se-reset-btn { width:100%; padding:10px; background:transparent;
+            border:1px solid rgba(239,68,68,0.4); border-radius:10px; color:#f87171;
+            font-size:12px; font-weight:600; cursor:pointer; font-family:'Prompt',sans-serif;
+            transition:all 0.2s; }
+        .se-reset-btn:hover { background:rgba(239,68,68,0.1); transform:none; box-shadow:none; }
+        .se-uploader-badge { text-align:center; font-size:10px; color:#64748b; margin-top:6px; }
+
+        /* ── ปุ่มบันทึกผลในแต่ละคู่ (แทนที่ inline inputs) ── */
+        .score-action-btn {
+            background:linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.05));
+            border:1px solid rgba(34,197,94,0.45); color:#22c55e;
+            padding:8px 18px; border-radius:10px; cursor:pointer;
+            font-family:'Prompt',sans-serif; font-size:13px; font-weight:700;
+            letter-spacing:0.3px; width:auto; transition:all 0.2s;
+        }
+        .score-action-btn:hover { background:rgba(34,197,94,0.28);
+            box-shadow:0 0 18px rgba(34,197,94,0.3); transform:translateY(-1px); color:#22c55e; }
+        .score-edit-btn {
+            background:transparent; border:1px solid rgba(255,255,255,0.12);
+            color:#a1b7d6; padding:3px 10px; border-radius:6px; cursor:pointer;
+            font-size:11px; font-weight:600; width:auto; margin-top:5px; transition:all 0.2s;
+        }
+        .score-edit-btn:hover { border-color:rgba(223,180,75,0.4); color:#dfb44b;
+            transform:none; box-shadow:none; }
+        .score-clickable { cursor:pointer; transition:all 0.18s !important; }
+        .score-clickable:hover { border-color:rgba(34,197,94,0.65) !important;
+            box-shadow:0 0 18px rgba(34,197,94,0.2) !important;
+            transform:scale(1.04) !important; color:var(--wc-gold) !important; }
 
         @media (max-width: 480px) {
             h1 { font-size: 20px; }
@@ -1142,6 +1228,28 @@
                 <button onclick="closePlayerLoginModal()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #334155 0%, #1e293b 100%); color: #cbd5e1; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">ปิด</button>
                 <button onclick="logoutPlayer()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 700;">ออกจากระบบ</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- ── Score Entry Modal ── -->
+<div id="score-entry-modal" onclick="if(event.target===this)closeScoreModal()">
+    <div class="se-modal-box">
+        <div class="se-modal-top"></div>
+        <div class="se-modal-head">
+            <span class="se-modal-title">⚽ บันทึกผลการแข่งขัน</span>
+            <button class="se-modal-close" onclick="closeScoreModal()">✕</button>
+        </div>
+        <div class="se-modal-body">
+            <div class="se-matchup" id="se-matchup-area"></div>
+            <div class="se-score-row">
+                <input type="number" class="se-score-inp" id="se-home-inp" min="0" placeholder="0">
+                <span class="se-dash">—</span>
+                <input type="number" class="se-score-inp" id="se-away-inp" min="0" placeholder="0">
+            </div>
+            <div class="se-evidence-row" id="se-evidence-area"></div>
+            <button class="se-confirm-btn" onclick="confirmScoreFromModal()">✅ ยืนยันจบการแข่งขัน</button>
+            <button class="se-reset-btn" id="se-reset-btn" style="display:none;" onclick="resetScoreFromModal()">↩️ ล้างผลและแก้ไขใหม่</button>
         </div>
     </div>
 </div>
@@ -2635,6 +2743,109 @@ function resetMatchScore(matchId) {
     renderLeague(); saveDataToCloud();
 }
 
+// ── Score Entry Modal ──
+let _seMatchId = null;
+
+function openScoreModal(matchId) {
+    if (state.isViewOnly) return;
+    let m = state.matches.find(x => x.id === matchId);
+    if (!m) return;
+    _seMatchId = matchId;
+
+    let hInfo = state.teams.find(t => t.id === m.homeId) || { player: m.homeId, team: m.homeId, logo: '', isFlag: false };
+    let aInfo = state.teams.find(t => t.id === m.awayId) || { player: m.awayId, team: m.awayId, logo: '', isFlag: false };
+
+    function teamLogoHTML(info) {
+        if (!info.logo) return `<div style="width:44px;height:44px;background:rgba(255,255,255,0.05);border-radius:6px;"></div>`;
+        return info.isFlag
+            ? `<img src="${info.logo}" class="se-team-logo flag" alt="${info.team}">`
+            : `<img src="${info.logo}" class="se-team-logo" alt="${info.team}">`;
+    }
+
+    document.getElementById('se-matchup-area').innerHTML = `
+        <div class="se-team">
+            ${teamLogoHTML(hInfo)}
+            <div class="se-team-name">${hInfo.team}</div>
+            <div class="se-player-name">${hInfo.player}</div>
+        </div>
+        <div class="se-vs">VS</div>
+        <div class="se-team">
+            ${teamLogoHTML(aInfo)}
+            <div class="se-team-name">${aInfo.team}</div>
+            <div class="se-player-name">${aInfo.player}</div>
+        </div>
+    `;
+
+    document.getElementById('se-home-inp').value = m.homeScore !== null ? m.homeScore : '';
+    document.getElementById('se-away-inp').value = m.awayScore !== null ? m.awayScore : '';
+
+    let hasEvidence = m.evidenceImg && m.evidenceImg.trim() !== '';
+    let evidenceBtnClass = hasEvidence ? 'evidence-btn has-img' : 'evidence-btn';
+    let uploaderBadge = (hasEvidence && m.evidenceUploadedBy)
+        ? `<div class="se-uploader-badge">📤 อัปโหลดโดย: <b style="color:#94a3b8;">${m.evidenceUploadedBy}</b></div>`
+        : '';
+    document.getElementById('se-evidence-area').innerHTML = `
+        ${hasEvidence ? `<button class="evidence-btn has-img" style="background:#1d4ed8;color:#fff;border-color:#3b82f6;" onclick="viewMatchEvidence(${matchId})">👁️ ดูหลักฐาน</button>` : ''}
+        <button class="${evidenceBtnClass}" onclick="uploadMatchEvidenceFromModal(${matchId})">${hasEvidence ? '📸 อัปโหลดใหม่' : '📷 อัปโหลดหลักฐาน'}</button>
+        ${uploaderBadge}
+    `;
+
+    document.getElementById('se-reset-btn').style.display =
+        (m.homeScore !== null && m.awayScore !== null) ? 'block' : 'none';
+
+    const modal = document.getElementById('score-entry-modal');
+    modal.style.display = 'flex';
+    setTimeout(() => document.getElementById('se-home-inp').focus(), 100);
+}
+
+function closeScoreModal() {
+    document.getElementById('score-entry-modal').style.display = 'none';
+    _seMatchId = null;
+}
+
+function confirmScoreFromModal() {
+    if (_seMatchId === null) return;
+    let homeVal = document.getElementById('se-home-inp').value;
+    let awayVal = document.getElementById('se-away-inp').value;
+    if (homeVal === '' || awayVal === '') {
+        alert('⚠️ กรุณากรอกคะแนนให้ครบทั้งสองทีมก่อนยืนยัน');
+        return;
+    }
+    let homeScore = parseInt(homeVal);
+    let awayScore = parseInt(awayVal);
+    if (isNaN(homeScore) || isNaN(awayScore) || homeScore < 0 || awayScore < 0) {
+        alert('⚠️ คะแนนไม่ถูกต้อง กรุณากรอกตัวเลขที่ถูกต้อง');
+        return;
+    }
+    let match = state.matches.find(m => m.id === _seMatchId);
+    if (!match) return;
+    match.homeScore = homeScore;
+    match.awayScore = awayScore;
+    closeScoreModal();
+    let fmt = state.tournamentFormat || 'league';
+    if (fmt !== 'league') renderAdminDock();
+    renderLeague(); saveDataToCloud();
+}
+
+function resetScoreFromModal() {
+    if (_seMatchId === null) return;
+    if (!confirm('↩️ ยืนยันล้างผลการแข่งขันคู่นี้?')) return;
+    let match = state.matches.find(m => m.id === _seMatchId);
+    if (!match) return;
+    match.homeScore = null;
+    match.awayScore = null;
+    if (match.winnerId !== undefined) match.winnerId = null;
+    closeScoreModal();
+    let fmt = state.tournamentFormat || 'league';
+    if (fmt !== 'league') renderAdminDock();
+    renderLeague(); saveDataToCloud();
+}
+
+function uploadMatchEvidenceFromModal(matchId) {
+    closeScoreModal();
+    uploadMatchEvidence(matchId);
+}
+
 function _getEvidenceLocalKey() {
     return `evidence_imgs_${state.binId || 'local'}`;
 }
@@ -3021,7 +3232,7 @@ function _buildMatchScoreHTML(m, fmt) {
         if (state.playerTeamId && m.awayId !== 'BYE') {
             uploadBtnHTML = `<button class="${evidenceBtnClass}" onclick="uploadMatchEvidence(${m.id})">${hasEvidence ? '📸 มีรูปหลักฐานแล้ว' : '📷 ส่งรูปสกอร์'}</button>`;
         } else if (!state.playerTeamId && m.awayId !== 'BYE' && !hasEvidence) {
-            uploadBtnHTML = `<span style="font-size:11px; color:#475569; font-style:italic;">🔒 ล็อกอิน ⚽ เพื่อส่งรูปหลักฐาน</span>`;
+            uploadBtnHTML = `<span style="font-size:9px; color:#334155; font-style:italic; opacity:0.7; line-height:1.5; text-align:center; display:block;">🔒 login<br>เพื่อส่งรูป</span>`;
         }
 
         scoreHTML = `
@@ -3042,29 +3253,16 @@ function _buildMatchScoreHTML(m, fmt) {
             scoreHTML = `<div class="score-view-box" style="color:#a1b7d6; font-size:13px;">🎟️ ผ่านอัตโนมัติ (BYE)</div>`;
         } else if (m.homeScore !== null && m.awayScore !== null) {
             scoreHTML = `
-                <div class="score-view-box">${m.homeScore} - ${m.awayScore}</div>
+                <div class="score-view-box score-clickable" onclick="openScoreModal(${m.id})" title="คลิกเพื่อแก้ไข / หลักฐาน">${m.homeScore} - ${m.awayScore}</div>
                 ${winnerBadgeHTML}
                 ${declareBtnHTML}
-                <div style="display:flex; gap:4px; margin-top:4px; flex-wrap:wrap; justify-content:center;">
-                    ${adminEvidenceViewHTML}
-                    <button class="${evidenceBtnClass}" onclick="uploadMatchEvidence(${m.id})">📷 อัปโหลดหลักฐาน</button>
-                    <button style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.4);color:#ef4444;font-size:11px;padding:4px 10px;border-radius:4px;cursor:pointer;font-weight:600;width:auto;transition:all 0.2s;" onclick="resetMatchScore(${m.id})">↩️ แก้ไขผล</button>
-                </div>
-                ${adminUploaderBadge ? `<div style="text-align:center; margin-top:2px;">${adminUploaderBadge}</div>` : ''}
             `;
         } else {
             scoreHTML = `
-                <div class="score-row-inputs">
-                    <input type="number" class="score-input" id="score-home-${m.id}" min="0" placeholder="0">
-                    <span class="vs-text">VS</span>
-                    <input type="number" class="score-input" id="score-away-${m.id}" min="0" placeholder="0">
+                <div class="score-view-box score-clickable" onclick="openScoreModal(${m.id})" style="color:rgba(34,197,94,0.75); border-color:rgba(34,197,94,0.3); font-size:14px; padding:8px 16px; line-height:1.3;">
+                    VS<div style="font-family:'Prompt',sans-serif; font-size:9px; font-weight:500; color:rgba(34,197,94,0.55); margin-top:3px; letter-spacing:0.4px;">⚽ กดบันทึกผล</div>
                 </div>
-                <button style="margin-top:6px;background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;font-size:12px;padding:7px 16px;border-radius:6px;width:auto;border:none;font-weight:700;cursor:pointer;letter-spacing:0.3px;" onclick="confirmMatchScore(${m.id})">✅ ยืนยันจบการแข่งขัน</button>
-                <div style="display:flex; gap:4px; margin-top:4px; flex-wrap:wrap; justify-content:center;">
-                    ${adminEvidenceViewHTML}
-                    <button class="${evidenceBtnClass}" onclick="uploadMatchEvidence(${m.id})">📷 อัปโหลดหลักฐาน</button>
-                </div>
-                ${adminUploaderBadge ? `<div style="text-align:center; margin-top:2px;">${adminUploaderBadge}</div>` : ''}
+                ${adminEvidenceViewHTML ? `<div style="margin-top:5px;">${adminEvidenceViewHTML}</div>` : ''}
             `;
         }
     }
