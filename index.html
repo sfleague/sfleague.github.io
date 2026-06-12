@@ -4004,9 +4004,9 @@ function resetBracketMatchScore(matchId) {
         <img src="https://i.ibb.co/PyXs6x6/S-3899394.jpg" alt="รูปภาพ">
     </div>
     <div class="ad-content">
-        <div class="ad-title">VIP: เพื่อนระดับตำนาน</div>
-        <div class="ad-desc">ขอเชิญพบกับเพื่อนผู้ทรงเกียรติ ผู้มีบารมีมากที่สุดในกลุ่ม</div>
-        <a href="#" class="ad-button" id="ad-link-friend">ดูประวัติความรวย</a>
+        <div class="ad-title">ต้าวเพื่อนใหม่ในตำนาน</div>
+        <div class="ad-desc">ขอเชิญพบกับเพื่อนรักผู้ทรงเกียรติ ผู้มีบารมีมากที่สุดในกลุ่ม</div>
+        <a href="#" class="ad-button" id="ad-link-friend">ดูประวัติใหม่เพื่อนเอ็ม</a>
     </div>
 </div>
 
@@ -4021,10 +4021,21 @@ function resetBracketMatchScore(matchId) {
                 banner.classList.add('ad-hidden');
             });
         }
-        if (adLink) {
-            adLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('คลิกเข้ามาทำเหี้ยอะไรไอพวกโง่...ช่างแม้งดิ');
+if (adLink) {
+    adLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        Swal.fire({
+            title: 'คลิกเข้ามาดูเพื่อนรักรักันหรอ!',
+            text: 'ใหม่เพื่อนเอ็ม',
+            imageUrl: 'https://i.ibb.co/FqVzBVXW/S-12959754.jpg', // เอา URL รูปมาใส่ตรงนี้
+            imageWidth: 400,
+            imageHeight: 300,
+            imageAlt: 'Custom image',
+            confirmButtonText: 'ปิด'
+        });
+    });
+}
             });
         }
     })();
