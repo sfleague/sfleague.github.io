@@ -963,6 +963,81 @@
             .score-input { width: 42px; height: 34px; font-size: 15px; }
             .fc-card { padding: 12px 10px; }
         }
+
+        /* ── อัตราการต่อรอง (Odds System) ── */
+        .odds-bar { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 100%; padding: 3px 0 0; }
+        .odds-chips { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; }
+        .odds-chip {
+            display: flex; flex-direction: row; align-items: center;
+            gap: 3px; padding: 2px 7px; border-radius: 4px; cursor: default;
+        }
+        .odds-chip-label { display: none; }
+        .odds-chip-value { font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900; line-height: 1; }
+        .odds-chip.home  { background: rgba(34,197,94,0.1);  border: 1px solid rgba(34,197,94,0.28);  color: #4ade80; }
+        .odds-chip.draw  { background: rgba(234,179,8,0.1);  border: 1px solid rgba(234,179,8,0.28);  color: #fbbf24; }
+        .odds-chip.away  { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.28);  color: #f87171; }
+        .odds-chip.home.live { box-shadow: 0 0 6px rgba(34,197,94,0.3); }
+        .odds-chip.draw.live { box-shadow: 0 0 6px rgba(234,179,8,0.3); }
+        .odds-chip.away.live { box-shadow: 0 0 6px rgba(239,68,68,0.3); }
+        .odds-empty-hint { font-size: 11px; color: rgba(161,183,214,0.4); font-style: italic; flex: 1; }
+        .odds-score-btn {
+            background: rgba(223,180,75,0.07); border: 1px dashed rgba(223,180,75,0.35);
+            color: rgba(223,180,75,0.7); font-size: 10px; padding: 3px 10px; border-radius: 5px;
+            cursor: pointer; font-weight: 700; width: auto; transition: all 0.18s;
+            white-space: nowrap; font-family: 'Prompt', sans-serif; line-height: 1.6; letter-spacing: 0.3px;
+        }
+        .odds-score-btn:hover { background: rgba(223,180,75,0.18); color: #dfb44b; border-style: solid; }
+        /* AH chip result states */
+        .odds-chip.win  { box-shadow: 0 0 16px rgba(34,197,94,0.6) !important; border-color: rgba(34,197,94,0.75) !important; background: rgba(34,197,94,0.22) !important; }
+        .odds-chip.loss { opacity: 0.28; filter: grayscale(0.5); }
+        .odds-chip.push-result { border-color: rgba(148,163,184,0.45) !important; background: rgba(148,163,184,0.09) !important; color: #94a3b8 !important; }
+        .odds-chip-hcap { font-size: 11px; font-weight: 900; opacity: 0.9; letter-spacing: 0.4px; }
+        .odds-chip-result { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.7px; padding: 2px 6px; border-radius: 3px; margin-top: 3px; line-height: 1; display: block; }
+        .odds-chip-result.win  { background: rgba(34,197,94,0.22); color: #4ade80; }
+        .odds-chip-result.loss { background: rgba(239,68,68,0.2); color: #f87171; }
+        .odds-chip-result.push { background: rgba(148,163,184,0.18); color: #94a3b8; }
+        .odds-chip-result.hw   { background: rgba(234,179,8,0.2); color: #fbbf24; }
+        .odds-chip-result.hl   { background: rgba(249,115,22,0.2); color: #fb923c; }
+        .odds-ah-label { width: 100%; text-align: center; font-size: 9px; color: rgba(223,180,75,0.5); letter-spacing: 1.2px; text-transform: uppercase; padding-bottom: 2px; font-weight: 700; }
+        .odds-modal-hcap-row { margin-bottom: 14px; }
+        .odds-modal-hcap-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; color: #dfb44b; display: block; margin-bottom: 7px; }
+        .odds-inp-hcap { font-size: 18px !important; border-color: rgba(223,180,75,0.3) !important; }
+
+        /* ── Odds Edit Modal ── */
+        #odds-modal { display: none; position: fixed; inset: 0; z-index: 3000;
+            background: rgba(0,0,0,0.88); backdrop-filter: blur(10px);
+            align-items: center; justify-content: center; padding: 20px; }
+        #odds-modal.open { display: flex; }
+        .odds-modal-box {
+            background: rgba(9,22,48,0.98);
+            border: 1px solid rgba(223,180,75,0.45); border-radius: 16px;
+            padding: 26px 24px 22px; width: 100%; max-width: 380px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.8), 0 0 40px rgba(223,180,75,0.08);
+            position: relative; overflow: hidden;
+        }
+        .odds-modal-top { height: 2px; background: linear-gradient(90deg, transparent, #dfb44b, transparent); margin: -26px -24px 20px; }
+        .odds-modal-title { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 900; color: #dfb44b; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; }
+        .odds-modal-matchup { font-size: 12px; color: #a1b7d6; margin-bottom: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .odds-input-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .odds-input-group label { display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 7px; }
+        .odds-input-group.home label { color: #4ade80; }
+        .odds-input-group.draw label { color: #fbbf24; }
+        .odds-input-group.away label { color: #f87171; }
+        .odds-inp {
+            width: 100%; padding: 10px 4px;
+            background: rgba(5,14,28,0.9); border-radius: 8px; color: #fff;
+            font-size: 20px; font-weight: 800; font-family: 'Orbitron', sans-serif;
+            text-align: center; border: 1px solid rgba(30,58,100,0.8);
+        }
+        .odds-inp:focus { outline: none; border-color: #dfb44b; box-shadow: 0 0 10px rgba(223,180,75,0.2); }
+        .odds-modal-actions { display: flex; gap: 8px; }
+        .odds-save-btn { flex: 2; padding: 11px 16px; background: linear-gradient(135deg, #dfb44b, #b88e2f); border: none; border-radius: 10px; color: #051126; font-size: 13px; font-weight: 800; cursor: pointer; font-family: 'Prompt', sans-serif; letter-spacing: 0.3px; }
+        .odds-save-btn:hover { opacity: 0.88; transform: none; box-shadow: none; }
+        .odds-clear-btn { flex: 1; padding: 11px 8px; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; color: #f87171; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Prompt', sans-serif; }
+        .odds-clear-btn:hover { background: rgba(239,68,68,0.18); transform: none; box-shadow: none; }
+        .odds-cancel-btn { flex: 1; padding: 11px 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #64748b; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Prompt', sans-serif; }
+        .odds-cancel-btn:hover { background: rgba(255,255,255,0.09); color: #a1b7d6; transform: none; box-shadow: none; }
+        @media (max-width: 480px) { .odds-chips { gap: 5px; } .odds-chip-value { font-size: 13px; } .odds-chip-label { font-size: 8px; } }
     </style>
 </head>
 <body>
@@ -1323,6 +1398,35 @@
                 </tr></thead>
                 <tbody id="hof-manage-list"></tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- ── Odds Edit Modal ── -->
+<div id="odds-modal" onclick="if(event.target===this)closeOddsModal()">
+    <div class="odds-modal-box">
+        <div class="odds-modal-top"></div>
+        <div class="odds-modal-title">📊 อัตราการต่อรอง</div>
+        <div class="odds-modal-matchup" id="odds-modal-matchup">ตั้งค่าอัตราต่อรองสำหรับคู่นี้</div>
+        <div class="odds-modal-hcap-row">
+            <label class="odds-modal-hcap-label">⚖️ ราคาต่อ Asian Handicap (จากฝั่งเหย้า)</label>
+            <input type="number" class="odds-inp odds-inp-hcap" id="odds-inp-draw" step="0.25" placeholder="-0.5" style="width:100%;">
+            <div style="font-size:10px; color:rgba(161,183,214,0.4); margin-top:5px; text-align:center;">เช่น -0.5 = เหย้าต่อ½   0 = เต็ม   +0.5 = เยือนต่อ½   -0.25 = เหย้าต่อ¼</div>
+        </div>
+        <div class="odds-input-row">
+            <div class="odds-input-group home">
+                <label>🟢 เหย้าชนะ</label>
+                <input type="number" class="odds-inp" id="odds-inp-home" min="1.01" step="0.01" placeholder="1.85">
+            </div>
+            <div class="odds-input-group away" style="grid-column: 3;">
+                <label>🔴 เยือนชนะ</label>
+                <input type="number" class="odds-inp" id="odds-inp-away" min="1.01" step="0.01" placeholder="1.95">
+            </div>
+        </div>
+        <div class="odds-modal-actions">
+            <button class="odds-save-btn" onclick="saveOdds()">💾 บันทึก</button>
+            <button class="odds-clear-btn" onclick="clearOdds()">🗑️ ล้าง</button>
+            <button class="odds-cancel-btn" onclick="closeOddsModal()">✕ ปิด</button>
         </div>
     </div>
 </div>
@@ -2932,6 +3036,7 @@ function openScoreModal(matchId) {
         <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;">
             ${hasEvidence ? `<button class="evidence-btn has-img" style="background:#1d4ed8;color:#fff;border-color:#3b82f6;width:auto;" onclick="viewMatchEvidence(${matchId})">👁️ ดูหลักฐาน</button>` : ''}
             <button class="${evidenceBtnClass}" style="width:auto;" onclick="uploadMatchEvidenceFromModal(${matchId})">${hasEvidence ? '📸 อัปโหลดใหม่' : '📷 อัปโหลดหลักฐาน'}</button>
+            <button class="odds-score-btn" onclick="openOddsFromScoreModal(${matchId})">📊 ตั้งต่อรอง</button>
         </div>
         ${uploaderBadge}
     `;
@@ -3502,13 +3607,14 @@ function _buildMatchRowDiv(m, fmt) {
     let isLeague = fmt === 'league';
     let dragAttrs = (isLeague && !state.isViewOnly) ? `draggable="true" ondragstart="handleTeamDragStart(event)" ondragover="handleTeamDragOver(event)" ondragleave="handleTeamDragLeave(event)" ondrop="handleTeamDrop(event)"` : '';
     let draggableClass = (isLeague && !state.isViewOnly) ? 'admin-draggable' : '';
+    let oddsBarHTML = _buildOddsBarHTML(m);
     let divMatch = document.createElement("div"); divMatch.className = "match-row";
     divMatch.innerHTML = `
         <div class="match-team home ${draggableClass}" data-team-id="${hInfo.id}" ${dragAttrs}>
             <div style="display:flex; flex-direction:column; align-items:flex-end;"><span style="font-weight:700;">${hInfo.team}</span><span style="font-size:11px; color:var(--wc-text-sub);">${hInfo.player}</span></div>
             ${hInfo.id === 'BYE' ? '<span style="font-size:22px;">🎟️</span>' : `<img class="${homeLogoClass}" src="${hInfo.logo}" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(hInfo.team)}';">`}<span class="badge-side">H</span>
         </div>
-        <div class="match-score">${scoreHTML}</div>
+        <div class="match-score">${scoreHTML}${oddsBarHTML}</div>
         <div class="match-team away ${draggableClass}" data-team-id="${aInfo.id}" ${dragAttrs}>
             <span class="badge-side">A</span>${aInfo.id === 'BYE' ? '<span style="font-size:22px;">🎟️</span>' : `<img class="${awayLogoClass}" src="${aInfo.logo}" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(aInfo.team)}';">`}
             <div style="display:flex; flex-direction:column; align-items:flex-start;"><span style="font-weight:700;">${aInfo.team}</span><span style="font-size:11px; color:var(--wc-text-sub);">${aInfo.player}</span></div>
@@ -4028,6 +4134,209 @@ function resetBracketMatchScore(matchId) {
             });
         }
     })();
+
+// ─── อัตราการต่อรอง (Odds System) ─────────────────────────────────────────
+
+let _currentOddsMatchId = null;
+
+function _buildOddsBarHTML(m) {
+    if (!m || m.homeId === 'BYE' || m.awayId === 'BYE') return '';
+    let odds = m.odds || {};
+    let hasHome = odds.home != null && odds.home !== '';
+    let hasHcap = odds.handicap != null && odds.handicap !== '';
+    let hasAway = odds.away != null && odds.away !== '';
+    if (!hasHome && !hasHcap && !hasAway) return '';
+
+    let hInfo = state.teams.find(t => t.id === m.homeId);
+    let aInfo = state.teams.find(t => t.id === m.awayId);
+    let homeLabel = hInfo ? hInfo.team : 'เหย้า';
+    let awayLabel = aInfo ? aInfo.team : 'เยือน';
+    let homeVal = hasHome ? parseFloat(odds.home).toFixed(2) : '—';
+    let awayVal = hasAway ? parseFloat(odds.away).toFixed(2) : '—';
+    let hasScore = m.homeScore !== null && m.awayScore !== null;
+
+    if (hasHcap) {
+        // ─── Asian Handicap Mode ───
+        let hcap = parseFloat(odds.handicap);
+        let awayHcap = -hcap;
+        let hcapStr = _fmtHcap(hcap);
+        let awayHcapStr = _fmtHcap(awayHcap);
+
+        let homeChipClass = 'home' + (hasHome ? ' live' : '');
+        let awayChipClass = 'away' + (hasHome ? ' live' : '');
+        let homeResult = '';
+        let awayResult = '';
+
+        if (hasScore) {
+            let r = _calcAHResult(m.homeScore, m.awayScore, hcap);
+            let resultClass = { win: 'win', loss: 'loss', push: 'push-result', hw: '', hl: '' };
+            homeChipClass += (resultClass[r.home] ? ' ' + resultClass[r.home] : '');
+            awayChipClass += (resultClass[r.away] ? ' ' + resultClass[r.away] : '');
+            let labelTH = { win: '✅ ชนะ', loss: '❌ แพ้', push: '↩ คืนเงิน', hw: '½ ชนะครึ่ง', hl: '½ แพ้ครึ่ง' };
+            homeResult = `<span class="odds-chip-result ${r.home}">${labelTH[r.home] || r.home}</span>`;
+            awayResult = `<span class="odds-chip-result ${r.away}">${labelTH[r.away] || r.away}</span>`;
+        }
+
+        return `
+            <div class="odds-bar">
+                <div class="odds-chips">
+                    <div class="odds-chip ${homeChipClass}">
+                        <span class="odds-chip-hcap">${hcapStr}</span>
+                        <span class="odds-chip-value">${homeVal}</span>
+                        ${homeResult}
+                    </div>
+                    <div class="odds-chip ${awayChipClass}">
+                        <span class="odds-chip-hcap">${awayHcapStr}</span>
+                        <span class="odds-chip-value">${awayVal}</span>
+                        ${awayResult}
+                    </div>
+                </div>
+            </div>
+        `;
+    } else {
+        // ─── Legacy 1X2 Mode (backward compat) ───
+        let hasDraw = odds.draw != null && odds.draw !== '';
+        let drawVal = hasDraw ? parseFloat(odds.draw).toFixed(2) : '—';
+        let homeClass = hasHome ? 'home live' : 'home';
+        let drawClass = hasDraw ? 'draw live' : 'draw';
+        let awayClass = hasAway ? 'away live' : 'away';
+        return `
+            <div class="odds-bar">
+                <div class="odds-chips">
+                    <div class="odds-chip ${homeClass}">
+                        <span class="odds-chip-label">${homeLabel}</span>
+                        <span class="odds-chip-value">${homeVal}</span>
+                    </div>
+                    <div class="odds-chip ${drawClass}">
+                        <span class="odds-chip-label">เสมอ</span>
+                        <span class="odds-chip-value">${drawVal}</span>
+                    </div>
+                    <div class="odds-chip ${awayClass}">
+                        <span class="odds-chip-label">${awayLabel}</span>
+                        <span class="odds-chip-value">${awayVal}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+}
+
+function openOddsModal(matchId) {
+    if (state.isViewOnly) return;
+    _currentOddsMatchId = matchId;
+    let m = state.matches.find(x => x.id === matchId);
+    if (!m) return;
+    let hInfo = state.teams.find(t => t.id === m.homeId);
+    let aInfo = state.teams.find(t => t.id === m.awayId);
+    let homeLabel = hInfo ? hInfo.team : m.homeId;
+    let awayLabel = aInfo ? aInfo.team : m.awayId;
+    document.getElementById('odds-modal-matchup').textContent = `${homeLabel}  vs  ${awayLabel}`;
+    let odds = m.odds || {};
+    document.getElementById('odds-inp-home').value = odds.home != null ? odds.home : '';
+    document.getElementById('odds-inp-draw').value = odds.handicap != null ? odds.handicap : '';
+    document.getElementById('odds-inp-away').value = odds.away != null ? odds.away : '';
+    document.getElementById('odds-modal').classList.add('open');
+    setTimeout(() => document.getElementById('odds-inp-home').focus(), 80);
+}
+
+function closeOddsModal() {
+    document.getElementById('odds-modal').classList.remove('open');
+    _currentOddsMatchId = null;
+}
+
+function openOddsFromScoreModal(matchId) {
+    closeScoreModal();
+    openOddsModal(matchId);
+}
+
+function saveOdds() {
+    if (_currentOddsMatchId === null) return;
+    let m = state.matches.find(x => x.id === _currentOddsMatchId);
+    if (!m) return;
+    let hRaw = document.getElementById('odds-inp-home').value.trim();
+    let dRaw = document.getElementById('odds-inp-draw').value.trim();
+    let aRaw = document.getElementById('odds-inp-away').value.trim();
+    let h = hRaw !== '' ? parseFloat(hRaw) : null;
+    let d = dRaw !== '' ? parseFloat(dRaw) : null;
+    let a = aRaw !== '' ? parseFloat(aRaw) : null;
+    if ((h !== null && (isNaN(h) || h < 1.01)) || (a !== null && (isNaN(a) || a < 1.01))) {
+        showStatus('❌ อัตราชนะต้องมีค่า ≥ 1.01');
+        return;
+    }
+    if (d !== null && isNaN(d)) { showStatus('❌ ค่าแฮนดิแคปไม่ถูกต้อง'); return; }
+    m.odds = {
+        home: h !== null ? h.toFixed(2) : null,
+        handicap: d !== null ? d.toFixed(2) : null,
+        away: a !== null ? a.toFixed(2) : null
+    };
+    closeOddsModal();
+    renderLeague();
+    saveDataToCloud();
+    showStatus('✅ บันทึกอัตราต่อรองแล้ว');
+}
+
+function clearOdds() {
+    if (_currentOddsMatchId === null) return;
+    let m = state.matches.find(x => x.id === _currentOddsMatchId);
+    if (!m) return;
+    if (!confirm('ลบอัตราต่อรองของคู่นี้หรือไม่?')) return;
+    m.odds = { home: null, handicap: null, away: null };
+    closeOddsModal();
+    renderLeague();
+    saveDataToCloud();
+    showStatus('✅ ล้างอัตราต่อรองแล้ว');
+}
+
+// ─── Asian Handicap Calculation Helpers ────────────────────────────────────
+
+function _fmtHcap(val) {
+    let n = parseFloat(val);
+    if (isNaN(n)) return '±0';
+    if (n === 0) return '±0';
+    let abs = Math.abs(n);
+    let sign = n > 0 ? '+' : '-';
+    // Display as fraction for quarters
+    let frac = Math.round(abs * 4);
+    if (frac % 4 === 0) return sign + (frac / 4).toString();         // whole: -1, +2
+    if (frac % 2 === 0) return sign + (frac / 4).toFixed(1);         // half: -0.5, +1.5
+    if (frac % 4 === 1) return sign + Math.floor(abs) + '¼';         // -0.25 → -0¼ / -1.25 → -1¼
+    return sign + Math.floor(abs) + '¾';                              // -0.75 → -0¾ / -1.75 → -1¾
+}
+
+function _calcSimpleAH(homeScore, awayScore, handicap) {
+    let adj = homeScore + handicap;
+    if (adj > awayScore) return { home: 'win', away: 'loss' };
+    if (adj < awayScore) return { home: 'loss', away: 'win' };
+    return { home: 'push', away: 'push' };
+}
+
+function _combineAHPair(r1, r2) {
+    if (r1 === 'win'  && r2 === 'win')  return 'win';
+    if (r1 === 'loss' && r2 === 'loss') return 'loss';
+    if (r1 === 'push' && r2 === 'push') return 'push';
+    if ((r1 === 'win'  && r2 === 'push') || (r1 === 'push' && r2 === 'win'))  return 'hw';
+    if ((r1 === 'loss' && r2 === 'push') || (r1 === 'push' && r2 === 'loss')) return 'hl';
+    return 'push';
+}
+
+function _oppAH(r) {
+    return { win: 'loss', loss: 'win', push: 'push', hw: 'hl', hl: 'hw' }[r] || 'push';
+}
+
+function _calcAHResult(homeScore, awayScore, handicap) {
+    let hcap = parseFloat(handicap);
+    // Quarter-ball line: e.g. -0.25, -0.75, +0.25, +0.75
+    // Detected when hcap * 4 is odd
+    if (Math.abs(Math.round(hcap * 4)) % 2 === 1) {
+        let line1 = hcap - 0.25;   // lower half-ball component
+        let line2 = hcap + 0.25;   // upper half-ball component
+        let r1 = _calcSimpleAH(homeScore, awayScore, line1);
+        let r2 = _calcSimpleAH(homeScore, awayScore, line2);
+        let homeRes = _combineAHPair(r1.home, r2.home);
+        return { home: homeRes, away: _oppAH(homeRes) };
+    }
+    return _calcSimpleAH(homeScore, awayScore, hcap);
+}
 </script>
 
 </body>
