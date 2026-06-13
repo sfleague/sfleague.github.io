@@ -1038,6 +1038,48 @@
         .odds-cancel-btn { flex: 1; padding: 11px 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: #64748b; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Prompt', sans-serif; }
         .odds-cancel-btn:hover { background: rgba(255,255,255,0.09); color: #a1b7d6; transform: none; box-shadow: none; }
         @media (max-width: 480px) { .odds-chips { gap: 5px; } .odds-chip-value { font-size: 13px; } .odds-chip-label { font-size: 8px; } }
+
+        /* ── Match Status & Actions ── */
+        .match-status-badge { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:800; padding:2px 8px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px; margin-top:3px; }
+        .match-status-playing { background:rgba(239,68,68,0.14); border:1px solid rgba(239,68,68,0.4); color:#f87171; }
+        .match-status-playing::before { content:''; display:inline-block; width:6px; height:6px; border-radius:50%; background:#ef4444; box-shadow:0 0 6px #ef4444; animation:pulseDot 1s ease-in-out infinite; }
+        .match-status-finished { background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.3); color:#22c55e; }
+        .match-action-btns { display:flex; gap:4px; margin-top:4px; flex-wrap:wrap; justify-content:center; }
+        .match-start-btn { background:rgba(59,130,246,0.12); border:1px solid rgba(59,130,246,0.35); color:#60a5fa; font-size:10px; font-weight:700; padding:3px 9px; border-radius:4px; cursor:pointer; width:auto; letter-spacing:0.3px; }
+        .match-start-btn:hover { background:rgba(59,130,246,0.28); transform:none; box-shadow:none; color:#93c5fd; }
+        .match-finish-btn { background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.35); color:#22c55e; font-size:10px; font-weight:700; padding:3px 9px; border-radius:4px; cursor:pointer; width:auto; letter-spacing:0.3px; }
+        .match-finish-btn:hover { background:rgba(34,197,94,0.28); transform:none; box-shadow:none; color:#4ade80; }
+        .match-row { position: relative; }
+        .match-row.has-status { padding-bottom: 22px; }
+        .match-status-abs { position:absolute; bottom:4px; left:50%; transform:translateX(-50%); white-space:nowrap; display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:800; padding:2px 10px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px; pointer-events:none; }
+        .match-status-badge { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:800; padding:2px 8px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px; }
+        /* ── Handicap compact chips ── */
+        .hcap-chip { display:inline-flex; align-items:center; font-size:11px; font-weight:800; padding:2px 7px; border-radius:4px; letter-spacing:0.2px; }
+        .hcap-chip.home-hcap { background:rgba(59,130,246,0.13); color:#60a5fa; border:1px solid rgba(59,130,246,0.28); }
+        .hcap-chip.away-hcap { background:rgba(239,68,68,0.1); color:#f87171; border:1px solid rgba(239,68,68,0.22); }
+        .hcap-chip.hcap-win { background:rgba(34,197,94,0.15); color:#22c55e; border-color:rgba(34,197,94,0.35); }
+        .hcap-chip.hcap-loss { background:rgba(239,68,68,0.15); color:#f87171; border-color:rgba(239,68,68,0.35); }
+        /* ── Odds inline ── */
+        .score-odds-row { display:flex; align-items:center; justify-content:center; gap:25px; flex-wrap:wrap; }
+        .odds-chips-inline { display:flex; gap:3px; align-items:center; }
+        /* ── H2H record row ── */
+        /* ── Form Guide (last 5) ── */
+        .form-guide { display:inline-flex; gap:3px; align-items:center; }
+        .form-dot { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:4px; font-size:10px; font-weight:800; font-family:'Orbitron','Prompt',sans-serif; }
+        .form-dot.W { background:rgba(34,197,94,0.2); color:#22c55e; border:1px solid rgba(34,197,94,0.4); }
+        .form-dot.D { background:rgba(100,116,139,0.2); color:#94a3b8; border:1px solid rgba(100,116,139,0.35); }
+        .form-dot.L { background:rgba(239,68,68,0.15); color:#f87171; border:1px solid rgba(239,68,68,0.35); }
+        .form-dot.empty { background:rgba(255,255,255,0.04); color:#334155; border:1px dashed rgba(255,255,255,0.08); }
+
+        .h2h-record-row { display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:8px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); margin-bottom:6px; font-size:12px; }
+        .h2h-record-score { font-size:14px; font-weight:800; color:#e2e8f0; min-width:44px; text-align:center; }
+        .h2h-record-meta { flex:1; color:#64748b; font-size:10px; }
+        .h2h-record-del { background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); color:#f87171; border-radius:6px; cursor:pointer; font-size:11px; padding:2px 8px; font-weight:700; }
+        .h2h-record-del:hover { background:rgba(239,68,68,0.2); }
+        .h2h-win-pill { display:inline-block; padding:1px 7px; border-radius:20px; font-size:10px; font-weight:800; }
+        .h2h-win-pill.w { background:rgba(34,197,94,0.15); color:#22c55e; }
+        .h2h-win-pill.d { background:rgba(100,116,139,0.15); color:#94a3b8; }
+        .h2h-win-pill.l { background:rgba(239,68,68,0.12); color:#f87171; }
     </style>
 </head>
 <body>
@@ -1217,16 +1259,17 @@
             <table id="standings-table">
                 <thead>
                     <tr>
-                        <th style="width: 8%;">RANK</th>
-                        <th style="text-align:left; width: 40%;">TEAM / MANAGER</th>
-                        <th style="width: 7%;">P</th>
-                        <th style="width: 7%;">W</th>
-                        <th style="width: 7%;">D</th>
-                        <th style="width: 7%;">L</th>
-                        <th style="width: 7%;">GF</th>
-                        <th style="width: 7%;">GA</th>
-                        <th style="width: 7%;">GD</th>
-                        <th style="width: 11%;">PTS</th>
+                        <th style="width: 5%;">RANK</th>
+                        <th style="text-align:left; width: 32%;">TEAM / MANAGER</th>
+                        <th style="width: 6%;">P</th>
+                        <th style="width: 6%;">W</th>
+                        <th style="width: 6%;">D</th>
+                        <th style="width: 6%;">L</th>
+                        <th style="width: 6%;">GF</th>
+                        <th style="width: 6%;">GA</th>
+                        <th style="width: 6%;">GD</th>
+                        <th style="width: 8%;">PTS</th>
+                        <th style="width: 19%;">5 นัดหลัง</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -1410,8 +1453,8 @@
         <div class="odds-modal-matchup" id="odds-modal-matchup">ตั้งค่าอัตราต่อรองสำหรับคู่นี้</div>
         <div class="odds-modal-hcap-row">
             <label class="odds-modal-hcap-label">⚖️ ราคาต่อ Asian Handicap (จากฝั่งเหย้า)</label>
-            <input type="number" class="odds-inp odds-inp-hcap" id="odds-inp-draw" step="0.25" placeholder="-0.5" style="width:100%;">
-            <div style="font-size:10px; color:rgba(161,183,214,0.4); margin-top:5px; text-align:center;">เช่น -0.5 = เหย้าต่อ½   0 = เต็ม   +0.5 = เยือนต่อ½   -0.25 = เหย้าต่อ¼</div>
+            <input type="number" class="odds-inp odds-inp-hcap" id="odds-inp-draw" step="0.25" placeholder="-0.5" style="width:100%;" oninput="autoFillOddsFromHcap()">
+            <div style="font-size:10px; color:rgba(161,183,214,0.4); margin-top:5px; text-align:center;">เช่น -0.5 = เหย้าต่อ½   0 = เต็ม   +0.5 = เยือนต่อ½   -0.25 = เหย้าต่อ¼ (อัตราชนะ-แพ้จะคำนวณอัตโนมัติ)</div>
         </div>
         <div class="odds-input-row">
             <div class="odds-input-group home">
@@ -1423,10 +1466,121 @@
                 <input type="number" class="odds-inp" id="odds-inp-away" min="1.01" step="0.01" placeholder="1.95">
             </div>
         </div>
+        <div style="padding:0 0 8px; text-align:center;">
+            <button onclick="autoCalcHandicap()" style="background:linear-gradient(135deg,rgba(139,92,246,0.18),rgba(59,130,246,0.18));border:1px solid rgba(139,92,246,0.4);color:#c084fc;font-size:12px;font-weight:700;padding:8px 18px;border-radius:8px;cursor:pointer;width:100%;font-family:'Prompt',sans-serif;letter-spacing:0.5px;">🤖 คำนวณแฮนดิแคปอัตโนมัติ (HoF + ฤดูกาล + H2H)</button>
+        </div>
+        <!-- H2H Summary inside odds modal -->
+        <div id="odds-h2h-bar" style="display:none; background:rgba(59,130,246,0.07); border:1px solid rgba(59,130,246,0.18); border-radius:10px; padding:9px 12px; margin-bottom:10px; font-size:11px; color:#93c5fd; line-height:1.6;"></div>
+        <div style="padding:0 0 10px; text-align:center;">
+            <button onclick="openH2HModal()" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;font-size:11px;font-weight:700;padding:6px 16px;border-radius:8px;cursor:pointer;width:100%;font-family:'Prompt',sans-serif;letter-spacing:0.5px;">📊 จัดการประวัติ H2H</button>
+        </div>
         <div class="odds-modal-actions">
             <button class="odds-save-btn" onclick="saveOdds()">💾 บันทึก</button>
             <button class="odds-clear-btn" onclick="clearOdds()">🗑️ ล้าง</button>
             <button class="odds-cancel-btn" onclick="closeOddsModal()">✕ ปิด</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── H2H Manager Modal (Standalone) ── -->
+<div id="h2h-manager-modal" onclick="if(event.target===this)closeH2HManager()" style="display:none;position:fixed;inset:0;z-index:1450;background:rgba(0,0,0,0.94);backdrop-filter:blur(12px);align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;">
+  <div style="background:rgba(11,30,61,0.98);border:1px solid rgba(59,130,246,0.35);border-radius:16px;padding:24px;width:100%;max-width:860px;margin:auto;box-shadow:0 24px 60px rgba(0,0,0,0.7);">
+    <!-- Header -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+      <div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#60a5fa;letter-spacing:2px;">📊 H2H MANAGER</div>
+        <div style="font-size:11px;color:#475569;margin-top:3px;">จัดการประวัติการพบกัน — บันทึกสถิติเก่าหรือปัจจุบัน</div>
+      </div>
+      <button onclick="closeH2HManager()" style="width:34px;height:34px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;border-radius:8px;cursor:pointer;font-size:15px;font-weight:700;padding:0;">✕</button>
+    </div>
+
+    <!-- ── Add Record Form ── -->
+    <div style="background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.18);border-radius:12px;padding:16px;margin-bottom:18px;">
+      <div style="font-size:12px;font-weight:700;color:#93c5fd;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">➕ เพิ่มสถิติ H2H</div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:end;margin-bottom:10px;">
+        <div>
+          <div style="font-size:10px;color:#60a5fa;font-weight:700;margin-bottom:4px;">ทีมเหย้า (Home)</div>
+          <select id="hmgr-home" style="width:100%;padding:9px 10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#e2e8f0;font-size:13px;font-family:'Prompt',sans-serif;" onchange="hmgrOnTeamChange()">
+            <option value="">-- เลือกทีม --</option>
+          </select>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding-bottom:2px;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <input type="number" id="hmgr-hs" min="0" max="30" placeholder="0" style="width:56px;padding:9px 6px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#e2e8f0;font-size:20px;font-weight:800;text-align:center;font-family:'Prompt',sans-serif;">
+            <span style="color:#475569;font-weight:800;font-size:14px;">—</span>
+            <input type="number" id="hmgr-as" min="0" max="30" placeholder="0" style="width:56px;padding:9px 6px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#e2e8f0;font-size:20px;font-weight:800;text-align:center;font-family:'Prompt',sans-serif;">
+          </div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:#f87171;font-weight:700;margin-bottom:4px;">ทีมเยือน (Away)</div>
+          <select id="hmgr-away" style="width:100%;padding:9px 10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#e2e8f0;font-size:13px;font-family:'Prompt',sans-serif;" onchange="hmgrOnTeamChange()">
+            <option value="">-- เลือกทีม --</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:120px 1fr auto;gap:10px;align-items:end;">
+        <div>
+          <div style="font-size:10px;color:#94a3b8;font-weight:700;margin-bottom:4px;">ฤดูกาล (Season)</div>
+          <input type="number" id="hmgr-season" min="1" placeholder="ฤดูกาล" style="width:100%;padding:9px 10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#e2e8f0;font-size:13px;font-family:'Prompt',sans-serif;">
+        </div>
+        <div>
+          <div style="font-size:10px;color:#94a3b8;font-weight:700;margin-bottom:4px;">หมายเหตุ</div>
+          <input type="text" id="hmgr-note" placeholder="รอบรองชนะเลิศ, รอบแบ่งกลุ่ม..." style="width:100%;padding:9px 10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#e2e8f0;font-size:13px;font-family:'Prompt',sans-serif;">
+        </div>
+        <button onclick="hmgrSaveRecord()" style="padding:9px 20px;background:linear-gradient(135deg,rgba(59,130,246,0.3),rgba(139,92,246,0.3));border:1px solid rgba(59,130,246,0.5);border-radius:10px;color:#93c5fd;font-weight:700;cursor:pointer;font-family:'Prompt',sans-serif;font-size:13px;white-space:nowrap;height:40px;">💾 บันทึก</button>
+      </div>
+      <!-- H2H preview for selected pair -->
+      <div id="hmgr-pair-summary" style="margin-top:10px;display:none;padding:8px 12px;background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.15);border-radius:8px;font-size:11px;color:#93c5fd;"></div>
+    </div>
+
+    <!-- ── Sync existing scores button ── -->
+    <div style="margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <button onclick="hmgrSyncAllMatches()" style="padding:8px 16px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.35);border-radius:8px;color:#4ade80;font-weight:700;cursor:pointer;font-family:'Prompt',sans-serif;font-size:12px;">⚡ ซิงค์จากผลแข่งขันทั้งหมด</button>
+      <span style="font-size:11px;color:#475569;">— นำผลแมตช์ที่บันทึกแล้วมาเพิ่มใน H2H อัตโนมัติ</span>
+    </div>
+
+    <!-- ── All H2H Pairs List ── -->
+    <div style="font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">📋 ประวัติทั้งหมด</div>
+    <div id="hmgr-all-pairs" style="max-height:420px;overflow-y:auto;"></div>
+  </div>
+</div>
+
+<!-- ── H2H History Modal ── -->
+<div id="h2h-modal" onclick="if(event.target===this)closeH2HModal()" style="display:none;position:fixed;inset:0;z-index:1400;background:rgba(0,0,0,0.92);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:16px;">
+    <div style="background:linear-gradient(145deg,#0d1f3c,#081424);border:1px solid rgba(59,130,246,0.3);border-radius:20px;padding:22px;max-width:520px;width:100%;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(59,130,246,0.12),0 24px 64px rgba(0,0,0,0.6);">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-shrink:0;">
+            <div style="flex:1;">
+                <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;color:#60a5fa;letter-spacing:2px;">📊 H2H HISTORY</div>
+                <div id="h2h-modal-subtitle" style="font-size:11px;color:#64748b;margin-top:2px;"></div>
+            </div>
+            <button onclick="closeH2HModal()" style="width:32px;height:32px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700;padding:0;">✕</button>
+        </div>
+        <div id="h2h-summary-bar" style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#93c5fd;line-height:1.7;flex-shrink:0;"></div>
+        <div id="h2h-records-list" style="overflow:auto;flex:1;min-height:0;margin-bottom:12px;"></div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;flex-shrink:0;">
+            <div style="font-size:10px;font-weight:700;color:#94a3b8;margin-bottom:10px;letter-spacing:1px;text-transform:uppercase;">➕ เพิ่มประวัติการพบกัน</div>
+            <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:end;margin-bottom:8px;">
+                <div style="text-align:center;">
+                    <div id="h2h-form-home-name" style="font-size:10px;font-weight:700;color:#60a5fa;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+                    <input type="number" id="h2h-hs" min="0" max="30" placeholder="0" style="width:100%;padding:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#e2e8f0;font-size:20px;font-weight:800;text-align:center;font-family:'Prompt',sans-serif;">
+                </div>
+                <div style="font-size:12px;color:#475569;font-weight:700;text-align:center;padding-bottom:10px;">VS</div>
+                <div style="text-align:center;">
+                    <div id="h2h-form-away-name" style="font-size:10px;font-weight:700;color:#f87171;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+                    <input type="number" id="h2h-as" min="0" max="30" placeholder="0" style="width:100%;padding:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#e2e8f0;font-size:20px;font-weight:800;text-align:center;font-family:'Prompt',sans-serif;">
+                </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-bottom:8px;">
+                <div style="flex:1;">
+                    <label style="font-size:10px;color:#64748b;display:block;margin-bottom:3px;">ฤดูกาล SS</label>
+                    <input type="number" id="h2h-season" min="1" placeholder="3" style="width:100%;padding:7px 10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#e2e8f0;font-size:13px;font-family:'Prompt',sans-serif;">
+                </div>
+                <div style="flex:2;">
+                    <label style="font-size:10px;color:#64748b;display:block;margin-bottom:3px;">หมายเหตุ (ไม่บังคับ)</label>
+                    <input type="text" id="h2h-note" placeholder="รอบรองชนะเลิศ..." style="width:100%;padding:7px 10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#e2e8f0;font-size:13px;font-family:'Prompt',sans-serif;">
+                </div>
+            </div>
+            <button onclick="saveH2HRecord()" style="width:100%;padding:9px;background:linear-gradient(135deg,rgba(59,130,246,0.25),rgba(139,92,246,0.25));border:1px solid rgba(59,130,246,0.4);border-radius:10px;color:#93c5fd;font-weight:700;cursor:pointer;font-family:'Prompt',sans-serif;font-size:13px;">💾 บันทึกผล</button>
         </div>
     </div>
 </div>
@@ -1535,7 +1689,8 @@ let state = {
     cupConfig: { roundFormat: 'single', finalFormat: 'single', thirdPlace: false, consolation: false },
     cupChampionId: null,
     consolationChampionId: null,
-    colors: { w1: "#ffffff", w2: "#dfb44b", w3: "#ffffff", h2Standings: "#dfb44b", h2Fixtures: "#dfb44b", h2Fame: "#dfb44b", h2Details: "#dfb44b", bgColor: "#051126" }
+    colors: { w1: "#ffffff", w2: "#dfb44b", w3: "#ffffff", h2Standings: "#dfb44b", h2Fixtures: "#dfb44b", h2Fame: "#dfb44b", h2Details: "#dfb44b", bgColor: "#051126" },
+    h2h: {}
 };
 
 let draggedTeamId = null;
@@ -2531,17 +2686,19 @@ function advanceConsolationRound() {
 // ── Toast notification system ──
 let _toastLoadingEl = null;
 let _toastTimer = null;
+let _toastPill = null;
 function showStatus(text, isLoading=false) {
     const container = document.getElementById('toast-container');
     if (!container) return;
-    // Dismiss existing loading toast immediately
+    // Dismiss ALL existing toasts before showing new one
     if (_toastLoadingEl) { _toastLoadingEl.remove(); _toastLoadingEl = null; }
+    if (_toastPill) { _toastPill.remove(); _toastPill = null; }
     if (_toastTimer) { clearTimeout(_toastTimer); _toastTimer = null; }
     // Determine type
     let type = 'info';
     if (isLoading) type = 'loading';
     else if (text.includes('❌') || text.includes('ล้มเหลว') || text.includes('ไม่สำเร็จ')) type = 'error';
-    else if (text.includes('✅') || text.includes('☁️') || text.includes('📸') || text.includes('🎉') || text.includes('🔓') || text.includes('⚽') || text.includes('👋')) type = 'success';
+    else if (text.includes('✅') || text.includes('☁️') || text.includes('📸') || text.includes('🎉') || text.includes('🔓') || text.includes('⚽') || text.includes('👋') || text.includes('🔴')) type = 'success';
     // Build pill
     const pill = document.createElement('div');
     pill.className = `toast-pill t-${type}`;
@@ -2550,9 +2707,10 @@ function showStatus(text, isLoading=false) {
     if (isLoading) {
         _toastLoadingEl = pill;
     } else {
+        _toastPill = pill;
         _toastTimer = setTimeout(() => {
             pill.classList.add('toast-out');
-            setTimeout(() => pill.remove(), 320);
+            setTimeout(() => { pill.remove(); if (_toastPill === pill) _toastPill = null; }, 320);
         }, 3000);
     }
 }
@@ -2626,6 +2784,7 @@ function renderAdminDock() {
         ${advanceHTML}
         ${consolAdvanceHTML}
         <button onclick="openEditTeamsModal()" style="background: var(--wc-gold); color: #000; font-size: 13px; height: 38px; padding: 0 15px;">✏️ จัดการผู้สมัคร / ระบบเว็บ</button>
+        <button onclick="openH2HManager()" style="background: linear-gradient(135deg,#1e3a8a,#1e40af); color: #93c5fd; border: 1px solid rgba(59,130,246,0.4); font-size: 13px; height: 38px; padding: 0 15px;">📊 จัดการ H2H</button>
         <button onclick="resetToNextSeason()" style="background: #22c55e; color: #fff; font-size: 13px; height: 38px; padding: 0 15px;">🔄 เริ่มซีซั่นใหม่</button>
         <button onclick="resetLeagueHard()" style="background: #ff4466; color: #fff; font-size: 13px; height: 38px; padding: 0 15px;">🚨 ลบทั้งหมด</button>
     `;
@@ -2968,6 +3127,7 @@ function confirmMatchScore(matchId) {
     }
     match.homeScore = homeScore;
     match.awayScore = awayScore;
+    _autoRecordH2H(match); // ✅ บันทึก H2H อัตโนมัติ
     let fmt = state.tournamentFormat || 'league';
     if (fmt !== 'league') renderAdminDock();
     renderLeague(); saveDataToCloud();
@@ -3032,11 +3192,23 @@ function openScoreModal(matchId) {
     let uploaderBadge = (hasEvidence && m.evidenceUploadedBy)
         ? `<div class="se-uploader-badge">📤 อัปโหลดโดย: <b style="color:#94a3b8;">${m.evidenceUploadedBy}</b></div>`
         : '';
+    // Build match status action buttons for admin
+    let matchStatusActionsHTML = '';
+    if (m.awayId !== 'BYE') {
+        if (!m.status) {
+            matchStatusActionsHTML = `<button class="match-start-btn" onclick="startMatch(${matchId});closeScoreModal();">▶ เริ่มแข่งขัน</button>`;
+        } else if (m.status === 'playing') {
+            matchStatusActionsHTML = `<button class="match-finish-btn" onclick="finishMatch(${matchId});closeScoreModal();">✅ ยืนยันจบแข่งขัน</button>`;
+        } else if (m.status === 'finished') {
+            matchStatusActionsHTML = `<span style="font-size:11px;color:#22c55e;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);padding:3px 9px;border-radius:4px;">✅ จบการแข่งขันแล้ว</span>`;
+        }
+    }
     document.getElementById('se-evidence-area').innerHTML = `
         <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;">
             ${hasEvidence ? `<button class="evidence-btn has-img" style="background:#1d4ed8;color:#fff;border-color:#3b82f6;width:auto;" onclick="viewMatchEvidence(${matchId})">👁️ ดูหลักฐาน</button>` : ''}
             <button class="${evidenceBtnClass}" style="width:auto;" onclick="uploadMatchEvidenceFromModal(${matchId})">${hasEvidence ? '📸 อัปโหลดใหม่' : '📷 อัปโหลดหลักฐาน'}</button>
             <button class="odds-score-btn" onclick="openOddsFromScoreModal(${matchId})">📊 ตั้งต่อรอง</button>
+            ${matchStatusActionsHTML}
         </div>
         ${uploaderBadge}
     `;
@@ -3116,7 +3288,7 @@ function openMatchViewModal(matchId) {
         viewRow.innerHTML = `<div class="se-view-score-pending">⏳ ยังไม่มีผล</div>`;
     }
 
-    // Evidence + upload buttons (no extra close button — use ✕ at top)
+    // Evidence + upload buttons (everyone can view)
     let evidenceInnerHTML = '';
     if (hasEvidence) {
         let uploaderBadge = m.evidenceUploadedBy
@@ -3165,6 +3337,7 @@ function confirmScoreFromModal() {
     if (!match) return;
     match.homeScore = homeScore;
     match.awayScore = awayScore;
+    _autoRecordH2H(match); // ✅ บันทึก H2H อัตโนมัติ
     closeScoreModal();
     let fmt = state.tournamentFormat || 'league';
     if (fmt !== 'league') renderAdminDock();
@@ -3498,6 +3671,41 @@ function saveCurrentChampToHistory() {
     }
 }
 
+// ── Form Guide helpers ────────────────────────────────────────────────────────
+function _getTeamForm(teamId, n) {
+    // Collect all matches this team played that have scores, sorted by match id (chronological)
+    let played = (state.matches || []).filter(m =>
+        (m.homeId === teamId || m.awayId === teamId) &&
+        m.homeId !== 'BYE' && m.awayId !== 'BYE' &&
+        m.homeScore !== null && m.homeScore !== undefined &&
+        m.awayScore !== null && m.awayScore !== undefined
+    );
+    // Sort by id ascending (id increments as matches are created)
+    played.sort((a, b) => (a.id || 0) - (b.id || 0));
+    // Take last n
+    let recent = played.slice(-n);
+    return recent.map(m => {
+        let isHome = m.homeId === teamId;
+        let gf = isHome ? m.homeScore : m.awayScore;
+        let ga = isHome ? m.awayScore : m.homeScore;
+        if (gf > ga) return { r: 'W', gf, ga };
+        if (gf < ga) return { r: 'L', gf, ga };
+        return { r: 'D', gf, ga };
+    });
+}
+
+function _buildFormGuideHTML(teamId, n) {
+    let form = _getTeamForm(teamId, n);
+    // Pad left with empty slots if fewer than n games played
+    let dots = [];
+    for (let i = form.length; i < n; i++) dots.push(`<span class="form-dot empty">·</span>`);
+    form.forEach(f => {
+        let tip = `${f.gf}-${f.ga}`;
+        dots.push(`<span class="form-dot ${f.r}" title="${f.r} (${tip})">${f.r}</span>`);
+    });
+    return `<div class="form-guide">${dots.join('')}</div>`;
+}
+
 function renderStandings() {
     let fmt = state.tournamentFormat || 'league';
     if (fmt !== 'league') { renderCupStatus(); return; }
@@ -3511,11 +3719,12 @@ function renderStandings() {
 
     // Restore league thead
     const thead = document.getElementById("standings-table").querySelector("thead");
-    if (thead && thead.children.length > 0 && thead.children[0].children.length < 8) {
+    if (thead) {
         thead.innerHTML = `<tr>
             <th style="width:5%">#</th><th style="text-align:left; width:30%">ทีม / ผู้จัดการ</th>
             <th>P</th><th style="color:#00ff88;">W</th><th>D</th><th style="color:#ff4466;">L</th>
             <th>GF</th><th>GA</th><th>GD</th><th>PTS</th>
+            <th style="min-width:110px;">5 นัดหลัง</th>
         </tr>`;
     }
 
@@ -3529,12 +3738,14 @@ function renderStandings() {
         else if (isDefending) tr.className = "defending-champ-row";
         let logoClass = team.isFlag ? "team-logo flag-img" : "team-logo club-img";
         const defendingBadge = isDefending ? `<span class="defending-badge">👑 DEFENDING</span>` : "";
+        let formHTML = _buildFormGuideHTML(team.id, 5);
         tr.innerHTML = `
             <td><strong>${index + 1}</strong></td>
             <td><div class="player-team-box"><img class="${logoClass}" src="${team.logo}" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(team.team)}';"><div class="team-info"><span class="p-name">${team.team}${team.isChampion ? '<span class="champion-badge">🏆 CHAMPION</span>' : ''}${defendingBadge}</span><span class="t-name">Manager: ${team.player}</span></div></div></td>
             <td>${team.p}</td><td style="color:#00ff88;">${team.w}</td><td>${team.d}</td><td style="color:#ff4466;">${team.l}</td>
             <td>${team.gf}</td><td>${team.ga}</td><td style="font-weight:bold; color:${team.gd >= 0 ? 'var(--wc-gold)' : '#ff4466'}">${team.gd > 0 ? '+' + team.gd : team.gd}</td>
             <td><span style="background:${team.isChampion ? 'var(--wc-gold)' : isDefending ? 'rgba(139,92,246,0.3)' : '#1a3660'}; color:${team.isChampion ? '#000' : '#fff'}; padding:3px 10px; font-weight:bold; border-radius:3px;">${team.pts}</span></td>
+            <td>${formHTML}</td>
         `;
         tbody.appendChild(tr);
     });
@@ -3607,18 +3818,32 @@ function _buildMatchRowDiv(m, fmt) {
     let isLeague = fmt === 'league';
     let dragAttrs = (isLeague && !state.isViewOnly) ? `draggable="true" ondragstart="handleTeamDragStart(event)" ondragover="handleTeamDragOver(event)" ondragleave="handleTeamDragLeave(event)" ondrop="handleTeamDrop(event)"` : '';
     let draggableClass = (isLeague && !state.isViewOnly) ? 'admin-draggable' : '';
-    let oddsBarHTML = _buildOddsBarHTML(m);
-    let divMatch = document.createElement("div"); divMatch.className = "match-row";
+    let chips = _buildOddsChips(m);
+
+    // Status badge — absolutely positioned in bottom padding of match-row
+    // (does NOT affect flex layout so score stays vertically centered with team names)
+    let statusBadgeHTML = '';
+    if (m.status === 'playing') {
+        statusBadgeHTML = `<div class="match-status-abs match-status-playing">🔴 กำลังแข่งขัน</div>`;
+    } else if (m.status === 'finished') {
+        statusBadgeHTML = `<div class="match-status-abs match-status-finished">✅ จบการแข่งขัน</div>`;
+    }
+
+    let divMatch = document.createElement("div");
+    divMatch.className = m.status ? "match-row has-status" : "match-row";
     divMatch.innerHTML = `
         <div class="match-team home ${draggableClass}" data-team-id="${hInfo.id}" ${dragAttrs}>
             <div style="display:flex; flex-direction:column; align-items:flex-end;"><span style="font-weight:700;">${hInfo.team}</span><span style="font-size:11px; color:var(--wc-text-sub);">${hInfo.player}</span></div>
             ${hInfo.id === 'BYE' ? '<span style="font-size:22px;">🎟️</span>' : `<img class="${homeLogoClass}" src="${hInfo.logo}" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(hInfo.team)}';">`}<span class="badge-side">H</span>
         </div>
-        <div class="match-score">${scoreHTML}${oddsBarHTML}</div>
+        <div class="match-score">
+            <div class="score-odds-row">${chips.homeChip}${scoreHTML}${chips.awayChip}</div>
+        </div>
         <div class="match-team away ${draggableClass}" data-team-id="${aInfo.id}" ${dragAttrs}>
             <span class="badge-side">A</span>${aInfo.id === 'BYE' ? '<span style="font-size:22px;">🎟️</span>' : `<img class="${awayLogoClass}" src="${aInfo.logo}" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(aInfo.team)}';">`}
             <div style="display:flex; flex-direction:column; align-items:flex-start;"><span style="font-weight:700;">${aInfo.team}</span><span style="font-size:11px; color:var(--wc-text-sub);">${aInfo.player}</span></div>
         </div>
+        ${statusBadgeHTML}
     `;
     return divMatch;
 }
@@ -3762,7 +3987,8 @@ function resetLeagueHard() {
                 cupConfig: { roundFormat: 'single', finalFormat: 'single', thirdPlace: false, consolation: false },
                 cupChampionId: null,
                 consolationChampionId: null,
-                colors: state.colors || { w1: "#ffffff", w2: "#dfb44b", w3: "#ffffff", h2Standings: "#dfb44b", h2Fixtures: "#dfb44b", h2Fame: "#dfb44b", h2Details: "#dfb44b", bgColor: "#051126" }
+                colors: state.colors || { w1: "#ffffff", w2: "#dfb44b", w3: "#ffffff", h2Standings: "#dfb44b", h2Fixtures: "#dfb44b", h2Fame: "#dfb44b", h2Details: "#dfb44b", bgColor: "#051126" },
+                h2h: state.h2h || {}  // ✅ รักษาประวัติ H2H ไว้เสมอ แม้จะ reset ฤดูกาล
             };
             showStatus("⏳ กำลังล้างข้อมูล...", true);
             fetch(`https://api.jsonbin.io/v3/b/${state.binId}`, {
@@ -4139,87 +4365,41 @@ function resetBracketMatchScore(matchId) {
 
 let _currentOddsMatchId = null;
 
-function _buildOddsBarHTML(m) {
-    if (!m || m.homeId === 'BYE' || m.awayId === 'BYE') return '';
+// Returns { homeChip, awayChip } — home goes LEFT of score, away goes RIGHT
+function _buildOddsChips(m) {
+    let empty = { homeChip: '', awayChip: '' };
+    if (!m || m.homeId === 'BYE' || m.awayId === 'BYE') return empty;
     let odds = m.odds || {};
-    let hasHome = odds.home != null && odds.home !== '';
     let hasHcap = odds.handicap != null && odds.handicap !== '';
-    let hasAway = odds.away != null && odds.away !== '';
-    if (!hasHome && !hasHcap && !hasAway) return '';
+    if (!hasHcap) return empty;
 
-    let hInfo = state.teams.find(t => t.id === m.homeId);
-    let aInfo = state.teams.find(t => t.id === m.awayId);
-    let homeLabel = hInfo ? hInfo.team : 'เหย้า';
-    let awayLabel = aInfo ? aInfo.team : 'เยือน';
-    let homeVal = hasHome ? parseFloat(odds.home).toFixed(2) : '—';
-    let awayVal = hasAway ? parseFloat(odds.away).toFixed(2) : '—';
-    let hasScore = m.homeScore !== null && m.awayScore !== null;
+    let hcap = parseFloat(odds.handicap);
+    if (isNaN(hcap)) return empty;
+    let awayHcap = -hcap;
+    let hcapStr = _fmtHcap(hcap);
+    let awayHcapStr = _fmtHcap(awayHcap);
 
-    if (hasHcap) {
-        // ─── Asian Handicap Mode ───
-        let hcap = parseFloat(odds.handicap);
-        let awayHcap = -hcap;
-        let hcapStr = _fmtHcap(hcap);
-        let awayHcapStr = _fmtHcap(awayHcap);
+    let hClass = 'hcap-chip home-hcap';
+    let aClass = 'hcap-chip away-hcap';
+    let hEmoji = '';
+    let aEmoji = '';
 
-        let homeChipClass = 'home' + (hasHome ? ' live' : '');
-        let awayChipClass = 'away' + (hasHome ? ' live' : '');
-        let homeResult = '';
-        let awayResult = '';
-
-        if (hasScore) {
-            let r = _calcAHResult(m.homeScore, m.awayScore, hcap);
-            let resultClass = { win: 'win', loss: 'loss', push: 'push-result', hw: '', hl: '' };
-            homeChipClass += (resultClass[r.home] ? ' ' + resultClass[r.home] : '');
-            awayChipClass += (resultClass[r.away] ? ' ' + resultClass[r.away] : '');
-            let labelTH = { win: '✅ ชนะ', loss: '❌ แพ้', push: '↩ คืนเงิน', hw: '½ ชนะครึ่ง', hl: '½ แพ้ครึ่ง' };
-            homeResult = `<span class="odds-chip-result ${r.home}">${labelTH[r.home] || r.home}</span>`;
-            awayResult = `<span class="odds-chip-result ${r.away}">${labelTH[r.away] || r.away}</span>`;
-        }
-
-        return `
-            <div class="odds-bar">
-                <div class="odds-chips">
-                    <div class="odds-chip ${homeChipClass}">
-                        <span class="odds-chip-hcap">${hcapStr}</span>
-                        <span class="odds-chip-value">${homeVal}</span>
-                        ${homeResult}
-                    </div>
-                    <div class="odds-chip ${awayChipClass}">
-                        <span class="odds-chip-hcap">${awayHcapStr}</span>
-                        <span class="odds-chip-value">${awayVal}</span>
-                        ${awayResult}
-                    </div>
-                </div>
-            </div>
-        `;
-    } else {
-        // ─── Legacy 1X2 Mode (backward compat) ───
-        let hasDraw = odds.draw != null && odds.draw !== '';
-        let drawVal = hasDraw ? parseFloat(odds.draw).toFixed(2) : '—';
-        let homeClass = hasHome ? 'home live' : 'home';
-        let drawClass = hasDraw ? 'draw live' : 'draw';
-        let awayClass = hasAway ? 'away live' : 'away';
-        return `
-            <div class="odds-bar">
-                <div class="odds-chips">
-                    <div class="odds-chip ${homeClass}">
-                        <span class="odds-chip-label">${homeLabel}</span>
-                        <span class="odds-chip-value">${homeVal}</span>
-                    </div>
-                    <div class="odds-chip ${drawClass}">
-                        <span class="odds-chip-label">เสมอ</span>
-                        <span class="odds-chip-value">${drawVal}</span>
-                    </div>
-                    <div class="odds-chip ${awayClass}">
-                        <span class="odds-chip-label">${awayLabel}</span>
-                        <span class="odds-chip-value">${awayVal}</span>
-                    </div>
-                </div>
-            </div>
-        `;
+    if (m.homeScore !== null && m.awayScore !== null) {
+        let r = _calcAHResult(m.homeScore, m.awayScore, hcap);
+        if (r.home === 'win' || r.home === 'hw') { hClass += ' hcap-win'; hEmoji = '✅'; }
+        else if (r.home === 'loss' || r.home === 'hl') { hClass += ' hcap-loss'; hEmoji = '❌'; }
+        else if (r.home === 'push') hEmoji = '↩';
+        if (r.away === 'win' || r.away === 'hw') { aClass += ' hcap-win'; aEmoji = '✅'; }
+        else if (r.away === 'loss' || r.away === 'hl') { aClass += ' hcap-loss'; aEmoji = '❌'; }
+        else if (r.away === 'push') aEmoji = '↩';
     }
+
+    return {
+        homeChip: `<span class="${hClass}">${hEmoji ? hEmoji + ' ' : ''}${hcapStr}</span>`,
+        awayChip: `<span class="${aClass}">${awayHcapStr}${aEmoji ? ' ' + aEmoji : ''}</span>`
+    };
 }
+function _buildOddsBarHTML(m) { return ''; } // legacy stub
 
 function openOddsModal(matchId) {
     if (state.isViewOnly) return;
@@ -4236,7 +4416,7 @@ function openOddsModal(matchId) {
     document.getElementById('odds-inp-draw').value = odds.handicap != null ? odds.handicap : '';
     document.getElementById('odds-inp-away').value = odds.away != null ? odds.away : '';
     document.getElementById('odds-modal').classList.add('open');
-    setTimeout(() => document.getElementById('odds-inp-home').focus(), 80);
+    setTimeout(() => { _refreshOddsH2HBar(); document.getElementById('odds-inp-home').focus(); }, 80);
 }
 
 function closeOddsModal() {
@@ -4287,7 +4467,431 @@ function clearOdds() {
     showStatus('✅ ล้างอัตราต่อรองแล้ว');
 }
 
-// ─── Asian Handicap Calculation Helpers ────────────────────────────────────
+// ─── Match Status Functions ──────────────────────────────────────────────────
+
+function startMatch(matchId) {
+    if (state.isViewOnly) return;
+    let m = state.matches.find(x => x.id === matchId);
+    if (!m) return;
+    m.status = 'playing';
+    renderLeague(); saveDataToCloud();
+    showStatus('🔴 เริ่มการแข่งขันแล้ว!');
+}
+
+function finishMatch(matchId) {
+    if (state.isViewOnly) return;
+    let m = state.matches.find(x => x.id === matchId);
+    if (!m) return;
+    m.status = 'finished';
+    renderLeague(); saveDataToCloud();
+    showStatus('✅ ยืนยันจบการแข่งขันแล้ว!');
+}
+
+// ─── Auto-Fill Odds from Handicap ────────────────────────────────────────────
+
+function autoFillOddsFromHcap() {
+    let hcapRaw = document.getElementById('odds-inp-draw').value.trim();
+    if (hcapRaw === '') return;
+    let hcap = parseFloat(hcapRaw);
+    if (isNaN(hcap)) return;
+    let homeInp = document.getElementById('odds-inp-home');
+    let awayInp = document.getElementById('odds-inp-away');
+    let absHcap = Math.abs(hcap);
+    let baseOdds = 1.90;
+    if (absHcap >= 2.0) baseOdds = 1.88;
+    if (absHcap >= 3.0) baseOdds = 1.85;
+    homeInp.value = baseOdds.toFixed(2);
+    awayInp.value = baseOdds.toFixed(2);
+}
+
+// ─── Auto-Calc Handicap from Hall of Fame + Season Stats ─────────────────────
+
+function _calcTeamStrength(teamId) {
+    // Current season stats
+    let w = 0, d = 0, l = 0;
+    state.matches.forEach(m => {
+        if (m.homeScore === null || m.awayScore === null) return;
+        if (m.homeId === teamId) {
+            if (m.homeScore > m.awayScore) w++;
+            else if (m.homeScore === m.awayScore) d++;
+            else l++;
+        } else if (m.awayId === teamId) {
+            if (m.awayScore > m.homeScore) w++;
+            else if (m.homeScore === m.awayScore) d++;
+            else l++;
+        }
+    });
+    let games = w + d + l;
+    let seasonPpg = games > 0 ? (w * 3 + d) / games : 0;
+
+    // Hall of Fame lifetime stats
+    let hof = (state.hallOfFame && state.hallOfFame[teamId]) ? state.hallOfFame[teamId] : {};
+    let hofW = hof.w || 0, hofD = hof.d || 0, hofL = hof.l || 0;
+    let hofGames = hofW + hofD + hofL;
+    let hofPpg = hofGames > 0 ? (hofW * 3 + hofD) / hofGames : 0;
+    let trophyBonus = (hof.trophies || 0) * 0.15;
+
+    // Weighted blend: 60% season + 40% all-time
+    let blended = (games > 0 ? seasonPpg * 0.6 : 0) + (hofGames > 0 ? hofPpg * 0.4 : 0) + trophyBonus;
+    return blended;
+}
+
+function autoCalcHandicap() {
+    if (!_currentOddsMatchId) return;
+    let m = state.matches.find(x => x.id === _currentOddsMatchId);
+    if (!m) return;
+
+    let homeStr = _calcTeamStrength(m.homeId);
+    let awayStr = _calcTeamStrength(m.awayId);
+    // H2H adjustment — defined later but hoisted as function declaration
+    let h2hAdj = typeof _calcH2HAdj === 'function' ? _calcH2HAdj(m.homeId, m.awayId) : 0;
+    let h2hGames = _getH2HRecords ? _getH2HRecords(m.homeId, m.awayId).length : 0;
+    let diff = (homeStr - awayStr) + h2hAdj;
+
+    // Map strength difference to handicap (negative = home gives handicap)
+    let hcap = 0;
+    if      (diff >  2.2)  hcap = -2.0;
+    else if (diff >  1.6)  hcap = -1.5;
+    else if (diff >  1.1)  hcap = -1.0;
+    else if (diff >  0.65) hcap = -0.75;
+    else if (diff >  0.35) hcap = -0.5;
+    else if (diff >  0.12) hcap = -0.25;
+    else if (diff < -2.2)  hcap =  2.0;
+    else if (diff < -1.6)  hcap =  1.5;
+    else if (diff < -1.1)  hcap =  1.0;
+    else if (diff < -0.65) hcap =  0.75;
+    else if (diff < -0.35) hcap =  0.5;
+    else if (diff < -0.12) hcap =  0.25;
+
+    document.getElementById('odds-inp-draw').value = hcap.toFixed(2);
+    document.getElementById('odds-inp-home').value = '1.90';
+    document.getElementById('odds-inp-away').value = '1.90';
+
+    let hcapLabel = _fmtHcap(hcap);
+    let homeTeam = (state.teams.find(t => t.id === m.homeId) || {}).team || m.homeId;
+    let awayTeam = (state.teams.find(t => t.id === m.awayId) || {}).team || m.awayId;
+    let whoGivesHcap = hcap < 0 ? homeTeam : (hcap > 0 ? awayTeam : 'เสมอกัน');
+    let h2hNote = h2hGames > 0 ? ` + H2H(${h2hGames}เกม)` : '';
+    let dataSource = (homeStr === 0 && awayStr === 0) ? 'ไม่มีสถิติ' : `HoF+ฤดูกาล${h2hNote}`;
+    showStatus(`🤖 แฮนดิแคป ${hcapLabel} (${whoGivesHcap}ต่อ) — ${dataSource}`);
+}
+
+// ─── H2H Manager (Standalone) ────────────────────────────────────────────────
+
+function openH2HManager() {
+    // Populate team dropdowns
+    let teams = (state.teams || []).filter(t => t.status === 'approved');
+    let opts = teams.map(t => `<option value="${t.id}">${t.player} — ${t.team}</option>`).join('');
+    let blank = '<option value="">-- เลือกทีม --</option>';
+    document.getElementById('hmgr-home').innerHTML = blank + opts;
+    document.getElementById('hmgr-away').innerHTML = blank + opts;
+    document.getElementById('hmgr-season').value = state.season || '';
+    document.getElementById('hmgr-hs').value = '';
+    document.getElementById('hmgr-as').value = '';
+    document.getElementById('hmgr-note').value = '';
+    document.getElementById('hmgr-pair-summary').style.display = 'none';
+    _hmgrRenderAllPairs();
+    document.getElementById('h2h-manager-modal').style.display = 'flex';
+}
+
+function closeH2HManager() {
+    document.getElementById('h2h-manager-modal').style.display = 'none';
+}
+
+function hmgrOnTeamChange() {
+    let hId = document.getElementById('hmgr-home').value;
+    let aId = document.getElementById('hmgr-away').value;
+    let bar = document.getElementById('hmgr-pair-summary');
+    if (!hId || !aId || hId === aId) { bar.style.display = 'none'; return; }
+    bar.innerHTML = _h2hSummaryHTML(hId, aId);
+    bar.style.display = '';
+}
+
+function hmgrSaveRecord() {
+    let hId = document.getElementById('hmgr-home').value;
+    let aId = document.getElementById('hmgr-away').value;
+    if (!hId || !aId) { showStatus('❌ เลือกทีมทั้งสองทีมก่อน'); return; }
+    if (hId === aId) { showStatus('❌ ทีมเหย้าและเยือนต้องไม่ใช่ทีมเดียวกัน'); return; }
+    let hs = parseInt(document.getElementById('hmgr-hs').value);
+    let as_ = parseInt(document.getElementById('hmgr-as').value);
+    if (isNaN(hs) || isNaN(as_) || hs < 0 || as_ < 0) { showStatus('❌ กรุณากรอกสกอร์ให้ครบ'); return; }
+    let season = parseInt(document.getElementById('hmgr-season').value) || state.season;
+    let note = document.getElementById('hmgr-note').value.trim();
+    let key = _h2hKey(hId, aId);
+    if (!state.h2h) state.h2h = {};
+    if (!state.h2h[key]) state.h2h[key] = [];
+    state.h2h[key].push({ homeId: hId, awayId: aId, hs, as: as_, season, note });
+    // Clear score fields only, keep team selection for easy bulk entry
+    document.getElementById('hmgr-hs').value = '';
+    document.getElementById('hmgr-as').value = '';
+    document.getElementById('hmgr-note').value = '';
+    hmgrOnTeamChange();
+    _hmgrRenderAllPairs();
+    saveDataToCloud();
+    showStatus('✅ บันทึก H2H แล้ว');
+}
+
+function hmgrDeleteRecord(key, idx) {
+    if (!state.h2h || !state.h2h[key]) return;
+    state.h2h[key].splice(idx, 1);
+    if (state.h2h[key].length === 0) delete state.h2h[key];
+    _hmgrRenderAllPairs();
+    saveDataToCloud();
+    showStatus('✅ ลบข้อมูล H2H แล้ว');
+}
+
+// ── Sync all existing match results into H2H automatically ──────────────────
+function hmgrSyncAllMatches() {
+    let added = 0;
+    (state.matches || []).forEach(m => {
+        if (m.homeId === 'BYE' || m.awayId === 'BYE') return;
+        if (m.homeScore === null || m.homeScore === undefined) return;
+        if (m.awayScore === null || m.awayScore === undefined) return;
+        let key = _h2hKey(m.homeId, m.awayId);
+        if (!state.h2h) state.h2h = {};
+        if (!state.h2h[key]) state.h2h[key] = [];
+        // Skip if already recorded by matchId
+        let alreadyRecorded = state.h2h[key].some(r => r.matchId !== undefined && r.matchId === m.id);
+        if (!alreadyRecorded) {
+            state.h2h[key].push({ matchId: m.id, homeId: m.homeId, awayId: m.awayId, hs: m.homeScore, as: m.awayScore, season: m.season || state.season, note: 'อัตโนมัติ' });
+            added++;
+        }
+    });
+    _hmgrRenderAllPairs();
+    saveDataToCloud();
+    if (added > 0) showStatus(`✅ ซิงค์แล้ว ${added} เกม`);
+    else showStatus('ℹ️ ไม่มีข้อมูลใหม่ที่ต้องซิงค์');
+}
+
+function _hmgrRenderAllPairs() {
+    let container = document.getElementById('hmgr-all-pairs');
+    if (!container) return;
+    let h2h = state.h2h || {};
+    let keys = Object.keys(h2h).filter(k => h2h[k] && h2h[k].length > 0);
+    if (keys.length === 0) {
+        container.innerHTML = `<div style="text-align:center;color:#475569;font-size:12px;padding:24px;">ยังไม่มีประวัติ H2H — เพิ่มด้านบน หรือกด ⚡ ซิงค์จากผลแข่งขัน</div>`;
+        return;
+    }
+    // Sort by number of games desc
+    keys.sort((a, b) => (h2h[b] || []).length - (h2h[a] || []).length);
+    container.innerHTML = keys.map(key => {
+        let records = h2h[key];
+        let ids = key.split('|');
+        let tA = state.teams.find(t => t.id === ids[0]) || { player: ids[0], team: ids[0] };
+        let tB = state.teams.find(t => t.id === ids[1]) || { player: ids[1], team: ids[1] };
+        // Compute mini stats for each side
+        let wA = 0, dA = 0, lA = 0;
+        records.forEach(r => {
+            let aIsHome = r.homeId === ids[0];
+            let ts = aIsHome ? r.hs : r.as;
+            let os = aIsHome ? r.as : r.hs;
+            if (ts > os) wA++;
+            else if (ts === os) dA++;
+            else lA++;
+        });
+        let wB = lA, dB = dA, lB = wA;
+        let recordRows = records.map((r, i) => {
+            let rHome = state.teams.find(t => t.id === r.homeId) || { team: r.homeId };
+            let rAway = state.teams.find(t => t.id === r.awayId) || { team: r.awayId };
+            let winner = r.hs > r.as ? rHome.team : (r.as > r.hs ? rAway.team : 'เสมอ');
+            let wColor = r.hs > r.as ? '#60a5fa' : (r.as > r.hs ? '#f87171' : '#94a3b8');
+            let autoTag = r.matchId ? `<span style="font-size:9px;background:rgba(34,197,94,0.12);color:#4ade80;border:1px solid rgba(34,197,94,0.25);border-radius:4px;padding:1px 5px;margin-left:4px;">⚡</span>` : '';
+            return `<div class="h2h-record-row">
+                <div style="font-size:10px;color:#64748b;min-width:28px;text-align:center;">SS${r.season||'?'}</div>
+                <div style="font-size:11px;color:#94a3b8;flex:1;text-align:right;">${rHome.team}</div>
+                <div class="h2h-record-score">${r.hs} — ${r.as}</div>
+                <div style="font-size:11px;color:#94a3b8;flex:1;">${rAway.team}</div>
+                <div style="font-size:10px;color:${wColor};font-weight:700;min-width:52px;text-align:center;">${winner}${autoTag}</div>
+                ${r.note && r.note !== 'อัตโนมัติ' ? `<div style="font-size:10px;color:#475569;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${r.note}">${r.note}</div>` : '<div></div>'}
+                <button class="h2h-record-del" onclick="hmgrDeleteRecord('${key}',${i})">✕</button>
+            </div>`;
+        }).join('');
+        return `<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);border-radius:10px;margin-bottom:10px;overflow:hidden;">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(59,130,246,0.06);cursor:pointer;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:12px;font-weight:700;color:#e2e8f0;">${tA.team} <span style="color:#475569;font-weight:400;">vs</span> ${tB.team}</span>
+                    <span style="font-size:11px;color:#64748b;">${records.length} เกม</span>
+                </div>
+                <div style="display:flex;gap:12px;font-size:11px;">
+                    <span style="color:#60a5fa;">${tA.team}: <b>${wA}W ${dA}D ${lA}L</b></span>
+                    <span style="color:#f87171;">${tB.team}: <b>${wB}W ${dB}D ${lB}L</b></span>
+                </div>
+            </div>
+            <div style="padding:8px 10px;">${recordRows}</div>
+        </div>`;
+    }).join('');
+}
+
+// ─── H2H (Head-to-Head) System ───────────────────────────────────────────────
+
+let _h2hHomeId = null;
+let _h2hAwayId = null;
+
+function _h2hKey(a, b) { return [a, b].sort().join('|'); }
+function _getH2HRecords(aId, bId) { return (state.h2h || {})[_h2hKey(aId, bId)] || []; }
+
+// ── Auto-record H2H from match result ──────────────────────────────────────
+function _autoRecordH2H(match) {
+    if (!match) return;
+    if (!match.homeId || !match.awayId) return;
+    if (match.homeId === 'BYE' || match.awayId === 'BYE') return;
+    if (match.homeScore === null || match.homeScore === undefined) return;
+    if (match.awayScore === null || match.awayScore === undefined) return;
+    if (!state.h2h) state.h2h = {};
+    let key = _h2hKey(match.homeId, match.awayId);
+    if (!state.h2h[key]) state.h2h[key] = [];
+    // ป้องกันบันทึกซ้ำ — เช็คด้วย matchId
+    let alreadyRecorded = state.h2h[key].some(r => r.matchId !== undefined && r.matchId === match.id);
+    if (alreadyRecorded) {
+        // อัปเดตคะแนนถ้ามีการแก้ไข
+        let existing = state.h2h[key].find(r => r.matchId === match.id);
+        if (existing) { existing.hs = match.homeScore; existing.as = match.awayScore; }
+        return;
+    }
+    state.h2h[key].push({
+        matchId: match.id,
+        homeId: match.homeId,
+        awayId: match.awayId,
+        hs: match.homeScore,
+        as: match.awayScore,
+        season: match.season || state.season,
+        note: 'อัตโนมัติ'
+    });
+}
+
+function _h2hTeamStats(teamId, oppId) {
+    let records = _getH2HRecords(teamId, oppId);
+    let w = 0, d = 0, l = 0, gf = 0, ga = 0;
+    records.forEach(r => {
+        let isHome = r.homeId === teamId;
+        let ts = isHome ? r.hs : r.as;
+        let os = isHome ? r.as : r.hs;
+        gf += ts; ga += os;
+        if (ts > os) w++;
+        else if (ts === os) d++;
+        else l++;
+    });
+    return { w, d, l, gf, ga, games: w + d + l };
+}
+
+// Returns adjustment to add to (homeStr - awayStr); positive = home advantage
+function _calcH2HAdj(homeId, awayId) {
+    let hs = _h2hTeamStats(homeId, awayId);
+    let as_ = _h2hTeamStats(awayId, homeId);
+    if (hs.games === 0) return 0;
+    let homePpg = (hs.w * 3 + hs.d) / hs.games;
+    let awayPpg = (as_.w * 3 + as_.d) / as_.games;
+    return (homePpg - awayPpg) * 0.25;
+}
+
+function _h2hSummaryHTML(homeId, awayId) {
+    let hs = _h2hTeamStats(homeId, awayId);
+    let as_ = _h2hTeamStats(awayId, homeId);
+    let hName = (state.teams.find(t => t.id === homeId) || {}).team || homeId;
+    let aName = (state.teams.find(t => t.id === awayId) || {}).team || awayId;
+    let total = hs.games;
+    if (total === 0) return `<span style="color:#475569;">ไม่มีประวัติ H2H — กด "จัดการประวัติ H2H" เพื่อเพิ่มข้อมูล</span>`;
+    let hPill = `<span class="h2h-win-pill w">${hs.w}W</span> <span class="h2h-win-pill d">${hs.d}D</span> <span class="h2h-win-pill l">${hs.l}L</span>`;
+    let aPill = `<span class="h2h-win-pill w">${as_.w}W</span> <span class="h2h-win-pill d">${as_.d}D</span> <span class="h2h-win-pill l">${as_.l}L</span>`;
+    return `<b style="color:#e2e8f0;">${total} เกม</b> &nbsp;|&nbsp; <b style="color:#60a5fa;">${hName}</b> ${hPill} GF${hs.gf}/GA${hs.ga} &nbsp;|&nbsp; <b style="color:#f87171;">${aName}</b> ${aPill} GF${as_.gf}/GA${as_.ga}`;
+}
+
+function _refreshOddsH2HBar() {
+    let bar = document.getElementById('odds-h2h-bar');
+    if (!bar || !_currentOddsMatchId) return;
+    let m = state.matches.find(x => x.id === _currentOddsMatchId);
+    if (!m) return;
+    let html = _h2hSummaryHTML(m.homeId, m.awayId);
+    bar.innerHTML = '📊 H2H: ' + html;
+    bar.style.display = '';
+}
+
+function openH2HModal() {
+    if (!_currentOddsMatchId) return;
+    let m = state.matches.find(x => x.id === _currentOddsMatchId);
+    if (!m) return;
+    _h2hHomeId = m.homeId;
+    _h2hAwayId = m.awayId;
+    let hName = (state.teams.find(t => t.id === m.homeId) || {}).team || m.homeId;
+    let aName = (state.teams.find(t => t.id === m.awayId) || {}).team || m.awayId;
+    document.getElementById('h2h-modal-subtitle').textContent = `${hName}  vs  ${aName}`;
+    document.getElementById('h2h-form-home-name').textContent = hName;
+    document.getElementById('h2h-form-away-name').textContent = aName;
+    document.getElementById('h2h-season').value = state.season || '';
+    document.getElementById('h2h-hs').value = '';
+    document.getElementById('h2h-as').value = '';
+    document.getElementById('h2h-note').value = '';
+    _renderH2HModal();
+    document.getElementById('h2h-modal').style.display = 'flex';
+}
+
+function closeH2HModal() {
+    document.getElementById('h2h-modal').style.display = 'none';
+    _h2hHomeId = null; _h2hAwayId = null;
+    _refreshOddsH2HBar();
+}
+
+function _renderH2HModal() {
+    if (!_h2hHomeId || !_h2hAwayId) return;
+    let hName = (state.teams.find(t => t.id === _h2hHomeId) || {}).team || _h2hHomeId;
+    let aName = (state.teams.find(t => t.id === _h2hAwayId) || {}).team || _h2hAwayId;
+    // Summary
+    document.getElementById('h2h-summary-bar').innerHTML = _h2hSummaryHTML(_h2hHomeId, _h2hAwayId);
+    // Records list
+    let records = _getH2HRecords(_h2hHomeId, _h2hAwayId);
+    let listEl = document.getElementById('h2h-records-list');
+    if (records.length === 0) {
+        listEl.innerHTML = `<div style="text-align:center; color:#475569; font-size:12px; padding:16px;">ยังไม่มีประวัติการพบกัน</div>`;
+        return;
+    }
+    let key = _h2hKey(_h2hHomeId, _h2hAwayId);
+    listEl.innerHTML = records.map((r, i) => {
+        let rHomeName = (state.teams.find(t => t.id === r.homeId) || {}).team || r.homeId;
+        let rAwayName = (state.teams.find(t => t.id === r.awayId) || {}).team || r.awayId;
+        let winner = r.hs > r.as ? rHomeName : (r.as > r.hs ? rAwayName : 'เสมอ');
+        let winnerColor = r.hs > r.as ? '#60a5fa' : (r.as > r.hs ? '#f87171' : '#94a3b8');
+        let note = r.note ? `<span style="color:#475569;"> — ${r.note}</span>` : '';
+        return `<div class="h2h-record-row">
+            <div style="font-size:10px; color:#64748b; min-width:24px; text-align:center;">SS${r.season || '?'}</div>
+            <div style="font-size:11px; color:#94a3b8; flex:1; text-align:right;">${rHomeName}</div>
+            <div class="h2h-record-score">${r.hs} — ${r.as}</div>
+            <div style="font-size:11px; color:#94a3b8; flex:1;">${rAwayName}</div>
+            <div style="font-size:10px; color:${winnerColor}; font-weight:700; min-width:48px; text-align:center;">${winner}</div>
+            ${note ? `<div style="font-size:10px;color:#475569;">${r.note}</div>` : ''}
+            <button class="h2h-record-del" onclick="deleteH2HRecord('${key}',${i})">✕</button>
+        </div>`;
+    }).join('');
+}
+
+function saveH2HRecord() {
+    if (!_h2hHomeId || !_h2hAwayId) return;
+    let hs = parseInt(document.getElementById('h2h-hs').value);
+    let as_ = parseInt(document.getElementById('h2h-as').value);
+    if (isNaN(hs) || isNaN(as_) || hs < 0 || as_ < 0) { showStatus('❌ กรุณาใส่สกอให้ครบ'); return; }
+    let season = parseInt(document.getElementById('h2h-season').value) || state.season;
+    let note = document.getElementById('h2h-note').value.trim();
+    let key = _h2hKey(_h2hHomeId, _h2hAwayId);
+    if (!state.h2h) state.h2h = {};
+    if (!state.h2h[key]) state.h2h[key] = [];
+    state.h2h[key].push({ homeId: _h2hHomeId, awayId: _h2hAwayId, hs, as: as_, season, note });
+    document.getElementById('h2h-hs').value = '';
+    document.getElementById('h2h-as').value = '';
+    document.getElementById('h2h-note').value = '';
+    _renderH2HModal();
+    saveDataToCloud();
+    showStatus('✅ บันทึก H2H แล้ว');
+}
+
+function deleteH2HRecord(key, idx) {
+    if (!state.h2h || !state.h2h[key]) return;
+    state.h2h[key].splice(idx, 1);
+    if (state.h2h[key].length === 0) delete state.h2h[key];
+    _renderH2HModal();
+    saveDataToCloud();
+    showStatus('✅ ลบข้อมูล H2H แล้ว');
+}
+
+// ─── Asian Handicap Calculation Helpers ──────────────────────────────────────
 
 function _fmtHcap(val) {
     let n = parseFloat(val);
