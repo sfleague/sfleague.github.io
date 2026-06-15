@@ -126,7 +126,13 @@
         .defending-badge { display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(109,40,217,0.12)); border: 1px solid rgba(167,139,250,0.45); color: #c4b5fd; padding: 2px 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-left: 8px; font-family: 'Orbitron', sans-serif; border-radius: 4px; letter-spacing: 0.5px; box-shadow: 0 0 8px rgba(139,92,246,0.2); }
 
         .round-title { background: linear-gradient(90deg, #0f2b54, transparent); color: var(--h2-fixtures-color); font-family: 'Orbitron', 'Prompt', sans-serif; font-weight: 800; padding: 12px 18px; font-size: 14px; text-transform: uppercase; margin-top: 30px; border-left: 4px solid var(--h2-fixtures-color); }
-        .match-row { display: flex; align-items: center; gap: 8px; padding: 16px 12px; border-bottom: 1px solid var(--wc-border); background: rgba(11, 30, 61, 0.4); }
+        .match-row { display: flex; flex-direction: column; gap: 0; padding: 12px 12px; border-bottom: 1px solid var(--wc-border); background: rgba(11, 30, 61, 0.4); }
+
+        .match-row-main { display: flex; align-items: center; gap: 8px; }
+        .match-row-bottom { display: flex; align-items: center; margin-top: 6px; }
+        .match-bottom-home { flex: 1 1 0; display: flex; justify-content: flex-end; padding-right: 30px; }
+        .match-bottom-center { flex: 0 0 auto; min-width: 110px; display: flex; justify-content: center; align-items: center; }
+        .match-bottom-away { flex: 1 1 0; display: flex; justify-content: flex-start; padding-left: 30px; }
 
         .match-team { flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 6px; }
         .match-team.admin-draggable { cursor: grab; }
@@ -141,7 +147,7 @@
         .match-score { flex: 0 0 auto; min-width: 110px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; padding: 0 4px; }
         .score-row-inputs { display: flex; justify-content: center; align-items: center; gap: 8px; }
         .score-input { width: 65px; height: 42px; text-align: center; background: #030a17; border: 1px solid var(--wc-border); border-radius: 4px; color: #fff; font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: bold; }
-        .score-view-box { font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 20px; background: linear-gradient(135deg, #1a3660, #0b1e3d); color: var(--wc-gold); padding: 8px 20px; border-radius: 4px; border: 1px solid var(--wc-gold); min-width: 100px; text-align: center; white-space: nowrap; }
+        .score-view-box { font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 16px; background: linear-gradient(135deg, #1a3660, #0b1e3d); color: var(--wc-gold); padding: 6px 14px; border-radius: 4px; border: 1px solid var(--wc-gold); min-width: 82px; text-align: center; white-space: nowrap; }
         .vs-text { color: var(--wc-text-sub); font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: bold; }
         .match-score .btn-secondary { font-size: 12px; padding: 6px 12px; border-radius: 4px; width: auto; }
         .match-score button.evidence-btn { width: auto; }
@@ -359,6 +365,58 @@
         .cl-badge.improve { background: rgba(234,179,8,0.15); color: #fbbf24; border: 1px solid rgba(234,179,8,0.3); }
         .cl-text { color: #cbd5e1; line-height: 1.5; }
 
+
+        /* ── Team Stats Modal ── */
+        #team-stats-modal { display:none; position:fixed; inset:0; z-index:1200;
+            background:rgba(0,0,0,0.87); backdrop-filter:blur(8px);
+            align-items:center; justify-content:center; padding:20px; }
+        .ts-modal-box {
+            position:relative; width:100%; max-width:520px; max-height:90vh;
+            background:rgba(11,30,61,0.97); border:1px solid rgba(223,180,75,0.35);
+            border-radius:16px; box-shadow:0 25px 80px rgba(0,0,0,0.8), 0 0 50px rgba(223,180,75,0.08);
+            overflow:hidden; display:flex; flex-direction:column;
+        }
+        .ts-modal-top { position:absolute; top:0; left:0; right:0; height:2px;
+            background:linear-gradient(90deg,transparent,var(--wc-gold),transparent); }
+        .ts-modal-header { display:flex; align-items:center; gap:12px; padding:18px 20px 14px;
+            border-bottom:1px solid rgba(255,255,255,0.07); flex-shrink:0; }
+        .ts-modal-logo { width:44px; height:44px; object-fit:contain; border-radius:6px; flex-shrink:0; }
+        .ts-modal-logo.flag { width:52px; height:34px; border-radius:4px; object-fit:cover; }
+        .ts-modal-title { font-family:'Orbitron',sans-serif; font-size:15px; font-weight:900;
+            color:#fff; margin:0; }
+        .ts-modal-sub { font-size:12px; color:var(--wc-text-sub); margin:0; }
+        .ts-close-btn { margin-left:auto; width:34px; height:34px; border-radius:8px; display:flex;
+            align-items:center; justify-content:center; background:rgba(255,255,255,0.05);
+            border:1px solid rgba(255,255,255,0.1); color:#94a3b8; cursor:pointer;
+            font-size:14px; padding:0; width:auto; transition:all 0.2s; }
+        .ts-close-btn:hover { background:rgba(255,255,255,0.12); color:#fff; transform:none; box-shadow:none; }
+        .ts-modal-body { padding:18px 20px 20px; overflow-y:auto; flex:1; min-height:0; display:flex; flex-direction:column; gap:16px; }
+        .ts-stat-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+        .ts-stat-box { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+            border-radius:10px; padding:12px 8px; text-align:center; }
+        .ts-stat-val { font-family:'Orbitron',sans-serif; font-size:22px; font-weight:800; line-height:1; margin-bottom:4px; }
+        .ts-stat-lbl { font-size:10px; color:var(--wc-text-sub); text-transform:uppercase; letter-spacing:0.5px; font-weight:700; }
+        .ts-stat-box.win  .ts-stat-val { color:#22c55e; }
+        .ts-stat-box.draw .ts-stat-val { color:#eab308; }
+        .ts-stat-box.loss .ts-stat-val { color:#ef4444; }
+        .ts-stat-row2 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+        .ts-stat-box2 { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06);
+            border-radius:8px; padding:10px 8px; text-align:center; }
+        .ts-stat-box2 .ts-stat-val { font-size:18px; color:var(--wc-gold); }
+        .ts-section-title { font-size:11px; font-weight:800; text-transform:uppercase;
+            letter-spacing:1px; color:var(--wc-text-sub); margin-bottom:6px; }
+        .ts-form-row { display:flex; gap:6px; flex-wrap:wrap; }
+        .ts-form-item { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07);
+            border-radius:8px; padding:8px 12px; font-size:12px; display:flex; align-items:center; gap:8px; flex:1 1 auto; min-width:180px; }
+        .ts-form-badge { font-size:11px; font-weight:800; padding:2px 7px; border-radius:4px; flex-shrink:0; }
+        .ts-form-badge.W { background:rgba(34,197,94,0.2); color:#22c55e; border:1px solid rgba(34,197,94,0.35); }
+        .ts-form-badge.D { background:rgba(234,179,8,0.2);  color:#fbbf24; border:1px solid rgba(234,179,8,0.35); }
+        .ts-form-badge.L { background:rgba(239,68,68,0.2);  color:#f87171; border:1px solid rgba(239,68,68,0.35); }
+        .ts-form-score { font-family:'Orbitron',sans-serif; font-size:12px; color:#fff; font-weight:700; }
+        .ts-form-opp { font-size:11px; color:var(--wc-text-sub); flex:1; }
+        /* clickable team name in fixtures */
+        .fixture-team-clickable { cursor:pointer; border-bottom:1px dashed rgba(223,180,75,0.35); transition:color 0.2s, border-color 0.2s; display:inline; }
+        .fixture-team-clickable:hover { color:var(--wc-gold) !important; border-bottom-color:var(--wc-gold); }
 
         /* ── Announcement Banner ── */
         #announcement-banner { display:none; width:100%; box-sizing:border-box; background:linear-gradient(135deg,rgba(234,179,8,0.18),rgba(234,100,8,0.10)); border:1px solid rgba(234,179,8,0.45); border-radius:10px; padding:12px 18px; margin-bottom:14px; position:relative; animation:announceFadeIn 0.4s ease; }
@@ -801,7 +859,7 @@
             img.flag-img { width: 36px; height: 24px; }
 
             /* กล่องสกอร์ */
-            .score-view-box { font-size: 15px; padding: 6px 10px; min-width: 68px; }
+            .score-view-box { font-size: 13px; padding: 5px 8px; min-width: 60px; }
             .score-input { width: 50px; height: 38px; font-size: 17px; }
             .match-score .btn-secondary { font-size: 11px; padding: 5px 8px; }
             .ah-chip { font-size: 9px; padding: 2px 4px; }
@@ -1086,12 +1144,12 @@
         .match-start-btn:hover { background:rgba(59,130,246,0.28); transform:none; box-shadow:none; color:#93c5fd; }
         .match-finish-btn { background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.35); color:#22c55e; font-size:10px; font-weight:700; padding:3px 9px; border-radius:4px; cursor:pointer; width:auto; letter-spacing:0.3px; }
         .match-finish-btn:hover { background:rgba(34,197,94,0.28); transform:none; box-shadow:none; color:#4ade80; }
-        .match-row { position: relative; }
-        .match-row.has-status { padding-bottom: 22px; }
-        .match-status-abs { position:absolute; bottom:4px; left:50%; transform:translateX(-50%); white-space:nowrap; display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:800; padding:2px 10px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px; pointer-events:none; }
+        .match-status-badge { white-space:nowrap; }
         .match-status-badge { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:800; padding:2px 8px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px; }
-        /* ── Thai-style Asian Handicap Chips (beside score) ── */
-        .ah-chip { display:inline-flex; align-items:center; font-size:10px; font-weight:900; padding:2px 5px; border-radius:4px; font-family:'Orbitron','Prompt',sans-serif; letter-spacing:0.2px; flex-shrink:0; white-space:nowrap; }
+        /* ── Logo wrapper (fixed width so logos always align) ── */
+        .match-logo-wrap { flex-shrink:0; display:flex; justify-content:center; align-items:center; width:68px; }
+        /* ── Thai-style Asian Handicap Chips (under logo) ── */
+        .ah-chip { display:inline-flex; align-items:center; font-size:10px; font-weight:900; padding:2px 6px; border-radius:4px; font-family:'Orbitron','Prompt',sans-serif; letter-spacing:0.2px; flex-shrink:0; white-space:nowrap; }
         .ah-fav  { background:rgba(239,68,68,0.14); color:#fca5a5; border:1px solid rgba(239,68,68,0.33); }
         .ah-recv { background:rgba(59,130,246,0.12); color:#93c5fd; border:1px solid rgba(59,130,246,0.25); }
         .ah-even { background:rgba(234,179,8,0.11); color:#fbbf24; border:1px solid rgba(234,179,8,0.28); }
@@ -1188,7 +1246,22 @@
             </button>
         </div>
         <div class="changelog-body" id="changelog-body">
+            <div style="margin-bottom:6px; padding:6px 10px; background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.2); border-radius:6px;">
+                <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#60a5fa;margin-bottom:6px;">⚽ ผลล่าสุด (อัตโนมัติ)</div>
+                <ul class="changelog-list" id="changelog-auto-results" style="margin:0;"></ul>
+            </div>
+            <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--wc-text-sub);margin:10px 0 6px;">📋 อัปเดตระบบ</div>
             <ul class="changelog-list">
+                <li class="cl-item">
+                    <span class="cl-date">15 JUN 2026</span>
+                    <span class="cl-badge improve">ปรับปรุง</span>
+                    <span class="cl-text">ย้าย Chip Asian Handicap ไปอยู่ใต้ธงชาติ/โลโก้แต่ละฝั่ง — ธงชาติและโลโก้ทุกทีมในสายการแข่งขันตรงกันสวยงาม</span>
+                </li>
+                <li class="cl-item">
+                    <span class="cl-date">15 JUN 2026</span>
+                    <span class="cl-badge new">ใหม่</span>
+                    <span class="cl-text">เพิ่มคำอธิบาย Asian Handicap ใน popup บันทึกผล — แสดงว่าคู่นี้ใครต่อใคร ราคาเท่าไหร่ ก่อนกรอกผลได้เลย</span>
+                </li>
                 <li class="cl-item">
                     <span class="cl-date">15 JUN 2026</span>
                     <span class="cl-badge new">ใหม่</span>
@@ -1403,6 +1476,24 @@
 
     <div class="fc-footer">
         powered by <strong>This is a book 888</strong> since 2026
+    </div>
+</div>
+
+<!-- ── Team Stats Modal ── -->
+<div id="team-stats-modal" onclick="if(event.target===this)closeTeamStatsModal()">
+    <div class="ts-modal-box">
+        <div class="ts-modal-top"></div>
+        <div class="ts-modal-header">
+            <img id="ts-logo" class="ts-modal-logo" src="" alt="">
+            <div style="flex:1;min-width:0;">
+                <p class="ts-modal-title" id="ts-team-name">—</p>
+                <p class="ts-modal-sub" id="ts-manager-name">—</p>
+            </div>
+            <button class="ts-close-btn" onclick="closeTeamStatsModal()">✕</button>
+        </div>
+        <div class="ts-modal-body" id="ts-modal-body">
+            <!-- filled by JS -->
+        </div>
     </div>
 </div>
 
@@ -1737,6 +1828,7 @@
                 <input type="number" class="se-score-inp" id="se-away-inp" min="0" placeholder="0">
             </div>
             <div id="se-score-view-row" style="display:none;" class="se-view-score-display"></div>
+            <div id="se-ah-area"></div>
             <div class="se-evidence-row" id="se-evidence-area"></div>
             <div class="se-modal-actions">
                 <button class="se-confirm-btn" id="se-confirm-btn" onclick="confirmScoreFromModal()">✅ บันทึกผล</button>
@@ -1762,35 +1854,227 @@ const IMGBB_API_KEY = "28a0c276f498b1564af7d2593f320d96";
 const FIXED_BIN_ID = "6a298092f5f4af5e29d8e8c4";
 
 const clubMap = {
-    'mancity': 'https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg', 'manchestercity': 'https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg',
-    'realmadrid': 'https://cdn.footystats.org/img/teams/spain-real-madrid-cf.png',
+    // ── Premier League ──
+    'mancity': 'https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg',
+    'manchestercity': 'https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg',
     'liverpool': 'https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg',
-    'barcelona': 'https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_(crest).svg', 'fcbarcelona': 'https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_(crest).svg',
     'arsenal': 'https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg',
     'chelsea': 'https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg',
+    'manunited': 'https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg',
+    'manchesterunited': 'https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg',
+    'tottenham': 'https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg',
+    'spurs': 'https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg',
+    'newcastle': 'https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg',
+    'newcastleunited': 'https://upload.wikimedia.org/wikipedia/en/5/56/Newcastle_United_Logo.svg',
+    'astonvilla': 'https://upload.wikimedia.org/wikipedia/en/9/9f/Aston_Villa_FC_crest_(2016).svg',
+    'westham': 'https://upload.wikimedia.org/wikipedia/en/c/c2/West_Ham_United_FC_logo.svg',
+    'brighton': 'https://upload.wikimedia.org/wikipedia/en/f/fd/Brighton_%26_Hove_Albion_FC.svg',
+    'everton': 'https://upload.wikimedia.org/wikipedia/en/7/7c/Everton_FC_logo.svg',
+    'wolves': 'https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg',
+    'wolverhampton': 'https://upload.wikimedia.org/wikipedia/en/f/fc/Wolverhampton_Wanderers.svg',
+    'leicester': 'https://upload.wikimedia.org/wikipedia/en/2/2d/Leicester_City_crest.svg',
+    'brentford': 'https://upload.wikimedia.org/wikipedia/en/2/2a/Brentford_FC_crest.svg',
+    'nottmforest': 'https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_F.C._logo.svg',
+    'nottinghamforest': 'https://upload.wikimedia.org/wikipedia/en/e/e5/Nottingham_Forest_F.C._logo.svg',
+    'crystalpalace': 'https://upload.wikimedia.org/wikipedia/en/0/0c/Crystal_Palace_FC_logo_%282022%29.svg',
+    'fulham': 'https://upload.wikimedia.org/wikipedia/en/e/eb/Fulham_FC_(shield).svg',
+    'ipswich': 'https://upload.wikimedia.org/wikipedia/en/4/43/Ipswich_Town.svg',
+    'bournemouth': 'https://upload.wikimedia.org/wikipedia/en/e/e5/AFC_Bournemouth_%282013%29.svg',
+    'southampton': 'https://upload.wikimedia.org/wikipedia/en/c/c9/FC_Southampton.svg',
+    // ── La Liga ──
+    'realmadrid': 'https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg',
+    'barcelona': 'https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_(crest).svg',
+    'fcbarcelona': 'https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_(crest).svg',
+    'atleticomadrid': 'https://upload.wikimedia.org/wikipedia/en/f/f4/Atletico_Madrid_2017_logo.svg',
+    'atletico': 'https://upload.wikimedia.org/wikipedia/en/f/f4/Atletico_Madrid_2017_logo.svg',
+    'sevilla': 'https://upload.wikimedia.org/wikipedia/en/3/3b/Sevilla_FC_logo.svg',
+    'villarreal': 'https://upload.wikimedia.org/wikipedia/en/b/b9/Villarreal_CF_logo-en.svg',
+    'realsociedad': 'https://upload.wikimedia.org/wikipedia/en/f/f1/Real_Sociedad_logo.svg',
+    'athleticbilbao': 'https://upload.wikimedia.org/wikipedia/en/9/98/Club_Athletic_de_Bilbao_logo.svg',
+    'betis': 'https://upload.wikimedia.org/wikipedia/en/1/13/Real_betis_logo.svg',
+    'realbetis': 'https://upload.wikimedia.org/wikipedia/en/1/13/Real_betis_logo.svg',
+    // ── Serie A ──
+    'juventus': 'https://upload.wikimedia.org/wikipedia/commons/1/15/Juventus_FC_2017_logo.svg',
+    'juve': 'https://upload.wikimedia.org/wikipedia/commons/1/15/Juventus_FC_2017_logo.svg',
+    'inter': 'https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021_logo.svg',
+    'intermilan': 'https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021_logo.svg',
+    'acmilan': 'https://upload.wikimedia.org/wikipedia/commons/d/d0/Logo_of_AC_Milan.svg',
+    'milan': 'https://upload.wikimedia.org/wikipedia/commons/d/d0/Logo_of_AC_Milan.svg',
+    'napoli': 'https://upload.wikimedia.org/wikipedia/commons/2/2d/SSC_Napoli_logo_2024.svg',
+    'roma': 'https://upload.wikimedia.org/wikipedia/en/f/f7/AS_Roma_logo_%282017%29.svg',
+    'asroma': 'https://upload.wikimedia.org/wikipedia/en/f/f7/AS_Roma_logo_%282017%29.svg',
+    'lazio': 'https://upload.wikimedia.org/wikipedia/en/7/71/SS_Lazio_Badge_2017.svg',
+    'fiorentina': 'https://upload.wikimedia.org/wikipedia/commons/1/10/ACF_Fiorentina_%282022%29.svg',
+    'atalanta': 'https://upload.wikimedia.org/wikipedia/en/6/67/Logo_Atalanta_BC_%282018%29.svg',
+    'torino': 'https://upload.wikimedia.org/wikipedia/en/7/7f/Torino_FC_logo.svg',
+    // ── Bundesliga ──
     'bayernmunich': 'https://upload.wikimedia.org/wikipedia/commons/1/1b/FC_Bayern_M%C3%BCnchen_logo_(2017).svg',
-    'manunited': 'https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg', 'manchesterunited': 'https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg',
-    'tottenham': 'https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg', 'spurs': 'https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg',
+    'bayern': 'https://upload.wikimedia.org/wikipedia/commons/1/1b/FC_Bayern_M%C3%BCnchen_logo_(2017).svg',
+    'dortmund': 'https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg',
+    'bvb': 'https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg',
+    'borussiadortmund': 'https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg',
+    'leipzig': 'https://upload.wikimedia.org/wikipedia/en/0/04/RB_Leipzig_2014_logo.svg',
+    'rbleipzig': 'https://upload.wikimedia.org/wikipedia/en/0/04/RB_Leipzig_2014_logo.svg',
+    'leverkusen': 'https://upload.wikimedia.org/wikipedia/en/5/59/Bayer_04_Leverkusen_logo.svg',
+    'bayerleverkusen': 'https://upload.wikimedia.org/wikipedia/en/5/59/Bayer_04_Leverkusen_logo.svg',
+    'gladbach': 'https://upload.wikimedia.org/wikipedia/commons/8/81/Borussia_M%C3%B6nchengladbach_logo.svg',
+    'borussiamonchengladbach': 'https://upload.wikimedia.org/wikipedia/commons/8/81/Borussia_M%C3%B6nchengladbach_logo.svg',
+    'eintracht': 'https://upload.wikimedia.org/wikipedia/commons/0/04/Eintracht_Frankfurt_Logo.svg',
+    'eintrachtfrankfurt': 'https://upload.wikimedia.org/wikipedia/commons/0/04/Eintracht_Frankfurt_Logo.svg',
+    'stuttgard': 'https://upload.wikimedia.org/wikipedia/commons/e/eb/VfB_Stuttgart_1893_Logo.svg',
+    'vfbstuttgart': 'https://upload.wikimedia.org/wikipedia/commons/e/eb/VfB_Stuttgart_1893_Logo.svg',
+    // ── Ligue 1 ──
     'psg': 'https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg',
-    'inter': 'https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021_logo.svg', 'intermilan': 'https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021_logo.svg',
-    'acmilan': 'https://upload.wikimedia.org/wikipedia/commons/d/d0/Logo_of_AC_Milan.svg'
+    'parissaintgermain': 'https://upload.wikimedia.org/wikipedia/en/a/a7/Paris_Saint-Germain_F.C..svg',
+    'monaco': 'https://upload.wikimedia.org/wikipedia/en/b/ba/AS_Monaco_FC.svg',
+    'asmonaco': 'https://upload.wikimedia.org/wikipedia/en/b/ba/AS_Monaco_FC.svg',
+    'marseille': 'https://upload.wikimedia.org/wikipedia/commons/d/d8/Olympique_Marseille_logo.svg',
+    'olympiquemarseille': 'https://upload.wikimedia.org/wikipedia/commons/d/d8/Olympique_Marseille_logo.svg',
+    'lyon': 'https://upload.wikimedia.org/wikipedia/en/6/6c/Olympique_Lyonnais_logo.svg',
+    'olympiquelyon': 'https://upload.wikimedia.org/wikipedia/en/6/6c/Olympique_Lyonnais_logo.svg',
+    'lille': 'https://upload.wikimedia.org/wikipedia/en/1/10/LOSC_Lille_Logo.svg',
+    'loscLille': 'https://upload.wikimedia.org/wikipedia/en/1/10/LOSC_Lille_Logo.svg',
+    // ── Other Leagues ──
+    'ajax': 'https://upload.wikimedia.org/wikipedia/en/7/79/Ajax_Amsterdam.svg',
+    'psv': 'https://upload.wikimedia.org/wikipedia/en/0/05/PSV_Eindhoven.svg',
+    'psveindhoven': 'https://upload.wikimedia.org/wikipedia/en/0/05/PSV_Eindhoven.svg',
+    'feyenoord': 'https://upload.wikimedia.org/wikipedia/en/b/b3/Feyenoord_logo.svg',
+    'porto': 'https://upload.wikimedia.org/wikipedia/en/f/f1/FC_Porto.svg',
+    'fcporto': 'https://upload.wikimedia.org/wikipedia/en/f/f1/FC_Porto.svg',
+    'benfica': 'https://upload.wikimedia.org/wikipedia/en/a/a2/SL_Benfica_logo.svg',
+    'slbenfica': 'https://upload.wikimedia.org/wikipedia/en/a/a2/SL_Benfica_logo.svg',
+    'sporting': 'https://upload.wikimedia.org/wikipedia/en/3/3e/Sporting_CP_logo.svg',
+    'sportingcp': 'https://upload.wikimedia.org/wikipedia/en/3/3e/Sporting_CP_logo.svg',
+    'celtic': 'https://upload.wikimedia.org/wikipedia/en/3/35/Celtic_FC.svg',
+    'rangers': 'https://upload.wikimedia.org/wikipedia/en/e/e1/Rangers_FC.svg',
+    'fenerbahce': 'https://upload.wikimedia.org/wikipedia/en/b/b1/Fenerbah%C3%A7e_SK.svg',
+    'galatasaray': 'https://upload.wikimedia.org/wikipedia/en/f/f9/Galatasaray.svg',
+    'besiktas': 'https://upload.wikimedia.org/wikipedia/en/8/8d/Besiktas_JK.svg',
+    'redsox': 'https://upload.wikimedia.org/wikipedia/en/6/6d/RedSox.svg',
+    'flamengo': 'https://upload.wikimedia.org/wikipedia/commons/2/2e/Flamengo_braz_logo.svg',
+    'boca': 'https://upload.wikimedia.org/wikipedia/commons/f/f3/BocaJuniorsLogo.svg',
+    'bocajuniors': 'https://upload.wikimedia.org/wikipedia/commons/f/f3/BocaJuniorsLogo.svg',
+    'riverplate': 'https://upload.wikimedia.org/wikipedia/commons/a/ae/River_Plate_logo.svg',
 };
 
 const flagMap = {
-    'thailand':'th', 'france':'fr', 'england':'gb-eng', 'germany':'de',
-    'argentina':'ar', 'brazil':'br', 'japan':'jp', 'spain':'es', 'italy':'it',
-    'portugal':'pt', 'belgium':'be', 'netherlands':'nl'
+    // ── เอเชีย ──
+    'thailand':'th', 'japan':'jp', 'southkorea':'kr', 'korea':'kr',
+    'china':'cn', 'australia':'au', 'iran':'ir', 'saudi':'sa', 'saudiarabia':'sa',
+    'uae':'ae', 'qatar':'qa', 'iraq':'iq', 'vietnam':'vn', 'indonesia':'id',
+    'malaysia':'my', 'philippines':'ph', 'india':'in', 'pakistan':'pk',
+    'uzbekistan':'uz', 'bahrain':'bh', 'jordan':'jo', 'oman':'om', 'kuwait':'kw',
+    'northkorea':'kp', 'singapore':'sg', 'myanmar':'mm', 'cambodia':'kh',
+    'laos':'la', 'tajikistan':'tj', 'kyrgyzstan':'kg', 'kazakhstan':'kz',
+    // ── ยุโรป ──
+    'france':'fr', 'england':'gb-eng', 'germany':'de', 'spain':'es', 'italy':'it',
+    'portugal':'pt', 'belgium':'be', 'netherlands':'nl', 'croatia':'hr',
+    'switzerland':'ch', 'austria':'at', 'denmark':'dk', 'sweden':'se', 'norway':'no',
+    'finland':'fi', 'poland':'pl', 'czechia':'cz', 'czech':'cz', 'slovakia':'sk',
+    'hungary':'hu', 'romania':'ro', 'ukraine':'ua', 'russia':'ru', 'turkey':'tr',
+    'greece':'gr', 'serbia':'rs', 'scotland':'gb-sct', 'wales':'gb-wls',
+    'ireland':'ie', 'northernireland':'gb-nir', 'iceland':'is', 'albania':'al',
+    'bosnia':'ba', 'montengro':'me', 'northmacedonia':'mk', 'slovenia':'si',
+    'slovakia':'sk', 'bulgaria':'bg', 'belarus':'by', 'moldova':'md',
+    'latvia':'lv', 'lithuania':'lt', 'estonia':'ee', 'luxembourg':'lu',
+    'malta':'mt', 'cyprus':'cy', 'georgia':'ge', 'armenia':'am', 'azerbaijan':'az',
+    // ── อเมริกา ──
+    'brazil':'br', 'argentina':'ar', 'colombia':'co', 'chile':'cl', 'peru':'pe',
+    'uruguay':'uy', 'ecuador':'ec', 'venezuela':'ve', 'bolivia':'bo', 'paraguay':'py',
+    'usa':'us', 'mexico':'mx', 'canada':'ca', 'costarica':'cr', 'panama':'pa',
+    'jamaica':'jm', 'honduras':'hn', 'elsalvador':'sv', 'cuba':'cu',
+    // ── แอฟริกา ──
+    'senegal':'sn', 'nigeria':'ng', 'ghana':'gh', 'cameroon':'cm', 'morocco':'ma',
+    'egypt':'eg', 'ivory coast':'ci', 'ivorycoast':'ci', 'cotedivoire':'ci',
+    'southafrica':'za', 'mali':'ml', 'guineabissau':'gw', 'guinea':'gn',
+    'tanzania':'tz', 'kenya':'ke', 'ethiopia':'et', 'algeria':'dz', 'tunisia':'tn',
+    'zambia':'zm', 'zimbabwe':'zw', 'angola':'ao', 'mozambique':'mz',
+    // ── โอเชียเนีย ──
+    'newzealand':'nz', 'fiji':'fj', 'papuanewguinea':'pg',
 };
 
 const autocompleteTeamsList = [
-    { name: "Manchester City", key: "mancity" }, { name: "Real Madrid", key: "realmadrid" }, { name: "Liverpool", key: "liverpool" },
-    { name: "FC Barcelona", key: "barcelona" }, { name: "Arsenal", key: "arsenal" }, { name: "Chelsea", key: "chelsea" },
-    { name: "Bayern Munich", key: "bayernmunich" }, { name: "Manchester United", key: "manunited" }, { name: "Tottenham Hotspur", key: "tottenham" },
-    { name: "PSG", key: "psg" }, { name: "Inter Milan", key: "inter" }, { name: "AC Milan", key: "acmilan" },
-    { name: "Thailand", key: "thailand" }, { name: "France", key: "france" }, { name: "England", key: "england" },
-    { name: "Germany", key: "germany" }, { name: "Argentina", key: "argentina" }, { name: "Brazil", key: "brazil" },
-    { name: "Japan", key: "japan" }, { name: "Spain", key: "spain" }, { name: "Italy", key: "italy" },
-    { name: "Portugal", key: "portugal" }, { name: "Belgium", key: "belgium" }, { name: "Netherlands", key: "netherlands" }
+    // ── Premier League ──
+    { name: "Manchester City", key: "mancity" }, { name: "Liverpool", key: "liverpool" },
+    { name: "Arsenal", key: "arsenal" }, { name: "Chelsea", key: "chelsea" },
+    { name: "Manchester United", key: "manunited" }, { name: "Tottenham Hotspur", key: "tottenham" },
+    { name: "Newcastle United", key: "newcastle" }, { name: "Aston Villa", key: "astonvilla" },
+    { name: "West Ham United", key: "westham" }, { name: "Brighton", key: "brighton" },
+    { name: "Everton", key: "everton" }, { name: "Wolves", key: "wolves" },
+    { name: "Leicester City", key: "leicester" }, { name: "Brentford", key: "brentford" },
+    { name: "Nottingham Forest", key: "nottmforest" }, { name: "Crystal Palace", key: "crystalpalace" },
+    { name: "Fulham", key: "fulham" }, { name: "Bournemouth", key: "bournemouth" },
+    { name: "Ipswich Town", key: "ipswich" }, { name: "Southampton", key: "southampton" },
+    // ── La Liga ──
+    { name: "Real Madrid", key: "realmadrid" }, { name: "FC Barcelona", key: "barcelona" },
+    { name: "Atletico Madrid", key: "atleticomadrid" }, { name: "Sevilla", key: "sevilla" },
+    { name: "Villarreal", key: "villarreal" }, { name: "Real Sociedad", key: "realsociedad" },
+    { name: "Athletic Bilbao", key: "athleticbilbao" }, { name: "Real Betis", key: "betis" },
+    // ── Serie A ──
+    { name: "Juventus", key: "juventus" }, { name: "Inter Milan", key: "inter" },
+    { name: "AC Milan", key: "acmilan" }, { name: "Napoli", key: "napoli" },
+    { name: "AS Roma", key: "roma" }, { name: "Lazio", key: "lazio" },
+    { name: "Fiorentina", key: "fiorentina" }, { name: "Atalanta", key: "atalanta" },
+    { name: "Torino", key: "torino" },
+    // ── Bundesliga ──
+    { name: "Bayern Munich", key: "bayernmunich" }, { name: "Borussia Dortmund", key: "dortmund" },
+    { name: "RB Leipzig", key: "leipzig" }, { name: "Bayer Leverkusen", key: "leverkusen" },
+    { name: "Borussia M'gladbach", key: "gladbach" }, { name: "Eintracht Frankfurt", key: "eintracht" },
+    { name: "VfB Stuttgart", key: "stuttgard" },
+    // ── Ligue 1 ──
+    { name: "PSG", key: "psg" }, { name: "Monaco", key: "monaco" },
+    { name: "Marseille", key: "marseille" }, { name: "Lyon", key: "lyon" },
+    { name: "Lille", key: "lille" },
+    // ── Other Clubs ──
+    { name: "Ajax", key: "ajax" }, { name: "PSV Eindhoven", key: "psv" },
+    { name: "Feyenoord", key: "feyenoord" }, { name: "FC Porto", key: "porto" },
+    { name: "Benfica", key: "benfica" }, { name: "Sporting CP", key: "sporting" },
+    { name: "Celtic", key: "celtic" }, { name: "Rangers", key: "rangers" },
+    { name: "Fenerbahce", key: "fenerbahce" }, { name: "Galatasaray", key: "galatasaray" },
+    { name: "Besiktas", key: "besiktas" }, { name: "Flamengo", key: "flamengo" },
+    { name: "Boca Juniors", key: "bocajuniors" }, { name: "River Plate", key: "riverplate" },
+    // ── ทีมชาติเอเชีย ──
+    { name: "Thailand", key: "thailand" }, { name: "Japan", key: "japan" },
+    { name: "South Korea", key: "southkorea" }, { name: "Australia", key: "australia" },
+    { name: "China", key: "china" }, { name: "Iran", key: "iran" },
+    { name: "Saudi Arabia", key: "saudiarabia" }, { name: "UAE", key: "uae" },
+    { name: "Qatar", key: "qatar" }, { name: "Iraq", key: "iraq" },
+    { name: "Vietnam", key: "vietnam" }, { name: "Indonesia", key: "indonesia" },
+    { name: "Malaysia", key: "malaysia" }, { name: "Philippines", key: "philippines" },
+    { name: "India", key: "india" }, { name: "Uzbekistan", key: "uzbekistan" },
+    { name: "Bahrain", key: "bahrain" }, { name: "Jordan", key: "jordan" },
+    { name: "Oman", key: "oman" }, { name: "Kuwait", key: "kuwait" },
+    { name: "Singapore", key: "singapore" }, { name: "Myanmar", key: "myanmar" },
+    // ── ทีมชาติยุโรป ──
+    { name: "France", key: "france" }, { name: "England", key: "england" },
+    { name: "Germany", key: "germany" }, { name: "Spain", key: "spain" },
+    { name: "Italy", key: "italy" }, { name: "Portugal", key: "portugal" },
+    { name: "Belgium", key: "belgium" }, { name: "Netherlands", key: "netherlands" },
+    { name: "Croatia", key: "croatia" }, { name: "Switzerland", key: "switzerland" },
+    { name: "Denmark", key: "denmark" }, { name: "Sweden", key: "sweden" },
+    { name: "Norway", key: "norway" }, { name: "Poland", key: "poland" },
+    { name: "Ukraine", key: "ukraine" }, { name: "Turkey", key: "turkey" },
+    { name: "Austria", key: "austria" }, { name: "Czech Republic", key: "czechia" },
+    { name: "Hungary", key: "hungary" }, { name: "Romania", key: "romania" },
+    { name: "Serbia", key: "serbia" }, { name: "Greece", key: "greece" },
+    { name: "Scotland", key: "scotland" }, { name: "Wales", key: "wales" },
+    { name: "Ireland", key: "ireland" }, { name: "Russia", key: "russia" },
+    // ── ทีมชาติอเมริกา ──
+    { name: "Brazil", key: "brazil" }, { name: "Argentina", key: "argentina" },
+    { name: "Colombia", key: "colombia" }, { name: "Chile", key: "chile" },
+    { name: "Uruguay", key: "uruguay" }, { name: "Ecuador", key: "ecuador" },
+    { name: "Peru", key: "peru" }, { name: "USA", key: "usa" },
+    { name: "Mexico", key: "mexico" }, { name: "Canada", key: "canada" },
+    { name: "Costa Rica", key: "costarica" }, { name: "Panama", key: "panama" },
+    { name: "Jamaica", key: "jamaica" }, { name: "Honduras", key: "honduras" },
+    // ── ทีมชาติแอฟริกา ──
+    { name: "Senegal", key: "senegal" }, { name: "Nigeria", key: "nigeria" },
+    { name: "Ghana", key: "ghana" }, { name: "Cameroon", key: "cameroon" },
+    { name: "Morocco", key: "morocco" }, { name: "Egypt", key: "egypt" },
+    { name: "Ivory Coast", key: "ivorycoast" }, { name: "South Africa", key: "southafrica" },
+    { name: "Algeria", key: "algeria" }, { name: "Tunisia", key: "tunisia" },
+    // ── โอเชียเนีย ──
+    { name: "New Zealand", key: "newzealand" }, { name: "Fiji", key: "fiji" },
 ];
 
 let state = {
@@ -3464,6 +3748,9 @@ function openScoreModal(matchId) {
     document.getElementById('se-reset-btn').style.display =
         (m.homeScore !== null && m.awayScore !== null) ? 'block' : 'none';
 
+    // AH explanation banner
+    _renderAHExplain(m, hInfo, aInfo, 'se-ah-area');
+
     const modal = document.getElementById('score-entry-modal');
     modal.style.display = 'flex';
     setTimeout(() => document.getElementById('se-home-inp').focus(), 100);
@@ -3498,8 +3785,188 @@ function toggleChangelog() {
     const body = document.getElementById('changelog-body');
     const arrow = document.getElementById('changelog-arrow');
     if (!body) return;
+    // Auto-inject recent match results at the top each time we open
+    if (!body.classList.contains('open')) {
+        _injectAutoChangelog();
+    }
     body.classList.toggle('open');
     arrow.classList.toggle('open');
+}
+
+function _injectAutoChangelog() {
+    const list = document.getElementById('changelog-auto-results');
+    if (!list) return;
+    const scored = (state.matches || [])
+        .filter(m => m.homeScore !== null && m.awayScore !== null &&
+                     m.homeId !== 'BYE' && m.awayId !== 'BYE')
+        .sort((a, b) => (b.id || 0) - (a.id || 0))
+        .slice(0, 5);
+    if (scored.length === 0) {
+        list.innerHTML = '<li class="cl-item"><span class="cl-text" style="color:#475569;">ยังไม่มีผลการแข่งขัน</span></li>';
+        return;
+    }
+    list.innerHTML = scored.map(m => {
+        const ht = state.teams.find(t => t.id === m.homeId);
+        const at = state.teams.find(t => t.id === m.awayId);
+        const homeName = ht ? ht.team : m.homeId;
+        const awayName = at ? at.team : m.awayId;
+        const hs = parseInt(m.homeScore), as = parseInt(m.awayScore);
+        let result = hs > as ? `${homeName} ชนะ` : hs < as ? `${awayName} ชนะ` : 'เสมอ';
+        let badge = hs > as ? `<span class="cl-badge fix">ผล</span>` :
+                    hs < as ? `<span class="cl-badge fix">ผล</span>` :
+                              `<span class="cl-badge improve">เสมอ</span>`;
+        const rnd = m.round ? `รอบ ${m.round}` : (m.cupRound ? `รอบ ${m.cupRound}` : '');
+        return `<li class="cl-item">
+            ${badge}
+            <span class="cl-text"><strong style="color:#fff;">${homeName} ${hs} – ${as} ${awayName}</strong> · ${result}${rnd ? ' · ' + rnd : ''}</span>
+        </li>`;
+    }).join('');
+}
+
+function openTeamStatsModal(teamId) {
+    const team = state.teams.find(t => t.id === teamId);
+    if (!team) return;
+
+    // Header
+    const logoEl = document.getElementById('ts-logo');
+    logoEl.src = team.logo || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(team.team)}`;
+    logoEl.onerror = function(){ this.onerror=null; this.src=`https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(team.team)}`; };
+    if (team.isFlag) { logoEl.className = 'ts-modal-logo flag'; } else { logoEl.className = 'ts-modal-logo'; }
+    document.getElementById('ts-team-name').textContent = team.team;
+    document.getElementById('ts-manager-name').textContent = 'Manager: ' + team.player;
+
+    // Calculate stats from state
+    let w=0, d=0, l=0, gf=0, ga=0;
+    const played = (state.matches || []).filter(m =>
+        (m.homeId === teamId || m.awayId === teamId) &&
+        m.homeId !== 'BYE' && m.awayId !== 'BYE' &&
+        m.homeScore !== null && m.awayScore !== null
+    ).sort((a,b) => (a.id||0) - (b.id||0));
+
+    played.forEach(m => {
+        const isHome = m.homeId === teamId;
+        const myG = isHome ? parseInt(m.homeScore) : parseInt(m.awayScore);
+        const opG = isHome ? parseInt(m.awayScore) : parseInt(m.homeScore);
+        gf += myG; ga += opG;
+        if (myG > opG) w++;
+        else if (myG < opG) l++;
+        else d++;
+    });
+    const p = w + d + l;
+    const gd = gf - ga;
+    const winRate = p > 0 ? Math.round((w / p) * 100) : 0;
+
+    // Last 5 matches detail
+    const last5 = played.slice(-5);
+    const last5HTML = last5.length > 0 ? last5.map(m => {
+        const isHome = m.homeId === teamId;
+        const oppId = isHome ? m.awayId : m.homeId;
+        const opp = state.teams.find(t => t.id === oppId);
+        const oppName = opp ? opp.team : oppId;
+        const myG = isHome ? parseInt(m.homeScore) : parseInt(m.awayScore);
+        const opG = isHome ? parseInt(m.awayScore) : parseInt(m.homeScore);
+        const scoreStr = isHome ? `${myG}–${opG}` : `${myG}–${opG}`;
+        const res = myG > opG ? 'W' : myG < opG ? 'L' : 'D';
+        const side = isHome ? '(H)' : '(A)';
+        return `<div class="ts-form-item">
+            <span class="ts-form-badge ${res}">${res}</span>
+            <span class="ts-form-score">${scoreStr}</span>
+            <span class="ts-form-opp">vs ${oppName} <span style="color:#475569;">${side}</span></span>
+        </div>`;
+    }).join('') : `<div style="font-size:12px;color:#475569;padding:8px 0;">ยังไม่มีผลการแข่งขัน</div>`;
+
+    document.getElementById('ts-modal-body').innerHTML = `
+        <div>
+            <div class="ts-section-title">สถิติรวม · ${p} นัด</div>
+            <div class="ts-stat-row">
+                <div class="ts-stat-box win"><div class="ts-stat-val">${w}</div><div class="ts-stat-lbl">ชนะ</div></div>
+                <div class="ts-stat-box draw"><div class="ts-stat-val">${d}</div><div class="ts-stat-lbl">เสมอ</div></div>
+                <div class="ts-stat-box loss"><div class="ts-stat-val">${l}</div><div class="ts-stat-lbl">แพ้</div></div>
+            </div>
+        </div>
+        <div>
+            <div class="ts-section-title">สถิติประตู</div>
+            <div class="ts-stat-row2">
+                <div class="ts-stat-box2"><div class="ts-stat-val">${gf}</div><div class="ts-stat-lbl">ยิงได้</div></div>
+                <div class="ts-stat-box2"><div class="ts-stat-val" style="color:#ef4444;">${ga}</div><div class="ts-stat-lbl">ยิงเสีย</div></div>
+                <div class="ts-stat-box2"><div class="ts-stat-val" style="color:${gd>=0?'#4ade80':'#f87171'}">${gd>0?'+':''}${gd}</div><div class="ts-stat-lbl">ต่างประตู</div></div>
+            </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:12px;color:var(--wc-text-sub);">Win Rate</span>
+            <span style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;color:${winRate>=50?'#22c55e':'#f87171'}">${winRate}%</span>
+        </div>
+        <div>
+            <div class="ts-section-title">ฟอร์ม 5 นัดล่าสุด</div>
+            <div class="ts-form-row">${last5HTML}</div>
+        </div>
+    `;
+
+    const modal = document.getElementById('team-stats-modal');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeTeamStatsModal() {
+    const modal = document.getElementById('team-stats-modal');
+    if (modal) { modal.style.display = 'none'; document.body.style.overflow = ''; }
+}
+
+// ── AH Explanation Banner ──────────────────────────────────────────────────
+function _ahNameThai(absHcap) {
+    const v = Math.round(absHcap * 4); // quarters
+    const names = {
+        0:  'เสมอ',
+        1:  'เสมอควบครึ่ง หรือ ปป.',
+        2:  'ครึ่งลูก',
+        3:  'ครึ่งควบลูก',
+        4:  'หนึ่งลูก',
+        5:  'ลูกควบลูกครึ่ง',
+        6:  'ลูกครึ่ง',
+        7:  'ลูกครึ่งควบสอง',
+        8:  'สองลูก',
+        9:  'สองลูกควบสองครึ่ง',
+        10: 'สองลูกครึ่ง',
+    };
+    return names[v] || `ต่อ ${absHcap}`;
+}
+
+function _renderAHExplain(m, hInfo, aInfo, targetId) {
+    const el = document.getElementById(targetId);
+    if (!el) return;
+    const odds = m.odds || {};
+    const hasHcap = odds.handicap != null && odds.handicap !== '';
+    if (!hasHcap) { el.innerHTML = ''; return; }
+    const hcap = parseFloat(odds.handicap);
+    if (isNaN(hcap)) { el.innerHTML = ''; return; }
+
+    const homeName = hInfo.team;
+    const awayName = aInfo.team;
+    const absVal = Math.abs(hcap);
+    const absStr = _fmtHcapThai(absVal);
+    const ahName = _ahNameThai(absVal);
+
+    let icon, desc;
+    if (hcap < 0) {
+        icon = '🔴';
+        desc = `<b style="color:#fca5a5;">${homeName}</b> ต่อ <b style="color:#93c5fd;">${awayName}</b> ราคา <b style="font-family:'Orbitron',sans-serif;color:#fbbf24;">${absStr}</b> <span style="color:#94a3b8;">(${ahName})</span>`;
+    } else if (hcap > 0) {
+        icon = '🔵';
+        desc = `<b style="color:#fca5a5;">${awayName}</b> ต่อ <b style="color:#93c5fd;">${homeName}</b> ราคา <b style="font-family:'Orbitron',sans-serif;color:#fbbf24;">${absStr}</b> <span style="color:#94a3b8;">(${ahName})</span>`;
+    } else {
+        icon = '⚖️';
+        desc = `<b style="color:#fca5a5;">${homeName}</b> พบ <b style="color:#93c5fd;">${awayName}</b> ราคา <b style="font-family:'Orbitron',sans-serif;color:#fbbf24;">0</b> <span style="color:#94a3b8;">(เสมอ)</span>`;
+    }
+
+    el.innerHTML = `<div style="margin:10px 0 4px;padding:9px 14px;background:rgba(234,179,8,0.07);border:1px solid rgba(234,179,8,0.25);border-radius:8px;font-size:13px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:16px;flex-shrink:0;">${icon}</span>
+            <div style="flex:1;">
+                <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#fbbf24;margin-bottom:4px;">Asian Handicap คู่นี้</div>
+                <div style="color:#e2e8f0;line-height:1.6;">${desc}</div>
+            </div>
+        </div>
+    </div>`;
 }
 // Override native alert globally
 window.alert = showAlert;
@@ -3566,6 +4033,11 @@ function openMatchViewModal(matchId) {
         evidenceInnerHTML += `<div style="font-size:12px;color:#4a6080;text-align:center;padding:8px 0;">ยังไม่มีรูปหลักฐาน</div>`;
     }
     document.getElementById('se-evidence-area').innerHTML = `<div class="se-view-evidence-area">${evidenceInnerHTML}</div>`;
+
+    // AH explanation banner (view-only)
+    let hInfoV = state.teams.find(t => t.id === m.homeId) || { player: m.homeId, team: m.homeId, logo: '', isFlag: false };
+    let aInfoV = state.teams.find(t => t.id === m.awayId) || { player: m.awayId, team: m.awayId, logo: '', isFlag: false };
+    _renderAHExplain(m, hInfoV, aInfoV, 'se-ah-area');
 
     // Switch title, hide edit-only action buttons
     document.querySelector('.se-modal-title').textContent = '⚽ รายละเอียดคู่แข่งขัน';
@@ -4110,40 +4582,50 @@ function _buildMatchRowDiv(m, fmt) {
     let draggableClass = (isLeague && !state.isViewOnly) ? 'admin-draggable' : '';
     let chips = _buildOddsChips(m);
 
-    // Status badge — absolutely positioned in bottom padding of match-row
-    // (does NOT affect flex layout so score stays vertically centered with team names)
     let statusBadgeHTML = '';
     if (m.status === 'playing') {
-        statusBadgeHTML = `<div class="match-status-abs match-status-playing">🔴 กำลังแข่งขัน</div>`;
+        statusBadgeHTML = `<span class="match-status-badge match-status-playing">🔴 กำลังแข่งขัน</span>`;
     } else if (m.status === 'finished') {
-        statusBadgeHTML = `<div class="match-status-abs match-status-finished">✅ จบการแข่งขัน</div>`;
+        statusBadgeHTML = `<span class="match-status-badge match-status-finished">✅ จบการแข่งขัน</span>`;
     }
 
+    const hasBottom = chips.homeChip || chips.awayChip || statusBadgeHTML;
+    const bottomRowHTML = hasBottom ? `
+        <div class="match-row-bottom">
+            <div class="match-bottom-home">${chips.homeChip || ''}</div>
+            <div class="match-bottom-center">${statusBadgeHTML}</div>
+            <div class="match-bottom-away">${chips.awayChip || ''}</div>
+        </div>` : '';
+
     let divMatch = document.createElement("div");
-    divMatch.className = m.status ? "match-row has-status" : "match-row";
+    divMatch.className = "match-row";
     divMatch.innerHTML = `
-        <div class="match-team home ${draggableClass}" data-team-id="${hInfo.id}" ${dragAttrs}>
-            <div class="match-team-info">
-                <span class="match-team-name">${hInfo.team}</span>
-                <span class="match-team-player">${hInfo.player}</span>
+        <div class="match-row-main">
+            <div class="match-team home ${draggableClass}" data-team-id="${hInfo.id}" ${dragAttrs}>
+                <div class="match-team-info">
+                    <span class="match-team-name${hInfo.id !== 'BYE' ? ' fixture-team-clickable' : ''}"${hInfo.id !== 'BYE' ? ` onclick="openTeamStatsModal('${hInfo.id}')" title="คลิกดูสถิติทีม"` : ''}>${hInfo.team}</span>
+                    <span class="match-team-player">${hInfo.player}</span>
+                </div>
+                <div class="match-logo-wrap">
+                    ${hInfo.id === 'BYE' ? '<span style="font-size:22px;">🎟️</span>' : `<img class="${homeLogoClass}" src="${hInfo.logo}" onerror="this.onerror=null;this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(hInfo.team)}';">`}
+                </div>
+                <span class="badge-side" style="flex-shrink:0;">H</span>
             </div>
-            ${hInfo.id === 'BYE' ? '<span style="font-size:22px;flex-shrink:0;">🎟️</span>' : `<img class="${homeLogoClass}" src="${hInfo.logo}" onerror="this.onerror=null;this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(hInfo.team)}';" style="flex-shrink:0;">`}
-            <span class="badge-side" style="flex-shrink:0;">H</span>
-            ${chips.homeChip}
-        </div>
-        <div class="match-score">
-            ${scoreHTML}
-        </div>
-        <div class="match-team away ${draggableClass}" data-team-id="${aInfo.id}" ${dragAttrs}>
-            ${chips.awayChip}
-            <span class="badge-side" style="flex-shrink:0;">A</span>
-            ${aInfo.id === 'BYE' ? '<span style="font-size:22px;flex-shrink:0;">🎟️</span>' : `<img class="${awayLogoClass}" src="${aInfo.logo}" onerror="this.onerror=null;this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(aInfo.team)}';" style="flex-shrink:0;">`}
-            <div class="match-team-info">
-                <span class="match-team-name">${aInfo.team}</span>
-                <span class="match-team-player">${aInfo.player}</span>
+            <div class="match-score">
+                ${scoreHTML}
+            </div>
+            <div class="match-team away ${draggableClass}" data-team-id="${aInfo.id}" ${dragAttrs}>
+                <span class="badge-side" style="flex-shrink:0;">A</span>
+                <div class="match-logo-wrap">
+                    ${aInfo.id === 'BYE' ? '<span style="font-size:22px;">🎟️</span>' : `<img class="${awayLogoClass}" src="${aInfo.logo}" onerror="this.onerror=null;this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(aInfo.team)}';">`}
+                </div>
+                <div class="match-team-info">
+                    <span class="match-team-name${aInfo.id !== 'BYE' ? ' fixture-team-clickable' : ''}"${aInfo.id !== 'BYE' ? ` onclick="openTeamStatsModal('${aInfo.id}')" title="คลิกดูสถิติทีม"` : ''}>${aInfo.team}</span>
+                    <span class="match-team-player">${aInfo.player}</span>
+                </div>
             </div>
         </div>
-        ${statusBadgeHTML}
+        ${bottomRowHTML}
     `;
     return divMatch;
 }
@@ -4687,8 +5169,8 @@ function _fmtHcapThai(absVal) {
     let rem = frac % 4;
     if (rem === 0) return whole.toString();
     if (rem === 2) return (whole + 0.5).toString();
-    if (rem === 1) return whole + '/' + (whole + 0.5);   // 0.25→"0/0.5", 1.25→"1/1.5"
-    return (whole + 0.5) + '/' + (whole + 1);            // 0.75→"0.5/1", 1.75→"1.5/2"
+    if (rem === 1) return whole + '-' + (whole + 0.5);   // 0.25→"0-0.5", 1.25→"1-1.5"
+    return (whole + 0.5) + '-' + (whole + 1);            // 0.75→"0.5-1", 1.75→"1.5-2"
 }
 
 // Returns { homeChip, awayChip } — Thai betting style numbers only, beside score
