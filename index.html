@@ -962,6 +962,13 @@
             .score-view-box { font-size: 14px; padding: 5px 6px; min-width: 58px; }
             .score-input { width: 42px; height: 34px; font-size: 15px; }
             .fc-card { padding: 12px 10px; }
+            .score-odds-row { gap: 3px; }
+            .hcap-chip { font-size: 9px; padding: 2px 4px; letter-spacing: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .score-odds-row { gap: 5px; }
+            .hcap-chip { font-size: 10px; padding: 2px 5px; }
         }
 
         /* ── อัตราการต่อรอง (Odds System) ── */
@@ -1060,7 +1067,7 @@
         .hcap-chip.hcap-win { background:rgba(34,197,94,0.15); color:#22c55e; border-color:rgba(34,197,94,0.35); }
         .hcap-chip.hcap-loss { background:rgba(239,68,68,0.15); color:#f87171; border-color:rgba(239,68,68,0.35); }
         /* ── Odds inline ── */
-        .score-odds-row { display:flex; align-items:center; justify-content:center; gap:25px; flex-wrap:wrap; }
+        .score-odds-row { display:flex; align-items:center; justify-content:center; gap:25px; flex-wrap:nowrap; }
         .odds-chips-inline { display:flex; gap:3px; align-items:center; }
         /* ── H2H record row ── */
         /* ── Form Guide (last 5) ── */
@@ -3395,12 +3402,7 @@ function _restoreEvidenceFromLocal() {
 }
 
 function _getStateForCloud() {
-    const copy = JSON.parse(JSON.stringify(state));
-    copy.matches = copy.matches.map(m => {
-        const { evidenceImg, ...rest } = m;
-        return rest;
-    });
-    return copy;
+    return JSON.parse(JSON.stringify(state));
 }
 
 function uploadMatchEvidence(matchId) {
