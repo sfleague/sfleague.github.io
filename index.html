@@ -126,9 +126,9 @@
         .defending-badge { display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(109,40,217,0.12)); border: 1px solid rgba(167,139,250,0.45); color: #c4b5fd; padding: 2px 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-left: 8px; font-family: 'Orbitron', sans-serif; border-radius: 4px; letter-spacing: 0.5px; box-shadow: 0 0 8px rgba(139,92,246,0.2); }
 
         .round-title { background: linear-gradient(90deg, #0f2b54, transparent); color: var(--h2-fixtures-color); font-family: 'Orbitron', 'Prompt', sans-serif; font-weight: 800; padding: 12px 18px; font-size: 14px; text-transform: uppercase; margin-top: 30px; border-left: 4px solid var(--h2-fixtures-color); }
-        .match-row { display: flex; justify-content: space-between; align-items: center; padding: 18px 12px; border-bottom: 1px solid var(--wc-border); background: rgba(11, 30, 61, 0.4); }
+        .match-row { display: flex; align-items: center; gap: 8px; padding: 16px 12px; border-bottom: 1px solid var(--wc-border); background: rgba(11, 30, 61, 0.4); }
 
-        .match-team { width: 35%; display: flex; align-items: center; gap: 12px; padding: 6px; border-radius: 6px; }
+        .match-team { flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 6px; }
         .match-team.admin-draggable { cursor: grab; }
         .match-team.admin-draggable:hover { background: rgba(223, 180, 75, 0.1); }
         .match-team.drag-over { background: rgba(34, 197, 94, 0.2) !important; border: 1px dashed #22c55e; }
@@ -138,10 +138,10 @@
         #fixtures-area .match-team img.club-img { width: 60px; height: 60px; border-radius: 6px; }
         #fixtures-area .match-team img.flag-img { width: 60px; height: 40px; border-radius: 4px; }
 
-        .match-score { width: 30%; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 6px; }
+        .match-score { flex: 0 0 auto; min-width: 110px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; padding: 0 4px; }
         .score-row-inputs { display: flex; justify-content: center; align-items: center; gap: 8px; }
         .score-input { width: 65px; height: 42px; text-align: center; background: #030a17; border: 1px solid var(--wc-border); border-radius: 4px; color: #fff; font-family: 'Orbitron', sans-serif; font-size: 20px; font-weight: bold; }
-        .score-view-box { font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 20px; background: linear-gradient(135deg, #1a3660, #0b1e3d); color: var(--wc-gold); padding: 6px 24px; border-radius: 4px; border: 1px solid var(--wc-gold); min-width: 100px; text-align: center; }
+        .score-view-box { font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 20px; background: linear-gradient(135deg, #1a3660, #0b1e3d); color: var(--wc-gold); padding: 8px 20px; border-radius: 4px; border: 1px solid var(--wc-gold); min-width: 100px; text-align: center; white-space: nowrap; }
         .vs-text { color: var(--wc-text-sub); font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: bold; }
         .match-score .btn-secondary { font-size: 12px; padding: 6px 12px; border-radius: 4px; width: auto; }
         .match-score button.evidence-btn { width: auto; }
@@ -358,6 +358,16 @@
         .cl-badge.new  { background: rgba(59,130,246,0.15); color: #60a5fa;  border: 1px solid rgba(59,130,246,0.3); }
         .cl-badge.improve { background: rgba(234,179,8,0.15); color: #fbbf24; border: 1px solid rgba(234,179,8,0.3); }
         .cl-text { color: #cbd5e1; line-height: 1.5; }
+
+
+        /* ── Announcement Banner ── */
+        #announcement-banner { display:none; width:100%; box-sizing:border-box; background:linear-gradient(135deg,rgba(234,179,8,0.18),rgba(234,100,8,0.10)); border:1px solid rgba(234,179,8,0.45); border-radius:10px; padding:12px 18px; margin-bottom:14px; position:relative; animation:announceFadeIn 0.4s ease; }
+        @keyframes announceFadeIn { from{opacity:0;transform:translateY(-8px);} to{opacity:1;transform:translateY(0);} }
+        #announcement-banner .ann-icon { font-size:18px; flex-shrink:0; }
+        #announcement-banner .ann-text { flex:1; font-size:14px; font-weight:600; color:#fde68a; line-height:1.5; white-space:pre-wrap; word-break:break-word; }
+        #announcement-banner .ann-label { font-size:10px; font-weight:800; color:#fbbf24; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+        #announcement-banner .ann-dismiss { display:block; margin:8px auto 0; background:rgba(234,179,8,0.1); border:1px solid rgba(234,179,8,0.3); color:#fbbf24; font-size:11px; font-weight:700; cursor:pointer; padding:4px 16px; border-radius:4px; transition:all 0.2s; width:auto; font-family:'Prompt',sans-serif; }
+        #announcement-banner .ann-dismiss:hover { background:rgba(234,179,8,0.22); border-color:rgba(234,179,8,0.55); }
 
         @media (max-width: 640px) {
             .admin-add-player-grid { grid-template-columns: 1fr; }
@@ -778,9 +788,9 @@
             th, td { padding: 10px 7px; font-size: 12px; }
 
             /* Match row: ทำให้พอดีจอมือถือ */
-            .match-row { padding: 10px 6px; gap: 4px; }
-            .match-team { width: 37%; gap: 6px; padding: 4px; }
-            .match-score { width: 26%; }
+            .match-row { padding: 8px 6px; gap: 4px; }
+            .match-team { gap: 5px; padding: 3px 4px; }
+            .match-score { min-width: 80px; padding: 0 2px; }
             .match-team .t-name { display: none; }
             .match-team .p-name { font-size: 12px; line-height: 1.2; }
 
@@ -791,9 +801,10 @@
             img.flag-img { width: 36px; height: 24px; }
 
             /* กล่องสกอร์ */
-            .score-view-box { font-size: 16px; padding: 5px 10px; min-width: 72px; }
+            .score-view-box { font-size: 15px; padding: 6px 10px; min-width: 68px; }
             .score-input { width: 50px; height: 38px; font-size: 17px; }
             .match-score .btn-secondary { font-size: 11px; padding: 5px 8px; }
+            .ah-chip { font-size: 9px; padding: 2px 4px; }
 
             /* ชื่อผู้เล่นในตารางคะแนน */
             .p-name { font-size: 14px; }
@@ -977,22 +988,17 @@
 
         @media (max-width: 480px) {
             h1 { font-size: 20px; }
-            .match-team { width: 36%; gap: 4px; }
-            .match-score { width: 28%; }
-            #fixtures-area .match-team img.club-img { width: 28px; height: 28px; }
-            #fixtures-area .match-team img.flag-img { width: 28px; height: 19px; }
-            .match-team .p-name { font-size: 11px; }
-            .score-view-box { font-size: 14px; padding: 5px 6px; min-width: 58px; }
+            .match-row { gap: 3px; padding: 8px 4px; }
+            .match-team { gap: 3px; padding: 2px; }
+            .match-score { min-width: 62px; padding: 0; }
+            #fixtures-area .match-team img.club-img { width: 24px; height: 24px; }
+            #fixtures-area .match-team img.flag-img { width: 24px; height: 16px; }
+            .match-team .p-name { font-size: 10px; }
+            .score-view-box { font-size: 13px; padding: 5px 6px; min-width: 58px; }
             .score-input { width: 42px; height: 34px; font-size: 15px; }
             .fc-card { padding: 12px 10px; }
-            .score-odds-row { gap: 3px; }
-            .hcap-chip { font-size: 9px; padding: 2px 4px; letter-spacing: 0; }
-        }
-
-        @media (max-width: 768px) {
-            .hcap-team-chip  { display: block; }
-            .hcap-center-row { display: none !important; }
-            .hcap-score-only { display: flex; justify-content: center; }
+            .ah-chip { font-size: 8px; padding: 1px 3px; }
+            .badge-side { font-size: 9px; padding: 1px 4px; }
         }
 
         /* ── อัตราการต่อรอง (Odds System) ── */
@@ -1084,12 +1090,19 @@
         .match-row.has-status { padding-bottom: 22px; }
         .match-status-abs { position:absolute; bottom:4px; left:50%; transform:translateX(-50%); white-space:nowrap; display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:800; padding:2px 10px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px; pointer-events:none; }
         .match-status-badge { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:800; padding:2px 8px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px; }
-        /* ── Handicap compact chips ── */
-        .hcap-chip { display:inline-flex; align-items:center; font-size:11px; font-weight:800; padding:2px 7px; border-radius:4px; letter-spacing:0.2px; }
-        .hcap-chip.home-hcap { background:rgba(59,130,246,0.13); color:#60a5fa; border:1px solid rgba(59,130,246,0.28); }
-        .hcap-chip.away-hcap { background:rgba(239,68,68,0.1); color:#f87171; border:1px solid rgba(239,68,68,0.22); }
-        .hcap-chip.hcap-win { background:rgba(34,197,94,0.15); color:#22c55e; border-color:rgba(34,197,94,0.35); }
-        .hcap-chip.hcap-loss { background:rgba(239,68,68,0.15); color:#f87171; border-color:rgba(239,68,68,0.35); }
+        /* ── Thai-style Asian Handicap Chips (beside score) ── */
+        .ah-chip { display:inline-flex; align-items:center; font-size:10px; font-weight:900; padding:2px 5px; border-radius:4px; font-family:'Orbitron','Prompt',sans-serif; letter-spacing:0.2px; flex-shrink:0; white-space:nowrap; }
+        .ah-fav  { background:rgba(239,68,68,0.14); color:#fca5a5; border:1px solid rgba(239,68,68,0.33); }
+        .ah-recv { background:rgba(59,130,246,0.12); color:#93c5fd; border:1px solid rgba(59,130,246,0.25); }
+        .ah-even { background:rgba(234,179,8,0.11); color:#fbbf24; border:1px solid rgba(234,179,8,0.28); }
+        .ah-win  { background:rgba(34,197,94,0.18) !important; color:#4ade80 !important; border-color:rgba(34,197,94,0.45) !important; }
+        .ah-loss { opacity:0.35; }
+        .ah-push { color:#94a3b8 !important; border-color:rgba(148,163,184,0.3) !important; background:rgba(148,163,184,0.08) !important; }
+        .match-team-info { display:flex; flex-direction:column; min-width:0; overflow:hidden; }
+        .match-team.home .match-team-info { align-items:flex-end; text-align:right; }
+        .match-team.away .match-team-info { align-items:flex-start; text-align:left; }
+        .match-team-name { font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%; }
+        .match-team-player { font-size:11px; color:var(--wc-text-sub); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%; }
         /* ── Win Streak Badge ── */
         .streak-badge {
             display: inline-flex; align-items: center; justify-content: center;
@@ -1103,13 +1116,7 @@
             box-shadow: 0 0 10px rgba(249,115,22,0.3); animation: streakPulse 1.8s ease-in-out infinite; }
         @keyframes streakPulse { 0%,100%{box-shadow:0 0 8px rgba(249,115,22,0.3);} 50%{box-shadow:0 0 18px rgba(249,115,22,0.6);} }
 
-        /* ── Chip desktop/mobile toggle ── */
-        .hcap-team-chip  { display: none; }
-        .hcap-center-row { display: flex; }
-        .hcap-score-only { display: none; }
-
         /* ── Odds inline ── */
-        .score-odds-row { display:flex; align-items:center; justify-content:center; gap:25px; flex-wrap:nowrap; }
         .odds-chips-inline { display:flex; gap:3px; align-items:center; }
         /* ── H2H record row ── */
         /* ── Form Guide (last 5) ── */
@@ -1134,6 +1141,19 @@
 <body>
 
 <div class="container">
+
+    <!-- ── Announcement Banner ── -->
+    <div id="announcement-banner">
+        <div style="display:flex; align-items:flex-start; gap:10px;">
+            <span class="ann-icon">🔔</span>
+            <div style="flex:1; min-width:0;">
+                <div class="ann-label">📢 ประกาศจาก Admin</div>
+                <span class="ann-text" id="announcement-text"></span>
+            </div>
+        </div>
+        <button class="ann-dismiss" onclick="dismissAnnouncement()">ปิด</button>
+    </div>
+
     <div class="fc-header">
         <div class="fc-logo-badge">🏆 FC 26 SF LEAGUE </div>
         <h1 id="tournament-title-display">
@@ -1161,12 +1181,29 @@
 
     <!-- ── Changelog Card ── -->
     <div class="fc-card" id="changelog-card">
-        <button class="changelog-toggle-btn" onclick="toggleChangelog()">
-            <span>🔔 อัปเดตล่าสุด</span>
-            <span class="changelog-arrow" id="changelog-arrow">▼</span>
-        </button>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+            <button class="changelog-toggle-btn" onclick="toggleChangelog()" style="flex:1; min-width:0;">
+                <span>🔔 อัปเดตล่าสุด</span>
+                <span class="changelog-arrow" id="changelog-arrow">▼</span>
+            </button>
+        </div>
         <div class="changelog-body" id="changelog-body">
             <ul class="changelog-list">
+                <li class="cl-item">
+                    <span class="cl-date">15 JUN 2026</span>
+                    <span class="cl-badge new">ใหม่</span>
+                    <span class="cl-text">ประกาศด่วน (Announcement Banner) — Admin พิมพ์ข้อความในหน้าตั้งค่า กด "บันทึก" แล้ว Viewer ทุกคนเห็น banner สีทองบนสุดของหน้าทันที (รองรับการล้างและปิด)</span>
+                </li>
+                <li class="cl-item">
+                    <span class="cl-date">15 JUN 2026</span>
+                    <span class="cl-badge new">ใหม่</span>
+                    <span class="cl-text">เพิ่มระบบ Live Update — หน้าเว็บจะรีเฟรชข้อมูลอัตโนมัติทุก 30 วินาที และแจ้งเตือนเมื่อมีผลใหม่ พร้อมปุ่ม "รีเฟรช" สำหรับดึงข้อมูลทันที</span>
+                </li>
+                <li class="cl-item">
+                    <span class="cl-date">15 JUN 2026</span>
+                    <span class="cl-badge fix">แก้ไข</span>
+                    <span class="cl-text">แก้บัคข้อมูล H2H หายหลัง reload — ตอนนี้ประวัติการพบกัน (H2H) โหลดจาก cloud ถูกต้องแล้ว</span>
+                </li>
                 <li class="cl-item">
                     <span class="cl-date">15 JUN 2026</span>
                     <span class="cl-badge fix">แก้ไข</span>
@@ -1432,6 +1469,12 @@
             <div>
                 <label style="display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; color: #5865F2;">💬 ลิงก์ Discord ประจำทัวร์นาเมนต์:</label>
                 <input type="text" id="edit-discord-url" class="edit-input" style="border-color: #5865F2;">
+            </div>
+            <div style="border:1px solid rgba(234,179,8,0.4); border-radius:10px; padding:14px; background:rgba(234,179,8,0.05);">
+                <label style="display:block; margin-bottom:6px; font-weight:700; font-size:13px; color:#fbbf24;">📢 ประกาศด่วน (Announcement Banner)</label>
+                <p style="font-size:12px; color:#94a3b8; margin:0 0 8px 0; line-height:1.5;">ข้อความนี้จะแสดงเป็น banner สีทองบนสุดของหน้าทันทีให้ viewer ทุกคนเห็น (ว่างไว้ = ซ่อน banner)</p>
+                <textarea id="edit-announcement" class="edit-input" style="height:64px; border-color:rgba(234,179,8,0.4);" placeholder="เช่น: แมตช์วันนี้เริ่ม 20:00 น. — ห้ามมาสาย!"></textarea>
+                <button onclick="clearAnnouncement()" style="margin-top:8px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.35); color:#f87171; font-size:12px; padding:5px 12px; border-radius:6px; cursor:pointer;">🗑️ ล้างประกาศ</button>
             </div>
             <div>
                 <label style="display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; color: var(--wc-gold);">📋 รายละเอียดทัวร์นาเมนต์ (เงินรางวัล / กฎกติกา / เวลาแข่ง):</label>
@@ -1771,11 +1814,132 @@ let state = {
     cupChampionId: null,
     consolationChampionId: null,
     colors: { w1: "#ffffff", w2: "#dfb44b", w3: "#ffffff", h2Standings: "#dfb44b", h2Fixtures: "#dfb44b", h2Fame: "#dfb44b", h2Details: "#dfb44b", bgColor: "#051126" },
-    h2h: {}
+    h2h: {},
+    announcement: ""
 };
 
 let draggedTeamId = null;
 let currentCrownedChampId = null;
+
+// ─── Auto-Refresh (Live Update) ───────────────────────────────────────────────
+let _autoRefreshTimer = null;
+let _lastBinVersion = null;
+const AUTO_REFRESH_INTERVAL = 30000; // 30 วินาที
+
+function _startAutoRefresh() {
+    if (_autoRefreshTimer) clearInterval(_autoRefreshTimer);
+    _autoRefreshTimer = setInterval(_checkForCloudUpdates, AUTO_REFRESH_INTERVAL);
+}
+
+function manualRefresh() {
+    if (!state.binId) return;
+    showStatus('⏳ กำลังดึงข้อมูลล่าสุด...', true);
+    fetch(`https://api.jsonbin.io/v3/b/${state.binId}/latest`, {
+        headers: { 'X-Master-Key': BIN_MASTER_KEY }
+    })
+    .then(res => res.json())
+    .then(resData => {
+        const newVer = resData.metadata && resData.metadata.version;
+        if (newVer && newVer !== _lastBinVersion) {
+            _lastBinVersion = newVer;
+            _applyCloudData(resData.record);
+            showStatus('✅ อัปเดตข้อมูลล่าสุดแล้ว');
+            showToast('🔄 โหลดข้อมูลใหม่เรียบร้อย!', 'info');
+        } else {
+            showStatus('✅ ข้อมูลล่าสุดอยู่แล้ว');
+        }
+    })
+    .catch(() => showStatus('❌ โหลดไม่สำเร็จ'));
+}
+
+function _checkForCloudUpdates() {
+    if (!state.binId || !state.isViewOnly) return;
+    fetch(`https://api.jsonbin.io/v3/b/${state.binId}/latest`, {
+        headers: { 'X-Master-Key': BIN_MASTER_KEY }
+    })
+    .then(res => res.json())
+    .then(resData => {
+        const newVer = resData.metadata && resData.metadata.version;
+        if (newVer && _lastBinVersion !== null && newVer !== _lastBinVersion) {
+            _lastBinVersion = newVer;
+            _applyCloudData(resData.record);
+            showToast('🔔 มีการอัปเดตผลการแข่งขัน!', 'info');
+        } else if (_lastBinVersion === null && newVer) {
+            _lastBinVersion = newVer;
+        }
+    })
+    .catch(() => {});
+}
+
+function _applyCloudData(r) {
+    if (!r) return;
+    state.teams = r.teams || state.teams;
+    state.matches = r.matches || state.matches;
+    state.hallOfFame = r.hallOfFame || state.hallOfFame;
+    state.h2h = r.h2h || state.h2h;
+    state.defendingChampId = r.defendingChampId !== undefined ? r.defendingChampId : state.defendingChampId;
+    state.tournamentStarted = r.tournamentStarted !== undefined ? r.tournamentStarted : state.tournamentStarted;
+    state.tournamentFormat = r.tournamentFormat || state.tournamentFormat;
+    state.cupChampionId = r.cupChampionId !== undefined ? r.cupChampionId : state.cupChampionId;
+    state.cupConfig = r.cupConfig || state.cupConfig;
+    if (r.announcement !== undefined) {
+        const prevAnn = state.announcement;
+        state.announcement = r.announcement || "";
+        // ถ้า announcement เปลี่ยน ให้รีเซ็ท dismissed เพื่อให้ banner โชว์ใหม่
+        if (state.announcement && state.announcement !== prevAnn) {
+            _announcementDismissed = false;
+        }
+    }
+    _restoreEvidenceFromLocal();
+    renderHeader();
+    renderLeague();
+    refreshUIState();
+    renderAnnouncement();
+}
+
+// ─── Announcement Banner ─────────────────────────────────────────────────────
+let _announcementDismissed = false;
+
+function renderAnnouncement() {
+    const banner = document.getElementById('announcement-banner');
+    const textEl = document.getElementById('announcement-text');
+    if (!banner || !textEl) return;
+    const msg = (state.announcement || '').trim();
+    if (msg && !_announcementDismissed) {
+        textEl.textContent = msg;
+        banner.style.display = 'block';
+    } else {
+        banner.style.display = 'none';
+    }
+}
+
+function dismissAnnouncement() {
+    _announcementDismissed = true;
+    const banner = document.getElementById('announcement-banner');
+    if (banner) banner.style.display = 'none';
+}
+
+function clearAnnouncement() {
+    if (state.isViewOnly) return;
+    document.getElementById('edit-announcement').value = '';
+    state.announcement = '';
+    renderAnnouncement();
+    saveDataToCloud();
+    showStatus('🗑️ ล้างประกาศแล้ว');
+}
+
+function showToast(msg, type) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    const pill = document.createElement('div');
+    pill.className = `toast-pill t-${type || 'info'}`;
+    pill.innerHTML = `<div class="t-dot"></div><span>${msg}</span>`;
+    container.appendChild(pill);
+    setTimeout(() => {
+        pill.classList.add('toast-out');
+        setTimeout(() => pill.remove(), 350);
+    }, 3500);
+}
 
 function initTeamAutocomplete() {
     setupAutocompleteLogic("reg-team", "autocomplete-list");
@@ -2986,6 +3150,7 @@ function _renderEditTeamsModalUI() {
     document.getElementById("edit-tournament-details").value = state.tournamentDetails || "";
     document.getElementById("edit-bg-image-url").value = state.bgImageUrl || "";
     document.getElementById("edit-discord-url").value = state.discordUrl || "https://discord.gg/ESMDUce5pf";
+    document.getElementById("edit-announcement").value = state.announcement || "";
 
     document.getElementById("admin-add-id").value = "";
     document.getElementById("admin-add-player").value = "";
@@ -3094,6 +3259,8 @@ function saveEditedTeams() {
     state.tournamentDetails = document.getElementById("edit-tournament-details").value;
     state.bgImageUrl = document.getElementById("edit-bg-image-url").value.trim();
     state.discordUrl = document.getElementById("edit-discord-url").value.trim() || "https://discord.gg/ESMDUce5pf";
+    state.announcement = document.getElementById("edit-announcement").value.trim();
+    renderAnnouncement();
 
     const rows = document.querySelectorAll("#edit-teams-container .edit-team-row");
     let hasError = false;
@@ -3956,23 +4123,24 @@ function _buildMatchRowDiv(m, fmt) {
     divMatch.className = m.status ? "match-row has-status" : "match-row";
     divMatch.innerHTML = `
         <div class="match-team home ${draggableClass}" data-team-id="${hInfo.id}" ${dragAttrs}>
-            <div style="display:flex; flex-direction:column; align-items:flex-end;">
-                <span style="font-weight:700;">${hInfo.team}</span>
-                <span style="font-size:11px; color:var(--wc-text-sub);">${hInfo.player}</span>
-                ${chips.homeChip ? `<div class="hcap-team-chip" style="margin-top:4px;">${chips.homeChip}</div>` : ''}
+            <div class="match-team-info">
+                <span class="match-team-name">${hInfo.team}</span>
+                <span class="match-team-player">${hInfo.player}</span>
             </div>
-            ${hInfo.id === 'BYE' ? '<span style="font-size:22px;">🎟️</span>' : `<img class="${homeLogoClass}" src="${hInfo.logo}" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(hInfo.team)}';">`}<span class="badge-side">H</span>
+            ${hInfo.id === 'BYE' ? '<span style="font-size:22px;flex-shrink:0;">🎟️</span>' : `<img class="${homeLogoClass}" src="${hInfo.logo}" onerror="this.onerror=null;this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(hInfo.team)}';" style="flex-shrink:0;">`}
+            <span class="badge-side" style="flex-shrink:0;">H</span>
+            ${chips.homeChip}
         </div>
         <div class="match-score">
-            <div class="hcap-center-row score-odds-row">${chips.homeChip}${scoreHTML}${chips.awayChip}</div>
-            <div class="hcap-score-only">${scoreHTML}</div>
+            ${scoreHTML}
         </div>
         <div class="match-team away ${draggableClass}" data-team-id="${aInfo.id}" ${dragAttrs}>
-            <span class="badge-side">A</span>${aInfo.id === 'BYE' ? '<span style="font-size:22px;">🎟️</span>' : `<img class="${awayLogoClass}" src="${aInfo.logo}" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(aInfo.team)}';">`}
-            <div style="display:flex; flex-direction:column; align-items:flex-start;">
-                <span style="font-weight:700;">${aInfo.team}</span>
-                <span style="font-size:11px; color:var(--wc-text-sub);">${aInfo.player}</span>
-                ${chips.awayChip ? `<div class="hcap-team-chip" style="margin-top:4px;">${chips.awayChip}</div>` : ''}
+            ${chips.awayChip}
+            <span class="badge-side" style="flex-shrink:0;">A</span>
+            ${aInfo.id === 'BYE' ? '<span style="font-size:22px;flex-shrink:0;">🎟️</span>' : `<img class="${awayLogoClass}" src="${aInfo.logo}" onerror="this.onerror=null;this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(aInfo.team)}';" style="flex-shrink:0;">`}
+            <div class="match-team-info">
+                <span class="match-team-name">${aInfo.team}</span>
+                <span class="match-team-player">${aInfo.player}</span>
             </div>
         </div>
         ${statusBadgeHTML}
@@ -4171,7 +4339,13 @@ function _loadBinData(idToLoad) {
     showStatus("⏳ กำลังโหลด...", true);
     fetch(`https://api.jsonbin.io/v3/b/${idToLoad}/latest`, { headers: { "X-Master-Key": BIN_MASTER_KEY } }).then(res => res.json())
     .then(resData => {
-        let r = resData.record; state.teams = r.teams || []; state.matches = r.matches || []; state.hallOfFame = r.hallOfFame || {}; state.defendingChampId = r.defendingChampId || null; state.season = r.season || 3;
+        let r = resData.record;
+        state.teams = r.teams || [];
+        state.matches = r.matches || [];
+        state.hallOfFame = r.hallOfFame || {};
+        state.h2h = r.h2h || {};
+        state.defendingChampId = r.defendingChampId || null;
+        state.season = r.season || 3;
         state.tournamentStarted = r.tournamentStarted || false;
         state.titleW1 = r.titleW1 || "WORLD"; state.titleW2 = r.titleW2 || "CUP"; state.titleW3 = r.titleW3 || "TOURNAMENT";
         state.tournamentDetails = r.tournamentDetails || ""; state.discordUrl = r.discordUrl || "https://discord.gg/ESMDUce5pf"; state.bgImageUrl = r.bgImageUrl || "";
@@ -4180,12 +4354,19 @@ function _loadBinData(idToLoad) {
         state.cupConfig = r.cupConfig || { roundFormat: 'single', finalFormat: 'single', thirdPlace: false, consolation: false };
         state.cupChampionId = r.cupChampionId || null;
         state.consolationChampionId = r.consolationChampionId || null;
+        state.announcement = r.announcement || "";
+        // บันทึก version เพื่อใช้ตรวจสอบการอัปเดต
+        if (resData.metadata && resData.metadata.version) {
+            _lastBinVersion = resData.metadata.version;
+        }
         _restoreEvidenceFromLocal();
         const shareBase = FIXED_BIN_ID
             ? (window.location.origin + window.location.pathname)
             : (window.location.origin + window.location.pathname + "?id=" + state.binId);
         document.getElementById("spectator-link-path").textContent = shareBase;
-        showStatus("☁️ โหลดข้อมูลแล้ว"); renderHeader(); renderLeague(); refreshUIState();
+        showStatus("☁️ โหลดข้อมูลแล้ว"); renderHeader(); renderLeague(); refreshUIState(); renderAnnouncement();
+        // เริ่ม auto-refresh สำหรับ viewer
+        if (state.isViewOnly) _startAutoRefresh();
     }).catch(() => showStatus("❌ โหลดไม่สำเร็จ"));
 }
 
@@ -4497,7 +4678,20 @@ function resetBracketMatchScore(matchId) {
 
 let _currentOddsMatchId = null;
 
-// Returns { homeChip, awayChip } — home goes LEFT of score, away goes RIGHT
+// Thai betting style format: 0.25→"0/0.5", 0.5→"0.5", 0.75→"0.5/1", 1→"1"
+function _fmtHcapThai(absVal) {
+    let n = Math.abs(parseFloat(absVal));
+    if (isNaN(n) || n === 0) return '0';
+    let frac = Math.round(n * 4);
+    let whole = Math.floor(frac / 4);
+    let rem = frac % 4;
+    if (rem === 0) return whole.toString();
+    if (rem === 2) return (whole + 0.5).toString();
+    if (rem === 1) return whole + '/' + (whole + 0.5);   // 0.25→"0/0.5", 1.25→"1/1.5"
+    return (whole + 0.5) + '/' + (whole + 1);            // 0.75→"0.5/1", 1.75→"1.5/2"
+}
+
+// Returns { homeChip, awayChip } — Thai betting style numbers only, beside score
 function _buildOddsChips(m) {
     let empty = { homeChip: '', awayChip: '' };
     if (!m || m.homeId === 'BYE' || m.awayId === 'BYE') return empty;
@@ -4507,28 +4701,36 @@ function _buildOddsChips(m) {
 
     let hcap = parseFloat(odds.handicap);
     if (isNaN(hcap)) return empty;
-    let awayHcap = -hcap;
-    let hcapStr = _fmtHcap(hcap);
-    let awayHcapStr = _fmtHcap(awayHcap);
 
-    let hClass = 'hcap-chip home-hcap';
-    let aClass = 'hcap-chip away-hcap';
-    let hEmoji = '';
-    let aEmoji = '';
+    let thaiStr = _fmtHcapThai(Math.abs(hcap));
+    let homeResult = '', awayResult = '';
 
     if (m.homeScore !== null && m.awayScore !== null) {
         let r = _calcAHResult(m.homeScore, m.awayScore, hcap);
-        if (r.home === 'win' || r.home === 'hw') { hClass += ' hcap-win'; hEmoji = '✅'; }
-        else if (r.home === 'loss' || r.home === 'hl') { hClass += ' hcap-loss'; hEmoji = '❌'; }
-        else if (r.home === 'push') hEmoji = '↩';
-        if (r.away === 'win' || r.away === 'hw') { aClass += ' hcap-win'; aEmoji = '✅'; }
-        else if (r.away === 'loss' || r.away === 'hl') { aClass += ' hcap-loss'; aEmoji = '❌'; }
-        else if (r.away === 'push') aEmoji = '↩';
+        homeResult = r.home; awayResult = r.away;
     }
 
+    // Home chip: favorite (gives) = red, underdog (receives) = blue, level = gold
+    let hCls = 'ah-chip';
+    if (hcap < 0)      hCls += ' ah-fav';
+    else if (hcap > 0) hCls += ' ah-recv';
+    else               hCls += ' ah-even';
+    if (homeResult === 'win' || homeResult === 'hw')   hCls += ' ah-win';
+    else if (homeResult === 'loss' || homeResult === 'hl') hCls += ' ah-loss';
+    else if (homeResult === 'push')                    hCls += ' ah-push';
+
+    // Away chip: mirror
+    let aCls = 'ah-chip';
+    if (hcap > 0)      aCls += ' ah-fav';
+    else if (hcap < 0) aCls += ' ah-recv';
+    else               aCls += ' ah-even';
+    if (awayResult === 'win' || awayResult === 'hw')   aCls += ' ah-win';
+    else if (awayResult === 'loss' || awayResult === 'hl') aCls += ' ah-loss';
+    else if (awayResult === 'push')                    aCls += ' ah-push';
+
     return {
-        homeChip: `<span class="${hClass}">${hEmoji ? hEmoji + ' ' : ''}${hcapStr}</span>`,
-        awayChip: `<span class="${aClass}">${awayHcapStr}${aEmoji ? ' ' + aEmoji : ''}</span>`
+        homeChip: `<span class="${hCls}">${thaiStr}</span>`,
+        awayChip: `<span class="${aCls}">${thaiStr}</span>`
     };
 }
 function _buildOddsBarHTML(m) { return ''; } // legacy stub
