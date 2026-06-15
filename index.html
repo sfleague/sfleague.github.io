@@ -336,6 +336,29 @@
         .fc-footer { text-align: center; font-family: 'Orbitron', 'Prompt', sans-serif; font-size: 12px; color: var(--wc-text-sub); padding: 30px 0; margin-top: 50px; border-top: 1px solid var(--wc-border); letter-spacing: 1px; opacity: 0.7; }
         .fc-footer strong { color: var(--wc-gold); font-weight: 800; }
 
+        /* ── Changelog ── */
+        .changelog-toggle-btn {
+            display: flex; align-items: center; gap: 10px; width: 100%;
+            background: none; border: none; cursor: pointer; padding: 0;
+            color: var(--wc-gold); font-family: 'Orbitron','Prompt',sans-serif;
+            font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 0; transition: opacity 0.2s; box-shadow: none; transform: none;
+            justify-content: space-between;
+        }
+        .changelog-toggle-btn:hover { opacity: 0.8; transform: none !important; box-shadow: none !important; }
+        .changelog-arrow { transition: transform 0.25s ease; font-size: 12px; }
+        .changelog-arrow.open { transform: rotate(180deg); }
+        .changelog-body { overflow: hidden; max-height: 0; transition: max-height 0.35s ease; }
+        .changelog-body.open { max-height: 800px; }
+        .changelog-list { margin: 14px 0 4px; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .cl-item { display: flex; gap: 10px; align-items: flex-start; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 10px 14px; font-size: 13px; }
+        .cl-date { font-size: 10px; color: var(--wc-text-sub); white-space: nowrap; padding-top: 2px; min-width: 70px; font-family:'Orbitron',sans-serif; letter-spacing:0.5px; }
+        .cl-badge { font-size: 10px; font-weight: 800; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; }
+        .cl-badge.fix  { background: rgba(34,197,94,0.15);  color: #22c55e;  border: 1px solid rgba(34,197,94,0.3); }
+        .cl-badge.new  { background: rgba(59,130,246,0.15); color: #60a5fa;  border: 1px solid rgba(59,130,246,0.3); }
+        .cl-badge.improve { background: rgba(234,179,8,0.15); color: #fbbf24; border: 1px solid rgba(234,179,8,0.3); }
+        .cl-text { color: #cbd5e1; line-height: 1.5; }
+
         @media (max-width: 640px) {
             .admin-add-player-grid { grid-template-columns: 1fr; }
             .edit-team-row { grid-template-columns: 1fr; gap: 8px; }
@@ -967,8 +990,9 @@
         }
 
         @media (max-width: 768px) {
-            .score-odds-row { gap: 5px; }
-            .hcap-chip { font-size: 10px; padding: 2px 5px; }
+            .hcap-team-chip  { display: block; }
+            .hcap-center-row { display: none !important; }
+            .hcap-score-only { display: flex; justify-content: center; }
         }
 
         /* ── อัตราการต่อรอง (Odds System) ── */
@@ -1066,6 +1090,24 @@
         .hcap-chip.away-hcap { background:rgba(239,68,68,0.1); color:#f87171; border:1px solid rgba(239,68,68,0.22); }
         .hcap-chip.hcap-win { background:rgba(34,197,94,0.15); color:#22c55e; border-color:rgba(34,197,94,0.35); }
         .hcap-chip.hcap-loss { background:rgba(239,68,68,0.15); color:#f87171; border-color:rgba(239,68,68,0.35); }
+        /* ── Win Streak Badge ── */
+        .streak-badge {
+            display: inline-flex; align-items: center; justify-content: center;
+            font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 900;
+            padding: 3px 9px; border-radius: 6px; letter-spacing: 0.5px; white-space: nowrap;
+        }
+        .streak-w { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.35); }
+        .streak-l { background: rgba(239,68,68,0.13); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+        .streak-d { background: rgba(234,179,8,0.12); color: #fbbf24; border: 1px solid rgba(234,179,8,0.28); }
+        .streak-fire { background: rgba(249,115,22,0.18); color: #fb923c; border-color: rgba(249,115,22,0.45);
+            box-shadow: 0 0 10px rgba(249,115,22,0.3); animation: streakPulse 1.8s ease-in-out infinite; }
+        @keyframes streakPulse { 0%,100%{box-shadow:0 0 8px rgba(249,115,22,0.3);} 50%{box-shadow:0 0 18px rgba(249,115,22,0.6);} }
+
+        /* ── Chip desktop/mobile toggle ── */
+        .hcap-team-chip  { display: none; }
+        .hcap-center-row { display: flex; }
+        .hcap-score-only { display: none; }
+
         /* ── Odds inline ── */
         .score-odds-row { display:flex; align-items:center; justify-content:center; gap:25px; flex-wrap:nowrap; }
         .odds-chips-inline { display:flex; gap:3px; align-items:center; }
@@ -1115,6 +1157,38 @@
     <div class="fc-card" id="details-display-card">
         <h2 class="title-details">📋 TOURNAMENT DETAILS (รายละเอียดและกฎกติกา)</h2>
         <div id="tournament-details-box" class="info-content-box">ยังไม่มีการระบุรายละเอียดทัวร์นาเมนต์</div>
+    </div>
+
+    <!-- ── Changelog Card ── -->
+    <div class="fc-card" id="changelog-card">
+        <button class="changelog-toggle-btn" onclick="toggleChangelog()">
+            <span>🔔 อัปเดตล่าสุด</span>
+            <span class="changelog-arrow" id="changelog-arrow">▼</span>
+        </button>
+        <div class="changelog-body" id="changelog-body">
+            <ul class="changelog-list">
+                <li class="cl-item">
+                    <span class="cl-date">15 JUN 2026</span>
+                    <span class="cl-badge fix">แก้ไข</span>
+                    <span class="cl-text">รูปหลักฐานตอนนี้ดูได้ทุก browser — บันทึก URL รูปขึ้น cloud แล้ว ไม่ต้องเปิดในเครื่องที่อัปโหลดเท่านั้น</span>
+                </li>
+                <li class="cl-item">
+                    <span class="cl-date">15 JUN 2026</span>
+                    <span class="cl-badge fix">แก้ไข</span>
+                    <span class="cl-text">กดดูรูปหลักฐานบนมือถือ — popup จะปิดอัตโนมัติ ไม่ต้องปิดมือก่อนแล้ว</span>
+                </li>
+                <li class="cl-item">
+                    <span class="cl-date">15 JUN 2026</span>
+                    <span class="cl-badge improve">ปรับปรุง</span>
+                    <span class="cl-text">Chip Asian Handicap บนมือถือ — แสดงใต้ชื่อทีมแทน ไม่ทับสกอร์และชื่อทีมอีกต่อไป</span>
+                </li>
+                <li class="cl-item">
+                    <span class="cl-date">15 JUN 2026</span>
+                    <span class="cl-badge new">ใหม่</span>
+                    <span class="cl-text">เพิ่มคอลัมน์ Streak ในตารางคะแนน — แสดงสายชนะ/แพ้/เสมอต่อเนื่อง พร้อมเอฟเฟกต์ 🔥 เมื่อชนะ 3 นัดขึ้นไปติดต่อกัน</span>
+                </li>
+            </ul>
+        </div>
     </div>
 
     <div class="fc-card" id="setup-area">
@@ -3252,6 +3326,14 @@ function closeCustomAlert() {
     const modal = document.getElementById('custom-alert-modal');
     if (modal) modal.style.display = 'none';
 }
+
+function toggleChangelog() {
+    const body = document.getElementById('changelog-body');
+    const arrow = document.getElementById('changelog-arrow');
+    if (!body) return;
+    body.classList.toggle('open');
+    arrow.classList.toggle('open');
+}
 // Override native alert globally
 window.alert = showAlert;
 
@@ -3489,6 +3571,7 @@ function uploadMatchEvidence(matchId) {
 function viewMatchEvidence(matchId) {
     let match = state.matches.find(m => m.id === matchId);
     if (!match || !match.evidenceImg) { alert("⚠️ คู่นี้ยังไม่มีผู้เล่นส่งรูปหลักฐานเข้ามาครับ"); return; }
+    closeScoreModal();
     const lb = document.getElementById("evidence-lightbox");
     const img = document.getElementById("evidence-lightbox-img");
     const dl = document.getElementById("evidence-lightbox-download");
@@ -3696,6 +3779,41 @@ function _getTeamForm(teamId, n) {
     });
 }
 
+function _getWinStreak(teamId) {
+    let played = (state.matches || []).filter(m =>
+        (m.homeId === teamId || m.awayId === teamId) &&
+        m.homeId !== 'BYE' && m.awayId !== 'BYE' &&
+        m.homeScore !== null && m.homeScore !== undefined &&
+        m.awayScore !== null && m.awayScore !== undefined
+    );
+    played.sort((a, b) => (a.id || 0) - (b.id || 0));
+    if (played.length === 0) return { type: 'none', count: 0 };
+    let results = played.map(m => {
+        let isHome = m.homeId === teamId;
+        let gf = isHome ? m.homeScore : m.awayScore;
+        let ga = isHome ? m.awayScore : m.homeScore;
+        return gf > ga ? 'W' : gf < ga ? 'L' : 'D';
+    });
+    let last = results[results.length - 1];
+    let count = 0;
+    for (let i = results.length - 1; i >= 0; i--) {
+        if (results[i] === last) count++;
+        else break;
+    }
+    return { type: last, count };
+}
+
+function _buildStreakHTML(teamId) {
+    let s = _getWinStreak(teamId);
+    if (s.type === 'none') return '<span style="color:#334155;font-size:12px;">—</span>';
+    if (s.type === 'W') {
+        if (s.count >= 3) return `<span class="streak-badge streak-w streak-fire">🔥 ${s.count}W</span>`;
+        return `<span class="streak-badge streak-w">${s.count}W</span>`;
+    }
+    if (s.type === 'L') return `<span class="streak-badge streak-l">${s.count}L</span>`;
+    return `<span class="streak-badge streak-d">${s.count}D</span>`;
+}
+
 function _buildFormGuideHTML(teamId, n) {
     let form = _getTeamForm(teamId, n);
     // Pad left with empty slots if fewer than n games played
@@ -3726,6 +3844,7 @@ function renderStandings() {
             <th style="width:5%">#</th><th style="text-align:left; width:30%">ทีม / ผู้จัดการ</th>
             <th>P</th><th style="color:#00ff88;">W</th><th>D</th><th style="color:#ff4466;">L</th>
             <th>GF</th><th>GA</th><th>GD</th><th>PTS</th>
+            <th style="min-width:60px;">Streak</th>
             <th style="min-width:110px;">5 นัดหลัง</th>
         </tr>`;
     }
@@ -3741,12 +3860,14 @@ function renderStandings() {
         let logoClass = team.isFlag ? "team-logo flag-img" : "team-logo club-img";
         const defendingBadge = isDefending ? `<span class="defending-badge">👑 DEFENDING</span>` : "";
         let formHTML = _buildFormGuideHTML(team.id, 5);
+        let streakHTML = _buildStreakHTML(team.id);
         tr.innerHTML = `
             <td><strong>${index + 1}</strong></td>
             <td><div class="player-team-box"><img class="${logoClass}" src="${team.logo}" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(team.team)}';"><div class="team-info"><span class="p-name">${team.team}${team.isChampion ? '<span class="champion-badge">🏆 CHAMPION</span>' : ''}${defendingBadge}</span><span class="t-name">Manager: ${team.player}</span></div></div></td>
             <td>${team.p}</td><td style="color:#00ff88;">${team.w}</td><td>${team.d}</td><td style="color:#ff4466;">${team.l}</td>
             <td>${team.gf}</td><td>${team.ga}</td><td style="font-weight:bold; color:${team.gd >= 0 ? 'var(--wc-gold)' : '#ff4466'}">${team.gd > 0 ? '+' + team.gd : team.gd}</td>
             <td><span style="background:${team.isChampion ? 'var(--wc-gold)' : isDefending ? 'rgba(139,92,246,0.3)' : '#1a3660'}; color:${team.isChampion ? '#000' : '#fff'}; padding:3px 10px; font-weight:bold; border-radius:3px;">${team.pts}</span></td>
+            <td>${streakHTML}</td>
             <td>${formHTML}</td>
         `;
         tbody.appendChild(tr);
@@ -3835,15 +3956,24 @@ function _buildMatchRowDiv(m, fmt) {
     divMatch.className = m.status ? "match-row has-status" : "match-row";
     divMatch.innerHTML = `
         <div class="match-team home ${draggableClass}" data-team-id="${hInfo.id}" ${dragAttrs}>
-            <div style="display:flex; flex-direction:column; align-items:flex-end;"><span style="font-weight:700;">${hInfo.team}</span><span style="font-size:11px; color:var(--wc-text-sub);">${hInfo.player}</span></div>
+            <div style="display:flex; flex-direction:column; align-items:flex-end;">
+                <span style="font-weight:700;">${hInfo.team}</span>
+                <span style="font-size:11px; color:var(--wc-text-sub);">${hInfo.player}</span>
+                ${chips.homeChip ? `<div class="hcap-team-chip" style="margin-top:4px;">${chips.homeChip}</div>` : ''}
+            </div>
             ${hInfo.id === 'BYE' ? '<span style="font-size:22px;">🎟️</span>' : `<img class="${homeLogoClass}" src="${hInfo.logo}" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(hInfo.team)}';">`}<span class="badge-side">H</span>
         </div>
         <div class="match-score">
-            <div class="score-odds-row">${chips.homeChip}${scoreHTML}${chips.awayChip}</div>
+            <div class="hcap-center-row score-odds-row">${chips.homeChip}${scoreHTML}${chips.awayChip}</div>
+            <div class="hcap-score-only">${scoreHTML}</div>
         </div>
         <div class="match-team away ${draggableClass}" data-team-id="${aInfo.id}" ${dragAttrs}>
             <span class="badge-side">A</span>${aInfo.id === 'BYE' ? '<span style="font-size:22px;">🎟️</span>' : `<img class="${awayLogoClass}" src="${aInfo.logo}" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(aInfo.team)}';">`}
-            <div style="display:flex; flex-direction:column; align-items:flex-start;"><span style="font-weight:700;">${aInfo.team}</span><span style="font-size:11px; color:var(--wc-text-sub);">${aInfo.player}</span></div>
+            <div style="display:flex; flex-direction:column; align-items:flex-start;">
+                <span style="font-weight:700;">${aInfo.team}</span>
+                <span style="font-size:11px; color:var(--wc-text-sub);">${aInfo.player}</span>
+                ${chips.awayChip ? `<div class="hcap-team-chip" style="margin-top:4px;">${chips.awayChip}</div>` : ''}
+            </div>
         </div>
         ${statusBadgeHTML}
     `;
