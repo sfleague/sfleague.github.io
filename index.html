@@ -1207,6 +1207,55 @@
         .h2h-win-pill.w { background:rgba(34,197,94,0.15); color:#22c55e; }
         .h2h-win-pill.d { background:rgba(100,116,139,0.15); color:#94a3b8; }
         .h2h-win-pill.l { background:rgba(239,68,68,0.12); color:#f87171; }
+
+        /* ─── Custom Modal (Alert / Confirm / Prompt) ─── */
+        .cm-overlay {
+            display: none; position: fixed; inset: 0; z-index: 9999;
+            background: rgba(0,0,0,0.82); backdrop-filter: blur(10px);
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .cm-overlay.open { display: flex; }
+        .cm-box {
+            background: linear-gradient(145deg, #0d1b35 0%, #091220 100%);
+            border: 1px solid rgba(223,180,75,0.35);
+            border-radius: 18px;
+            padding: 30px 32px 24px;
+            max-width: 480px; width: 100%;
+            box-shadow: 0 24px 70px rgba(0,0,0,0.85), 0 0 40px rgba(223,180,75,0.08);
+            animation: cm-pop 0.22s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes cm-pop { from { transform: scale(0.88); opacity:0; } to { transform: scale(1); opacity:1; } }
+        .cm-icon { font-size: 32px; margin-bottom: 12px; text-align: center; line-height: 1; }
+        .cm-msg {
+            color: #cbd5e1; font-size: 15px; line-height: 1.65;
+            white-space: pre-wrap; text-align: center;
+            font-family: 'Sarabun', sans-serif; margin-bottom: 24px;
+        }
+        .cm-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .cm-btn-ok {
+            padding: 11px 32px; border-radius: 10px; border: none;
+            background: linear-gradient(135deg, #dfb44b 0%, #b8932c 100%);
+            color: #07101e; font-weight: 800; font-size: 14px; letter-spacing: 0.4px;
+            cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+            font-family: 'Sarabun', sans-serif; min-width: 100px;
+        }
+        .cm-btn-ok:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(223,180,75,0.45); }
+        .cm-btn-ok:active { transform: translateY(0); }
+        .cm-btn-cancel {
+            padding: 11px 32px; border-radius: 10px;
+            background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+            color: #94a3b8; font-weight: 700; font-size: 14px; letter-spacing: 0.4px;
+            cursor: pointer; transition: background 0.15s, color 0.15s;
+            font-family: 'Sarabun', sans-serif; min-width: 100px;
+        }
+        .cm-btn-cancel:hover { background: rgba(255,255,255,0.12); color: #e2e8f0; }
+        .cm-input {
+            width: 100%; box-sizing: border-box; padding: 11px 14px; border-radius: 9px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(223,180,75,0.3);
+            color: #dfb44b; font-size: 13px; margin-bottom: 20px;
+            font-family: monospace; cursor: text; outline: none;
+        }
+        .cm-input:focus { border-color: rgba(223,180,75,0.6); }
     </style>
 </head>
 <body>
@@ -1422,6 +1471,30 @@
                 <a id="evidence-lightbox-download" class="evidence-lightbox-download" download="evidence.jpg">⬇️ บันทึกรูป</a>
                 <button id="evidence-lightbox-delete-btn" class="evidence-lightbox-delete" onclick="deleteMatchEvidence()" style="display:none;">🗑️ ลบหลักฐาน</button>
                 <button class="evidence-lightbox-close" onclick="closeEvidenceLightbox()">✕ ปิด</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Confirm Modal -->
+    <div id="cm-confirm" class="cm-overlay">
+        <div class="cm-box">
+            <div class="cm-icon" id="cm-confirm-icon">❓</div>
+            <div class="cm-msg" id="cm-confirm-msg"></div>
+            <div class="cm-actions">
+                <button class="cm-btn-cancel" id="cm-confirm-cancel" onclick="_cmConfirmClose(false)">ยกเลิก</button>
+                <button class="cm-btn-ok" id="cm-confirm-ok" onclick="_cmConfirmClose(true)">ตกลง</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Prompt Modal (link copy fallback) -->
+    <div id="cm-prompt" class="cm-overlay" onclick="if(event.target===this)_cmPromptClose()">
+        <div class="cm-box">
+            <div class="cm-icon">📋</div>
+            <div class="cm-msg" id="cm-prompt-msg"></div>
+            <input id="cm-prompt-input" class="cm-input" type="text" readonly onclick="this.select()">
+            <div class="cm-actions">
+                <button class="cm-btn-ok" onclick="_cmPromptClose()">ปิด</button>
             </div>
         </div>
     </div>
@@ -2346,6 +2419,44 @@ function clearAnnouncement() {
     showStatus('🗑️ ล้างประกาศแล้ว');
 }
 
+// ─── Custom Modal System (confirm / prompt — alert ใช้ custom-alert-modal เดิม) ─
+let _cmConfirmResolve = null;
+
+function _extractEmoji(msg) {
+    const m = msg.match(/^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|[\u{1F300}-\u{1FAFF}]|\u26A0\uFE0F|[\u2600-\u27FF])/u);
+    return m ? m[0] : null;
+}
+function _stripLeadingEmoji(msg) {
+    return msg.replace(/^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F|[\u{1F300}-\u{1FAFF}]|\u26A0\uFE0F|[\u2600-\u27FF])\s*/u, '');
+}
+
+function showConfirm(msg, okText = 'ตกลง', cancelText = 'ยกเลิก') {
+    const icon = _extractEmoji(String(msg));
+    const el = document.getElementById('cm-confirm');
+    document.getElementById('cm-confirm-icon').textContent = icon || '❓';
+    document.getElementById('cm-confirm-msg').textContent = icon ? _stripLeadingEmoji(String(msg)) : String(msg);
+    document.getElementById('cm-confirm-ok').textContent = okText;
+    document.getElementById('cm-confirm-cancel').textContent = cancelText;
+    el.classList.add('open');
+    return new Promise(res => { _cmConfirmResolve = res; });
+}
+function _cmConfirmClose(result) {
+    document.getElementById('cm-confirm').classList.remove('open');
+    if (_cmConfirmResolve) { _cmConfirmResolve(result); _cmConfirmResolve = null; }
+}
+
+function showPrompt(msg, defaultVal = '') {
+    document.getElementById('cm-prompt-msg').textContent = String(msg);
+    const inp = document.getElementById('cm-prompt-input');
+    inp.value = defaultVal;
+    document.getElementById('cm-prompt').classList.add('open');
+    setTimeout(() => inp.select(), 80);
+}
+function _cmPromptClose() {
+    document.getElementById('cm-prompt').classList.remove('open');
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 function showToast(msg, type) {
     const container = document.getElementById('toast-container');
     if (!container) return;
@@ -2442,13 +2553,13 @@ function submitAdminLogin() {
     const passVal = document.getElementById("login-password").value.trim();
 
     if (!userVal || !passVal) {
-        alert("⚠️ กรุณากรอกทั้งชื่อผู้ใช้และรหัสผ่านให้ครบถ้วนครับ");
+        showAlert("⚠️ กรุณากรอกทั้งชื่อผู้ใช้และรหัสผ่านให้ครบถ้วนครับ");
         return;
     }
 
     if (userVal === ADMIN_USER && passVal === ADMIN_PASS) {
         if (window._READONLY_MODE) {
-            alert('🔒 Readonly Mode เปิดอยู่ — Admin UI ใช้งานได้ แต่จะไม่บันทึกข้อมูลขึ้น Cloud\nปิด ?readonly=1 ออกจาก URL เพื่อใช้งานจริง');
+            showAlert('🔒 Readonly Mode เปิดอยู่ — Admin UI ใช้งานได้ แต่จะไม่บันทึกข้อมูลขึ้น Cloud\nปิด ?readonly=1 ออกจาก URL เพื่อใช้งานจริง');
         }
         state.isViewOnly = false;
         closeAdminLoginModal();
@@ -2463,9 +2574,9 @@ function submitAdminLogin() {
         refreshUIState();
         
         showStatus("🔓 Admin เข้าระบบแล้ว");
-        alert("🎉 ยินดีต้อนรับครับแอดมิน! เมนูตัวควบคุมปลดล็อกเรียบร้อยแล้ว");
+        showAlert("🎉 ยินดีต้อนรับครับแอดมิน! เมนูตัวควบคุมปลดล็อกเรียบร้อยแล้ว");
     } else {
-        alert("❌ รหัสผ่านหรือบัญชีผู้ใช้ไม่ถูกต้อง! กรุณาลองใหม่อีกครั้ง");
+        showAlert("❌ รหัสผ่านหรือบัญชีผู้ใช้ไม่ถูกต้อง! กรุณาลองใหม่อีกครั้ง");
     }
 }
 
@@ -2493,10 +2604,10 @@ function closePlayerLoginModal() {
 
 function submitPlayerLogin() {
     const idVal = document.getElementById("player-login-id").value.trim();
-    if (!idVal) { alert("⚠️ กรุณากรอก ID ของคุณก่อนครับ"); return; }
+    if (!idVal) { showAlert("⚠️ กรุณากรอก ID ของคุณก่อนครับ"); return; }
     const team = state.teams.find(t => t.id.toLowerCase() === idVal.toLowerCase() && t.status === 'approved');
     if (!team) {
-        alert("❌ ไม่พบ ID นี้ในรายชื่อผู้แข่งขันที่อนุมัติแล้ว\nกรุณาตรวจสอบ ID ให้ถูกต้อง หรือรอการอนุมัติจากแอดมินครับ");
+        showAlert("❌ ไม่พบ ID นี้ในรายชื่อผู้แข่งขันที่อนุมัติแล้ว\nกรุณาตรวจสอบ ID ให้ถูกต้อง หรือรอการอนุมัติจากแอดมินครับ");
         return;
     }
     state.playerTeamId = team.id;
@@ -2556,17 +2667,17 @@ function generateLogoAndFlag(teamName) {
 }
 
 function submitRegistration() {
-    if (state.tournamentStarted) { alert("❌ ทัวร์นาเมนต์เริ่มไปแล้ว ปิดรับสมัครใน SS นี้ครับ!"); return; }
+    if (state.tournamentStarted) { showAlert("❌ ทัวร์นาเมนต์เริ่มไปแล้ว ปิดรับสมัครใน SS นี้ครับ!"); return; }
 
     const idVal = document.getElementById("reg-id").value.trim();
     const playerVal = document.getElementById("reg-player").value.trim();
     const teamVal = document.getElementById("reg-team").value.trim();
 
-    if (!idVal || !playerVal || !teamVal) { alert("⚠️ กรุณากรอกข้อมูลให้ครบถ้วนทุกช่องครับ"); return; }
+    if (!idVal || !playerVal || !teamVal) { showAlert("⚠️ กรุณากรอกข้อมูลให้ครบถ้วนทุกช่องครับ"); return; }
 
     const existingIndex = state.teams.findIndex(t => t.id.toLowerCase() === idVal.toLowerCase());
     if (existingIndex !== -1 && state.teams[existingIndex].status !== 'rejected' && state.isViewOnly) {
-        alert("❌ ID นี้มีผู้ใช้งานแล้ว กรุณาใช้ ID อื่นครับ"); return;
+        showAlert("❌ ID นี้มีผู้ใช้งานแล้ว กรุณาใช้ ID อื่นครับ"); return;
     }
 
     showStatus("⏳ กำลังบันทึกข้อมูล...", true);
@@ -2598,11 +2709,11 @@ function submitRegistration() {
     .then(() => {
         if (state.isViewOnly) {
             showStatus("☁️ ส่งใบสมัครแล้ว รอ Admin ยืนยัน");
-            alert("📩 ส่งข้อมูลสมัครเรียบร้อยแล้ว! ใบสมัครของคุณกำลังรอการตรวจสอบ เพื่อปลดล็อกตารางแข่ง");
+            showAlert("📩 ส่งข้อมูลสมัครเรียบร้อยแล้ว! ใบสมัครของคุณกำลังรอการตรวจสอบ เพื่อปลดล็อกตารางแข่ง");
             localStorage.setItem(`my_player_id_ss_${state.season}`, idVal);
         } else {
             showStatus("✅ เพิ่มผู้เล่นสำเร็จ");
-            alert(`✅ เพิ่มผู้เล่น [ ${playerVal} - ${teamVal} ] เข้าสู่ระบบและอนุมัติเรียบร้อยแล้ว!`);
+            showAlert(`✅ เพิ่มผู้เล่น [ ${playerVal} - ${teamVal} ] เข้าสู่ระบบและอนุมัติเรียบร้อยแล้ว!`);
 
             document.getElementById("reg-id").value = "";
             document.getElementById("reg-player").value = "";
@@ -2620,10 +2731,10 @@ function adminAddPlayerFromModal() {
     const playerVal = document.getElementById("admin-add-player").value.trim();
     const teamVal = document.getElementById("admin-add-team").value.trim();
 
-    if (!idVal || !playerVal || !teamVal) { alert("⚠️ กรุณากรอกข้อมูลผู้เล่นให้ครบทุกช่องครับ"); return; }
+    if (!idVal || !playerVal || !teamVal) { showAlert("⚠️ กรุณากรอกข้อมูลผู้เล่นให้ครบทุกช่องครับ"); return; }
 
     const existingIndex = state.teams.findIndex(t => t.id.toLowerCase() === idVal.toLowerCase());
-    if (existingIndex !== -1) { alert("❌ ID นี้มีผู้ใช้งานแล้ว กรุณาใช้ ID อื่นครับ"); return; }
+    if (existingIndex !== -1) { showAlert("❌ ID นี้มีผู้ใช้งานแล้ว กรุณาใช้ ID อื่นครับ"); return; }
 
     showStatus("⏳ กำลังเพิ่มผู้เล่น...", true);
     const media = generateLogoAndFlag(teamVal);
@@ -2642,7 +2753,7 @@ function adminAddPlayerFromModal() {
     .then(res => res.json())
     .then(() => {
         showStatus("✅ เพิ่มผู้เล่นสำเร็จ");
-        alert(`✅ เพิ่มผู้เล่น [ ${playerVal} - ${teamVal} ] เข้าสู่ระบบและอนุมัติเรียบร้อยแล้ว!`);
+        showAlert(`✅ เพิ่มผู้เล่น [ ${playerVal} - ${teamVal} ] เข้าสู่ระบบและอนุมัติเรียบร้อยแล้ว!`);
 
         document.getElementById("admin-add-id").value = "";
         document.getElementById("admin-add-player").value = "";
@@ -2930,7 +3041,7 @@ function bracketDrop(e, matchId, slot, currentTeamId) {
     let srcMatch = state.matches.find(m => m.id === srcMatchId);
     let tgtMatch = state.matches.find(m => m.id === tgtMatchId);
     if (!srcMatch || !tgtMatch) return;
-    if (tgtMatch.homeScore !== null || tgtMatch.awayScore !== null) { alert('⚠️ ไม่สามารถลากสลับได้ เพราะคู่นั้นกรอกคะแนนไปแล้ว'); return; }
+    if (tgtMatch.homeScore !== null || tgtMatch.awayScore !== null) { showAlert('⚠️ ไม่สามารถลากสลับได้ เพราะคู่นั้นกรอกคะแนนไปแล้ว'); return; }
     // Swap team in leg1 of both matches
     let swapIn = (m, oldId, newId) => { if (m.homeId === oldId) m.homeId = newId; else if (m.awayId === oldId) m.awayId = newId; };
     swapIn(srcMatch, srcTeamId, currentTeamId);
@@ -2960,7 +3071,7 @@ function selectFormat(fmt) {
     if (panel) panel.style.display = fmt === 'cup' ? 'block' : 'none';
 }
 
-function confirmStartTournament() {
+async function confirmStartTournament() {
     closeFormatPicker();
     const approvedTeams = state.teams.filter(t => t.status === 'approved');
     let roundFmt = document.querySelector('input[name="cup-round-fmt"]:checked')?.value || 'single';
@@ -2970,7 +3081,7 @@ function confirmStartTournament() {
     let finalFmt = finalFmtVal === 'same' ? roundFmt : 'single';
     let extras = [thirdPlace ? '+ อันดับ 3' : '', consolation ? '+ สายล่าง' : ''].filter(Boolean).join(' ');
     let labels = { league: 'ลีค เหย้า-เยือน', cup: `ถ้วย (${roundFmt === '2leg' ? 'เหย้า-เยือน' : 'นัดเดียว'}${extras ? ' ' + extras : ''})`, 'cup-2leg': 'ถ้วย เหย้า-เยือน' };
-    if (!confirm(`🏆 ยืนยันเริ่มทัวร์นาเมนต์ SS${state.season}?\nรูปแบบ: ${labels[_selectedFormat]}\nจำนวนทีม: ${approvedTeams.length} ทีม\n\nหลังกดจะปิดรับสมัครทันที!`)) return;
+    if (!await showConfirm(`🏆 ยืนยันเริ่มทัวร์นาเมนต์ SS${state.season}?\nรูปแบบ: ${labels[_selectedFormat]}\nจำนวนทีม: ${approvedTeams.length} ทีม\n\nหลังกดจะปิดรับสมัครทันที!`)) return;
 
     state.tournamentFormat = _selectedFormat;
     state.tournamentStarted = true;
@@ -2986,7 +3097,7 @@ function confirmStartTournament() {
         state.matches = buildKnockoutCustom(shuffled, state.cupConfig);
     }
     renderAdminDock(); renderLeague(); refreshUIState(); saveDataToCloud();
-    alert("🎉 เริ่มการแข่งขันเรียบร้อยแล้ว สู้ๆ ครับ!");
+    showAlert("🎉 เริ่มการแข่งขันเรียบร้อยแล้ว สู้ๆ ครับ!");
 }
 
 function buildKnockoutCustom(teamObjs, config) {
@@ -3207,10 +3318,10 @@ function renderCupStatus() {
     });
 }
 
-function saveCupChampToHistory() {
+async function saveCupChampToHistory() {
     if (state.isViewOnly || !state.cupChampionId) return;
     let champ = state.teams.find(t => t.id === state.cupChampionId);
-    if (!champ || !confirm(`🏅 ยืนยันบันทึก [ ${champ.player} ] เป็นแชมป์ถ้วย SS${state.season}?`)) return;
+    if (!champ || !await showConfirm(`🏅 ยืนยันบันทึก [ ${champ.player} ] เป็นแชมป์ถ้วย SS${state.season}?`)) return;
     if (!state.hallOfFame) state.hallOfFame = {};
     state.teams.filter(t => t.status === 'approved').forEach(t => {
         if (!state.hallOfFame[t.id]) state.hallOfFame[t.id] = { name: t.player, trophies: 0, wins: 0, draws: 0, losses: 0, goalsFor: 0, goalsAgainst: 0 };
@@ -3218,7 +3329,7 @@ function saveCupChampToHistory() {
     });
     state.hallOfFame[state.cupChampionId].trophies += 1;
     state.defendingChampId = state.cupChampionId;
-    alert("💾 บันทึกลง Hall of Fame เรียบร้อยแล้ว!");
+    showAlert("💾 บันทึกลง Hall of Fame เรียบร้อยแล้ว!");
     renderLeague(); saveDataToCloud();
 }
 
@@ -3234,17 +3345,17 @@ function adminDeclare2LegTieWinner(tieId, cupRound, winnerId) {
     if (leg1) { leg1.winnerId = winnerId; renderAdminDock(); renderLeague(); saveDataToCloud(); }
 }
 
-function openDeclareWinner(matchId, homeId, awayId) {
+async function openDeclareWinner(matchId, homeId, awayId) {
     if (state.isViewOnly) return;
     let ht = state.teams.find(t => t.id === homeId), at = state.teams.find(t => t.id === awayId);
-    let winner = confirm(`⚡ เลือกทีมที่ผ่านรอบ:\n\n✅ OK  →  ${ht ? ht.team : homeId}\n❌ Cancel  →  ${at ? at.team : awayId}`) ? homeId : awayId;
+    let winner = await showConfirm(`⚡ เลือกทีมที่ผ่านรอบ:\n\n✅ OK  →  ${ht ? ht.team : homeId}\n❌ Cancel  →  ${at ? at.team : awayId}`) ? homeId : awayId;
     adminDeclareCupWinner(matchId, winner);
 }
 
-function open2LegDeclareWinner(tieId, cupRound, homeId, awayId) {
+async function open2LegDeclareWinner(tieId, cupRound, homeId, awayId) {
     if (state.isViewOnly) return;
     let ht = state.teams.find(t => t.id === homeId), at = state.teams.find(t => t.id === awayId);
-    let winner = confirm(`⚡ รวมประตูเท่ากัน! เลือกทีมที่ผ่านรอบ:\n\n✅ OK  →  ${ht ? ht.team : homeId}\n❌ Cancel  →  ${at ? at.team : awayId}`) ? homeId : awayId;
+    let winner = await showConfirm(`⚡ รวมประตูเท่ากัน! เลือกทีมที่ผ่านรอบ:\n\n✅ OK  →  ${ht ? ht.team : homeId}\n❌ Cancel  →  ${at ? at.team : awayId}`) ? homeId : awayId;
     adminDeclare2LegTieWinner(tieId, cupRound, winner);
 }
 
@@ -3255,7 +3366,7 @@ function advanceKnockoutRound() {
     let allCupRounds = [...new Set(state.matches.filter(m => !m.isThirdPlace && !m.isConsolation).map(m => m.cupRound || m.round))];
     let currentCupRound = Math.max(...allCupRounds);
     if (!isCupRoundComplete(currentCupRound)) {
-        alert("⚠️ ยังมีคู่ที่ยังไม่สรุปผลครับ กรุณากรอกผลและกำหนดผู้ชนะในคู่ที่เสมอให้ครบก่อน");
+        showAlert("⚠️ ยังมีคู่ที่ยังไม่สรุปผลครับ กรุณากรอกผลและกำหนดผู้ชนะในคู่ที่เสมอให้ครบก่อน");
         return;
     }
     let crMatches = state.matches.filter(m => (m.cupRound || m.round) === currentCupRound && !m.isThirdPlace && !m.isConsolation);
@@ -3269,10 +3380,10 @@ function advanceKnockoutRound() {
         state.cupChampionId = winners[0];
         let champ = state.teams.find(t => t.id === winners[0]);
         renderAdminDock(); renderLeague(); saveDataToCloud();
-        alert(`🏆 ผู้ชนะถ้วยคือ [ ${champ ? champ.team + ' — ' + champ.player : winners[0]} ]! ยินดีด้วยครับ!`);
+        showAlert(`🏆 ผู้ชนะถ้วยคือ [ ${champ ? champ.team + ' — ' + champ.player : winners[0]} ]! ยินดีด้วยครับ!`);
         return;
     }
-    if (winners.length === 0) { alert("⚠️ ไม่พบผู้ชนะในรอบนี้"); return; }
+    if (winners.length === 0) { showAlert("⚠️ ไม่พบผู้ชนะในรอบนี้"); return; }
 
     // Consolation bracket: collect losers and create consolation matches
     if (config.consolation) {
@@ -3319,7 +3430,7 @@ function advanceKnockoutRound() {
     let nextMatches = buildNextRoundCustom(winners, nextCupRound, nextFmt);
     state.matches = [...state.matches, ...nextMatches];
     renderAdminDock(); renderLeague(); saveDataToCloud();
-    alert(`🎉 เปิดรอบที่ ${nextCupRound} แล้ว! ทีมที่ผ่านรอบ: ${winners.length} ทีม`);
+    showAlert(`🎉 เปิดรอบที่ ${nextCupRound} แล้ว! ทีมที่ผ่านรอบ: ${winners.length} ทีม`);
 }
 
 // ─── CONSOLATION BRACKET ─────────────────────────────────────────────────────
@@ -3345,9 +3456,9 @@ function advanceConsolationRound() {
     if (state.isViewOnly) return;
     _cupMatchIdCounter = Math.max(0, ...state.matches.map(m => m.id || 0)) + 1;
     let currentRound = getConsolationCurrentRound();
-    if (currentRound === 0) { alert("⚠️ ยังไม่มีการแข่งขันสายล่าง"); return; }
+    if (currentRound === 0) { showAlert("⚠️ ยังไม่มีการแข่งขันสายล่าง"); return; }
     if (!isConsolationRoundComplete(currentRound)) {
-        alert("⚠️ ยังมีคู่สายล่างที่ยังไม่สรุปผล กรุณากรอกผลให้ครบก่อน");
+        showAlert("⚠️ ยังมีคู่สายล่างที่ยังไม่สรุปผล กรุณากรอกผลให้ครบก่อน");
         return;
     }
     let roundMatches = state.matches.filter(m => m.isConsolation && m.consolationRound === currentRound);
@@ -3360,10 +3471,10 @@ function advanceConsolationRound() {
         state.consolationChampionId = winners[0];
         let champ = state.teams.find(t => t.id === winners[0]);
         renderAdminDock(); renderLeague(); saveDataToCloud();
-        alert(`🥈 ผู้ชนะสายล่างคือ [ ${champ ? champ.team + ' — ' + champ.player : winners[0]} ]!`);
+        showAlert(`🥈 ผู้ชนะสายล่างคือ [ ${champ ? champ.team + ' — ' + champ.player : winners[0]} ]!`);
         return;
     }
-    if (winners.length < 2) { alert("⚠️ ต้องการผู้ชนะอย่างน้อย 2 คนเพื่อเปิดรอบถัดไป"); return; }
+    if (winners.length < 2) { showAlert("⚠️ ต้องการผู้ชนะอย่างน้อย 2 คนเพื่อเปิดรอบถัดไป"); return; }
     let nextRound = currentRound + 1;
     let cTieId = 10000 + nextRound * 100;
     let shuffled = shuffle([...winners.map(id => state.teams.find(t => t.id === id)).filter(Boolean)]);
@@ -3375,7 +3486,7 @@ function advanceConsolationRound() {
         state.matches.push({ id: _cupMatchIdCounter++, round: 9000 + nextRound, cupRound: 9000 + nextRound, homeId: a.id, awayId: 'BYE', homeScore: 3, awayScore: 0, evidenceImg: "", tieId: cTieId + Math.floor(shuffled.length/2), leg: 1, winnerId: a.id, isConsolation: true, consolationRound: nextRound });
     }
     renderAdminDock(); renderLeague(); saveDataToCloud();
-    alert(`🎉 เปิดรอบสายล่าง ${nextRound} แล้ว! ${winners.length} ทีม`);
+    showAlert(`🎉 เปิดรอบสายล่าง ${nextRound} แล้ว! ${winners.length} ทีม`);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -3583,7 +3694,7 @@ function refreshUIState() {
 function adminStartTournament() {
     if (state.isViewOnly) return;
     const approvedTeams = state.teams.filter(t => t.status === 'approved');
-    if (approvedTeams.length < 2) { alert("⚠️ ต้องมีทีมที่ผ่านการอนุมัติอย่างน้อย 2 ทีมขึ้นไปครับ"); return; }
+    if (approvedTeams.length < 2) { showAlert("⚠️ ต้องมีทีมที่ผ่านการอนุมัติอย่างน้อย 2 ทีมขึ้นไปครับ"); return; }
     _selectedFormat = 'league';
     document.querySelectorAll('.format-card').forEach(c => c.classList.toggle('selected', c.dataset.format === 'league'));
     document.getElementById('format-picker-modal').classList.add('open');
@@ -3723,10 +3834,10 @@ function rejectTeamNode(index) {
     _renderEditTeamsModalUI();
 }
 
-function removeTeamNode(index) {
+async function removeTeamNode(index) {
     const t = state.teams[index];
     if (!t) return;
-    if (confirm(`ลบ [ ${t.player} - ${t.team} ] ออกจากรายชื่อ?`)) {
+    if (await showConfirm(`ลบ [ ${t.player} - ${t.team} ] ออกจากรายชื่อ?`)) {
         state.teams.splice(index, 1);
         saveDataToCloud();
         renderLeague();
@@ -3783,15 +3894,15 @@ function saveEditedTeams() {
         }
     });
 
-    if(hasError) { alert("⚠️ ห้ามเว้นช่องว่างรหัส,ชื่อ หรือทีมแข่งเด็ดขาดครับ!"); return; }
+    if(hasError) { showAlert("⚠️ ห้ามเว้นช่องว่างรหัส,ชื่อ หรือทีมแข่งเด็ดขาดครับ!"); return; }
 
     closeEditTeamsModal(); renderHeader(); renderLeague(); refreshUIState(); saveDataToCloud();
-    alert("💾 อัปเดตบันทึกข้อมูล ข้อความแจ้งกลับ และธีมสีแยกส่วนเรียบร้อยครับ!");
+    showAlert("💾 อัปเดตบันทึกข้อมูล ข้อความแจ้งกลับ และธีมสีแยกส่วนเรียบร้อยครับ!");
 }
 
-function resetToNextSeason() {
+async function resetToNextSeason() {
     if (state.isViewOnly) return;
-    if (confirm("🔄 ยืนยันการเปิดฉากสู่ซีซั่นถัดไป (Reset SS)?\nระบบจะล้างตารางเดิมทั้งหมดเพื่อเปิดฟอร์มหน้าแรกให้เพื่อนๆ มาลงทะเบียนใหม่อีกครั้ง")) {
+    if (await showConfirm("🔄 ยืนยันการเปิดฉากสู่ซีซั่นถัดไป (Reset SS)?\nระบบจะล้างตารางเดิมทั้งหมดเพื่อเปิดฟอร์มหน้าแรกให้เพื่อนๆ มาลงทะเบียนใหม่อีกครั้ง")) {
         // ล้าง localStorage ที่เกี่ยวข้องทั้งหมด (รวม evidence)
         localStorage.removeItem(`my_player_id_ss_${state.season}`);
         localStorage.removeItem(`evidence_imgs_${state.binId || 'local'}`);
@@ -3813,7 +3924,7 @@ function resetToNextSeason() {
         });
 
         renderHeader(); renderAdminDock(); renderLeague(); refreshUIState(); saveDataToCloud();
-        alert(`🎉 สลับเข้าสู่ช่วงเตรียมพร้อมเปิดลงทะเบียนประจำซีซั่น SS${state.season} เรียบร้อยแล้ว!`);
+        showAlert(`🎉 สลับเข้าสู่ช่วงเตรียมพร้อมเปิดลงทะเบียนประจำซีซั่น SS${state.season} เรียบร้อยแล้ว!`);
     }
 }
 
@@ -3855,13 +3966,13 @@ function confirmMatchScore(matchId) {
     let homeInput = document.getElementById(`score-home-${matchId}`);
     let awayInput = document.getElementById(`score-away-${matchId}`);
     if (!homeInput || !awayInput || homeInput.value === '' || awayInput.value === '') {
-        alert('⚠️ กรุณากรอกคะแนนให้ครบทั้งสองทีมก่อนยืนยัน');
+        showAlert('⚠️ กรุณากรอกคะแนนให้ครบทั้งสองทีมก่อนยืนยัน');
         return;
     }
     let homeScore = parseInt(homeInput.value);
     let awayScore = parseInt(awayInput.value);
     if (isNaN(homeScore) || isNaN(awayScore) || homeScore < 0 || awayScore < 0) {
-        alert('⚠️ คะแนนไม่ถูกต้อง กรุณากรอกตัวเลขที่ถูกต้อง');
+        showAlert('⚠️ คะแนนไม่ถูกต้อง กรุณากรอกตัวเลขที่ถูกต้อง');
         return;
     }
     match.homeScore = homeScore;
@@ -3872,9 +3983,9 @@ function confirmMatchScore(matchId) {
     renderLeague(); saveDataToCloud();
 }
 
-function resetMatchScore(matchId) {
+async function resetMatchScore(matchId) {
     if (state.isViewOnly) return;
-    if (!confirm('↩️ ยืนยันแก้ไขผลการแข่งขันคู่นี้? คะแนนจะถูกล้างออก')) return;
+    if (!await showConfirm('↩️ ยืนยันแก้ไขผลการแข่งขันคู่นี้? คะแนนจะถูกล้างออก')) return;
     let match = state.matches.find(m => m.id === matchId); if (!match) return;
     let savedStatus = match.status;
     match.homeScore = null;
@@ -3977,13 +4088,19 @@ function showAlert(msg) {
     const msgEl = document.getElementById('cal-msg');
     const iconEl = document.getElementById('cal-icon');
     if (!modal) { console.warn(msg); return; }
-    msgEl.textContent = msg;
-    const m = msg || '';
-    if (m.includes('⚠️') || m.includes('ล้มเหลว') || m.includes('ไม่ถูกต้อง') || m.includes('ไม่ครบ') || m.includes('ห้าม')) iconEl.textContent = '⚠️';
-    else if (m.includes('🏆') || m.includes('แชมป์')) iconEl.textContent = '🏆';
-    else if (m.includes('🎉') || m.includes('เปิดรอบ') || m.includes('สำเร็จ') || m.includes('เรียบร้อย') || m.includes('💾') || m.includes('✅')) iconEl.textContent = '✅';
-    else if (m.includes('❌') || m.includes('ตกรอบ')) iconEl.textContent = '❌';
-    else iconEl.textContent = 'ℹ️';
+    const s = String(msg || '');
+    const icon = typeof _extractEmoji === 'function' ? _extractEmoji(s) : null;
+    if (icon) {
+        iconEl.textContent = icon;
+        msgEl.textContent = typeof _stripLeadingEmoji === 'function' ? _stripLeadingEmoji(s) : s;
+    } else {
+        msgEl.textContent = s;
+        if (s.includes('⚠️') || s.includes('ล้มเหลว') || s.includes('ไม่ถูกต้อง') || s.includes('ไม่ครบ') || s.includes('ห้าม')) iconEl.textContent = '⚠️';
+        else if (s.includes('🏆') || s.includes('แชมป์')) iconEl.textContent = '🏆';
+        else if (s.includes('🎉') || s.includes('สำเร็จ') || s.includes('เรียบร้อย') || s.includes('💾') || s.includes('✅')) iconEl.textContent = '✅';
+        else if (s.includes('❌')) iconEl.textContent = '❌';
+        else iconEl.textContent = 'ℹ️';
+    }
     modal.style.display = 'flex';
 }
 function closeCustomAlert() {
@@ -4264,13 +4381,13 @@ function confirmScoreFromModal() {
     let homeVal = document.getElementById('se-home-inp').value;
     let awayVal = document.getElementById('se-away-inp').value;
     if (homeVal === '' || awayVal === '') {
-        alert('⚠️ กรุณากรอกคะแนนให้ครบทั้งสองทีมก่อนยืนยัน');
+        showAlert('⚠️ กรุณากรอกคะแนนให้ครบทั้งสองทีมก่อนยืนยัน');
         return;
     }
     let homeScore = parseInt(homeVal);
     let awayScore = parseInt(awayVal);
     if (isNaN(homeScore) || isNaN(awayScore) || homeScore < 0 || awayScore < 0) {
-        alert('⚠️ คะแนนไม่ถูกต้อง กรุณากรอกตัวเลขที่ถูกต้อง');
+        showAlert('⚠️ คะแนนไม่ถูกต้อง กรุณากรอกตัวเลขที่ถูกต้อง');
         return;
     }
     let match = state.matches.find(m => m.id === _seMatchId);
@@ -4284,9 +4401,9 @@ function confirmScoreFromModal() {
     renderLeague(); saveDataToCloud();
 }
 
-function resetScoreFromModal() {
+async function resetScoreFromModal() {
     if (_seMatchId === null) return;
-    if (!confirm('↩️ ยืนยันล้างผลการแข่งขันคู่นี้?')) return;
+    if (!await showConfirm('↩️ ยืนยันล้างผลการแข่งขันคู่นี้?')) return;
     let match = state.matches.find(m => m.id === _seMatchId);
     if (!match) return;
     let savedStatus = match.status;
@@ -4345,7 +4462,7 @@ function uploadMatchEvidence(matchId) {
     if (!match) return;
 
     if (!IMGBB_API_KEY || IMGBB_API_KEY === "ใส่_API_KEY_ของคุณตรงนี้") {
-        alert("⚠️ ยังไม่ได้ใส่ IMGBB_API_KEY ในโค้ด!\n\nสมัครฟรีที่ https://api.imgbb.com แล้วใส่ API Key ของคุณแทนคำว่า 'ใส่_API_KEY_ของคุณตรงนี้' ในไฟล์ HTML ครับ");
+        showAlert("⚠️ ยังไม่ได้ใส่ IMGBB_API_KEY ในโค้ด!\n\nสมัครฟรีที่ https://api.imgbb.com แล้วใส่ API Key ของคุณแทนคำว่า 'ใส่_API_KEY_ของคุณตรงนี้' ในไฟล์ HTML ครับ");
         return;
     }
 
@@ -4423,7 +4540,7 @@ function uploadMatchEvidence(matchId) {
 
 function viewMatchEvidence(matchId) {
     let match = state.matches.find(m => m.id === matchId);
-    if (!match || !match.evidenceImg) { alert("⚠️ คู่นี้ยังไม่มีผู้เล่นส่งรูปหลักฐานเข้ามาครับ"); return; }
+    if (!match || !match.evidenceImg) { showAlert("⚠️ คู่นี้ยังไม่มีผู้เล่นส่งรูปหลักฐานเข้ามาครับ"); return; }
     closeScoreModal();
     _currentEvidenceMatchId = matchId;
     const lb = document.getElementById("evidence-lightbox");
@@ -4437,10 +4554,10 @@ function viewMatchEvidence(matchId) {
     history.pushState({ lightboxOpen: true }, "");
 }
 
-function deleteMatchEvidence() {
+async function deleteMatchEvidence() {
     if (state.isViewOnly) return;
     if (!_currentEvidenceMatchId) return;
-    if (!confirm("🗑️ ลบรูปหลักฐานของแมตช์นี้?")) return;
+    if (!await showConfirm("🗑️ ลบรูปหลักฐานของแมตช์นี้?")) return;
     let match = state.matches.find(m => m.id === _currentEvidenceMatchId);
     if (!match) return;
     match.evidenceImg = "";
@@ -4598,13 +4715,13 @@ function closeHofModal() {
     if (modal) { modal.style.display = "none"; document.body.style.overflow = ""; }
 }
 
-function saveCurrentChampToHistory() {
+async function saveCurrentChampToHistory() {
     if (state.isViewOnly || !currentCrownedChampId) return;
     let standings = calculateStandings();
     let winner = standings.find(t => t.id === currentCrownedChampId);
     if (!winner) return;
     
-    if (confirm(`🏅 ยืนยันบันทึกคุณ [ ${winner.player} ] เป็นแชมป์ซีซั่นนี้?\nสถิติ ชนะ/เสมอ/แพ้ ของทุกคนในซีซั่นนี้จะถูกนำไปสะสมใน Hall of Fame ถาวร`)) {
+    if (await showConfirm(`🏅 ยืนยันบันทึกคุณ [ ${winner.player} ] เป็นแชมป์ซีซั่นนี้?\nสถิติ ชนะ/เสมอ/แพ้ ของทุกคนในซีซั่นนี้จะถูกนำไปสะสมใน Hall of Fame ถาวร`)) {
         if (!state.hallOfFame) state.hallOfFame = {};
         
         standings.forEach(team => {
@@ -4622,7 +4739,7 @@ function saveCurrentChampToHistory() {
         state.hallOfFame[winner.id].trophies += 1;
         state.defendingChampId = winner.id;
 
-        alert(`💾 บันทึกสถิติลง Hall of Fame เรียบร้อยแล้ว!`);
+        showAlert(`💾 บันทึกสถิติลง Hall of Fame เรียบร้อยแล้ว!`);
         if (document.getElementById("champion-action-bar")) document.getElementById("champion-action-bar").style.display = "none";
         renderLeague(); saveDataToCloud();
     }
@@ -4974,8 +5091,8 @@ function renderLeague() {
     }
 }
 
-function resetLeagueHard() {
-    if (!state.isViewOnly && confirm("🚨 ลบข้อมูลทัวร์นาเมนต์และประวัติถ้วยทั้งหมดแบบกู้คืนไม่ได้?\n\n⚠️ ผู้เล่นและผู้ใช้ทุกคนจะถูกรีเซ็ทด้วย")) {
+async function resetLeagueHard() {
+    if (!state.isViewOnly && await showConfirm("🚨 ลบข้อมูลทัวร์นาเมนต์และประวัติถ้วยทั้งหมดแบบกู้คืนไม่ได้?\n\n⚠️ ผู้เล่นและผู้ใช้ทุกคนจะถูกรีเซ็ทด้วย")) {
         // 1. ล้าง localStorage ทั้งหมดที่เกี่ยวข้อง (รวม evidence)
         localStorage.removeItem(`my_player_id_ss_${state.season}`);
         localStorage.removeItem('wc_online_bin_id');
@@ -5028,12 +5145,12 @@ function userCopyShareLink() {
     }
     if (linkPath) {
         navigator.clipboard.writeText(linkPath).then(() => {
-            alert("📤 คัดลอกลิงก์หน้าทัวร์นาเมนต์เรียบร้อยแล้ว! สามารถนำไปแชร์ต่อให้เพื่อนๆ สมัครเข้าร่วมได้เลยครับ");
+            showAlert("📤 คัดลอกลิงก์หน้าทัวร์นาเมนต์เรียบร้อยแล้ว! สามารถนำไปแชร์ต่อให้เพื่อนๆ สมัครเข้าร่วมได้เลยครับ");
         }).catch(() => {
-            prompt("📋 คัดลอกลิงก์นี้ไปแชร์ให้เพื่อน:", linkPath);
+            showPrompt("📋 คัดลอกลิงก์นี้ไปแชร์ให้เพื่อน:", linkPath);
         });
     } else {
-        alert("⚠️ ตัวระบุยังดึงคีย์ลิงก์ออนไลน์ไม่สมบูรณ์ กรุณารอสักครู่แล้วกดใหม่อีกครั้งครับ");
+        showAlert("⚠️ ตัวระบุยังดึงคีย์ลิงก์ออนไลน์ไม่สมบูรณ์ กรุณารอสักครู่แล้วกดใหม่อีกครั้งครับ");
     }
 }
 
@@ -5164,8 +5281,8 @@ function updateAdminHofField(id, field, value) {
     else state.hallOfFame[id][field] = parseInt(value) || 0;
 }
 
-function removePlayerFromHof(id) {
-    if (confirm(`ลบข้อมูล HOF ของ ${id} หรือไม่?`)) {
+async function removePlayerFromHof(id) {
+    if (await showConfirm(`ลบข้อมูล HOF ของ ${id} หรือไม่?`)) {
         delete state.hallOfFame[id];
         renderAdminHofList();
     }
@@ -5173,7 +5290,7 @@ function removePlayerFromHof(id) {
 
 function saveAdminHofData() {
     saveDataToCloud();
-    alert("💾 บันทึกข้อมูล Hall of Fame เรียบร้อยแล้ว");
+    showAlert("💾 บันทึกข้อมูล Hall of Fame เรียบร้อยแล้ว");
     renderHallOfFame();
 }
 
@@ -5223,8 +5340,8 @@ function saveHofManageData() {
     showStatus('💾 บันทึก HOF แล้ว');
 }
 
-function resetAllHofData() {
-    if (confirm("🚨 คำเตือน: คุณกำลังจะล้างข้อมูล Hall of Fame ทั้งหมด! ยืนยันหรือไม่?")) {
+async function resetAllHofData() {
+    if (await showConfirm("🚨 คำเตือน: คุณกำลังจะล้างข้อมูล Hall of Fame ทั้งหมด! ยืนยันหรือไม่?")) {
         state.hallOfFame = {};
         renderAdminHofList();
         saveDataToCloud();
@@ -5324,12 +5441,12 @@ function confirmBracketScore() {
     let homeInp = document.getElementById('bk-inp-home');
     let awayInp = document.getElementById('bk-inp-away');
     if (!homeInp || !awayInp || homeInp.value === '' || awayInp.value === '') {
-        alert('⚠️ กรุณากรอกคะแนนให้ครบทั้งสองทีมก่อนยืนยัน');
+        showAlert('⚠️ กรุณากรอกคะแนนให้ครบทั้งสองทีมก่อนยืนยัน');
         return;
     }
     let hs = parseInt(homeInp.value), as_ = parseInt(awayInp.value);
     if (isNaN(hs) || isNaN(as_) || hs < 0 || as_ < 0) {
-        alert('⚠️ คะแนนไม่ถูกต้อง กรุณากรอกตัวเลขที่ถูกต้อง');
+        showAlert('⚠️ คะแนนไม่ถูกต้อง กรุณากรอกตัวเลขที่ถูกต้อง');
         return;
     }
     let m = state.matches.find(x => x.id === _bkModalMatchId);
@@ -5344,8 +5461,8 @@ function confirmBracketScore() {
     saveDataToCloud();
 }
 
-function resetBracketMatchScore(matchId) {
-    if (!confirm('↩️ ยืนยันแก้ไขผลการแข่งขันคู่นี้? คะแนนจะถูกล้างออก')) return;
+async function resetBracketMatchScore(matchId) {
+    if (!await showConfirm('↩️ ยืนยันแก้ไขผลการแข่งขันคู่นี้? คะแนนจะถูกล้างออก')) return;
     let m = state.matches.find(x => x.id === matchId);
     if (!m) return;
     m.homeScore = null;
@@ -5400,7 +5517,7 @@ function resetBracketMatchScore(matchId) {
         if (adLink) {
             adLink.addEventListener('click', function(e) {
                 e.preventDefault();
-                alert('คลิกเข้ามาทำเหี้ยอะไรไอพวกโง่...ช่างแม้งดิ');
+                showAlert('คลิกเข้ามาทำเหี้ยอะไรไอพวกโง่...ช่างแม้งดิ');
             });
         }
     })();
@@ -5520,11 +5637,11 @@ function saveOdds() {
     showStatus('✅ บันทึกอัตราต่อรองแล้ว');
 }
 
-function clearOdds() {
+async function clearOdds() {
     if (_currentOddsMatchId === null) return;
     let m = state.matches.find(x => x.id === _currentOddsMatchId);
     if (!m) return;
-    if (!confirm('ลบอัตราต่อรองของคู่นี้หรือไม่?')) return;
+    if (!await showConfirm('ลบอัตราต่อรองของคู่นี้หรือไม่?')) return;
     m.odds = { home: null, handicap: null, away: null };
     closeOddsModal();
     renderLeague();
