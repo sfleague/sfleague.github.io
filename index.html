@@ -201,8 +201,8 @@
 
         .edit-team-row {
             display: grid;
-            grid-template-columns: 85px 100px 130px 150px 1fr 140px;
-            gap: 12px;
+            grid-template-columns: 72px 90px 125px 145px 200px 1fr 130px;
+            gap: 10px;
             margin-bottom: 12px;
             align-items: center;
             background: rgba(3, 10, 23, 0.4);
@@ -210,6 +210,13 @@
             border-radius: 8px;
             border: 1px solid rgba(26, 54, 96, 0.5);
         }
+        .logo-url-cell { display: flex; align-items: center; gap: 5px; }
+        .logo-preview-mini { width: 32px; height: 32px; object-fit: contain; border-radius: 4px; flex-shrink: 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
+        .logo-preview-mini.is-flag { height: 22px; object-fit: cover; }
+        .edit-input-logo { font-size: 11px; }
+        .logo-search-btn { flex-shrink:0; padding:5px 7px !important; font-size:13px !important; width:auto !important; height:32px; border-radius:5px !important; background:rgba(96,165,250,0.15) !important; border:1px solid rgba(96,165,250,0.4) !important; color:#60a5fa !important; cursor:pointer; transition:all 0.2s; }
+        .logo-search-btn:hover { background:rgba(96,165,250,0.3) !important; transform:none !important; box-shadow:none !important; }
+        .logo-search-btn:disabled { opacity:0.5; cursor:wait !important; }
         .edit-input { width: 100%; padding: 10px 14px; background: #030a17; border: 1px solid var(--wc-border); border-radius: 6px; color: #fff; font-size: 14px; transition: all 0.2s ease; }
         .edit-input:focus { border-color: var(--wc-gold); box-shadow: 0 0 8px rgba(223, 180, 75, 0.2); outline: none; }
         .edit-input-id { border-color: var(--wc-gold); color: var(--wc-gold); font-weight: bold; }
@@ -1521,13 +1528,19 @@
             <button class="admin-add-player-btn" onclick="adminAddPlayerFromModal()">อนุมัติและเพิ่มผู้เล่นเข้าลีคทันที ⚡</button>
         </div>
 
-        <h3 style="color: #fff; border-bottom: 1px solid var(--wc-border); padding-bottom: 8px;">📥 รายชื่อที่เพื่อนสมัครเข้ามา (รอการยืนยัน/แก้ไข)</h3>
+        <div style="display:flex; align-items:center; justify-content:space-between; border-bottom: 1px solid var(--wc-border); padding-bottom: 8px; margin-bottom:0;">
+            <h3 style="color: #fff; margin:0;">📥 รายชื่อที่เพื่อนสมัครเข้ามา (รอการยืนยัน/แก้ไข)</h3>
+            <button id="bulk-logo-search-btn" onclick="_searchWikiLogoAll()"
+                style="padding:6px 12px; font-size:12px; background:rgba(96,165,250,0.15); border:1px solid rgba(96,165,250,0.4); color:#60a5fa; border-radius:6px; cursor:pointer; white-space:nowrap;"
+                title="ค้นหาโลโก้จาก Wikipedia สำหรับทีมที่ยังไม่มีโลโก้ทั้งหมด">🔍 ค้นหาโลโก้ทั้งหมด</button>
+        </div>
         <div class="edit-team-row" style="font-weight: bold; color: var(--wc-gold); margin-bottom: 5px; background: transparent; border: none; padding-bottom: 0;">
             <span>สถานะ</span>
             <span>ID ผู้เล่น</span>
             <span>ชื่อผู้จัดการ</span>
             <span>ทีมที่เลือก</span>
-            <span>ข้อความแจ้งกลับผู้สมัคร (กรณีไม่ผ่าน)</span>
+            <span style="color:#60a5fa;">🖼️ URL โลโก้ (วางลิงก์รูปตรงนี้)</span>
+            <span>ข้อความแจ้งกลับ</span>
             <span>การจัดการ</span>
         </div>
         <div id="edit-teams-container" style="max-height: 240px; overflow-y: auto; margin-bottom: 25px; padding-right: 5px;"></div>
@@ -1933,7 +1946,7 @@ const clubMap = {
     'lyon': 'https://upload.wikimedia.org/wikipedia/en/6/6c/Olympique_Lyonnais_logo.svg',
     'olympiquelyon': 'https://upload.wikimedia.org/wikipedia/en/6/6c/Olympique_Lyonnais_logo.svg',
     'lille': 'https://upload.wikimedia.org/wikipedia/en/1/10/LOSC_Lille_Logo.svg',
-    'loscLille': 'https://upload.wikimedia.org/wikipedia/en/1/10/LOSC_Lille_Logo.svg',
+    'losclille': 'https://upload.wikimedia.org/wikipedia/en/1/10/LOSC_Lille_Logo.svg',
     // ── Other Leagues ──
     'ajax': 'https://upload.wikimedia.org/wikipedia/en/7/79/Ajax_Amsterdam.svg',
     'psv': 'https://upload.wikimedia.org/wikipedia/en/0/05/PSV_Eindhoven.svg',
@@ -2251,12 +2264,19 @@ function _migrateTeamCrestsFromFlags() {
     (state.teams || []).forEach(t => {
         if (!t.team) return;
         const normalized = t.team.toLowerCase().replace(/[\s\.\-_]/g, '');
-        if (clubMap[normalized]) {
-            t.logo = clubMap[normalized];
-            t.isFlag = false;
-        } else if (flagMap[normalized] && (!t.logo || t.logo.includes('jsdelivr') || t.logo.includes('circle-flags'))) {
+        // ไม่แตะ URL ที่ดีอยู่แล้ว (flagcdn หรือ URL ที่ admin กรอกเอง)
+        const isBrokenLogo = !t.logo
+            || t.logo.includes('jsdelivr')
+            || t.logo.includes('circle-flags')
+            || (t.logo.includes('upload.wikimedia.org'))
+            || (t.logo.includes('dicebear') && flagMap[normalized]);
+        if (!isBrokenLogo) return;
+        if (flagMap[normalized]) {
             t.logo = `https://flagcdn.com/w160/${flagMap[normalized]}.png`;
             t.isFlag = true;
+        } else if (!t.logo) {
+            t.logo = `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(t.team)}`;
+            t.isFlag = false;
         }
     });
 }
@@ -2491,6 +2511,13 @@ function logoutPlayer() {
 }
 // ────────────────────────────────────────────────────────────────────────────
 
+function _toWikiThumb(url, size) {
+    if (!url || !url.includes('upload.wikimedia.org') || !url.endsWith('.svg')) return url;
+    var m = url.match(/^(https:\/\/upload\.wikimedia\.org\/wikipedia\/(?:en|commons)\/)(.\/..\/(.+\.svg))$/);
+    if (!m) return url;
+    return m[1] + 'thumb/' + m[2] + '/' + (size || 120) + 'px-' + m[3] + '.png';
+}
+
 function _logoFallback(el, teamName) {
     var normalized = teamName.toLowerCase().replace(/[\s\.\-_]/g, '');
     var failedSrc = el.src || '';
@@ -2499,11 +2526,13 @@ function _logoFallback(el, teamName) {
     var triedFlag  = failedSrc.includes('flagcdn.com');
 
     if (!triedCrest && clubMap[normalized]) {
-        el.src = clubMap[normalized];
+        el.src = _toWikiThumb(clubMap[normalized]);
         el.className = el.className.replace('flag-img', 'club-img');
+        el.onerror = function() { _logoFallback(this, teamName); };
     } else if (!triedFlag && flagMap[normalized]) {
         el.src = 'https://flagcdn.com/w160/' + flagMap[normalized] + '.png';
         el.className = el.className.replace('club-img', 'flag-img');
+        el.onerror = function() { _logoFallback(this, teamName); };
     } else {
         el.src = 'https://api.dicebear.com/7.x/identicon/svg?seed=' + encodeURIComponent(teamName);
     }
@@ -2511,12 +2540,10 @@ function _logoFallback(el, teamName) {
 
 function generateLogoAndFlag(teamName) {
     let normalized = teamName.toLowerCase().replace(/[\s\.\-_]/g, '');
-    let logoUrl = `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(teamName)}`;
-    let isFlag = false;
-
-    if (clubMap[normalized]) { logoUrl = clubMap[normalized]; isFlag = false; }
-    else if (flagMap[normalized]) { logoUrl = `https://flagcdn.com/w160/${flagMap[normalized]}.png`; isFlag = true; }
-    return { logoUrl, isFlag, normalized };
+    if (flagMap[normalized]) {
+        return { logoUrl: `https://flagcdn.com/w160/${flagMap[normalized]}.png`, isFlag: true, normalized };
+    }
+    return { logoUrl: `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(teamName)}`, isFlag: false, normalized };
 }
 
 function submitRegistration() {
@@ -3445,7 +3472,7 @@ function renderAdminDock() {
         ${advanceHTML}
         ${consolAdvanceHTML}
         <button onclick="openEditTeamsModal()" style="background: var(--wc-gold); color: #000; font-size: 13px; height: 38px; padding: 0 15px;">✏️ จัดการผู้สมัคร / ระบบเว็บ</button>
-        <button onclick="upgradeFlagcdnToCrests()" style="background: linear-gradient(135deg,#0f766e,#0d9488); color: #fff; font-size: 13px; height: 38px; padding: 0 15px;" title="สแกนหาทีมชาติที่ใช้ธง URL เก่า แล้วเปลี่ยนเป็นตราสโมสรอัตโนมัติ">🔄 อัปเกรดตราทีมชาติ</button>
+        <button onclick="upgradeFlagcdnToCrests()" style="background: linear-gradient(135deg,#0f766e,#0d9488); color: #fff; font-size: 13px; height: 38px; padding: 0 15px;" title="รีเซ็ตทุกทีมให้แสดงธงชาติ (ไม่กระทบทีมที่ไม่ใช่ทีมชาติ)">🏳️ รีเซ็ตธงชาติทุกทีม</button>
         <button onclick="openH2HManager()" style="background: linear-gradient(135deg,#1e3a8a,#1e40af); color: #93c5fd; border: 1px solid rgba(59,130,246,0.4); font-size: 13px; height: 38px; padding: 0 15px;">📊 จัดการ H2H</button>
         <button onclick="resetToNextSeason()" style="background: #22c55e; color: #fff; font-size: 13px; height: 38px; padding: 0 15px;">🔄 เริ่มซีซั่นใหม่</button>
         <button onclick="resetLeagueHard()" style="background: #ff4466; color: #fff; font-size: 13px; height: 38px; padding: 0 15px;">🚨 ลบทั้งหมด</button>
@@ -3455,31 +3482,27 @@ function renderAdminDock() {
 function upgradeFlagcdnToCrests() {
     if (state.isViewOnly) return;
     let upgraded = 0;
-    let notFound = [];
+    let skipped = [];
     state.teams.forEach(t => {
-        if (t.logo && t.logo.includes('flagcdn.com')) {
-            let normalized = (t.team || '').toLowerCase().replace(/[\s\.\-_]/g, '');
-            if (clubMap[normalized]) {
-                t.logo = clubMap[normalized];
-                t.isFlag = false;
-                upgraded++;
-            } else {
-                notFound.push(t.team);
-            }
+        const normalized = (t.team || '').toLowerCase().replace(/[\s\.\-_]/g, '');
+        if (flagMap[normalized]) {
+            t.logo = `https://flagcdn.com/w160/${flagMap[normalized]}.png`;
+            t.isFlag = true;
+            upgraded++;
+        } else {
+            skipped.push(t.team);
         }
     });
-    if (upgraded === 0 && notFound.length === 0) {
-        showToast('✅ ไม่พบทีมที่ใช้ธง URL เก่าแล้ว', 'success');
+    if (upgraded === 0) {
+        showToast('⚠️ ไม่พบทีมชาติที่จะรีเซ็ต', 'warning');
         return;
     }
-    if (upgraded > 0) {
-        showToast(`🔄 อัปเดต ${upgraded} ทีม — กำลังบันทึก...`, 'loading');
-        saveDataToCloud();
-        renderLeague();
-        setTimeout(() => showToast(`✅ อัปเดตตราสโมสร ${upgraded} ทีมสำเร็จ!`, 'success'), 1200);
-    }
-    if (notFound.length > 0) {
-        setTimeout(() => showToast(`⚠️ ไม่พบตราสโมสรสำหรับ: ${notFound.join(', ')}`, 'error'), 2200);
+    showToast(`🏳️ รีเซ็ตธงชาติ ${upgraded} ทีม — กำลังบันทึก...`, 'loading');
+    saveDataToCloud();
+    renderLeague();
+    setTimeout(() => showToast(`✅ รีเซ็ตธงชาติ ${upgraded} ทีมสำเร็จ!`, 'success'), 1200);
+    if (skipped.length > 0) {
+        setTimeout(() => showToast(`ℹ️ ทีมที่ไม่มีธงชาติ (ใช้ค่าเดิม): ${skipped.join(', ')}`, 'warning'), 2400);
     }
 }
 
@@ -3628,7 +3651,7 @@ function _renderEditTeamsModalUI() {
                 ✅ อนุมัติแล้ว <span style="background:rgba(34,197,94,0.25); padding:1px 7px; border-radius:4px; font-family:'Orbitron',sans-serif; font-size:13px;">${approvedCount}</span>
             </span>
             ${rejectedCount > 0 ? `<span style="display:inline-flex; align-items:center; gap:5px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.35); border-radius:6px; padding:4px 10px; font-size:12px; font-weight:700; color:#f87171;">❌ ให้แก้ไข <span style="background:rgba(239,68,68,0.25); padding:1px 7px; border-radius:4px; font-family:'Orbitron',sans-serif; font-size:13px;">${rejectedCount}</span></span>` : ''}
-            <button onclick="upgradeFlagcdnToCrests()" style="margin-left:auto; background:linear-gradient(135deg,#0f766e,#0d9488); color:#fff; font-size:11px; padding:4px 12px; border-radius:6px; height:auto; width:auto; font-weight:700; border:none; cursor:pointer;" title="สแกนทีมที่ใช้ธง URL เก่าแล้วเปลี่ยนเป็นตราสโมสรอัตโนมัติ">🔄 อัปเกรดตราทีมชาติ</button>
+            <button onclick="upgradeFlagcdnToCrests()" style="margin-left:auto; background:linear-gradient(135deg,#0f766e,#0d9488); color:#fff; font-size:11px; padding:4px 12px; border-radius:6px; height:auto; width:auto; font-weight:700; border:none; cursor:pointer;" title="รีเซ็ตทุกทีมให้แสดงธงชาติ">🏳️ รีเซ็ตธงชาติ</button>
         `;
         container.appendChild(statsDiv);
 
@@ -3638,13 +3661,25 @@ function _renderEditTeamsModalUI() {
             else if(t.status === 'rejected') statusBadge = `<span class="rejected-badge">❌ ให้แก้</span>`;
             else statusBadge = `<span class="pending-badge">⏳ รอตรวจ</span>`;
 
+            const logoSrc = t.logo || '';
+            const escapedTeam = t.team.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const previewFlagClass = t.isFlag ? ' is-flag' : '';
             let div = document.createElement("div"); div.className = "edit-team-row"; div.setAttribute("data-index", idx);
             div.innerHTML = `
                 <div>${statusBadge}</div>
                 <input type="text" class="edit-input edit-input-id" value="${t.id}" placeholder="ID">
                 <input type="text" class="edit-input edit-input-player" value="${t.player}" placeholder="ชื่อคนเล่น">
                 <input type="text" class="edit-input edit-input-team" value="${t.team}" placeholder="ชื่อทีม">
-                <input type="text" class="edit-input edit-input-comment" value="${t.comment || ''}" placeholder="พิมพ์แจ้งเหตุผลที่ไม่ผ่านเพื่อให้ผู้เล่นไปแก้ไข...">
+                <div class="logo-url-cell">
+                    <img class="logo-preview-mini${previewFlagClass}" src="${logoSrc}" title="คลิกเปิดรูปในแท็บใหม่"
+                         onclick="if(this.src)window.open(this.src,'_blank')"
+                         onerror="this.style.opacity='0.25';this.onerror=null;">
+                    <input type="text" class="edit-input edit-input-logo" value="${logoSrc}" placeholder="วาง URL หรือกด 🔍" style="font-size:11px;"
+                           oninput="(function(inp){var img=inp.closest('.logo-url-cell').querySelector('img');img.style.opacity='1';img.onerror=function(){img.style.opacity='0.25';img.onerror=null;};img.src=inp.value||'about:blank';})(this)">
+                    <button class="logo-search-btn" title="ค้นหาโลโก้จาก Wikipedia อัตโนมัติ"
+                            onclick="_searchWikiLogo(this.closest('.edit-team-row'), this.closest('.edit-team-row').querySelector('.edit-input-team').value)">🔍</button>
+                </div>
+                <input type="text" class="edit-input edit-input-comment" value="${t.comment || ''}" placeholder="แจ้งเหตุผลถ้าไม่ผ่าน...">
                 <div style="display:flex; gap:4px; flex-wrap:wrap;">
                     ${t.status !== 'approved' ? `<button onclick="approveTeam(${idx})" title="อนุมัติผ่าน">ผ่าน ✅</button>` : ''}
                     ${t.status !== 'rejected' ? `<button onclick="rejectTeamNode(${idx})" title="ส่งกลับไปแก้ไข" style="background:#b91c1c;">ให้แก้ ❌</button>` : ''}
@@ -3654,6 +3689,75 @@ function _renderEditTeamsModalUI() {
             container.appendChild(div);
         });
     }
+}
+
+async function _searchWikiLogo(rowEl, teamName) {
+    if (!teamName || !teamName.trim()) return;
+    var inp = rowEl.querySelector('.edit-input-logo');
+    var img = rowEl.querySelector('.logo-preview-mini');
+    var btn = rowEl.querySelector('.logo-search-btn');
+    if (!inp || !img || !btn) return;
+    btn.textContent = '⏳'; btn.disabled = true;
+    try {
+        var searchTerms = [
+            teamName + ' national football team',
+            teamName + ' F.C.',
+            teamName + ' football club',
+            teamName + ' football'
+        ];
+        var found = null;
+        for (var i = 0; i < searchTerms.length && !found; i++) {
+            var apiUrl = 'https://en.wikipedia.org/w/api.php?action=query&generator=search' +
+                '&gsrsearch=' + encodeURIComponent(searchTerms[i]) +
+                '&prop=pageimages&format=json&pithumbsize=150&origin=*&gsrlimit=5';
+            var res = await fetch(apiUrl);
+            var data = await res.json();
+            var pages = data.query && data.query.pages;
+            if (pages) {
+                var pArr = Object.values(pages).sort(function(a,b){ return (a.index||99)-(b.index||99); });
+                for (var j = 0; j < pArr.length; j++) {
+                    if (pArr[j].thumbnail && pArr[j].thumbnail.source) {
+                        found = pArr[j].thumbnail.source; break;
+                    }
+                }
+            }
+        }
+        if (found) {
+            inp.value = found;
+            img.style.opacity = '1';
+            img.onerror = function(){ this.style.opacity='0.25'; this.onerror=null; };
+            img.src = found;
+            btn.textContent = '✅';
+            setTimeout(function(){ btn.textContent = '🔍'; }, 2000);
+        } else {
+            btn.textContent = '❌';
+            setTimeout(function(){ btn.textContent = '🔍'; }, 2000);
+            showToast && showToast('ไม่พบโลโก้ใน Wikipedia สำหรับ: ' + teamName, 'warning');
+        }
+    } catch(e) {
+        btn.textContent = '❌';
+        setTimeout(function(){ btn.textContent = '🔍'; }, 2000);
+    }
+    btn.disabled = false;
+}
+
+async function _searchWikiLogoAll() {
+    var rows = document.querySelectorAll('#edit-teams-container .edit-team-row');
+    if (!rows.length) return;
+    var btn = document.getElementById('bulk-logo-search-btn');
+    if (btn) { btn.textContent = '⏳ กำลังค้นหา...'; btn.disabled = true; }
+    var count = 0;
+    for (var i = 0; i < rows.length; i++) {
+        var teamInp = rows[i].querySelector('.edit-input-team');
+        var logoInp = rows[i].querySelector('.edit-input-logo');
+        if (!teamInp || !logoInp) continue;
+        if (logoInp.value.trim()) continue;
+        await _searchWikiLogo(rows[i], teamInp.value);
+        count++;
+        await new Promise(function(r){ setTimeout(r, 400); });
+    }
+    if (btn) { btn.textContent = '🔍 ค้นหาทั้งหมด'; btn.disabled = false; }
+    showToast && showToast('ค้นหาโลโก้เสร็จแล้ว ' + count + ' ทีม (เฉพาะทีมที่ยังไม่มีโลโก้)', 'success');
 }
 
 function approveTeam(index) {
@@ -3728,9 +3832,17 @@ function saveEditedTeams() {
         state.teams[idx].team = team;
         state.teams[idx].comment = comment;
 
-        let media = generateLogoAndFlag(team);
-        state.teams[idx].logo = media.logoUrl;
-        state.teams[idx].isFlag = media.isFlag;
+        const logoInput = row.querySelector(".edit-input-logo");
+        const manualLogo = logoInput ? logoInput.value.trim() : '';
+        if (manualLogo) {
+            state.teams[idx].logo = manualLogo;
+            state.teams[idx].isFlag = manualLogo.includes('flagcdn.com') ||
+                /\/(flag|flags?)\//i.test(manualLogo);
+        } else {
+            let media = generateLogoAndFlag(team);
+            state.teams[idx].logo = media.logoUrl;
+            state.teams[idx].isFlag = media.isFlag;
+        }
     });
 
     if(hasError) { alert("⚠️ ห้ามเว้นช่องว่างรหัส,ชื่อ หรือทีมแข่งเด็ดขาดครับ!"); return; }
