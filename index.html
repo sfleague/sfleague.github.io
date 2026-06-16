@@ -3669,9 +3669,11 @@ function resetMatchScore(matchId) {
     if (state.isViewOnly) return;
     if (!confirm('↩️ ยืนยันแก้ไขผลการแข่งขันคู่นี้? คะแนนจะถูกล้างออก')) return;
     let match = state.matches.find(m => m.id === matchId); if (!match) return;
+    let savedStatus = match.status;
     match.homeScore = null;
     match.awayScore = null;
     if (match.winnerId !== undefined) match.winnerId = null;
+    match.status = savedStatus;
     let fmt = state.tournamentFormat || 'league';
     if (fmt !== 'league') renderAdminDock();
     renderLeague(); saveDataToCloud();
@@ -3746,7 +3748,7 @@ function openScoreModal(matchId) {
     `;
 
     document.getElementById('se-reset-btn').style.display =
-        (m.homeScore !== null && m.awayScore !== null) ? 'block' : 'none';
+        (m.homeScore !== null && m.awayScore !== null && m.status !== 'finished') ? 'block' : 'none';
 
     // AH explanation banner
     _renderAHExplain(m, hInfo, aInfo, 'se-ah-area');
@@ -4077,9 +4079,11 @@ function resetScoreFromModal() {
     if (!confirm('↩️ ยืนยันล้างผลการแข่งขันคู่นี้?')) return;
     let match = state.matches.find(m => m.id === _seMatchId);
     if (!match) return;
+    let savedStatus = match.status;
     match.homeScore = null;
     match.awayScore = null;
     if (match.winnerId !== undefined) match.winnerId = null;
+    match.status = savedStatus;
     closeScoreModal();
     let fmt = state.tournamentFormat || 'league';
     if (fmt !== 'league') renderAdminDock();
@@ -5290,6 +5294,8 @@ function startMatch(matchId) {
     let m = state.matches.find(x => x.id === matchId);
     if (!m) return;
     m.status = 'playing';
+    if (m.homeScore === null) m.homeScore = 0;
+    if (m.awayScore === null) m.awayScore = 0;
     renderLeague(); saveDataToCloud();
     showStatus('🔴 เริ่มการแข่งขันแล้ว!');
 }
