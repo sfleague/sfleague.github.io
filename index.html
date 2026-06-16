@@ -2418,7 +2418,10 @@ function submitAdminLogin() {
         return;
     }
 
-    if (userVal === ADMIN_USER && passVal === ADMIN_PASS) { 
+    if (userVal === ADMIN_USER && passVal === ADMIN_PASS) {
+        if (window._READONLY_MODE) {
+            alert('🔒 Readonly Mode เปิดอยู่ — Admin UI ใช้งานได้ แต่จะไม่บันทึกข้อมูลขึ้น Cloud\nปิด ?readonly=1 ออกจาก URL เพื่อใช้งานจริง');
+        }
         state.isViewOnly = false;
         closeAdminLoginModal();
         
@@ -2488,10 +2491,14 @@ function logoutPlayer() {
 
 function _logoFallback(el, teamName) {
     var normalized = teamName.toLowerCase().replace(/[\s\.\-_]/g, '');
-    var flagCode = flagMap[normalized];
+    var failedSrc = el.src || '';
     el.onerror = null;
-    if (flagCode) {
-        el.src = 'https://flagcdn.com/w160/' + flagCode + '.png';
+    var alreadyTriedCrest = failedSrc.includes('wikimedia') || failedSrc.includes('wikipedia') || failedSrc.includes('upload.wiki');
+    if (!alreadyTriedCrest && clubMap[normalized]) {
+        el.src = clubMap[normalized];
+        el.className = el.className.replace('flag-img', 'club-img');
+    } else if (flagMap[normalized]) {
+        el.src = 'https://flagcdn.com/w160/' + flagMap[normalized] + '.png';
         el.className = el.className.replace('club-img', 'flag-img');
     } else {
         el.src = 'https://api.dicebear.com/7.x/identicon/svg?seed=' + encodeURIComponent(teamName);
@@ -3434,10 +3441,42 @@ function renderAdminDock() {
         ${advanceHTML}
         ${consolAdvanceHTML}
         <button onclick="openEditTeamsModal()" style="background: var(--wc-gold); color: #000; font-size: 13px; height: 38px; padding: 0 15px;">✏️ จัดการผู้สมัคร / ระบบเว็บ</button>
+        <button onclick="upgradeFlagcdnToCrests()" style="background: linear-gradient(135deg,#0f766e,#0d9488); color: #fff; font-size: 13px; height: 38px; padding: 0 15px;" title="สแกนหาทีมชาติที่ใช้ธง URL เก่า แล้วเปลี่ยนเป็นตราสโมสรอัตโนมัติ">🔄 อัปเกรดตราทีมชาติ</button>
         <button onclick="openH2HManager()" style="background: linear-gradient(135deg,#1e3a8a,#1e40af); color: #93c5fd; border: 1px solid rgba(59,130,246,0.4); font-size: 13px; height: 38px; padding: 0 15px;">📊 จัดการ H2H</button>
         <button onclick="resetToNextSeason()" style="background: #22c55e; color: #fff; font-size: 13px; height: 38px; padding: 0 15px;">🔄 เริ่มซีซั่นใหม่</button>
         <button onclick="resetLeagueHard()" style="background: #ff4466; color: #fff; font-size: 13px; height: 38px; padding: 0 15px;">🚨 ลบทั้งหมด</button>
     `;
+}
+
+function upgradeFlagcdnToCrests() {
+    if (state.isViewOnly) return;
+    let upgraded = 0;
+    let notFound = [];
+    state.teams.forEach(t => {
+        if (t.logo && t.logo.includes('flagcdn.com')) {
+            let normalized = (t.team || '').toLowerCase().replace(/[\s\.\-_]/g, '');
+            if (clubMap[normalized]) {
+                t.logo = clubMap[normalized];
+                t.isFlag = false;
+                upgraded++;
+            } else {
+                notFound.push(t.team);
+            }
+        }
+    });
+    if (upgraded === 0 && notFound.length === 0) {
+        showToast('✅ ไม่พบทีมที่ใช้ธง URL เก่าแล้ว', 'success');
+        return;
+    }
+    if (upgraded > 0) {
+        showToast(`🔄 อัปเดต ${upgraded} ทีม — กำลังบันทึก...`, 'loading');
+        saveDataToCloud();
+        renderLeague();
+        setTimeout(() => showToast(`✅ อัปเดตตราสโมสร ${upgraded} ทีมสำเร็จ!`, 'success'), 1200);
+    }
+    if (notFound.length > 0) {
+        setTimeout(() => showToast(`⚠️ ไม่พบตราสโมสรสำหรับ: ${notFound.join(', ')}`, 'error'), 2200);
+    }
 }
 
 function refreshUIState() {
@@ -3585,6 +3624,7 @@ function _renderEditTeamsModalUI() {
                 ✅ อนุมัติแล้ว <span style="background:rgba(34,197,94,0.25); padding:1px 7px; border-radius:4px; font-family:'Orbitron',sans-serif; font-size:13px;">${approvedCount}</span>
             </span>
             ${rejectedCount > 0 ? `<span style="display:inline-flex; align-items:center; gap:5px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.35); border-radius:6px; padding:4px 10px; font-size:12px; font-weight:700; color:#f87171;">❌ ให้แก้ไข <span style="background:rgba(239,68,68,0.25); padding:1px 7px; border-radius:4px; font-family:'Orbitron',sans-serif; font-size:13px;">${rejectedCount}</span></span>` : ''}
+            <button onclick="upgradeFlagcdnToCrests()" style="margin-left:auto; background:linear-gradient(135deg,#0f766e,#0d9488); color:#fff; font-size:11px; padding:4px 12px; border-radius:6px; height:auto; width:auto; font-weight:700; border:none; cursor:pointer;" title="สแกนทีมที่ใช้ธง URL เก่าแล้วเปลี่ยนเป็นตราสโมสรอัตโนมัติ">🔄 อัปเกรดตราทีมชาติ</button>
         `;
         container.appendChild(statsDiv);
 
@@ -4366,6 +4406,7 @@ window.addEventListener("popstate", function(e) {
 let debounceTimer;
 function saveDataToCloud() {
     if (state.isViewOnly) return;
+    if (window._READONLY_MODE) { showToast('🔒 Readonly Mode — ไม่บันทึกข้อมูล', 'info'); return; }
     showStatus("⏳ กำลังบันทึก...", true); clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
         fetch(`https://api.jsonbin.io/v3/b/${state.binId}`, {
@@ -4948,6 +4989,7 @@ function _loadBinData(idToLoad) {
     .then(resData => {
         let r = resData.record;
         state.teams = r.teams || [];
+        _migrateTeamCrestsFromFlags();
         state.matches = r.matches || [];
         state.hallOfFame = r.hallOfFame || {};
         state.h2h = r.h2h || {};
@@ -4979,6 +5021,21 @@ function _loadBinData(idToLoad) {
 
 window.onload = function() {
     initTeamAutocomplete();
+
+    // ── Readonly / Test Mode ──────────────────────────────────────────────
+    const _urlParams = new URLSearchParams(window.location.search);
+    if (_urlParams.get('readonly') === '1') {
+        window._READONLY_MODE = true;
+        const banner = document.createElement('div');
+        banner.id = 'readonly-banner';
+        banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:linear-gradient(90deg,#b45309,#92400e);color:#fef3c7;text-align:center;padding:7px 16px;font-size:13px;font-weight:700;font-family:Prompt,sans-serif;letter-spacing:.5px;box-shadow:0 2px 8px rgba(0,0,0,.4);';
+        banner.innerHTML = '🔒 <strong>READONLY MODE</strong> — ดูและแก้ได้ แต่ไม่บันทึกขึ้น Cloud &nbsp;|&nbsp; <a href="' + window.location.href.replace(/[?&]readonly=1/,'') + '" style="color:#fde68a;text-decoration:underline;">ออกจาก Readonly Mode</a>';
+        document.body.prepend(banner);
+        document.body.style.paddingTop = '36px';
+    } else {
+        window._READONLY_MODE = false;
+    }
+    // ─────────────────────────────────────────────────────────────────────
 
     if (FIXED_BIN_ID) {
         // โหมดลิงก์เดียว: ใช้ ID ที่ฝังไว้เสมอ ไม่สนใจ URL params
