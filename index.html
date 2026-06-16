@@ -2251,8 +2251,8 @@ function _migrateTeamCrestsFromFlags() {
     (state.teams || []).forEach(t => {
         if (!t.team) return;
         const normalized = t.team.toLowerCase().replace(/[\s\.\-_]/g, '');
-        // อัปเดตเฉพาะทีมที่มี logo เป็น flagcdn.com (ธงชาติ) เท่านั้น ไม่ทับ logo สโมสรที่ถูกต้องอยู่แล้ว
-        if (clubMap[normalized] && t.logo && t.logo.includes('flagcdn.com')) {
+        // อัปเดต logo สำหรับทุกทีมที่ชื่อตรงกับ clubMap (ทั้ง flag เก่าและ URL เก่าที่ผิด)
+        if (clubMap[normalized]) {
             t.logo = clubMap[normalized];
             t.isFlag = false;
         }
@@ -2485,6 +2485,18 @@ function logoutPlayer() {
     showStatus("👋 ออกจากระบบแล้ว");
 }
 // ────────────────────────────────────────────────────────────────────────────
+
+function _logoFallback(el, teamName) {
+    var normalized = teamName.toLowerCase().replace(/[\s\.\-_]/g, '');
+    var flagCode = flagMap[normalized];
+    el.onerror = null;
+    if (flagCode) {
+        el.src = 'https://flagcdn.com/w160/' + flagCode + '.png';
+        el.className = el.className.replace('club-img', 'flag-img');
+    } else {
+        el.src = 'https://api.dicebear.com/7.x/identicon/svg?seed=' + encodeURIComponent(teamName);
+    }
+}
 
 function generateLogoAndFlag(teamName) {
     let normalized = teamName.toLowerCase().replace(/[\s\.\-_]/g, '');
@@ -3140,7 +3152,7 @@ function renderCupStatus() {
         let roundLabel = maxRound > 0 ? getCupRoundName(maxRound) : '-';
         let tr = document.createElement("tr");
         tr.innerHTML = `<td><strong>${idx + 1}</strong></td>
-            <td><div class="player-team-box"><img class="${logoClass}" src="${t.logo}" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(t.team)}';">
+            <td><div class="player-team-box"><img class="${logoClass}" src="${t.logo}" onerror="_logoFallback(this,'${t.team.replace(/'/g,"\\'")}')">
                 <div class="team-info"><span class="p-name">${t.team}</span><span class="t-name">Manager: ${t.player}</span></div></div></td>
             <td>${badge}</td>
             <td style="font-size:11px; color:var(--wc-text-sub);">${roundLabel}</td>`;
@@ -3941,7 +3953,7 @@ function openTeamStatsModal(teamId) {
     // Header
     const logoEl = document.getElementById('ts-logo');
     logoEl.src = team.logo || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(team.team)}`;
-    logoEl.onerror = function(){ this.onerror=null; this.src=`https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(team.team)}`; };
+    logoEl.onerror = function(){ _logoFallback(this, team.team); };
     if (team.isFlag) { logoEl.className = 'ts-modal-logo flag'; } else { logoEl.className = 'ts-modal-logo'; }
     document.getElementById('ts-team-name').textContent = team.team;
     document.getElementById('ts-manager-name').textContent = 'Manager: ' + team.player;
@@ -4615,7 +4627,7 @@ function renderStandings() {
         let streakHTML = _buildStreakHTML(team.id);
         tr.innerHTML = `
             <td><strong>${index + 1}</strong></td>
-            <td><div class="player-team-box"><img class="${logoClass}" src="${team.logo}" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(team.team)}';"><div class="team-info"><span class="p-name">${team.team}${team.isChampion ? '<span class="champion-badge">🏆 CHAMPION</span>' : ''}${defendingBadge}</span><span class="t-name">Manager: ${team.player}</span></div></div></td>
+            <td><div class="player-team-box"><img class="${logoClass}" src="${team.logo}" onerror="_logoFallback(this,'${team.team.replace(/'/g,"\\'")}')"><div class="team-info"><span class="p-name">${team.team}${team.isChampion ? '<span class="champion-badge">🏆 CHAMPION</span>' : ''}${defendingBadge}</span><span class="t-name">Manager: ${team.player}</span></div></div></td>
             <td>${team.p}</td><td style="color:#00ff88;">${team.w}</td><td>${team.d}</td><td style="color:#ff4466;">${team.l}</td>
             <td>${team.gf}</td><td>${team.ga}</td><td style="font-weight:bold; color:${team.gd >= 0 ? 'var(--wc-gold)' : '#ff4466'}">${team.gd > 0 ? '+' + team.gd : team.gd}</td>
             <td><span style="background:${team.isChampion ? 'var(--wc-gold)' : isDefending ? 'rgba(139,92,246,0.3)' : '#1a3660'}; color:${team.isChampion ? '#000' : '#fff'}; padding:3px 10px; font-weight:bold; border-radius:3px;">${team.pts}</span></td>
@@ -4720,7 +4732,7 @@ function _buildMatchRowDiv(m, fmt) {
                     <span class="match-team-player">${hInfo.player}</span>
                 </div>
                 <div class="match-logo-wrap">
-                    ${hInfo.id === 'BYE' ? '<span style="font-size:22px;">🎟️</span>' : `<img class="${homeLogoClass}" src="${hInfo.logo}" onerror="this.onerror=null;this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(hInfo.team)}';">`}
+                    ${hInfo.id === 'BYE' ? '<span style="font-size:22px;">🎟️</span>' : `<img class="${homeLogoClass}" src="${hInfo.logo}" onerror="_logoFallback(this,'${hInfo.team.replace(/'/g,"\\'")}')">` }
                 </div>
                 <span class="badge-side" style="flex-shrink:0;">H</span>
             </div>
@@ -4730,7 +4742,7 @@ function _buildMatchRowDiv(m, fmt) {
             <div class="match-team away ${draggableClass}" data-team-id="${aInfo.id}" ${dragAttrs}>
                 <span class="badge-side" style="flex-shrink:0;">A</span>
                 <div class="match-logo-wrap">
-                    ${aInfo.id === 'BYE' ? '<span style="font-size:22px;">🎟️</span>' : `<img class="${awayLogoClass}" src="${aInfo.logo}" onerror="this.onerror=null;this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(aInfo.team)}';">`}
+                    ${aInfo.id === 'BYE' ? '<span style="font-size:22px;">🎟️</span>' : `<img class="${awayLogoClass}" src="${aInfo.logo}" onerror="_logoFallback(this,'${aInfo.team.replace(/'/g,"\\'")}')">` }
                 </div>
                 <div class="match-team-info">
                     <span class="match-team-name${aInfo.id !== 'BYE' ? ' fixture-team-clickable' : ''}"${aInfo.id !== 'BYE' ? ` onclick="openTeamStatsModal('${aInfo.id}')" title="คลิกดูสถิติทีม"` : ''}>${aInfo.team}</span>
