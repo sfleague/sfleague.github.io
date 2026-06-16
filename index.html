@@ -3814,33 +3814,19 @@ function handleTeamDragOver(e) { if (state.isViewOnly) return; e.preventDefault(
 function handleTeamDragLeave(e) { if (state.isViewOnly) return; e.preventDefault(); e.currentTarget.classList.remove("drag-over"); }
 function handleTeamDrop(e) {
     if (state.isViewOnly) return;
-    if ((state.tournamentFormat || 'league') !== 'league') return;
     e.preventDefault(); e.currentTarget.classList.remove("drag-over");
     const targetId = e.currentTarget.getAttribute("data-team-id");
     if (!draggedTeamId || !targetId || draggedTeamId === targetId) return;
 
-    let idxA = state.teams.findIndex(t => t.id === draggedTeamId);
-    let idxB = state.teams.findIndex(t => t.id === targetId);
-    if (idxA === -1 || idxB === -1) return;
-
-    // สลับตำแหน่งใน teams array (สำหรับตารางคะแนน)
-    let temp = state.teams[idxA];
-    state.teams[idxA] = state.teams[idxB];
-    state.teams[idxB] = temp;
-
-    // สลับ ID สองทีมใน matches ที่มีอยู่แล้ว (ไม่ rebuild)
-    // แมตช์อื่นที่ไม่เกี่ยวกับสองทีมนี้ไม่ถูกแตะเลย
-    const idA = draggedTeamId;
-    const idB = targetId;
+    // หาแมตช์ระหว่างสองทีมนี้แล้วสลับแค่เจ้าบ้าน/ทีมเยือน ไม่แตะแมตช์อื่นเลย
     state.matches.forEach(m => {
-        const homeWasA = m.homeId === idA;
-        const homeWasB = m.homeId === idB;
-        const awayWasA = m.awayId === idA;
-        const awayWasB = m.awayId === idB;
-        if (homeWasA) m.homeId = idB;
-        else if (homeWasB) m.homeId = idA;
-        if (awayWasA) m.awayId = idB;
-        else if (awayWasB) m.awayId = idA;
+        const isThisMatch =
+            (m.homeId === draggedTeamId && m.awayId === targetId) ||
+            (m.homeId === targetId && m.awayId === draggedTeamId);
+        if (!isThisMatch) return;
+        [m.homeId, m.awayId] = [m.awayId, m.homeId];
+        [m.homeScore, m.awayScore] = [m.awayScore, m.homeScore];
+        if (m.evidenceImg !== undefined) {} // evidence ยังคงเป็นของแมตช์เดิม
     });
 
     renderLeague(); saveDataToCloud();
