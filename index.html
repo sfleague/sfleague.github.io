@@ -1530,9 +1530,6 @@
 
         <div style="display:flex; align-items:center; justify-content:space-between; border-bottom: 1px solid var(--wc-border); padding-bottom: 8px; margin-bottom:0;">
             <h3 style="color: #fff; margin:0;">📥 รายชื่อที่เพื่อนสมัครเข้ามา (รอการยืนยัน/แก้ไข)</h3>
-            <button id="bulk-logo-search-btn" onclick="_searchWikiLogoAll()"
-                style="padding:6px 12px; font-size:12px; background:rgba(96,165,250,0.15); border:1px solid rgba(96,165,250,0.4); color:#60a5fa; border-radius:6px; cursor:pointer; white-space:nowrap;"
-                title="ค้นหาโลโก้จาก Wikipedia สำหรับทีมที่ยังไม่มีโลโก้ทั้งหมด">🔍 ค้นหาโลโก้ทั้งหมด</button>
         </div>
         <div class="edit-team-row" style="font-weight: bold; color: var(--wc-gold); margin-bottom: 5px; background: transparent; border: none; padding-bottom: 0;">
             <span>สถานะ</span>
@@ -2268,14 +2265,16 @@ function _migrateTeamCrestsFromFlags() {
         const isBrokenLogo = !t.logo
             || t.logo.includes('jsdelivr')
             || t.logo.includes('circle-flags')
-            || (t.logo.includes('upload.wikimedia.org'))
-            || (t.logo.includes('dicebear') && flagMap[normalized]);
+            || (t.logo.includes('dicebear'));
         if (!isBrokenLogo) return;
         if (flagMap[normalized]) {
             t.logo = `https://flagcdn.com/w160/${flagMap[normalized]}.png`;
             t.isFlag = true;
-        } else if (!t.logo) {
-            t.logo = `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(t.team)}`;
+        } else if (clubMap[normalized]) {
+            t.logo = _toWikiThumb(clubMap[normalized], 120);
+            t.isFlag = false;
+        } else {
+            t.logo = t.logo && !t.logo.includes('dicebear') ? t.logo : '';
             t.isFlag = false;
         }
     });
@@ -2395,12 +2394,11 @@ function setupAutocompleteLogic(inputId, listContainerId) {
             const div = document.createElement("div");
             div.className = "suggestion-item";
             const imgClass = media.isFlag ? "flag-style" : "";
-            const flagCode = flagMap[media.normalized];
-            const onerrorScript = flagCode
-                ? `this.onerror=null;this.src='https://flagcdn.com/w160/${flagCode}.png';this.className='flag-style';`
-                : `this.style.display='none';`;
+            const imgHtml = media.logoUrl
+                ? `<img class="${imgClass}" src="${media.logoUrl}" onerror="this.style.display='none';">`
+                : '';
             div.innerHTML = `
-                <img class="${imgClass}" src="${media.logoUrl}" onerror="${onerrorScript}">
+                ${imgHtml}
                 <span class="suggestion-name">${item.name}</span>
             `;
             
@@ -2534,7 +2532,7 @@ function _logoFallback(el, teamName) {
         el.className = el.className.replace('club-img', 'flag-img');
         el.onerror = function() { _logoFallback(this, teamName); };
     } else {
-        el.src = 'https://api.dicebear.com/7.x/identicon/svg?seed=' + encodeURIComponent(teamName);
+        el.style.display = 'none';
     }
 }
 
@@ -2543,7 +2541,10 @@ function generateLogoAndFlag(teamName) {
     if (flagMap[normalized]) {
         return { logoUrl: `https://flagcdn.com/w160/${flagMap[normalized]}.png`, isFlag: true, normalized };
     }
-    return { logoUrl: `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(teamName)}`, isFlag: false, normalized };
+    if (clubMap[normalized]) {
+        return { logoUrl: _toWikiThumb(clubMap[normalized], 120), isFlag: false, normalized };
+    }
+    return { logoUrl: '', isFlag: false, normalized };
 }
 
 function submitRegistration() {
@@ -3139,7 +3140,7 @@ function renderCupStatus() {
     }
     if (state.cupChampionId) {
         let champ = state.teams.find(t => t.id === state.cupChampionId);
-        let logoHtml = champ ? `<div class="cup-champion-logo-wrap"><img src="${champ.logo}" onerror="this.onerror=null;this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(champ.team)}'"></div>` : '';
+        let logoHtml = champ ? `<div class="cup-champion-logo-wrap">${champ.logo ? `<img src="${champ.logo}" onerror="this.onerror=null;this.style.display='none';">` : ''}</div>` : '';
         let saveBtn = !state.isViewOnly ? `<div style="margin-top:20px;"><button onclick="saveCupChampToHistory()" style="background:linear-gradient(135deg,#ffd700,#e07832);color:#000;font-weight:900;padding:12px 32px;border-radius:10px;cursor:pointer;font-size:15px;width:auto;font-family:'Orbitron',sans-serif;letter-spacing:1px;border:none;box-shadow:0 4px 20px rgba(255,215,0,0.4);">🏅 บันทึกแชมป์ลง Hall of Fame</button></div>` : '';
         bannerArea.innerHTML = `<div class="cup-champion-banner">
             <div class="cup-champion-stars">
@@ -3674,10 +3675,8 @@ function _renderEditTeamsModalUI() {
                     <img class="logo-preview-mini${previewFlagClass}" src="${logoSrc}" title="คลิกเปิดรูปในแท็บใหม่"
                          onclick="if(this.src)window.open(this.src,'_blank')"
                          onerror="this.style.opacity='0.25';this.onerror=null;">
-                    <input type="text" class="edit-input edit-input-logo" value="${logoSrc}" placeholder="วาง URL หรือกด 🔍" style="font-size:11px;"
+                    <input type="text" class="edit-input edit-input-logo" value="${logoSrc}" placeholder="วาง URL รูปโลโก้ตรงนี้" style="font-size:11px;"
                            oninput="(function(inp){var img=inp.closest('.logo-url-cell').querySelector('img');img.style.opacity='1';img.onerror=function(){img.style.opacity='0.25';img.onerror=null;};img.src=inp.value||'about:blank';})(this)">
-                    <button class="logo-search-btn" title="ค้นหาโลโก้จาก Wikipedia อัตโนมัติ"
-                            onclick="_searchWikiLogo(this.closest('.edit-team-row'), this.closest('.edit-team-row').querySelector('.edit-input-team').value)">🔍</button>
                 </div>
                 <input type="text" class="edit-input edit-input-comment" value="${t.comment || ''}" placeholder="แจ้งเหตุผลถ้าไม่ผ่าน...">
                 <div style="display:flex; gap:4px; flex-wrap:wrap;">
@@ -3691,74 +3690,6 @@ function _renderEditTeamsModalUI() {
     }
 }
 
-async function _searchWikiLogo(rowEl, teamName) {
-    if (!teamName || !teamName.trim()) return;
-    var inp = rowEl.querySelector('.edit-input-logo');
-    var img = rowEl.querySelector('.logo-preview-mini');
-    var btn = rowEl.querySelector('.logo-search-btn');
-    if (!inp || !img || !btn) return;
-    btn.textContent = '⏳'; btn.disabled = true;
-    try {
-        var searchTerms = [
-            teamName + ' national football team',
-            teamName + ' F.C.',
-            teamName + ' football club',
-            teamName + ' football'
-        ];
-        var found = null;
-        for (var i = 0; i < searchTerms.length && !found; i++) {
-            var apiUrl = 'https://en.wikipedia.org/w/api.php?action=query&generator=search' +
-                '&gsrsearch=' + encodeURIComponent(searchTerms[i]) +
-                '&prop=pageimages&format=json&pithumbsize=150&origin=*&gsrlimit=5';
-            var res = await fetch(apiUrl);
-            var data = await res.json();
-            var pages = data.query && data.query.pages;
-            if (pages) {
-                var pArr = Object.values(pages).sort(function(a,b){ return (a.index||99)-(b.index||99); });
-                for (var j = 0; j < pArr.length; j++) {
-                    if (pArr[j].thumbnail && pArr[j].thumbnail.source) {
-                        found = pArr[j].thumbnail.source; break;
-                    }
-                }
-            }
-        }
-        if (found) {
-            inp.value = found;
-            img.style.opacity = '1';
-            img.onerror = function(){ this.style.opacity='0.25'; this.onerror=null; };
-            img.src = found;
-            btn.textContent = '✅';
-            setTimeout(function(){ btn.textContent = '🔍'; }, 2000);
-        } else {
-            btn.textContent = '❌';
-            setTimeout(function(){ btn.textContent = '🔍'; }, 2000);
-            showToast && showToast('ไม่พบโลโก้ใน Wikipedia สำหรับ: ' + teamName, 'warning');
-        }
-    } catch(e) {
-        btn.textContent = '❌';
-        setTimeout(function(){ btn.textContent = '🔍'; }, 2000);
-    }
-    btn.disabled = false;
-}
-
-async function _searchWikiLogoAll() {
-    var rows = document.querySelectorAll('#edit-teams-container .edit-team-row');
-    if (!rows.length) return;
-    var btn = document.getElementById('bulk-logo-search-btn');
-    if (btn) { btn.textContent = '⏳ กำลังค้นหา...'; btn.disabled = true; }
-    var count = 0;
-    for (var i = 0; i < rows.length; i++) {
-        var teamInp = rows[i].querySelector('.edit-input-team');
-        var logoInp = rows[i].querySelector('.edit-input-logo');
-        if (!teamInp || !logoInp) continue;
-        if (logoInp.value.trim()) continue;
-        await _searchWikiLogo(rows[i], teamInp.value);
-        count++;
-        await new Promise(function(r){ setTimeout(r, 400); });
-    }
-    if (btn) { btn.textContent = '🔍 ค้นหาทั้งหมด'; btn.disabled = false; }
-    showToast && showToast('ค้นหาโลโก้เสร็จแล้ว ' + count + ' ทีม (เฉพาะทีมที่ยังไม่มีโลโก้)', 'success');
-}
 
 function approveTeam(index) {
     const t = state.teams[index];
@@ -3839,9 +3770,8 @@ function saveEditedTeams() {
             state.teams[idx].isFlag = manualLogo.includes('flagcdn.com') ||
                 /\/(flag|flags?)\//i.test(manualLogo);
         } else {
-            let media = generateLogoAndFlag(team);
-            state.teams[idx].logo = media.logoUrl;
-            state.teams[idx].isFlag = media.isFlag;
+            state.teams[idx].logo = state.teams[idx].logo || '';
+            state.teams[idx].isFlag = false;
         }
     });
 
@@ -4109,7 +4039,8 @@ function openTeamStatsModal(teamId) {
 
     // Header
     const logoEl = document.getElementById('ts-logo');
-    logoEl.src = team.logo || `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(team.team)}`;
+    logoEl.src = team.logo || '';
+    if (!team.logo) logoEl.style.display = 'none'; else logoEl.style.display = '';
     logoEl.onerror = function(){ _logoFallback(this, team.team); };
     if (team.isFlag) { logoEl.className = 'ts-modal-logo flag'; } else { logoEl.className = 'ts-modal-logo'; }
     document.getElementById('ts-team-name').textContent = team.team;
