@@ -3816,28 +3816,34 @@ function handleTeamDrop(e) {
     if (state.isViewOnly) return;
     if ((state.tournamentFormat || 'league') !== 'league') return;
     e.preventDefault(); e.currentTarget.classList.remove("drag-over");
-    const targetId = e.currentTarget.getAttribute("data-team-id"); if (!draggedTeamId || !targetId || draggedTeamId === targetId) return;
+    const targetId = e.currentTarget.getAttribute("data-team-id");
+    if (!draggedTeamId || !targetId || draggedTeamId === targetId) return;
 
-    let idxA = state.teams.findIndex(t => t.id === draggedTeamId); let idxB = state.teams.findIndex(t => t.id === targetId);
+    let idxA = state.teams.findIndex(t => t.id === draggedTeamId);
+    let idxB = state.teams.findIndex(t => t.id === targetId);
     if (idxA === -1 || idxB === -1) return;
 
-    let scoreMap = {};
-    state.matches.forEach(m => { if (m.homeScore !== null || m.awayScore !== null) { scoreMap[`${m.homeId}_vs_${m.awayId}`] = { homeScore: m.homeScore, awayScore: m.awayScore, evidenceImg: m.evidenceImg || "" }; } });
+    // สลับตำแหน่งใน teams array (สำหรับตารางคะแนน)
+    let temp = state.teams[idxA];
+    state.teams[idxA] = state.teams[idxB];
+    state.teams[idxB] = temp;
 
-    let temp = state.teams[idxA]; state.teams[idxA] = state.teams[idxB]; state.teams[idxB] = temp;
-    let newMatches = buildRoundRobin(state.teams.filter(t => t.status === 'approved'));
-    newMatches.forEach(m => {
-        if (scoreMap[`${m.homeId}_vs_${m.awayId}`]) {
-            m.homeScore = scoreMap[`${m.homeId}_vs_${m.awayId}`].homeScore;
-            m.awayScore = scoreMap[`${m.homeId}_vs_${m.awayId}`].awayScore;
-            m.evidenceImg = scoreMap[`${m.homeId}_vs_${m.awayId}`].evidenceImg || "";
-        } else if (scoreMap[`${m.awayId}_vs_${m.homeId}`]) {
-            m.homeScore = scoreMap[`${m.awayId}_vs_${m.homeId}`].awayScore;
-            m.awayScore = scoreMap[`${m.awayId}_vs_${m.homeId}`].homeScore;
-            m.evidenceImg = scoreMap[`${m.awayId}_vs_${m.homeId}`].evidenceImg || "";
-        }
+    // สลับ ID สองทีมใน matches ที่มีอยู่แล้ว (ไม่ rebuild)
+    // แมตช์อื่นที่ไม่เกี่ยวกับสองทีมนี้ไม่ถูกแตะเลย
+    const idA = draggedTeamId;
+    const idB = targetId;
+    state.matches.forEach(m => {
+        const homeWasA = m.homeId === idA;
+        const homeWasB = m.homeId === idB;
+        const awayWasA = m.awayId === idA;
+        const awayWasB = m.awayId === idB;
+        if (homeWasA) m.homeId = idB;
+        else if (homeWasB) m.homeId = idA;
+        if (awayWasA) m.awayId = idB;
+        else if (awayWasB) m.awayId = idA;
     });
-    state.matches = newMatches; renderLeague(); saveDataToCloud();
+
+    renderLeague(); saveDataToCloud();
 }
 
 function updateScore(matchId, type, val) {
@@ -4068,7 +4074,7 @@ function openTeamStatsModal(teamId) {
     const winRate = p > 0 ? Math.round((w / p) * 100) : 0;
 
     // Last 5 matches detail
-    const last5 = played.slice(-5);
+    const last5 = played.slice(-5).reverse();
     const last5HTML = last5.length > 0 ? last5.map(m => {
         const isHome = m.homeId === teamId;
         const oppId = isHome ? m.awayId : m.homeId;
