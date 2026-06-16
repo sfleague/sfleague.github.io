@@ -560,7 +560,13 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             object-fit: contain;
         }
-        .evidence-lightbox-actions { display: flex; gap: 12px; }
+        .evidence-lightbox-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+        .evidence-lightbox-delete {
+            padding: 9px 22px; border-radius: 10px; font-size: 14px; font-weight: 700;
+            background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.5);
+            color: #f87171; cursor: pointer; width: auto; letter-spacing: 0.5px; transition: all 0.2s;
+        }
+        .evidence-lightbox-delete:hover { background: #ef4444; color: #fff; border-color: #ef4444; transform: none; box-shadow: 0 0 15px rgba(239,68,68,0.4); }
         .evidence-lightbox-close {
             padding: 9px 22px; border-radius: 10px; font-size: 14px; font-weight: 700;
             background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
@@ -1414,6 +1420,7 @@
             <img id="evidence-lightbox-img" src="" alt="หลักฐานการแข่งขัน">
             <div class="evidence-lightbox-actions">
                 <a id="evidence-lightbox-download" class="evidence-lightbox-download" download="evidence.jpg">⬇️ บันทึกรูป</a>
+                <button id="evidence-lightbox-delete-btn" class="evidence-lightbox-delete" onclick="deleteMatchEvidence()" style="display:none;">🗑️ ลบหลักฐาน</button>
                 <button class="evidence-lightbox-close" onclick="closeEvidenceLightbox()">✕ ปิด</button>
             </div>
         </div>
@@ -2206,6 +2213,7 @@ let state = {
 
 let draggedTeamId = null;
 let currentCrownedChampId = null;
+let _currentEvidenceMatchId = null;
 
 // ─── Auto-Refresh (Live Update) ───────────────────────────────────────────────
 let _autoRefreshTimer = null;
@@ -4417,13 +4425,31 @@ function viewMatchEvidence(matchId) {
     let match = state.matches.find(m => m.id === matchId);
     if (!match || !match.evidenceImg) { alert("⚠️ คู่นี้ยังไม่มีผู้เล่นส่งรูปหลักฐานเข้ามาครับ"); return; }
     closeScoreModal();
+    _currentEvidenceMatchId = matchId;
     const lb = document.getElementById("evidence-lightbox");
     const img = document.getElementById("evidence-lightbox-img");
     const dl = document.getElementById("evidence-lightbox-download");
+    const delBtn = document.getElementById("evidence-lightbox-delete-btn");
     img.src = match.evidenceImg;
     dl.href = match.evidenceImg;
+    if (delBtn) delBtn.style.display = !state.isViewOnly ? 'inline-block' : 'none';
     lb.classList.add("open");
     history.pushState({ lightboxOpen: true }, "");
+}
+
+function deleteMatchEvidence() {
+    if (state.isViewOnly) return;
+    if (!_currentEvidenceMatchId) return;
+    if (!confirm("🗑️ ลบรูปหลักฐานของแมตช์นี้?")) return;
+    let match = state.matches.find(m => m.id === _currentEvidenceMatchId);
+    if (!match) return;
+    match.evidenceImg = "";
+    match.evidenceUploadedBy = "";
+    _saveEvidenceToLocal();
+    saveDataToCloud();
+    closeEvidenceLightbox();
+    renderLeague();
+    showToast("🗑️ ลบรูปหลักฐานแล้ว", "success");
 }
 
 function closeEvidenceLightbox() {
