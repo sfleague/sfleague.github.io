@@ -2251,10 +2251,12 @@ function _migrateTeamCrestsFromFlags() {
     (state.teams || []).forEach(t => {
         if (!t.team) return;
         const normalized = t.team.toLowerCase().replace(/[\s\.\-_]/g, '');
-        // อัปเดต logo สำหรับทุกทีมที่ชื่อตรงกับ clubMap (ทั้ง flag เก่าและ URL เก่าที่ผิด)
         if (clubMap[normalized]) {
             t.logo = clubMap[normalized];
             t.isFlag = false;
+        } else if (flagMap[normalized] && (!t.logo || t.logo.includes('jsdelivr') || t.logo.includes('circle-flags'))) {
+            t.logo = `https://flagcdn.com/w160/${flagMap[normalized]}.png`;
+            t.isFlag = true;
         }
     });
 }
@@ -2493,11 +2495,13 @@ function _logoFallback(el, teamName) {
     var normalized = teamName.toLowerCase().replace(/[\s\.\-_]/g, '');
     var failedSrc = el.src || '';
     el.onerror = null;
-    var alreadyTriedCrest = failedSrc.includes('wikimedia') || failedSrc.includes('wikipedia') || failedSrc.includes('upload.wiki');
-    if (!alreadyTriedCrest && clubMap[normalized]) {
+    var triedCrest = failedSrc.includes('wikimedia') || failedSrc.includes('wikipedia') || failedSrc.includes('upload.wiki');
+    var triedFlag  = failedSrc.includes('flagcdn.com');
+
+    if (!triedCrest && clubMap[normalized]) {
         el.src = clubMap[normalized];
         el.className = el.className.replace('flag-img', 'club-img');
-    } else if (flagMap[normalized]) {
+    } else if (!triedFlag && flagMap[normalized]) {
         el.src = 'https://flagcdn.com/w160/' + flagMap[normalized] + '.png';
         el.className = el.className.replace('club-img', 'flag-img');
     } else {
@@ -3854,9 +3858,10 @@ function openScoreModal(matchId) {
 
     function teamLogoHTML(info) {
         if (!info.logo) return `<div style="width:44px;height:44px;background:rgba(255,255,255,0.05);border-radius:6px;"></div>`;
+        const esc = info.team.replace(/'/g, "\\'");
         return info.isFlag
-            ? `<img src="${info.logo}" class="se-team-logo flag" alt="${info.team}">`
-            : `<img src="${info.logo}" class="se-team-logo" alt="${info.team}">`;
+            ? `<img src="${info.logo}" class="se-team-logo flag" alt="${info.team}" onerror="_logoFallback(this,'${esc}')">`
+            : `<img src="${info.logo}" class="se-team-logo" alt="${info.team}" onerror="_logoFallback(this,'${esc}')">`;
     }
 
     document.getElementById('se-matchup-area').innerHTML = `
@@ -4145,9 +4150,10 @@ function openMatchViewModal(matchId) {
 
     function teamLogoHTML(info) {
         if (!info.logo) return `<div style="width:44px;height:44px;background:rgba(255,255,255,0.05);border-radius:6px;"></div>`;
+        const esc = info.team.replace(/'/g, "\\'");
         return info.isFlag
-            ? `<img src="${info.logo}" class="se-team-logo flag" alt="${info.team}">`
-            : `<img src="${info.logo}" class="se-team-logo" alt="${info.team}">`;
+            ? `<img src="${info.logo}" class="se-team-logo flag" alt="${info.team}" onerror="_logoFallback(this,'${esc}')">`
+            : `<img src="${info.logo}" class="se-team-logo" alt="${info.team}" onerror="_logoFallback(this,'${esc}')">`;
     }
 
     document.getElementById('se-matchup-area').innerHTML = `
