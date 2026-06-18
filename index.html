@@ -114,7 +114,7 @@
         img.club-img { object-fit: contain; width: 42px; height: 42px; border-radius: 4px; }
         img.flag-img { object-fit: cover; width: 45px; height: 30px; border-radius: 3px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); }
 
-        .team-info { display: flex; flex-direction: column; text-align: left; }
+        .team-info { display: flex; flex-direction: column; text-align: left; flex: 1; min-width: 0; }
         .p-name { font-weight: 700; font-size: 16px; color: #fff; }
         .t-name { font-size: 12px; color: var(--wc-text-sub); }
 
@@ -124,6 +124,58 @@
         tr.defending-champ-row { background: linear-gradient(90deg, rgba(139,92,246,0.14) 0%, rgba(139,92,246,0.02) 100%) !important; box-shadow: inset 4px 0 0 rgba(167,139,250,0.7); }
         tr.defending-champ-row td { color: #e9d5ff !important; font-weight: 600; }
         .defending-badge { display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(109,40,217,0.12)); border: 1px solid rgba(167,139,250,0.45); color: #c4b5fd; padding: 2px 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-left: 8px; font-family: 'Orbitron', sans-serif; border-radius: 4px; letter-spacing: 0.5px; box-shadow: 0 0 8px rgba(139,92,246,0.2); }
+
+        /* ══════════════════════════════════════ RANK #1 SPECTACULAR ══════════════════════════════════════ */
+        @keyframes no1Shimmer { 0%{background-position:-400% center;} 100%{background-position:400% center;} }
+        @keyframes no1Crown { 0%,100%{transform:translateY(0) rotate(-6deg) scale(1);} 45%{transform:translateY(-7px) rotate(6deg) scale(1.22);} }
+        @keyframes no1RowPulse { 0%,100%{box-shadow:inset 4px 0 0 #ffd700, 0 0 18px rgba(255,215,0,0.12);} 50%{box-shadow:inset 5px 0 0 #ffd700, 0 0 45px rgba(255,215,0,0.38), 0 3px 35px rgba(255,180,0,0.18);} }
+        @keyframes no1StarSpin { 0%{opacity:0.3;transform:scale(0.75) rotate(0deg);} 50%{opacity:1;transform:scale(1.25) rotate(180deg);} 100%{opacity:0.3;transform:scale(0.75) rotate(360deg);} }
+        @keyframes no1DaysPulse { 0%,100%{transform:scale(1); box-shadow:0 0 6px rgba(255,215,0,0.2);} 50%{transform:scale(1.06); box-shadow:0 0 14px rgba(255,215,0,0.55);} }
+        @keyframes no1BgMove { 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+
+        tr.rank-one-row {
+            background: linear-gradient(105deg, rgba(255,215,0,0.22) 0%, rgba(255,175,0,0.11) 40%, rgba(255,215,0,0.04) 100%) !important;
+            animation: no1RowPulse 3s ease-in-out infinite;
+            position: relative;
+        }
+        tr.rank-one-row td { color: #ffe566 !important; font-weight: 700; }
+        .no1-rank-cell { display:flex; flex-direction:column; align-items:center; gap:2px; }
+        .no1-rank-num {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; border-radius: 50%;
+            background: linear-gradient(135deg, #ffe566, #b8860b);
+            color: #000; font-weight: 900; font-size: 16px; font-family:'Orbitron',sans-serif;
+            box-shadow: 0 0 14px rgba(255,215,0,0.7), 0 0 4px rgba(255,215,0,0.4);
+        }
+        .no1-crown {
+            display: inline-block;
+            animation: no1Crown 2.4s ease-in-out infinite;
+            font-size: 18px; line-height: 1; filter: drop-shadow(0 0 6px rgba(255,215,0,0.8));
+        }
+        .no1-team-label { display:flex; flex-direction:column; gap:3px; }
+        .no1-shimmer-name {
+            background: linear-gradient(90deg, #ffe566 0%, #fff 35%, #ffd700 55%, #ffb300 75%, #ffe566 100%);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: no1Shimmer 2.8s linear infinite;
+            font-weight: 900 !important; font-size: 16px;
+        }
+        .no1-days-badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.22), rgba(255,140,0,0.12));
+            border: 1px solid rgba(255,215,0,0.55);
+            color: #ffd700; padding: 2px 9px; font-size: 10px; font-weight: 800;
+            border-radius: 4px; font-family: 'Orbitron', sans-serif;
+            animation: no1DaysPulse 2.2s ease-in-out infinite;
+            letter-spacing: 0.4px; white-space: nowrap; cursor: default;
+        }
+        .no1-stars { display:flex; gap:3px; align-items:center; }
+        .no1-star { font-size:11px; display:inline-block; animation: no1StarSpin 2s linear infinite; }
+        .no1-star:nth-child(2) { animation-delay:0.7s; font-size:13px; }
+        .no1-star:nth-child(3) { animation-delay:1.4s; }
+        /* ════════════════════════════════════════════════════════════════════════════════════════════════ */
 
         .round-title { background: linear-gradient(90deg, #0f2b54, transparent); color: var(--h2-fixtures-color); font-family: 'Orbitron', 'Prompt', sans-serif; font-weight: 800; padding: 12px 18px; font-size: 14px; text-transform: uppercase; margin-top: 30px; border-left: 4px solid var(--h2-fixtures-color); }
         .match-row { display: flex; flex-direction: column; gap: 0; padding: 12px 12px; border-bottom: 1px solid var(--wc-border); background: rgba(11, 30, 61, 0.4); }
@@ -834,7 +886,27 @@
 .ad-button:hover { background: linear-gradient(to bottom, #ffe48a 0%, #e5c158 100%); transform: translateY(-1px); }
 .ad-button:active { transform: translateY(2px); box-shadow: 0 2px 0 #b8860b; }
 
-.ad-hidden { transform: scale(0) rotate(20deg); opacity: 0; pointer-events: none; }   
+.ad-hidden { transform: scale(0) rotate(20deg); opacity: 0; pointer-events: none; }
+
+        /* ── Ad Banner Editor Modal ── */
+        #ad-editor-modal { display:none; position:fixed; inset:0; z-index:4500; background:rgba(0,0,0,0.82); align-items:center; justify-content:center; }
+        #ad-editor-modal.open { display:flex; }
+        .ad-editor-box { background:#0b1929; border:1px solid rgba(223,180,75,0.4); border-radius:14px; padding:24px; width:min(500px,94vw); max-height:90vh; overflow-y:auto; position:relative; }
+        .ad-editor-label { font-size:11px; color:var(--wc-text-sub); font-weight:700; letter-spacing:0.5px; text-transform:uppercase; display:block; margin-bottom:5px; }
+        .ad-editor-inp { width:100%; box-sizing:border-box; background:#030a17; border:1px solid var(--wc-border); color:#fff; padding:8px 12px; border-radius:6px; font-family:'Prompt',sans-serif; font-size:13px; }
+        .ad-editor-inp:focus { outline:none; border-color:rgba(223,180,75,0.5); }
+        /* toggle switch */
+        .ad-toggle-wrap { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; padding:10px 14px; background:rgba(255,255,255,0.04); border-radius:8px; border:1px solid rgba(255,255,255,0.08); }
+        .ad-toggle-track { position:relative; display:inline-block; width:42px; height:24px; cursor:pointer; }
+        .ad-toggle-track input { opacity:0; width:0; height:0; position:absolute; }
+        .ad-toggle-bg { position:absolute; inset:0; border-radius:12px; background:#1e3a5f; transition:0.2s; border:1px solid rgba(255,255,255,0.15); }
+        .ad-toggle-thumb { position:absolute; width:18px; height:18px; top:3px; left:3px; border-radius:50%; background:#334155; transition:0.2s; }
+        .ad-toggle-track input:checked ~ .ad-toggle-bg { background:#22c55e; }
+        .ad-toggle-track input:checked ~ .ad-toggle-thumb { left:21px; background:#fff; }
+        /* Ad Popup (fullscreen image viewer) */
+        #ad-popup-modal { display:none; position:fixed; inset:0; z-index:5500; background:rgba(0,0,0,0.88); align-items:center; justify-content:center; flex-direction:column; gap:16px; padding:24px; box-sizing:border-box; }
+        #ad-popup-modal.open { display:flex; }
+        .ad-popup-box { position:relative; max-width:min(480px,92vw); width:100%; background:#0b1929; border:2px solid rgba(223,180,75,0.5); border-radius:14px; overflow:hidden; animation:announceFadeIn 0.25s ease; }
 
         /* ===================================================
            MOBILE RESPONSIVE FIXES
@@ -855,8 +927,14 @@
             h2 { font-size: 16px; }
 
             /* ตาราง standings: ให้เลื่อนซ้าย-ขวาได้ */
-            #standings-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 460px; }
+            #standings-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 560px; }
             th, td { padding: 10px 7px; font-size: 12px; }
+
+            /* ── แก้ชื่อทีมเรียงตรงในตาราง standings บนมือถือ ── */
+            #standings-table .player-team-box { align-items: center; flex-wrap: nowrap; gap: 8px; }
+            #standings-table .team-info { flex: 1 1 0; min-width: 0; overflow: hidden; }
+            #standings-table .p-name { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; font-size: 13px; line-height: 1.4; word-break: break-word; white-space: normal; }
+            #standings-table .t-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
             /* Match row: ทำให้พอดีจอมือถือ */
             .match-row { padding: 8px 6px; gap: 4px; }
@@ -1059,6 +1137,9 @@
 
         @media (max-width: 480px) {
             h1 { font-size: 20px; }
+            /* standings table on very small screens */
+            #standings-table .p-name { font-size: 12px; }
+            #standings-table .champion-badge, #standings-table .defending-badge { font-size: 9px; padding: 2px 5px; }
             .match-row { gap: 3px; padding: 8px 4px; }
             .match-team { gap: 3px; padding: 2px; }
             .match-score { min-width: 62px; padding: 0; }
@@ -1070,6 +1151,133 @@
             .fc-card { padding: 12px 10px; }
             .ah-chip { font-size: 8px; padding: 1px 3px; }
             .badge-side { font-size: 9px; padding: 1px 4px; }
+        }
+
+        /* ══════════════════════════════════════════
+           BIG MATCH OF THE WEEK
+        ══════════════════════════════════════════ */
+        @keyframes bigMatchPulse {
+            0%,100% { box-shadow: 0 0 16px rgba(255,80,0,0.45), 0 0 36px rgba(220,60,0,0.18), inset 0 0 20px rgba(255,80,0,0.05); }
+            50%      { box-shadow: 0 0 30px rgba(255,120,0,0.75), 0 0 55px rgba(220,80,0,0.35), inset 0 0 30px rgba(255,80,0,0.1); }
+        }
+        @keyframes bigMatchBorderColor {
+            0%   { border-color: #ff6b00; }
+            33%  { border-color: #ffd700; }
+            66%  { border-color: #ff3b30; }
+            100% { border-color: #ff6b00; }
+        }
+        @keyframes bigMatchShimmer {
+            0%   { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        @keyframes fireWiggle {
+            0%,100% { transform: scaleY(1) rotate(-3deg); }
+            25%     { transform: scaleY(1.12) rotate(3deg); }
+            50%     { transform: scaleY(0.93) rotate(-1deg); }
+            75%     { transform: scaleY(1.07) rotate(2deg); }
+        }
+        .big-match-wrapper { position: relative; margin: 4px 0 18px; }
+        .big-match-banner {
+            background: linear-gradient(90deg, #3d0a00 0%, #7a1a00 25%, #ff5500 50%, #7a1a00 75%, #3d0a00 100%);
+            background-size: 200% 100%;
+            animation: bigMatchShimmer 3.5s linear infinite;
+            border-left: 4px solid #ff6b00;
+            padding: 9px 18px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            font-family: 'Orbitron', 'Prompt', sans-serif;
+            font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 2px;
+            color: #fff; text-shadow: 0 0 10px rgba(255,140,0,0.9), 0 0 20px rgba(255,80,0,0.5);
+        }
+        .bm-fire { font-size: 18px; display: inline-block; animation: fireWiggle 0.55s ease-in-out infinite; }
+        .bm-fire:nth-child(2) { animation-delay: 0.18s; }
+        .bm-fire:nth-child(4) { animation-delay: 0.09s; }
+        .bm-fire:nth-child(5) { animation-delay: 0.27s; }
+        .big-match-row {
+            border: 2px solid #ff6b00 !important;
+            animation: bigMatchPulse 2.4s ease-in-out infinite, bigMatchBorderColor 4s linear infinite;
+            background: linear-gradient(135deg, rgba(255,55,0,0.13) 0%, rgba(18,8,0,0.55) 50%, rgba(255,55,0,0.09) 100%) !important;
+            position: relative; overflow: hidden;
+        }
+        .big-match-row::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(120deg, transparent 30%, rgba(255,110,0,0.07) 50%, transparent 70%);
+            animation: bigMatchShimmer 3s linear infinite;
+            pointer-events: none;
+        }
+
+        /* ── Big Match Picker Modal ── */
+        #big-match-picker-modal {
+            display: none; position: fixed; inset: 0; z-index: 9100;
+            background: rgba(5,17,38,0.88); backdrop-filter: blur(8px);
+            justify-content: center; align-items: flex-start;
+            padding: 40px 16px; overflow-y: auto;
+        }
+        #big-match-picker-modal.open { display: flex; }
+        .bmp-box {
+            background: var(--wc-card-bg); border: 2px solid #ff6b00;
+            border-radius: 14px; width: 100%; max-width: 600px;
+            box-shadow: 0 0 50px rgba(255,80,0,0.35), 0 20px 60px rgba(0,0,0,0.6);
+            padding: 26px; position: relative;
+        }
+        .bmp-title {
+            font-family: 'Orbitron', sans-serif; font-weight: 800;
+            font-size: 18px; color: #ff8c42;
+            display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+        }
+        .bmp-sub { font-size: 13px; color: var(--wc-text-sub); margin-bottom: 18px; }
+        .bmp-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+        .bmp-auto-btn {
+            background: linear-gradient(135deg, #ff6b00, #b84500); color: #fff;
+            border: none; padding: 11px 20px; border-radius: 8px;
+            font-weight: 800; font-size: 13px; cursor: pointer;
+            display: flex; align-items: center; gap: 7px;
+            font-family: 'Prompt', sans-serif; letter-spacing: 0.3px;
+        }
+        .bmp-auto-btn:hover { opacity: 0.88; transform: none; box-shadow: 0 0 18px rgba(255,100,0,0.5); }
+        .bmp-clear-btn {
+            background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.35);
+            color: #f87171; padding: 11px 16px; border-radius: 8px;
+            font-weight: 700; font-size: 13px; cursor: pointer;
+            font-family: 'Prompt', sans-serif;
+        }
+        .bmp-clear-btn:hover { background: rgba(239,68,68,0.22); transform: none; box-shadow: none; }
+        .bmp-match-list { display: flex; flex-direction: column; gap: 7px; max-height: 58vh; overflow-y: auto; padding-right: 4px; }
+        .bmp-match-item {
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(255,255,255,0.03); border: 1px solid var(--wc-border);
+            border-radius: 8px; padding: 11px 14px; cursor: pointer;
+            transition: all 0.18s; justify-content: space-between; flex-wrap: wrap; gap: 6px;
+        }
+        .bmp-match-item:hover { background: rgba(255,107,0,0.1); border-color: #ff6b00; }
+        .bmp-match-item.selected { background: rgba(255,107,0,0.16); border-color: #ff6b00; box-shadow: 0 0 14px rgba(255,107,0,0.3); }
+        .bmp-match-teams { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; color: #fff; flex: 1; min-width: 0; flex-wrap: wrap; }
+        .bmp-match-meta { display: flex; gap: 7px; align-items: center; flex-shrink: 0; }
+        .bmp-match-round { font-size: 11px; color: var(--wc-text-sub); white-space: nowrap; }
+        .bmp-match-score { font-family: 'Orbitron', sans-serif; font-size: 11px; color: var(--wc-gold); background: rgba(223,180,75,0.1); border: 1px solid rgba(223,180,75,0.28); padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+        .bmp-close-btn { position: absolute; top: 14px; right: 14px; background: none; border: none; color: var(--wc-text-sub); font-size: 20px; cursor: pointer; width: auto; padding: 4px 8px; line-height: 1; }
+        .bmp-close-btn:hover { color: #fff; transform: none; box-shadow: none; }
+        .bmp-section-label { font-size: 11px; color: var(--wc-text-sub); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin: 12px 0 6px; padding-left: 2px; }
+
+        /* ── Big Match toggle button inside score box ── */
+        .bm-toggle-btn {
+            background: rgba(255,107,0,0.07); border: 1px dashed rgba(255,107,0,0.38);
+            color: rgba(255,107,0,0.65); font-size: 10px; padding: 3px 9px; border-radius: 4px;
+            cursor: pointer; font-weight: 700; width: auto; transition: all 0.18s; margin-top: 4px;
+            font-family: 'Prompt', sans-serif; letter-spacing: 0.3px; display: inline-block;
+        }
+        .bm-toggle-btn:hover { background: rgba(255,107,0,0.18); color: #ff8c42; border-style: solid; transform: none; box-shadow: none; }
+        .bm-toggle-btn.active {
+            background: rgba(255,107,0,0.2); border: 1px solid #ff6b00;
+            color: #ff8c42; box-shadow: 0 0 8px rgba(255,107,0,0.28);
+        }
+        .bm-toggle-btn.active:hover { background: rgba(239,68,68,0.15); border-color: #ef4444; color: #fca5a5; }
+        /* viewer: small badge showing big match */
+        .bm-viewer-badge { font-size: 10px; color: #ff8c42; display: inline-flex; align-items: center; gap: 3px; margin-top: 3px; font-weight: 700; }
+
+        @media (max-width: 480px) {
+            .big-match-banner { font-size: 11px; letter-spacing: 1px; padding: 8px 12px; }
+            .bmp-box { padding: 18px 14px; }
+            .bmp-match-teams { font-size: 13px; }
         }
 
         /* ── อัตราการต่อรอง (Odds System) ── */
@@ -1674,6 +1882,21 @@
     </div>
 </div>
 
+<!-- ── Big Match Picker Modal ── -->
+<div id="big-match-picker-modal" onclick="if(event.target===this)closeBigMatchPickerModal()">
+    <div class="bmp-box">
+        <button class="bmp-close-btn" onclick="closeBigMatchPickerModal()">✕</button>
+        <div class="bmp-title"><span class="bm-fire">🔥</span> บิ๊กแมชประจำสัปดาห์</div>
+        <div class="bmp-sub">ให้ระบบเลือกคู่ที่สำคัญที่สุดให้อัตโนมัติ หรือเลือกเองด้วยตนเอง</div>
+        <div class="bmp-actions">
+            <button class="bmp-auto-btn" onclick="autoPickBigMatch()">⚡ AI เลือกให้อัตโนมัติ</button>
+            <button class="bmp-clear-btn" onclick="clearBigMatch()">✕ ยกเลิกบิ๊กแมช</button>
+        </div>
+        <div class="bmp-section-label">— หรือเลือกเองจากรายการด้านล่าง —</div>
+        <div class="bmp-match-list" id="bmp-match-list"></div>
+    </div>
+</div>
+
 <div id="adminLoginModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 17, 38, 0.85); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center;">
     <div class="modal-content" style="background: var(--wc-card-bg); border: 2px solid var(--wc-gold); box-shadow: 0 0 30px rgba(223, 180, 75, 0.25); padding: 30px; border-radius: 12px; width: 100%; max-width: 400px; text-align: center; color: var(--wc-text-main); position: relative;">
         <div style="font-size: 40px; margin-bottom: 10px;">🔑</div>
@@ -1920,6 +2143,7 @@
             <div id="se-score-view-row" style="display:none;" class="se-view-score-display"></div>
             <div id="se-ah-area"></div>
             <div class="se-evidence-row" id="se-evidence-area"></div>
+            <div id="se-bigmatch-area" style="text-align:center;margin-bottom:8px;"></div>
             <div class="se-modal-actions">
                 <button class="se-confirm-btn" id="se-confirm-btn" onclick="confirmScoreFromModal()">✅ บันทึกผล</button>
                 <button class="se-reset-btn" id="se-reset-btn" style="display:none;" onclick="resetScoreFromModal()">↩️ ล้างผล</button>
@@ -2281,7 +2505,19 @@ let state = {
     consolationChampionId: null,
     colors: { w1: "#ffffff", w2: "#dfb44b", w3: "#ffffff", h2Standings: "#dfb44b", h2Fixtures: "#dfb44b", h2Fame: "#dfb44b", h2Details: "#dfb44b", bgColor: "#051126" },
     h2h: {},
-    announcement: ""
+    announcement: "",
+    bigMatchIds: [],
+    no1History: { teamId: null, since: null },
+    adBanner: {
+        enabled: true,
+        labelText: "โฆษณาต้าวเพื่อนใหม่",
+        title: "ต้าวเพื่อนใหม่: เพื่อนซี้ระดับตำนาน",
+        desc: "ขอเชิญพบกับเพื่อนผู้ทรงเกียรติ ผู้มีบารมีมากที่สุดในกลุ่ม",
+        imgUrl: "https://i.ibb.co/FqVzBVXW/S-12959754.jpg",
+        btnText: "ดูประวัติต้าวเพื่อนใหม่",
+        linkUrl: "",
+        width: 280
+    }
 };
 
 let draggedTeamId = null;
@@ -2381,11 +2617,16 @@ function _applyCloudData(r) {
             _announcementDismissed = false;
         }
     }
+    // backward-compat: old data used bigMatchId (single), new uses bigMatchIds (array)
+    state.bigMatchIds = Array.isArray(r.bigMatchIds) ? r.bigMatchIds : (r.bigMatchId ? [r.bigMatchId] : state.bigMatchIds || []);
+    if (r.no1History) state.no1History = r.no1History;
+    if (r.adBanner !== undefined) state.adBanner = Object.assign({}, state.adBanner, r.adBanner);
     _restoreEvidenceFromLocal();
     renderHeader();
     renderLeague();
     refreshUIState();
     renderAnnouncement();
+    renderAdBanner();
 }
 
 // ─── Announcement Banner ─────────────────────────────────────────────────────
@@ -2773,15 +3014,25 @@ function shuffle(array) {
 function buildRoundRobin(teamObjects) {
     let list = [...teamObjects]; if (list.length % 2 !== 0) list.push({ id: "Bye", player: "Bye", team: "Bye", status: "approved" });
     let numTeams = list.length, roundsNum = numTeams - 1, halfSize = numTeams / 2;
+
+    // ── Fix: random cut so NO single team is always the fixed "anchor" (position 0)
+    //    Without this, the same team always faces opponents in the same sequential order
+    let cut = 1 + Math.floor(Math.random() * (numTeams - 1));
+    list = [...list.slice(cut), ...list.slice(0, cut)];
+
     let firstLeg = [], secondLeg = [], matchId = 1;
     for (let round = 0; round < roundsNum; round++) {
+        let roundPairs1 = [], roundPairs2 = [];
         for (let i = 0; i < halfSize; i++) {
             let home = list[i], away = list[numTeams - 1 - i];
             if (home.id !== "Bye" && away.id !== "Bye") {
-                firstLeg.push({ id: matchId++, round: round + 1, homeId: home.id, awayId: away.id, homeScore: null, awayScore: null, evidenceImg: "" });
-                secondLeg.push({ id: matchId++, round: round + 1 + roundsNum, homeId: away.id, awayId: home.id, homeScore: null, awayScore: null, evidenceImg: "" });
+                roundPairs1.push({ id: matchId++, round: round + 1, homeId: home.id, awayId: away.id, homeScore: null, awayScore: null, evidenceImg: "" });
+                roundPairs2.push({ id: matchId++, round: round + 1 + roundsNum, homeId: away.id, awayId: home.id, homeScore: null, awayScore: null, evidenceImg: "" });
             }
         }
+        // Shuffle match ORDER within each round so display varies naturally
+        shuffle(roundPairs1); shuffle(roundPairs2);
+        firstLeg.push(...roundPairs1); secondLeg.push(...roundPairs2);
         list.splice(1, 0, list.pop());
     }
     return [...firstLeg, ...secondLeg];
@@ -3591,6 +3842,8 @@ function renderAdminDock() {
         ${startBtnHTML}
         ${advanceHTML}
         ${consolAdvanceHTML}
+        <button onclick="openBigMatchPickerModal()" style="background: linear-gradient(135deg, #b84500, #ff6b00); color: #fff; font-size: 13px; height: 38px; padding: 0 15px; border: 1px solid rgba(255,107,0,0.5);">🔥 บิ๊กแมช</button>
+        <button onclick="openAdBannerEditor()" style="background: linear-gradient(135deg,#1e3a5f,#0f2640); color: #dfb44b; border: 1px solid rgba(223,180,75,0.4); font-size: 13px; height: 38px; padding: 0 15px;">📢 Ad Banner</button>
         <button onclick="openEditTeamsModal()" style="background: var(--wc-gold); color: #000; font-size: 13px; height: 38px; padding: 0 15px;">✏️ จัดการผู้สมัคร / ระบบเว็บ</button>
         <button onclick="upgradeFlagcdnToCrests()" style="background: linear-gradient(135deg,#0f766e,#0d9488); color: #fff; font-size: 13px; height: 38px; padding: 0 15px;" title="รีเซ็ตทุกทีมให้แสดงธงชาติ (ไม่กระทบทีมที่ไม่ใช่ทีมชาติ)">🏳️ รีเซ็ตธงชาติทุกทีม</button>
         <button onclick="openH2HManager()" style="background: linear-gradient(135deg,#1e3a8a,#1e40af); color: #93c5fd; border: 1px solid rgba(59,130,246,0.4); font-size: 13px; height: 38px; padding: 0 15px;">📊 จัดการ H2H</button>
@@ -4069,6 +4322,18 @@ function openScoreModal(matchId) {
     document.getElementById('se-reset-btn').style.display =
         (m.homeScore !== null && m.awayScore !== null && m.status !== 'finished') ? 'block' : 'none';
 
+    // Big Match toggle inside score modal
+    if (m.awayId !== 'BYE') {
+        let isBigM = (state.bigMatchIds || []).includes(matchId);
+        document.getElementById('se-bigmatch-area').innerHTML =
+            `<button class="bm-toggle-btn${isBigM ? ' active' : ''}" style="font-size:12px;padding:5px 18px;"
+                onclick="toggleBigMatch(${matchId});_refreshSeBigMatchBtn(${matchId})">
+                ${isBigM ? '🔥 บิ๊กแมช ✓  — กดเพื่อยกเลิก' : '🔥 ตั้งเป็น Big Match ของสัปดาห์'}
+            </button>`;
+    } else {
+        document.getElementById('se-bigmatch-area').innerHTML = '';
+    }
+
     // AH explanation banner
     _renderAHExplain(m, hInfo, aInfo, 'se-ah-area');
 
@@ -4184,8 +4449,8 @@ function openTeamStatsModal(teamId) {
     const gd = gf - ga;
     const winRate = p > 0 ? Math.round((w / p) * 100) : 0;
 
-    // Last 5 matches detail
-    const last5 = played.slice(-5).reverse();
+    // Last 5 matches detail (oldest→newest: left to right)
+    const last5 = played.slice().sort((a, b) => (a.id || 0) - (b.id || 0)).slice(-5);
     const last5HTML = last5.length > 0 ? last5.map(m => {
         const isHome = m.homeId === teamId;
         const oppId = isHome ? m.awayId : m.homeId;
@@ -4841,21 +5106,65 @@ function renderStandings() {
     let sorted = calculateStandings(); renderHallOfFame();
     var tbody = document.getElementById("standings-table").querySelector("tbody"); tbody.innerHTML = "";
     document.getElementById("champion-action-bar").style.display = (!state.isViewOnly && currentCrownedChampId) ? "block" : "none";
+
+    // ── Track #1 history ──────────────────────────────────────────
+    if (sorted.length > 0) {
+        const topTeam = sorted[0];
+        const h = state.no1History || { teamId: null, since: null };
+        if (topTeam.id !== h.teamId) {
+            state.no1History = { teamId: topTeam.id, since: Date.now() };
+            if (!state.isViewOnly) saveDataToCloud();
+        }
+    }
+
     sorted.forEach((team, index) => {
         const isDefending = state.defendingChampId && team.id === state.defendingChampId && !team.isChampion;
+        const isRankOne = (index === 0) && !team.isChampion;
         let tr = document.createElement("tr");
         if (team.isChampion) tr.className = "champion-row";
         else if (isDefending) tr.className = "defending-champ-row";
+        else if (isRankOne) tr.className = "rank-one-row";
         let logoClass = team.isFlag ? "team-logo flag-img" : "team-logo club-img";
         const defendingBadge = isDefending ? `<span class="defending-badge">👑 DEFENDING</span>` : "";
         let formHTML = _buildFormGuideHTML(team.id, 5);
         let streakHTML = _buildStreakHTML(team.id);
+
+        // ── #1 rank cell & team cell ───────────────────────────────
+        let rankCellHTML, teamCellHTML;
+        if (isRankOne) {
+            // Days at #1
+            const sinceMs = (state.no1History && state.no1History.since) ? state.no1History.since : Date.now();
+            const days = Math.max(0, Math.floor((Date.now() - sinceMs) / 86400000));
+            const daysLabel = days === 0 ? 'วันนี้! 🔥' : `${days} วัน`;
+
+            rankCellHTML = `<div class="no1-rank-cell"><span class="no1-rank-num">1</span><span class="no1-crown">👑</span></div>`;
+            teamCellHTML = `
+                <div class="player-team-box">
+                    <img class="${logoClass}" src="${team.logo}" onerror="_logoFallback(this,'${team.team.replace(/'/g,"\\'")}')">
+                    <div class="team-info">
+                        <div class="no1-team-label">
+                            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                                <span class="no1-shimmer-name">${team.team}</span>
+                                <span class="no1-days-badge">🏆 ที่ 1 มา ${daysLabel}</span>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:6px;margin-top:2px;">
+                                <span class="t-name" style="color:#a58c30;">Manager: ${team.player}</span>
+                                <span class="no1-stars"><span class="no1-star">⭐</span><span class="no1-star">✨</span><span class="no1-star">⭐</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+        } else {
+            rankCellHTML = `<strong>${index + 1}</strong>`;
+            teamCellHTML = `<div class="player-team-box"><img class="${logoClass}" src="${team.logo}" onerror="_logoFallback(this,'${team.team.replace(/'/g,"\\'")}')"><div class="team-info"><span class="p-name">${team.team}${team.isChampion ? '<span class="champion-badge">🏆 CHAMPION</span>' : ''}${defendingBadge}</span><span class="t-name">Manager: ${team.player}</span></div></div>`;
+        }
+
         tr.innerHTML = `
-            <td><strong>${index + 1}</strong></td>
-            <td><div class="player-team-box"><img class="${logoClass}" src="${team.logo}" onerror="_logoFallback(this,'${team.team.replace(/'/g,"\\'")}')"><div class="team-info"><span class="p-name">${team.team}${team.isChampion ? '<span class="champion-badge">🏆 CHAMPION</span>' : ''}${defendingBadge}</span><span class="t-name">Manager: ${team.player}</span></div></div></td>
+            <td>${rankCellHTML}</td>
+            <td>${teamCellHTML}</td>
             <td>${team.p}</td><td style="color:#00ff88;">${team.w}</td><td>${team.d}</td><td style="color:#ff4466;">${team.l}</td>
             <td>${team.gf}</td><td>${team.ga}</td><td style="font-weight:bold; color:${team.gd >= 0 ? 'var(--wc-gold)' : '#ff4466'}">${team.gd > 0 ? '+' + team.gd : team.gd}</td>
-            <td><span style="background:${team.isChampion ? 'var(--wc-gold)' : isDefending ? 'rgba(139,92,246,0.3)' : '#1a3660'}; color:${team.isChampion ? '#000' : '#fff'}; padding:3px 10px; font-weight:bold; border-radius:3px;">${team.pts}</span></td>
+            <td><span style="background:${team.isChampion ? 'var(--wc-gold)' : isDefending ? 'rgba(139,92,246,0.3)' : isRankOne ? 'rgba(255,215,0,0.25)' : '#1a3660'}; color:${team.isChampion ? '#000' : isRankOne ? '#ffe566' : '#fff'}; padding:3px 10px; font-weight:bold; border-radius:3px; ${isRankOne ? 'border:1px solid rgba(255,215,0,0.4);' : ''}">${team.pts}</span></td>
             <td>${streakHTML}</td>
             <td>${formHTML}</td>
         `;
@@ -4947,8 +5256,9 @@ function _buildMatchRowDiv(m, fmt) {
             <div class="match-bottom-away">${chips.awayChip || ''}</div>
         </div>` : '';
 
+    let isBigMatch = Array.isArray(state.bigMatchIds) && state.bigMatchIds.includes(m.id);
     let divMatch = document.createElement("div");
-    divMatch.className = "match-row";
+    divMatch.className = "match-row" + (isBigMatch ? " big-match-row" : "");
     divMatch.innerHTML = `
         <div class="match-row-main">
             <div class="match-team home ${draggableClass}" data-team-id="${hInfo.id}" ${dragAttrs}>
@@ -4977,8 +5287,348 @@ function _buildMatchRowDiv(m, fmt) {
         </div>
         ${bottomRowHTML}
     `;
+
+    if (isBigMatch) {
+        let wrapper = document.createElement("div");
+        wrapper.className = "big-match-wrapper";
+        let banner = document.createElement("div");
+        banner.className = "big-match-banner";
+        banner.innerHTML = `<span class="bm-fire">🔥</span><span class="bm-fire">🔥</span><span>&nbsp;BIG MATCH OF THE WEEK&nbsp;</span><span class="bm-fire">🔥</span><span class="bm-fire">🔥</span>`;
+        wrapper.appendChild(banner);
+        wrapper.appendChild(divMatch);
+        return wrapper;
+    }
     return divMatch;
 }
+
+// ══════════════════════════════════════════════════════════════════════════════
+// BIG MATCH OF THE WEEK
+// ══════════════════════════════════════════════════════════════════════════════
+
+// ── คำนวณ prestige score ของทีมจาก Hall of Fame ──────────────────────────────
+function _getTeamHofScore(teamId) {
+    let team = state.teams.find(t => t.id === teamId);
+    if (!team) return 0;
+    // ค้นหาจาก player name (key ใน HoF อาจเป็น id หรือ player name)
+    let hof = state.hallOfFame || {};
+    let data = hof[team.player] || hof[teamId] || null;
+    if (!data) return 0;
+    let trophies = data.trophies || 0;
+    let wins = data.wins || 0, draws = data.draws || 0, losses = data.losses || 0;
+    let total = wins + draws + losses;
+    let winRate = total > 0 ? wins / total : 0;
+    // สูตร: แชมป์มีน้ำหนักสูงสุด, รองลงมาคือ winRate และจำนวนชนะ
+    return trophies * 22 + winRate * 18 + wins * 2;
+}
+
+// ── ให้คะแนนแต่ละแมชเพื่อ auto-pick บิ๊กแมช ─────────────────────────────────
+function _scoreMatchForBigPick(m, ptMap, rankMap) {
+    let hPts = ptMap[m.homeId] || 0, aPts = ptMap[m.awayId] || 0;
+    let hRank = rankMap[m.homeId] !== undefined ? rankMap[m.homeId] : 99;
+    let aRank = rankMap[m.awayId] !== undefined ? rankMap[m.awayId] : 99;
+    let hHof = _getTeamHofScore(m.homeId);
+    let aHof = _getTeamHofScore(m.awayId);
+
+    let combinedPts   = hPts + aPts;
+    let rankCloseness = 10 / (Math.abs(hRank - aRank) + 1);
+    let topTierBonus  = (hRank < 3 || aRank < 3) ? 8 : 0;
+    let topClashBonus = (hRank < 3 && aRank < 3) ? 14 : 0;
+    let hofPrestige   = (hHof + aHof) * 0.55;   // น้ำหนัก HoF
+
+    return combinedPts * 1.5 + rankCloseness + topTierBonus + topClashBonus + hofPrestige;
+}
+
+function autoPickBigMatch() {
+    if (state.isViewOnly) return;
+    let unplayed = state.matches.filter(m =>
+        m.homeScore === null && m.awayScore === null &&
+        m.homeId !== 'BYE' && m.awayId !== 'BYE' &&
+        m.homeId !== 'Bye' && m.awayId !== 'Bye');
+    if (unplayed.length === 0) { showAlert("⚠️ ไม่มีแมชที่ยังไม่ได้เล่นแล้ว"); return; }
+
+    let standingsArr = calculateStandings();
+    let ptMap = {}, rankMap = {};
+    standingsArr.forEach((t, i) => { ptMap[t.id] = t.pts; rankMap[t.id] = i; });
+
+    let fmt = state.tournamentFormat || 'league';
+    let newBigMatchIds = [];
+
+    if (fmt === 'league') {
+        // สำหรับ ROUND MATCH: เลือก 1 บิ๊กแมชต่อรอบ (รอบที่ยังไม่ได้เล่น)
+        let rounds = [...new Set(unplayed.map(m => m.round))].sort((a, b) => a - b);
+        rounds.forEach(r => {
+            let rMatches = unplayed.filter(m => m.round === r);
+            let best = rMatches.reduce((prev, cur) =>
+                _scoreMatchForBigPick(cur, ptMap, rankMap) > _scoreMatchForBigPick(prev, ptMap, rankMap) ? cur : prev, rMatches[0]);
+            newBigMatchIds.push(best.id);
+        });
+    } else {
+        // สำหรับ Cup: เลือก 1 แมชที่ดีที่สุดในรอบถัดไปที่ยังไม่เล่น
+        let scored = unplayed.map(m => ({ m, score: _scoreMatchForBigPick(m, ptMap, rankMap) }));
+        scored.sort((a, b) => b.score - a.score);
+        newBigMatchIds = [scored[0].m.id];
+    }
+
+    state.bigMatchIds = newBigMatchIds;
+    saveDataToCloud();
+    renderLeague();
+    closeBigMatchPickerModal();
+    _renderBigMatchPickerList();
+    showToast(`🔥 AI เลือก ${newBigMatchIds.length} บิ๊กแมชจาก HoF + ตาราง`, 'info');
+}
+
+function openBigMatchPickerModal() {
+    if (state.isViewOnly) return;
+    _renderBigMatchPickerList();
+    let modal = document.getElementById('big-match-picker-modal');
+    if (modal) modal.classList.add('open');
+}
+
+function closeBigMatchPickerModal() {
+    let modal = document.getElementById('big-match-picker-modal');
+    if (modal) modal.classList.remove('open');
+}
+
+function _renderBigMatchPickerList() {
+    let listEl = document.getElementById('bmp-match-list');
+    if (!listEl) return;
+    let fmt = state.tournamentFormat || 'league';
+    let isLeague = fmt === 'league';
+    let allSelectable = state.matches.filter(m =>
+        m.homeId !== 'BYE' && m.awayId !== 'BYE' &&
+        m.homeId !== 'Bye' && m.awayId !== 'Bye' &&
+        !m.isThirdPlace && !m.isConsolation);
+    if (allSelectable.length === 0) {
+        listEl.innerHTML = '<div style="color:var(--wc-text-sub);text-align:center;padding:20px;">ยังไม่มีแมชในทัวร์นาเมนต์</div>';
+        return;
+    }
+    let unplayed = allSelectable.filter(m => m.homeScore === null);
+    let played   = allSelectable.filter(m => m.homeScore !== null);
+
+    function buildItems(arr) {
+        return arr.map(m => {
+            let hT = state.teams.find(t => t.id === m.homeId);
+            let aT = state.teams.find(t => t.id === m.awayId);
+            let hName = hT ? hT.team : m.homeId;
+            let aName = aT ? aT.team : m.awayId;
+            let roundLabel = isLeague ? `รอบ ${m.round}` : `คัพรอบ ${m.cupRound || m.round}`;
+            let scoreLabel = m.homeScore !== null ? `${m.homeScore}–${m.awayScore}` : 'ยังไม่เล่น';
+            let isBig = (state.bigMatchIds || []).includes(m.id);
+            return `<div class="bmp-match-item${isBig ? ' selected' : ''}" onclick="toggleBigMatch(${m.id},true)">
+                <div class="bmp-match-teams">
+                    <span>${hName}</span>
+                    <span style="color:var(--wc-text-sub);font-size:11px;padding:0 2px;">vs</span>
+                    <span>${aName}</span>
+                </div>
+                <div class="bmp-match-meta">
+                    <span class="bmp-match-round">${roundLabel}</span>
+                    <span class="bmp-match-score">${scoreLabel}</span>
+                    <span style="font-size:15px;line-height:1;">${isBig ? '🔥' : ''}</span>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    let html = '';
+    if (unplayed.length > 0) { html += `<div class="bmp-section-label">⏳ ยังไม่ได้เล่น</div>` + buildItems(unplayed); }
+    if (played.length > 0)   { html += `<div class="bmp-section-label" style="margin-top:14px;">✅ เล่นแล้ว</div>` + buildItems(played); }
+    listEl.innerHTML = html;
+}
+
+// toggleBigMatch: เพิ่มหรือลบ matchId ออกจาก bigMatchIds array
+// fromModal=true เมื่อเรียกจาก picker modal (ไม่ปิด modal)
+function toggleBigMatch(matchId, fromModal) {
+    if (state.isViewOnly) return;
+    let ids = state.bigMatchIds || [];
+    let idx = ids.indexOf(matchId);
+    let added;
+    if (idx === -1) {
+        state.bigMatchIds = [...ids, matchId];
+        added = true;
+    } else {
+        state.bigMatchIds = ids.filter(x => x !== matchId);
+        added = false;
+    }
+    saveDataToCloud();
+    renderLeague();
+    if (fromModal) _renderBigMatchPickerList();
+    let m = state.matches.find(x => x.id === matchId);
+    if (m) {
+        let hT = state.teams.find(t => t.id === m.homeId);
+        let aT = state.teams.find(t => t.id === m.awayId);
+        if (added) showToast(`🔥 บิ๊กแมช: ${hT ? hT.team : '?'} vs ${aT ? aT.team : '?'}`, 'info');
+        else showToast(`✅ ยกเลิกบิ๊กแมช: ${hT ? hT.team : '?'} vs ${aT ? aT.team : '?'}`, 'info');
+    }
+}
+
+function clearBigMatch() {
+    if (state.isViewOnly) return;
+    state.bigMatchIds = [];
+    saveDataToCloud();
+    renderLeague();
+    closeBigMatchPickerModal();
+    showToast('✅ ยกเลิกบิ๊กแมชทั้งหมดแล้ว', 'info');
+}
+
+// Refresh big-match button text inside the open score modal (no full re-render)
+function _refreshSeBigMatchBtn(matchId) {
+    const area = document.getElementById('se-bigmatch-area');
+    if (!area) return;
+    let isBigM = (state.bigMatchIds || []).includes(matchId);
+    area.innerHTML = `<button class="bm-toggle-btn${isBigM ? ' active' : ''}" style="font-size:12px;padding:5px 18px;"
+        onclick="toggleBigMatch(${matchId});_refreshSeBigMatchBtn(${matchId})">
+        ${isBigM ? '🔥 บิ๊กแมช ✓  — กดเพื่อยกเลิก' : '🔥 ตั้งเป็น Big Match ของสัปดาห์'}
+    </button>`;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// AD BANNER SYSTEM
+// ══════════════════════════════════════════════════════════════════════════════
+
+function _htmlEsc(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderAdBanner() {
+    const banner = document.getElementById('friend-ad-banner');
+    if (!banner) return;
+    const ad = state.adBanner || {};
+    if (!ad.enabled) {
+        banner.style.display = 'none';
+        return;
+    }
+    banner.style.display = '';
+    banner.style.width = (ad.width || 280) + 'px';
+    banner.classList.remove('ad-hidden');
+
+    const linkUrl = (ad.linkUrl || '').trim();
+    const clickAction = linkUrl
+        ? `window.open(${JSON.stringify(linkUrl)},'_blank')`
+        : `openAdPopup()`;
+
+    banner.innerHTML = `
+        <button style="position:absolute;top:5px;right:5px;background:rgba(255,255,255,0.1);border:2px solid #d4af37;width:28px;height:28px;border-radius:50%;cursor:pointer;font-weight:bold;color:#d4af37;display:flex;align-items:center;justify-content:center;z-index:10;font-size:14px;line-height:1;padding:0;width:auto;padding:0 8px;height:28px;"
+            onclick="this.closest('#friend-ad-banner').classList.add('ad-hidden')" title="ปิด">&times;</button>
+        <div class="ad-image-container" style="cursor:pointer;" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}">
+            <span class="ad-label">${_htmlEsc(ad.labelText || 'โฆษณา')}</span>
+            <img src="${_htmlEsc(ad.imgUrl || '')}" alt="banner" onerror="this.style.opacity='0.15'">
+        </div>
+        <div class="ad-content">
+            <div class="ad-title">${_htmlEsc(ad.title || '')}</div>
+            <div class="ad-desc">${_htmlEsc(ad.desc || '')}</div>
+            <button class="ad-button" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}">${_htmlEsc(ad.btnText || 'ดูเพิ่มเติม')}</button>
+        </div>
+    `;
+}
+
+function openAdPopup() {
+    const ad = state.adBanner || {};
+    const modal = document.getElementById('ad-popup-modal');
+    if (!modal) return;
+    const imgEl = document.getElementById('ad-popup-img');
+    if (imgEl) { imgEl.src = ad.imgUrl || ''; imgEl.style.display = ad.imgUrl ? 'block' : 'none'; }
+    const phEl = document.getElementById('ad-popup-img-ph');
+    if (phEl) phEl.style.display = ad.imgUrl ? 'none' : '';
+    const titleEl = document.getElementById('ad-popup-title');
+    if (titleEl) titleEl.textContent = ad.title || '';
+    const descEl = document.getElementById('ad-popup-desc');
+    if (descEl) descEl.textContent = ad.desc || '';
+    modal.classList.add('open');
+}
+
+function closeAdPopup() {
+    const modal = document.getElementById('ad-popup-modal');
+    if (modal) modal.classList.remove('open');
+}
+
+function openAdBannerEditor() {
+    if (state.isViewOnly) return;
+    const ad = state.adBanner || {};
+    const toggle = document.getElementById('ad-enabled-toggle');
+    if (toggle) toggle.checked = ad.enabled !== false;
+    const fi = id => document.getElementById(id);
+    if (fi('ad-label-inp')) fi('ad-label-inp').value = ad.labelText || '';
+    if (fi('ad-title-inp')) fi('ad-title-inp').value = ad.title || '';
+    if (fi('ad-desc-inp'))  fi('ad-desc-inp').value  = ad.desc || '';
+    if (fi('ad-img-inp'))   fi('ad-img-inp').value   = ad.imgUrl || '';
+    if (fi('ad-btn-inp'))   fi('ad-btn-inp').value   = ad.btnText || '';
+    if (fi('ad-link-inp'))  fi('ad-link-inp').value  = ad.linkUrl || '';
+    const slider = fi('ad-width-slider');
+    if (slider) { slider.value = ad.width || 280; fi('ad-width-val').textContent = slider.value; }
+    updateAdImgPreview();
+    const modal = fi('ad-editor-modal');
+    if (modal) modal.classList.add('open');
+}
+
+function closeAdBannerEditor() {
+    const modal = document.getElementById('ad-editor-modal');
+    if (modal) modal.classList.remove('open');
+}
+
+function updateAdImgPreview() {
+    const imgInp = document.getElementById('ad-img-inp');
+    const previewTag = document.getElementById('ad-img-preview-tag');
+    const emptyEl   = document.getElementById('ad-img-preview-empty');
+    if (!imgInp || !previewTag) return;
+    const url = imgInp.value.trim();
+    if (url) {
+        previewTag.src = url;
+        previewTag.style.display = 'block';
+        if (emptyEl) emptyEl.style.display = 'none';
+    } else {
+        previewTag.style.display = 'none';
+        if (emptyEl) emptyEl.style.display = '';
+    }
+}
+
+async function uploadAdImageFromFile(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    const progressEl = document.getElementById('ad-upload-progress');
+    const labelEl = document.getElementById('ad-upload-label-text');
+    if (progressEl) { progressEl.style.display = ''; progressEl.textContent = '⏳ กำลังอัปโหลด...'; }
+    if (labelEl) labelEl.textContent = '⏳ กำลังอัปโหลด...';
+    try {
+        const formData = new FormData();
+        formData.append('image', file);
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: 'POST', body: formData });
+        const json = await res.json();
+        if (json.success) {
+            const url = json.data.url;
+            const imgInp = document.getElementById('ad-img-inp');
+            if (imgInp) { imgInp.value = url; updateAdImgPreview(); }
+            if (progressEl) { progressEl.textContent = '✅ อัปโหลดสำเร็จ!'; progressEl.style.color = '#22c55e'; progressEl.style.background = 'rgba(34,197,94,0.08)'; progressEl.style.borderColor = 'rgba(34,197,94,0.2)'; setTimeout(() => { progressEl.style.display = 'none'; progressEl.style.color = '#60a5fa'; progressEl.style.background = 'rgba(59,130,246,0.08)'; progressEl.style.borderColor = 'rgba(59,130,246,0.2)'; }, 2500); }
+        } else {
+            throw new Error(json.error && json.error.message ? json.error.message : 'Upload failed');
+        }
+    } catch(e) {
+        if (progressEl) { progressEl.textContent = '❌ อัปโหลดไม่สำเร็จ: ' + e.message; progressEl.style.color = '#f87171'; progressEl.style.background = 'rgba(239,68,68,0.08)'; progressEl.style.borderColor = 'rgba(239,68,68,0.2)'; setTimeout(() => { progressEl.style.display = 'none'; progressEl.style.color = '#60a5fa'; progressEl.style.background = 'rgba(59,130,246,0.08)'; progressEl.style.borderColor = 'rgba(59,130,246,0.2)'; }, 3000); }
+    } finally {
+        if (labelEl) labelEl.textContent = '📁 เลือกรูปจากเครื่อง';
+        input.value = '';
+    }
+}
+
+function saveAdBanner() {
+    if (state.isViewOnly) return;
+    const fi = id => document.getElementById(id);
+    state.adBanner = {
+        enabled:   (fi('ad-enabled-toggle') || {}).checked !== false,
+        labelText: (fi('ad-label-inp') || {}).value || '',
+        title:     (fi('ad-title-inp') || {}).value || '',
+        desc:      (fi('ad-desc-inp')  || {}).value || '',
+        imgUrl:    (fi('ad-img-inp')   || {}).value || '',
+        btnText:   (fi('ad-btn-inp')   || {}).value || '',
+        linkUrl:   (fi('ad-link-inp')  || {}).value || '',
+        width:     parseInt((fi('ad-width-slider') || {}).value) || 280
+    };
+    saveDataToCloud();
+    renderAdBanner();
+    closeAdBannerEditor();
+    showToast('📢 บันทึก Ad Banner เรียบร้อยแล้ว!', 'success');
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
 
 function renderLeague() {
     let fmt = state.tournamentFormat || 'league';
@@ -5188,6 +5838,10 @@ function _loadBinData(idToLoad) {
         state.cupChampionId = r.cupChampionId || null;
         state.consolationChampionId = r.consolationChampionId || null;
         state.announcement = r.announcement || "";
+        // backward-compat: old data used bigMatchId (single), new uses bigMatchIds (array)
+        state.bigMatchIds = Array.isArray(r.bigMatchIds) ? r.bigMatchIds : (r.bigMatchId ? [r.bigMatchId] : []);
+        if (r.adBanner !== undefined) state.adBanner = Object.assign({}, state.adBanner, r.adBanner);
+        renderAdBanner();
         // บันทึก version เพื่อใช้ตรวจสอบการอัปเดต
         if (resData.metadata && resData.metadata.version) {
             _lastBinVersion = resData.metadata.version;
@@ -5489,38 +6143,73 @@ async function resetBracketMatchScore(matchId) {
 </div>
 
 <!-- HTML แบนเนอร์โฆษณาเพื่อน -->
-<div id="friend-ad-banner">
-    <button id="close-ad" title="ไม่ดูแล้ว!">&times;</button>
-    <div class="ad-image-container">
-        <span class="ad-label">โฆษณาต้าวเพื่อนใหม่</span>
-        <!-- เปลี่ยน URL รูปภาพตรงนี้เป็นรูปเพื่อนของคุณ -->
-        <img src="https://i.ibb.co/FqVzBVXW/S-12959754.jpg" alt="รูปภาพ">
-    </div>
-    <div class="ad-content">
-        <div class="ad-title">ต้าวเพื่อนใหม่: เพื่อนซี้ระดับตำนาน</div>
-        <div class="ad-desc">ขอเชิญพบกับเพื่อนผู้ทรงเกียรติ ผู้มีบารมีมากที่สุดในกลุ่ม</div>
-        <a href="#" class="ad-button" id="ad-link-friend">ดูประวัติต้าวเพื่อนใหม่</a>
+<!-- Ad Banner (dynamic — rendered by renderAdBanner()) -->
+<div id="friend-ad-banner" style="display:none;"></div>
+
+<!-- Ad Banner Editor Modal -->
+<div id="ad-editor-modal" onclick="if(event.target===this)closeAdBannerEditor()">
+    <div class="ad-editor-box">
+        <div style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;color:#dfb44b;margin-bottom:18px;letter-spacing:1px;">📢 แก้ไข Ad Banner</div>
+
+        <div class="ad-toggle-wrap">
+            <span style="font-size:13px;font-weight:600;color:#a1b7d6;">แสดง Ad Banner</span>
+            <label class="ad-toggle-track">
+                <input type="checkbox" id="ad-enabled-toggle">
+                <span class="ad-toggle-bg"></span>
+                <span class="ad-toggle-thumb"></span>
+            </label>
+        </div>
+
+        <div style="margin-bottom:12px;"><label class="ad-editor-label">ป้ายชื่อ (Label มุมแบนเนอร์)</label><input type="text" id="ad-label-inp" class="ad-editor-inp" placeholder="โฆษณา"></div>
+        <div style="margin-bottom:12px;"><label class="ad-editor-label">ชื่อหัวเรื่อง</label><input type="text" id="ad-title-inp" class="ad-editor-inp" placeholder="หัวเรื่อง..."></div>
+        <div style="margin-bottom:12px;"><label class="ad-editor-label">คำอธิบาย</label><textarea id="ad-desc-inp" class="ad-editor-inp" rows="2" style="resize:vertical;" placeholder="รายละเอียด..."></textarea></div>
+        <div style="margin-bottom:12px;">
+            <label class="ad-editor-label">รูปภาพ</label>
+            <div style="display:flex;gap:8px;margin-bottom:6px;">
+                <input type="text" id="ad-img-inp" class="ad-editor-inp" placeholder="https://... หรืออัปโหลดรูปด้านล่าง" oninput="updateAdImgPreview()" style="flex:1;">
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+                <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(59,130,246,0.12);border:1px dashed rgba(59,130,246,0.45);border-radius:8px;padding:9px 12px;cursor:pointer;font-size:12px;font-weight:700;color:#60a5fa;transition:all 0.2s;" onmouseover="this.style.background='rgba(59,130,246,0.2)'" onmouseout="this.style.background='rgba(59,130,246,0.12)'" title="อัปโหลดรูปจากเครื่อง">
+                    <span id="ad-upload-label-text">📁 เลือกรูปจากเครื่อง</span>
+                    <input type="file" id="ad-img-file" accept="image/*" style="display:none;" onchange="uploadAdImageFromFile(this)">
+                </label>
+            </div>
+            <div id="ad-upload-progress" style="display:none;font-size:11px;color:#60a5fa;margin-bottom:6px;padding:6px 10px;background:rgba(59,130,246,0.08);border-radius:6px;border:1px solid rgba(59,130,246,0.2);">⏳ กำลังอัปโหลด...</div>
+            <div id="ad-img-preview" style="width:100%;height:110px;border-radius:8px;overflow:hidden;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;">
+                <img id="ad-img-preview-tag" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;" onerror="this.style.display='none';document.getElementById('ad-img-preview-empty').style.display=''">
+                <span id="ad-img-preview-empty" style="font-size:12px;color:var(--wc-text-sub);">ยังไม่มีรูปภาพ</span>
+            </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+            <div style="flex:1;min-width:130px;"><label class="ad-editor-label">ข้อความปุ่ม</label><input type="text" id="ad-btn-inp" class="ad-editor-inp" placeholder="ดูเพิ่มเติม"></div>
+            <div style="flex:1;min-width:130px;"><label class="ad-editor-label">ลิงก์ปุ่ม <span style="color:#64748b;font-weight:400;">(ว่าง = เด้งรูป)</span></label><input type="text" id="ad-link-inp" class="ad-editor-inp" placeholder="https://... หรือเว้นว่าง"></div>
+        </div>
+        <div style="margin-bottom:18px;"><label class="ad-editor-label">ขนาดแบนเนอร์: <span id="ad-width-val">280</span>px</label><input type="range" id="ad-width-slider" min="200" max="420" step="10" oninput="document.getElementById('ad-width-val').textContent=this.value" style="width:100%;accent-color:#dfb44b;"></div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button onclick="saveAdBanner()" style="flex:1;background:linear-gradient(135deg,#dfb44b,#b88e2f);color:#000;border:none;padding:10px 16px;border-radius:8px;font-family:'Prompt',sans-serif;font-weight:700;font-size:13px;cursor:pointer;">💾 บันทึก</button>
+            <button onclick="closeAdBannerEditor()" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:#a1b7d6;padding:10px 16px;border-radius:8px;font-family:'Prompt',sans-serif;font-size:13px;cursor:pointer;width:auto;">✕ ปิด</button>
+        </div>
     </div>
 </div>
 
+<!-- Ad Banner Image Popup Modal -->
+<div id="ad-popup-modal" onclick="if(event.target===this)closeAdPopup()">
+    <div class="ad-popup-box">
+        <button onclick="closeAdPopup()" style="position:absolute;top:8px;right:8px;z-index:2;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.18);color:#94a3b8;border-radius:6px;cursor:pointer;font-size:12px;line-height:1;padding:3px 7px;width:auto;height:auto;transition:all 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.12)';this.style.color='#fff'" onmouseout="this.style.background='rgba(0,0,0,0.45)';this.style.color='#94a3b8'">✕</button>
+        <img id="ad-popup-img" src="" alt="" style="width:100%;max-height:300px;object-fit:cover;display:none;">
+        <div id="ad-popup-img-ph" style="display:none;width:100%;height:70px;background:rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.07);align-items:center;justify-content:center;color:#475569;font-size:12px;">🖼️</div>
+        <div style="padding:16px 20px 20px;">
+            <div id="ad-popup-title" style="font-size:17px;font-weight:800;color:#dfb44b;margin-bottom:6px;"></div>
+            <div id="ad-popup-desc" style="font-size:13px;color:#c7d8ef;line-height:1.6;"></div>
+        </div>
+    </div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.35);margin-top:4px;">แตะนอกรูปเพื่อปิด</div>
+</div>
+
 <script>
-    (function( ) {
-        const banner = document.getElementById('friend-ad-banner');
-        const closeBtn = document.getElementById('close-ad');
-        const adLink = document.getElementById('ad-link-friend');
-        if (closeBtn && banner) {
-            closeBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                banner.classList.add('ad-hidden');
-            });
-        }
-        if (adLink) {
-            adLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                showAlert('คลิกเข้ามาทำเหี้ยอะไรไอพวกโง่...ช่างแม้งดิ');
-            });
-        }
-    })();
+    // initialise ad banner once DOM is ready
+    document.addEventListener('DOMContentLoaded', function() { renderAdBanner(); });
 
 // ─── อัตราการต่อรอง (Odds System) ─────────────────────────────────────────
 
