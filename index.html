@@ -4050,10 +4050,16 @@ function _renderEditTeamsModalUI() {
                     <input type="text" class="edit-input edit-input-logo" value="${logoSrc}" placeholder="วาง URL รูปโลโก้ตรงนี้" style="font-size:11px;"
                            oninput="(function(inp){var img=inp.closest('.logo-url-cell').querySelector('img');img.style.opacity='1';img.onerror=function(){img.style.opacity='0.25';img.onerror=null;};img.src=inp.value||'about:blank';})(this)">
                 </div>
-                <input type="text" class="edit-input edit-input-comment" value="${t.comment || ''}" placeholder="แจ้งเหตุผลถ้าไม่ผ่าน...">
+                <div class="comment-cell" style="display:flex; flex-direction:column; gap:4px;">
+                    <button onclick="(function(btn){var box=btn.closest('.comment-cell').querySelector('.comment-input-box');box.style.display=box.style.display==='none'?'block':'none';})(this)" style="font-size:11px; padding:5px 10px; width:auto; background:rgba(96,165,250,0.15); border:1px solid rgba(96,165,250,0.4); color:#60a5fa; border-radius:5px; cursor:pointer;" title="คลิกเพื่อพิมพ์ข้อความแจ้งกลับ">${t.comment ? '💬 แก้ข้อความ' : '✏️ พิมพ์ข้อความ'}</button>
+                    <div class="comment-input-box" style="display:none;">
+                        <input type="text" class="edit-input edit-input-comment" value="${t.comment || ''}" placeholder="แจ้งเหตุผลถ้าไม่ผ่าน...">
+                    </div>
+                    ${t.comment ? `<div style="font-size:11px; color:#94a3b8; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${t.comment.replace(/"/g,'&quot;')}">💬 ${t.comment}</div>` : ''}
+                </div>
                 <div style="display:flex; gap:4px; flex-wrap:wrap;">
                     ${t.status !== 'approved' ? `<button onclick="approveTeam(${idx})" title="อนุมัติผ่าน">ผ่าน ✅</button>` : ''}
-                    ${t.status !== 'rejected' ? `<button onclick="rejectTeamNode(${idx})" title="ส่งกลับไปแก้ไข" style="background:#b91c1c;">ให้แก้ ❌</button>` : ''}
+                    ${t.status !== 'rejected' && t.status !== 'approved' ? `<button onclick="rejectTeamNode(${idx})" title="ส่งกลับไปแก้ไข" style="background:#b91c1c;">ให้แก้ ❌</button>` : ''}
                     <button onclick="removeTeamNode(${idx})" title="ลบรายชื่อ" style="background:#374151;">ลบ 🗑️</button>
                 </div>
             `;
