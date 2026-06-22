@@ -122,7 +122,7 @@
         }
 
         /* ── Floating sparkles ── */
-        .header-particles { position: absolute; inset: -40px; pointer-events: none; z-index: 0; overflow: hidden; }
+        .header-particles { position: absolute; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
         .hp {
             position: absolute; border-radius: 50%;
             background: radial-gradient(circle, #fff 0%, var(--wc-gold) 60%, transparent 100%);
@@ -134,7 +134,6 @@
         .wc2026-hosts {
             font-family: 'Orbitron', sans-serif; font-size: 10px; letter-spacing: 3px;
             color: rgba(200,220,255,0.5); text-transform: uppercase; margin-top: 10px;
-            animation: fadeInUp 1.2s 0.5s cubic-bezier(0.16,1,0.3,1) both;
         }
         .wc2026-hosts .ht { color: var(--wc-gold); font-weight: 700; }
           .host-flag {
@@ -148,14 +147,6 @@
           .host-dot { color: rgba(255,255,255,0.25); margin: 0 8px; font-size: 16px; }
           .wc2026-hosts { display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap; }
 
-        /* ── WC2026 Keyframes ── */
-            30%  { transform: translateY(-14px) rotate(0.5deg); }
-            70%  { transform: translateY(-6px) rotate(-0.5deg); }
-        }
-            50%     { filter: drop-shadow(0 0 44px rgba(242,194,78,1)) drop-shadow(0 0 90px rgba(242,194,78,0.55)) drop-shadow(0 0 130px rgba(242,194,78,0.2)); }
-        }
-            100% { opacity: 0;   transform: translate(-50%,-50%) scale(1.28); }
-        }
         @keyframes particleDrift {
             0%   { opacity: 0;   transform: translateY(0)     scale(0); }
             8%   { opacity: 0.9; transform: translateY(-15px) scale(1); }
@@ -2606,8 +2597,8 @@
         <div class="header-particles" id="header-particles"></div>
 
         <!-- Trophy: shown only when URL set via Admin -->
-        <div id="trophy-wrap" style="display:none;margin-bottom:16px;">
-            <img id="trophy-img" src="" alt="Trophy"
+        <div id="trophy-wrap" style="display:block;margin-bottom:16px;">
+            <img id="trophy-img" src="wc2026-trophy.png" alt="Trophy"
                  style="width:160px;height:160px;object-fit:contain;animation:trophyFloat 5s ease-in-out infinite;filter:drop-shadow(0 0 24px rgba(242,194,78,0.9)) drop-shadow(0 0 60px rgba(242,194,78,0.35));"
                  onerror="document.getElementById('trophy-wrap').style.display='none'">
         </div>
@@ -5474,7 +5465,7 @@ function saveEditedTeams() {
         let id = row.querySelector(".edit-input-id").value.trim();
         let player = row.querySelector(".edit-input-player").value.trim();
         let team = row.querySelector(".edit-input-team").value.trim();
-        let comment = row.querySelector(".edit-input-comment").value.trim();
+        let comment = row.querySelector(".edit-input-comment")?.value?.trim() ?? (state.teams[idx]?.comment || '');
 
         if (!id || !player || !team) { hasError = true; return; }
 
@@ -7043,8 +7034,8 @@ function _applyHeaderTrophy(url) {
     var wrap = document.getElementById("trophy-wrap");
     var img  = document.getElementById("trophy-img");
     if (!wrap || !img) return;
-    if (url && url.trim()) { img.src = url.trim(); wrap.style.display = "block"; }
-    else { wrap.style.display = "none"; }
+    if (url && url.trim()) { img.src = url.trim(); }
+    wrap.style.display = "block";
 }
 
 function saveTrophyImg() {
