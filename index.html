@@ -7350,6 +7350,10 @@ function _loadBinData(idToLoad) {
         state.bigMatchIds = Array.isArray(r.bigMatchIds) ? r.bigMatchIds : (r.bigMatchId ? [r.bigMatchId] : []);
         if (r.adBanner !== undefined) state.adBanner = Object.assign({}, state.adBanner, r.adBanner);
         state.trophyImg = r.trophyImg || "";
+        // ── load fields that were missing from _loadBinData ──
+        if (r.no1History) state.no1History = r.no1History;
+        if (Array.isArray(r.changelog)) state.changelog = r.changelog;
+        if (r.announcement !== undefined) state.announcement = r.announcement || "";
         renderAdBanner();
         // บันทึก version เพื่อใช้ตรวจสอบการอัปเดต
         if (resData.metadata && resData.metadata.version) {
