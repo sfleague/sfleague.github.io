@@ -71,7 +71,7 @@
             padding: 14px 24px;
             font-size: 15px;
             cursor: pointer;
-            width: 100%;
+            width: auto;
             border-radius: 8px;
             letter-spacing: 0.5px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -98,6 +98,88 @@
 
         .btn-secondary { background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); }
         .btn-secondary:hover { background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); box-shadow: 0 0 20px rgba(37, 99, 235, 0.5); color: #fff; }
+
+        /* ── Import Backup label button animation ── */
+        .import-backup-label {
+            background: linear-gradient(135deg,#065f46,#047857);
+            color: #6ee7b7;
+            font-size: 12px;
+            height: 38px;
+            padding: 0 12px;
+            border: 1px solid rgba(52,211,153,0.4);
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            font-family: 'Prompt', sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            white-space: nowrap;
+        }
+        .import-backup-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(52,211,153,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+            background: linear-gradient(135deg,#10b981,#059669);
+            color: #fff;
+        }
+        .import-backup-label:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba(52,211,153,0.3);
+        }
+
+        /* ── Comment Reply Popup ── */
+        #comment-reply-popup {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 20000;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .comment-popup-box {
+            background: rgba(11,30,61,0.98);
+            border: 1px solid rgba(96,165,250,0.45);
+            border-radius: 14px;
+            padding: 24px;
+            width: 100%;
+            max-width: 440px;
+            position: relative;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.7), 0 0 40px rgba(96,165,250,0.1);
+            animation: popupSlideIn 0.28s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes popupSlideIn {
+            from { opacity:0; transform:translateY(20px) scale(0.94); }
+            to   { opacity:1; transform:translateY(0) scale(1); }
+        }
+        .comment-popup-title {
+            font-size: 15px; font-weight: 800; color: #60a5fa;
+            margin: 0 0 16px 0; display: flex; align-items: center; gap: 8px;
+        }
+        .comment-popup-close {
+            position: absolute; top: 12px; right: 12px;
+            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+            color: #94a3b8; width: 28px; height: 28px; border-radius: 6px;
+            cursor: pointer; font-size: 14px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; padding: 0;
+        }
+        .comment-popup-close:hover { background: rgba(255,255,255,0.15); color: #fff; transform: none !important; box-shadow: none !important; }
+        .comment-popup-textarea {
+            width: 100%; padding: 12px 14px;
+            background: #030a17; border: 1px solid rgba(96,165,250,0.35);
+            border-radius: 8px; color: #fff; font-size: 14px;
+            font-family: 'Prompt', sans-serif; line-height: 1.6;
+            resize: vertical; min-height: 100px;
+            transition: border-color 0.2s; box-sizing: border-box;
+        }
+        .comment-popup-textarea:focus { border-color: #60a5fa; outline: none; box-shadow: 0 0 8px rgba(96,165,250,0.2); }
+        .comment-popup-actions { display: flex; gap: 10px; margin-top: 14px; justify-content: flex-end; }
+        .comment-popup-actions button { font-size: 13px; padding: 9px 20px; border-radius: 8px; }
 
         h2 { font-family: 'Orbitron', 'Prompt', sans-serif; font-size: 20px; font-weight: 800; text-transform: uppercase; border-bottom: 2px solid var(--wc-border); padding-bottom: 12px; margin-bottom: 20px; transition: color 0.3s ease; }
         h2.title-standings { color: var(--h2-standings-color); }
@@ -444,11 +526,11 @@
         .ts-modal-title { font-family:'Orbitron',sans-serif; font-size:15px; font-weight:900;
             color:#fff; margin:0; }
         .ts-modal-sub { font-size:12px; color:var(--wc-text-sub); margin:0; }
-        .ts-close-btn { margin-left:auto; width:34px; height:34px; border-radius:8px; display:flex;
+        .ts-close-btn { margin-left:auto; width:34px !important; height:34px; border-radius:8px; display:flex;
             align-items:center; justify-content:center; background:rgba(255,255,255,0.05);
             border:1px solid rgba(255,255,255,0.1); color:#94a3b8; cursor:pointer;
-            font-size:14px; padding:0; width:auto; transition:all 0.2s; }
-        .ts-close-btn:hover { background:rgba(255,255,255,0.12); color:#fff; transform:none; box-shadow:none; }
+            font-size:14px; padding:0; flex-shrink:0; transition:all 0.2s; }
+        .ts-close-btn:hover { background:rgba(255,255,255,0.12); color:#fff; transform:none !important; box-shadow:none !important; }
         .ts-modal-body { padding:18px 20px 20px; overflow-y:auto; flex:1; min-height:0; display:flex; flex-direction:column; gap:16px; }
         .ts-stat-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
         .ts-stat-box { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
@@ -1520,6 +1602,10 @@
                 <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#60a5fa;margin-bottom:6px;">⚽ ผลล่าสุด (อัตโนมัติ)</div>
                 <ul class="changelog-list" id="changelog-auto-results" style="margin:0;"></ul>
             </div>
+            <div id="changelog-dynamic-section" style="display:none; margin-bottom:6px;">
+                <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#a78bfa;margin-bottom:6px;">🆕 อัปเดตจาก Admin</div>
+                <ul class="changelog-list" id="changelog-dynamic-list" style="margin:0;"></ul>
+            </div>
             <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--wc-text-sub);margin:10px 0 6px;">📋 อัปเดตระบบ</div>
             <ul class="changelog-list">
                 <li class="cl-item">
@@ -1865,6 +1951,13 @@
                 <textarea id="edit-announcement" class="edit-input" style="height:64px; border-color:rgba(234,179,8,0.4);" placeholder="เช่น: แมตช์วันนี้เริ่ม 20:00 น. — ห้ามมาสาย!"></textarea>
                 <button onclick="clearAnnouncement()" style="margin-top:8px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.35); color:#f87171; font-size:12px; padding:5px 12px; border-radius:6px; cursor:pointer;">🗑️ ล้างประกาศ</button>
             </div>
+            <div style="border:1px solid rgba(167,139,250,0.35); border-radius:10px; padding:14px; background:rgba(167,139,250,0.05);">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+                    <label style="font-weight:700; font-size:13px; color:#a78bfa; margin:0;">🔔 Changelog (อัปเดตระบบ)</label>
+                    <button onclick="openClEntryModal()" style="background:linear-gradient(135deg,#7c3aed,#6d28d9); color:#fff; border:none; border-radius:7px; padding:5px 14px; font-size:12px; font-weight:700; cursor:pointer; font-family:'Prompt',sans-serif; white-space:nowrap;">+ เพิ่มรายการ</button>
+                </div>
+                <div id="cl-admin-list" style="display:flex; flex-direction:column; gap:6px;"></div>
+            </div>
             <div>
                 <label style="display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; color: var(--wc-gold);">📋 รายละเอียดทัวร์นาเมนต์ (เงินรางวัล / กฎกติกา / เวลาแข่ง):</label>
                 <textarea id="edit-tournament-details" class="edit-input" style="height: 80px;"></textarea>
@@ -1875,9 +1968,48 @@
             </div>
         </div>
 
-        <div style="display: flex; gap: 12px; margin-top: 20px;">
-            <button onclick="saveEditedTeams()">💾 บันทึกการตั้งค่าทั้งหมด</button>
-            <button onclick="closeEditTeamsModal()">ยกเลิก</button>
+        <div style="display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;">
+            <button onclick="saveEditedTeams()" style="width:auto; padding:9px 20px; font-size:13px; white-space:nowrap;">💾 บันทึกทั้งหมด</button>
+            <button onclick="closeEditTeamsModal()" style="width:auto; padding:9px 16px; font-size:13px; white-space:nowrap;">✕ ปิด</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Changelog Entry Popup ── -->
+<div id="cl-entry-modal" onclick="if(event.target===this)closeClEntryModal()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(5,17,38,0.88);backdrop-filter:blur(10px);z-index:10005;justify-content:center;align-items:center;">
+    <div style="background:var(--wc-card-bg);border:1px solid rgba(167,139,250,0.45);border-radius:14px;padding:24px;width:calc(100% - 32px);max-width:480px;position:relative;box-shadow:0 0 40px rgba(167,139,250,0.15);">
+        <button onclick="closeClEntryModal()" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;font-family:'Prompt',sans-serif;">✕</button>
+        <div style="font-size:16px;font-weight:800;color:#a78bfa;margin-bottom:16px;letter-spacing:0.5px;">🔔 เพิ่ม Changelog ใหม่</div>
+        <div style="margin-bottom:12px;">
+            <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">ประเภท</div>
+            <div style="display:flex;gap:8px;">
+                <button id="clp-btn-new" onclick="selectClBadge('new')" style="font-size:13px;padding:6px 16px;border-radius:7px;border:1px solid rgba(59,130,246,0.5);background:rgba(59,130,246,0.15);color:#60a5fa;cursor:pointer;font-family:'Prompt',sans-serif;font-weight:700;">🆕 ใหม่</button>
+                <button id="clp-btn-improve" onclick="selectClBadge('improve')" style="font-size:13px;padding:6px 16px;border-radius:7px;border:1px solid rgba(234,179,8,0.5);background:rgba(234,179,8,0.1);color:#fbbf24;cursor:pointer;font-family:'Prompt',sans-serif;font-weight:700;">🔧 ปรับปรุง</button>
+                <button id="clp-btn-fix" onclick="selectClBadge('fix')" style="font-size:13px;padding:6px 16px;border-radius:7px;border:1px solid rgba(34,197,94,0.5);background:rgba(34,197,94,0.1);color:#22c55e;cursor:pointer;font-family:'Prompt',sans-serif;font-weight:700;">🐛 แก้ไข</button>
+            </div>
+        </div>
+        <div style="margin-bottom:14px;">
+            <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">รายละเอียด</div>
+            <textarea id="cl-popup-text" class="edit-input" style="height:110px;resize:vertical;font-size:14px;line-height:1.6;" placeholder="เช่น เพิ่มระบบ Export Backup — ดาวน์โหลดข้อมูลทั้งหมดเป็นไฟล์ JSON ได้แล้ว"></textarea>
+        </div>
+        <div style="display:flex;gap:10px;">
+            <button onclick="saveClEntry()" style="flex:1;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border:none;border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Prompt',sans-serif;">✅ เพิ่ม</button>
+            <button onclick="closeClEntryModal()" style="background:rgba(255,255,255,0.06);color:#94a3b8;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 18px;font-size:14px;cursor:pointer;font-family:'Prompt',sans-serif;">ยกเลิก</button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Import Confirm Popup ── -->
+<div id="import-confirm-modal" onclick="if(event.target===this)cancelImportBackup()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(5,17,38,0.88);backdrop-filter:blur(10px);z-index:10005;justify-content:center;align-items:center;">
+    <div style="background:var(--wc-card-bg);border:1px solid rgba(52,211,153,0.35);border-radius:14px;padding:24px;width:calc(100% - 32px);max-width:440px;position:relative;box-shadow:0 0 40px rgba(52,211,153,0.1);">
+        <div style="font-size:16px;font-weight:800;color:#6ee7b7;margin-bottom:16px;">📂 ยืนยันการ Import Backup</div>
+        <div id="import-file-info" style="background:rgba(52,211,153,0.05);border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;line-height:2;color:#cbd5e1;"></div>
+        <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#fca5a5;line-height:1.6;">
+            ⚠️ ข้อมูลปัจจุบันในระบบจะถูก<strong>แทนที่ทั้งหมด</strong><br>ไม่สามารถยกเลิกได้หลังยืนยัน
+        </div>
+        <div style="display:flex;gap:10px;">
+            <button onclick="confirmImportBackup()" style="flex:1;background:linear-gradient(135deg,#065f46,#047857);color:#6ee7b7;border:1px solid rgba(52,211,153,0.4);border-radius:8px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Prompt',sans-serif;">✅ ยืนยัน Import</button>
+            <button onclick="cancelImportBackup()" style="background:rgba(255,255,255,0.06);color:#94a3b8;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 18px;font-size:14px;cursor:pointer;font-family:'Prompt',sans-serif;">ยกเลิก</button>
         </div>
     </div>
 </div>
@@ -2506,6 +2638,7 @@ let state = {
     colors: { w1: "#ffffff", w2: "#dfb44b", w3: "#ffffff", h2Standings: "#dfb44b", h2Fixtures: "#dfb44b", h2Fame: "#dfb44b", h2Details: "#dfb44b", bgColor: "#051126" },
     h2h: {},
     announcement: "",
+    changelog: [],
     bigMatchIds: [],
     no1History: { teamId: null, since: null },
     adBanner: {
@@ -2617,6 +2750,7 @@ function _applyCloudData(r) {
             _announcementDismissed = false;
         }
     }
+    if (Array.isArray(r.changelog)) state.changelog = r.changelog;
     // backward-compat: old data used bigMatchId (single), new uses bigMatchIds (array)
     state.bigMatchIds = Array.isArray(r.bigMatchIds) ? r.bigMatchIds : (r.bigMatchId ? [r.bigMatchId] : state.bigMatchIds || []);
     if (r.no1History) state.no1History = r.no1History;
@@ -2627,6 +2761,7 @@ function _applyCloudData(r) {
     refreshUIState();
     renderAnnouncement();
     renderAdBanner();
+    renderChangelog();
 }
 
 // ─── Announcement Banner ─────────────────────────────────────────────────────
@@ -2658,6 +2793,111 @@ function clearAnnouncement() {
     renderAnnouncement();
     saveDataToCloud();
     showStatus('🗑️ ล้างประกาศแล้ว');
+}
+
+// ─── Changelog Admin ──────────────────────────────────────────────────────────
+
+const _CL_BADGE_LABELS = { new: 'ใหม่', improve: 'ปรับปรุง', fix: 'แก้ไข' };
+const _CL_BADGE_COLORS = {
+    new:     { border:'rgba(59,130,246,0.5)',  bg:'rgba(59,130,246,0.1)',  color:'#60a5fa' },
+    improve: { border:'rgba(234,179,8,0.5)',   bg:'rgba(234,179,8,0.1)',   color:'#fbbf24' },
+    fix:     { border:'rgba(34,197,94,0.5)',   bg:'rgba(34,197,94,0.1)',   color:'#22c55e' }
+};
+
+let _selectedClBadge = 'new';
+
+function selectClBadge(badge) {
+    _selectedClBadge = badge;
+    ['new','improve','fix'].forEach(b => {
+        const c = _CL_BADGE_COLORS[b];
+        ['cl-btn-','clp-btn-'].forEach(prefix => {
+            const btn = document.getElementById(prefix + b);
+            if (!btn) return;
+            btn.style.outline = b === badge ? '2px solid ' + c.color : 'none';
+            btn.style.boxShadow = b === badge ? '0 0 8px ' + c.color + '55' : 'none';
+        });
+    });
+}
+
+function openClEntryModal() {
+    _selectedClBadge = 'new';
+    selectClBadge('new');
+    const ta = document.getElementById('cl-popup-text');
+    if (ta) ta.value = '';
+    const modal = document.getElementById('cl-entry-modal');
+    if (modal) { modal.style.display = 'flex'; setTimeout(() => ta && ta.focus(), 100); }
+}
+
+function closeClEntryModal() {
+    const modal = document.getElementById('cl-entry-modal');
+    if (modal) modal.style.display = 'none';
+}
+
+function saveClEntry() {
+    if (state.isViewOnly) return;
+    const text = (document.getElementById('cl-popup-text').value || '').trim();
+    if (!text) { showToast('⚠️ กรุณาพิมพ์ข้อความก่อน', 'error'); return; }
+    const badge = _selectedClBadge || 'new';
+    const now = new Date();
+    const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const dateStr = now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+    const entry = { id: Date.now().toString(), date: dateStr, badge, text };
+    if (!Array.isArray(state.changelog)) state.changelog = [];
+    state.changelog.unshift(entry);
+    closeClEntryModal();
+    renderChangelogAdmin();
+    renderChangelog();
+    saveDataToCloud();
+    showToast('✅ เพิ่ม Changelog แล้ว', 'success');
+}
+
+function addChangelogEntry() { openClEntryModal(); }
+
+function deleteChangelogEntry(id) {
+    if (state.isViewOnly) return;
+    state.changelog = (state.changelog || []).filter(e => e.id !== id);
+    renderChangelogAdmin();
+    renderChangelog();
+    saveDataToCloud();
+    showToast('🗑️ ลบ Changelog แล้ว', 'success');
+}
+
+function renderChangelog() {
+    const section = document.getElementById('changelog-dynamic-section');
+    const list = document.getElementById('changelog-dynamic-list');
+    if (!section || !list) return;
+    const entries = state.changelog || [];
+    if (entries.length === 0) { section.style.display = 'none'; return; }
+    section.style.display = 'block';
+    list.innerHTML = entries.map(e => {
+        const c = _CL_BADGE_COLORS[e.badge] || _CL_BADGE_COLORS.new;
+        const label = _CL_BADGE_LABELS[e.badge] || e.badge;
+        return `<li class="cl-item">
+            <span class="cl-date">${e.date}</span>
+            <span class="cl-badge ${e.badge}">${label}</span>
+            <span class="cl-text">${e.text}</span>
+        </li>`;
+    }).join('');
+}
+
+function renderChangelogAdmin() {
+    const container = document.getElementById('cl-admin-list');
+    if (!container) return;
+    const entries = state.changelog || [];
+    if (entries.length === 0) {
+        container.innerHTML = '<div style="font-size:12px;color:#64748b;text-align:center;padding:8px 0;">ยังไม่มีรายการ</div>';
+        return;
+    }
+    container.innerHTML = entries.map(e => {
+        const c = _CL_BADGE_COLORS[e.badge] || _CL_BADGE_COLORS.new;
+        const label = _CL_BADGE_LABELS[e.badge] || e.badge;
+        return `<div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:7px;padding:7px 10px;">
+            <span style="font-size:10px;font-weight:800;padding:2px 7px;border-radius:4px;border:1px solid ${c.border};background:${c.bg};color:${c.color};white-space:nowrap;">${label}</span>
+            <span style="font-size:12px;color:#cbd5e1;flex:1;line-height:1.4;">${e.text}</span>
+            <span style="font-size:10px;color:#475569;white-space:nowrap;">${e.date}</span>
+            <button onclick="deleteChangelogEntry('${e.id}')" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#f87171;font-size:11px;padding:2px 8px;border-radius:4px;cursor:pointer;font-family:'Prompt',sans-serif;">✕</button>
+        </div>`;
+    }).join('');
 }
 
 // ─── Custom Modal System (confirm / prompt — alert ใช้ custom-alert-modal เดิม) ─
@@ -3846,7 +4086,12 @@ function renderAdminDock() {
         <button onclick="openAdBannerEditor()" style="background: linear-gradient(135deg,#1e3a5f,#0f2640); color: #dfb44b; border: 1px solid rgba(223,180,75,0.4); font-size: 13px; height: 38px; padding: 0 15px;">📢 Ad Banner</button>
         <button onclick="openEditTeamsModal()" style="background: var(--wc-gold); color: #000; font-size: 13px; height: 38px; padding: 0 15px;">✏️ จัดการผู้สมัคร / ระบบเว็บ</button>
         <button onclick="upgradeFlagcdnToCrests()" style="background: linear-gradient(135deg,#0f766e,#0d9488); color: #fff; font-size: 13px; height: 38px; padding: 0 15px;" title="รีเซ็ตทุกทีมให้แสดงธงชาติ (ไม่กระทบทีมที่ไม่ใช่ทีมชาติ)">🏳️ รีเซ็ตธงชาติทุกทีม</button>
-        <button onclick="openH2HManager()" style="background: linear-gradient(135deg,#1e3a8a,#1e40af); color: #93c5fd; border: 1px solid rgba(59,130,246,0.4); font-size: 13px; height: 38px; padding: 0 15px;">📊 จัดการ H2H</button>
+        <button onclick="openH2HManager()" style="background: linear-gradient(135deg,#1e3a8a,#1e40af); color: #93c5fd; border: 1px solid rgba(59,130,246,0.4); font-size: 13px; height: 38px; padding: 0 15px; white-space: nowrap;">📊 จัดการ H2H</button>
+        <button onclick="exportBackup()" style="background: linear-gradient(135deg,#0e7490,#0891b2); color: #fff; font-size: 13px; height: 38px; padding: 0 15px; border: 1px solid rgba(6,182,212,0.4);" title="ดาวน์โหลด backup ข้อมูลทั้งหมดเป็นไฟล์ JSON">💾 Export Backup</button>
+        <label class="import-backup-label" title="โหลด backup JSON กลับเข้าระบบ">
+            📂 Import Backup
+            <input type="file" accept=".json" onchange="importBackup(event)" style="display:none;">
+        </label>
         <button onclick="resetToNextSeason()" style="background: #22c55e; color: #fff; font-size: 13px; height: 38px; padding: 0 15px;">🔄 เริ่มซีซั่นใหม่</button>
         <button onclick="resetLeagueHard()" style="background: #ff4466; color: #fff; font-size: 13px; height: 38px; padding: 0 15px;">🚨 ลบทั้งหมด</button>
     `;
@@ -3995,6 +4240,8 @@ function _renderEditTeamsModalUI() {
     document.getElementById("edit-bg-image-url").value = state.bgImageUrl || "";
     document.getElementById("edit-discord-url").value = state.discordUrl || "https://discord.gg/ESMDUce5pf";
     document.getElementById("edit-announcement").value = state.announcement || "";
+    selectClBadge('new');
+    renderChangelogAdmin();
 
     document.getElementById("admin-add-id").value = "";
     document.getElementById("admin-add-player").value = "";
@@ -4051,11 +4298,8 @@ function _renderEditTeamsModalUI() {
                            oninput="(function(inp){var img=inp.closest('.logo-url-cell').querySelector('img');img.style.opacity='1';img.onerror=function(){img.style.opacity='0.25';img.onerror=null;};img.src=inp.value||'about:blank';})(this)">
                 </div>
                 <div class="comment-cell" style="display:flex; flex-direction:column; gap:4px;">
-                    <button onclick="(function(btn){var box=btn.closest('.comment-cell').querySelector('.comment-input-box');box.style.display=box.style.display==='none'?'block':'none';})(this)" style="font-size:11px; padding:5px 10px; width:auto; background:rgba(96,165,250,0.15); border:1px solid rgba(96,165,250,0.4); color:#60a5fa; border-radius:5px; cursor:pointer;" title="คลิกเพื่อพิมพ์ข้อความแจ้งกลับ">${t.comment ? '💬 แก้ข้อความ' : '✏️ พิมพ์ข้อความ'}</button>
-                    <div class="comment-input-box" style="display:none;">
-                        <input type="text" class="edit-input edit-input-comment" value="${t.comment || ''}" placeholder="แจ้งเหตุผลถ้าไม่ผ่าน...">
-                    </div>
-                    ${t.comment ? `<div style="font-size:11px; color:#94a3b8; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${t.comment.replace(/"/g,'&quot;')}">💬 ${t.comment}</div>` : ''}
+                    <button onclick="openCommentPopup(${idx}, this.closest('.edit-team-row').getAttribute('data-index'))" style="font-size:11px; padding:5px 10px; width:auto; background:rgba(96,165,250,0.15); border:1px solid rgba(96,165,250,0.4); color:#60a5fa; border-radius:5px; cursor:pointer; transition:all 0.2s ease;" onmouseover="this.style.background='rgba(96,165,250,0.3)';this.style.transform='translateY(-1px)';" onmouseout="this.style.background='rgba(96,165,250,0.15)';this.style.transform='';" title="คลิกเพื่อพิมพ์ข้อความแจ้งกลับ">${t.comment ? '💬 แก้ข้อความ' : '✏️ พิมพ์ข้อความ'}</button>
+                    ${t.comment ? `<div style="font-size:11px; color:#94a3b8; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:180px;" title="${t.comment.replace(/"/g,'&quot;')}">💬 ${t.comment}</div>` : ''}
                 </div>
                 <div style="display:flex; gap:4px; flex-wrap:wrap;">
                     ${t.status !== 'approved' ? `<button onclick="approveTeam(${idx})" title="อนุมัติผ่าน">ผ่าน ✅</button>` : ''}
@@ -5261,6 +5505,7 @@ function _buildMatchRowDiv(m, fmt) {
             <div class="match-bottom-center">${statusBadgeHTML}</div>
             <div class="match-bottom-away">${chips.awayChip || ''}</div>
         </div>` : '';
+
 
     let isBigMatch = Array.isArray(state.bigMatchIds) && state.bigMatchIds.includes(m.id);
     let divMatch = document.createElement("div");
@@ -6820,7 +7065,224 @@ function _calcAHResult(homeScore, awayScore, handicap) {
     }
     return _calcSimpleAH(homeScore, awayScore, hcap);
 }
+
+// ─── Backup: Export & Import ──────────────────────────────────────────────────
+
+function exportBackup() {
+    if (!state.binId && state.teams.length === 0) {
+        showToast('❌ ไม่มีข้อมูลให้ backup', 'error'); return;
+    }
+    const backupData = {
+        _backupMeta: {
+            exportedAt: new Date().toISOString(),
+            binId: state.binId,
+            season: state.season,
+            version: 1
+        },
+        teams: state.teams,
+        matches: state.matches,
+        hallOfFame: state.hallOfFame,
+        h2h: state.h2h,
+        defendingChampId: state.defendingChampId,
+        tournamentStarted: state.tournamentStarted,
+        tournamentFormat: state.tournamentFormat,
+        cupConfig: state.cupConfig,
+        cupChampionId: state.cupChampionId,
+        consolationChampionId: state.consolationChampionId,
+        announcement: state.announcement,
+        bigMatchIds: state.bigMatchIds,
+        no1History: state.no1History,
+        adBanner: state.adBanner,
+        changelog: state.changelog,
+        colors: state.colors,
+        titleW1: state.titleW1,
+        titleW2: state.titleW2,
+        titleW3: state.titleW3,
+        tournamentDetails: state.tournamentDetails,
+        discordUrl: state.discordUrl,
+        bgImageUrl: state.bgImageUrl
+    };
+
+    const dateStr = new Date().toISOString().slice(0,10);
+    const leagueName = (state.titleW1 + '_' + state.titleW2 + '_' + state.titleW3)
+        .replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'').toLowerCase() || 'league';
+    const filename = `backup_${leagueName}_ss${state.season}_${dateStr}.json`;
+
+    const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+    showToast('💾 Export สำเร็จ! ได้ไฟล์ ' + filename, 'success');
+}
+
+function importBackup(event) {
+    if (state.isViewOnly) { showToast('❌ ต้อง login admin ก่อน', 'error'); return; }
+    const file = event.target.files && event.target.files[0];
+    event.target.value = '';
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        let data;
+        try {
+            data = JSON.parse(e.target.result);
+        } catch(err) {
+            showToast('❌ ไฟล์ไม่ถูกต้อง (JSON เสีย)', 'error'); return;
+        }
+
+        // ตรวจว่าเป็น backup จริง
+        if (!data._backupMeta || (!data.teams && !data.matches)) {
+            showToast('❌ ไฟล์นี้ไม่ใช่ backup ของระบบ', 'error'); return;
+        }
+
+        const meta = data._backupMeta;
+        const teamCount = (data.teams || []).length;
+        const matchCount = (data.matches || []).length;
+        const exportedAt = meta.exportedAt ? meta.exportedAt.slice(0,10) : 'ไม่ทราบ';
+
+        // เก็บ data ไว้รอ confirm
+        _pendingImportData = data;
+        const infoEl = document.getElementById('import-file-info');
+        if (infoEl) {
+            infoEl.innerHTML =
+                `<div>📅 <strong>Export วันที่:</strong> ${exportedAt}</div>` +
+                `<div>⚽ <strong>ทีม:</strong> ${teamCount} ทีม</div>` +
+                `<div>📋 <strong>แมตช์:</strong> ${matchCount} แมตช์</div>` +
+                `<div>📦 <strong>Season:</strong> ${meta.season || '?'}</div>`;
+        }
+        const modal = document.getElementById('import-confirm-modal');
+        if (modal) modal.style.display = 'flex';
+    };
+    reader.readAsText(file);
+}
+
+let _pendingImportData = null;
+
+function cancelImportBackup() {
+    _pendingImportData = null;
+    const modal = document.getElementById('import-confirm-modal');
+    if (modal) modal.style.display = 'none';
+}
+
+function confirmImportBackup() {
+    const data = _pendingImportData;
+    _pendingImportData = null;
+    const modal = document.getElementById('import-confirm-modal');
+    if (modal) modal.style.display = 'none';
+    if (!data) return;
+
+    showToast('⏳ กำลัง import และบันทึก...', 'loading');
+
+    // นำข้อมูลเข้า state (ไม่แตะ binId — ใช้ binId เดิม)
+    state.teams               = data.teams               || [];
+    state.matches             = data.matches             || [];
+    state.hallOfFame          = data.hallOfFame          || {};
+    state.h2h                 = data.h2h                 || {};
+    state.defendingChampId    = data.defendingChampId    !== undefined ? data.defendingChampId    : null;
+    state.tournamentStarted   = data.tournamentStarted   !== undefined ? data.tournamentStarted   : false;
+    state.tournamentFormat    = data.tournamentFormat    || 'league';
+    state.cupConfig           = data.cupConfig           || state.cupConfig;
+    state.cupChampionId       = data.cupChampionId       !== undefined ? data.cupChampionId       : null;
+    state.consolationChampionId = data.consolationChampionId !== undefined ? data.consolationChampionId : null;
+    state.announcement        = data.announcement        || '';
+    state.changelog           = Array.isArray(data.changelog) ? data.changelog : [];
+    state.bigMatchIds         = data.bigMatchIds         || [];
+    state.no1History          = data.no1History          || { teamId: null, since: null };
+    if (data.adBanner)        state.adBanner            = Object.assign({}, state.adBanner, data.adBanner);
+    if (data.colors)          state.colors              = Object.assign({}, state.colors, data.colors);
+    if (data.titleW1)         state.titleW1             = data.titleW1;
+    if (data.titleW2)         state.titleW2             = data.titleW2;
+    if (data.titleW3)         state.titleW3             = data.titleW3;
+    if (data.tournamentDetails !== undefined) state.tournamentDetails = data.tournamentDetails;
+    if (data.discordUrl)      state.discordUrl          = data.discordUrl;
+    if (data.bgImageUrl !== undefined) state.bgImageUrl = data.bgImageUrl;
+
+    // บันทึกขึ้น cloud ทันที
+    if (state.binId) {
+        const payload = {
+            teams: state.teams, matches: state.matches,
+            hallOfFame: state.hallOfFame, h2h: state.h2h,
+            defendingChampId: state.defendingChampId,
+            tournamentStarted: state.tournamentStarted,
+            tournamentFormat: state.tournamentFormat,
+            cupConfig: state.cupConfig, cupChampionId: state.cupChampionId,
+            consolationChampionId: state.consolationChampionId,
+            announcement: state.announcement, changelog: state.changelog,
+            bigMatchIds: state.bigMatchIds, no1History: state.no1History,
+            adBanner: state.adBanner, colors: state.colors,
+            titleW1: state.titleW1, titleW2: state.titleW2, titleW3: state.titleW3,
+            tournamentDetails: state.tournamentDetails,
+            discordUrl: state.discordUrl, bgImageUrl: state.bgImageUrl
+        };
+        fetch(`https://api.jsonbin.io/v3/b/${state.binId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json", "X-Master-Key": BIN_MASTER_KEY },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(() => { showToast('✅ Import สำเร็จ! อัปโหลด cloud แล้ว', 'success'); })
+        .catch(() => { showToast('⚠️ Import ได้ แต่ save cloud ไม่สำเร็จ — ลอง save อีกครั้ง', 'error'); });
+    } else {
+        showToast('✅ Import สำเร็จ! (ยังไม่มี Bin ID)', 'success');
+    }
+
+    // render ใหม่ทั้งหมด
+    renderHeader();
+    renderLeague();
+    refreshUIState();
+    renderAnnouncement();
+    renderAdBanner();
+    renderChangelog();
+    applyColors();
+}
+
+/* ── Comment Reply Popup Functions ── */
+function openCommentPopup(idx, dataIdx) {
+    var realIdx = (dataIdx !== null && dataIdx !== undefined) ? parseInt(dataIdx) : idx;
+    var t = state.teams[realIdx];
+    if (!t) return;
+    var popup = document.getElementById('comment-reply-popup');
+    var textarea = document.getElementById('comment-popup-textarea');
+    var nameEl = document.getElementById('comment-popup-playername');
+    popup.setAttribute('data-team-idx', realIdx);
+    textarea.value = t.comment || '';
+    nameEl.textContent = (t.player || '') + (t.team ? ' — ' + t.team : '');
+    popup.style.display = 'flex';
+    setTimeout(function(){ textarea.focus(); }, 80);
+}
+function closeCommentPopup() {
+    var popup = document.getElementById('comment-reply-popup');
+    popup.style.display = 'none';
+}
+function saveCommentFromPopup() {
+    var popup = document.getElementById('comment-reply-popup');
+    var textarea = document.getElementById('comment-popup-textarea');
+    var idx = parseInt(popup.getAttribute('data-team-idx'));
+    if (isNaN(idx) || !state.teams[idx]) { closeCommentPopup(); return; }
+    state.teams[idx].comment = textarea.value.trim();
+    closeCommentPopup();
+    _renderEditTeamsModalUI();
+}
 </script>
+
+<!-- ── Comment Reply Popup Modal ── -->
+<div id="comment-reply-popup" onclick="if(event.target===this)closeCommentPopup()">
+    <div class="comment-popup-box">
+        <button class="comment-popup-close" onclick="closeCommentPopup()">✕</button>
+        <div class="comment-popup-title">
+            <span style="font-size:18px;">💬</span>
+            <span>ข้อความแจ้งกลับ</span>
+        </div>
+        <div style="font-size:12px; color:#94a3b8; margin-bottom:10px;" id="comment-popup-playername"></div>
+        <textarea class="comment-popup-textarea" id="comment-popup-textarea"
+            placeholder="พิมพ์ข้อความแจ้งกลับไปยังผู้สมัคร เช่น เหตุผลที่ไม่ผ่าน หรือสิ่งที่ต้องแก้ไข..."></textarea>
+        <div class="comment-popup-actions">
+            <button onclick="closeCommentPopup()" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:#94a3b8; padding:9px 18px; font-size:13px; border-radius:8px;">ยกเลิก</button>
+            <button onclick="saveCommentFromPopup()" style="background:linear-gradient(135deg,#1d4ed8,#2563eb); color:#fff; padding:9px 20px; font-size:13px; border-radius:8px; border:none;">💾 บันทึก</button>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
