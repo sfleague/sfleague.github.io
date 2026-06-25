@@ -38,6 +38,7 @@
         }
 
         * { box-sizing: border-box; font-family: 'Prompt', 'Segoe UI', sans-serif; }
+        html { overflow-x: hidden; max-width: 100%; }
         body {
             background-color: var(--wc-bg-dark);
             background-image:
@@ -1240,6 +1241,7 @@
 
         @media (max-width: 768px) {
             body { padding: 10px 10px 60px 10px; }
+            .container { width: 100%; max-width: 100%; }
 
             /* หัวข้อหลัก */
             h1 { font-size: 26px !important; letter-spacing: 2px; }
@@ -1268,8 +1270,12 @@
             }
 
             /* ตาราง standings: ให้เลื่อนซ้าย-ขวาได้ */
-            #standings-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; min-width: 560px; }
+            #standings-table { min-width: 560px; }
             th, td { padding: 10px 7px; font-size: 12px; }
+
+            /* ── ป้องกัน header glow ล้นจอ ── */
+            .fc-header { overflow: hidden; }
+            .fc-header::before { width: 100% !important; max-width: 100vw !important; }
 
             /* ── แก้ชื่อทีมเรียงตรงในตาราง standings บนมือถือ ── */
             #standings-table .player-team-box { align-items: center; flex-wrap: nowrap; gap: 8px; }
@@ -1279,10 +1285,10 @@
 
             /* Match row: ทำให้พอดีจอมือถือ */
             .match-row { padding: 8px 6px; gap: 4px; }
-            .match-team { gap: 5px; padding: 3px 4px; }
-            .match-score { min-width: 80px; padding: 0 2px; }
+            .match-team { gap: 5px; padding: 3px 4px; flex: 1 1 0; max-width: calc(50% - 40px); overflow: hidden; }
+            .match-score { min-width: 72px; flex: 0 0 72px; padding: 0 2px; }
             .match-team .t-name { display: none; }
-            .match-team .p-name { font-size: 12px; line-height: 1.2; }
+            .match-team .p-name { font-size: 12px; line-height: 1.2; word-break: break-word; white-space: normal; }
 
             /* โลโก้ทีมในตารางแข่ง */
             #fixtures-area .match-team img.club-img { width: 36px; height: 36px; }
