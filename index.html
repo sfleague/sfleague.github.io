@@ -1383,7 +1383,8 @@
         /* ── Score Entry Modal ── */
         #score-entry-modal { display:none; position:fixed; inset:0; z-index:2500;
             background:rgba(0,0,0,0.88); backdrop-filter:blur(8px);
-            align-items:center; justify-content:center; padding:20px; }
+            align-items:center; justify-content:center; padding:16px;
+            overflow-y:auto; }
         #score-entry-modal.open { display:flex; }
         .se-modal-box {
             position:relative; width:100%; max-width:420px;
@@ -1391,6 +1392,17 @@
             border:1px solid rgba(34,197,94,0.35); border-radius:18px;
             box-shadow:0 25px 70px rgba(0,0,0,0.8), 0 0 50px rgba(34,197,94,0.08);
             overflow:hidden;
+            max-height:calc(100dvh - 32px);
+            overflow-y:auto;
+            flex-shrink:0;
+        }
+        @media (max-width:480px) {
+            #score-entry-modal { padding:10px; align-items:flex-start; }
+            .se-modal-box { max-height:calc(100dvh - 20px); border-radius:14px; }
+            .se-modal-body { padding:14px; }
+            .se-matchup { padding:10px 8px; gap:6px; margin-bottom:12px; }
+            .se-team-name { font-size:11px; max-width:90px; }
+            .se-score-inp { max-width:72px; font-size:24px; padding:8px 4px; }
         }
         .se-modal-top { height:2px; background:linear-gradient(90deg,transparent,#22c55e,transparent); }
         .se-modal-head { display:flex; align-items:center; justify-content:space-between;
@@ -3113,8 +3125,8 @@
     </div>
 </div>
 
-<div id="adminLoginModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 17, 38, 0.85); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center;">
-    <div class="modal-content" style="background: var(--wc-card-bg); border: 2px solid var(--wc-gold); box-shadow: 0 0 30px rgba(223, 180, 75, 0.25); padding: 30px; border-radius: 12px; width: 100%; max-width: 400px; text-align: center; color: var(--wc-text-main); position: relative;">
+<div id="adminLoginModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 17, 38, 0.85); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 16px; box-sizing: border-box; overflow-y: auto;">
+    <div class="modal-content" style="background: var(--wc-card-bg); border: 2px solid var(--wc-gold); box-shadow: 0 0 30px rgba(223, 180, 75, 0.25); padding: 24px 20px; border-radius: 12px; width: 100%; max-width: 400px; text-align: center; color: var(--wc-text-main); position: relative; box-sizing: border-box;">
         <div style="font-size: 40px; margin-bottom: 10px;">🔑</div>
         <h2 style="margin-top: 0; color: var(--wc-gold); border-bottom: 1px solid var(--wc-border); padding-bottom: 12px; font-family: 'Orbitron', sans-serif; letter-spacing: 2px; font-size: 22px;">ADMIN ACCESS</h2>
         <div style="text-align: left; margin-bottom: 25px; margin-top: 20px;">
@@ -5665,7 +5677,7 @@ function openScoreModal(matchId) {
     `;
 
     document.getElementById('se-reset-btn').style.display =
-        (m.homeScore !== null && m.awayScore !== null && m.status !== 'finished') ? 'block' : 'none';
+        (m.homeScore !== null && m.awayScore !== null) ? 'block' : 'none';
 
     // Big Match toggle inside score modal
     if (m.awayId !== 'BYE') {
@@ -6135,14 +6147,13 @@ function confirmScoreFromModal() {
 
 async function resetScoreFromModal() {
     if (_seMatchId === null) return;
-    if (!await showConfirm('↩️ ยืนยันล้างผลการแข่งขันคู่นี้?')) return;
+    if (!await showConfirm('↩️ ยืนยันล้างผลและรีเซ็ทสถานะการแข่งขันคู่นี้?')) return;
     let match = state.matches.find(m => m.id === _seMatchId);
     if (!match) return;
-    let savedStatus = match.status;
     match.homeScore = null;
     match.awayScore = null;
     if (match.winnerId !== undefined) match.winnerId = null;
-    match.status = savedStatus;
+    match.status = null;
     closeScoreModal();
     let fmt = state.tournamentFormat || 'league';
     if (fmt !== 'league') renderAdminDock();
