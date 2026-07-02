@@ -5697,7 +5697,7 @@ function openScoreModal(matchId) {
     `;
 
     document.getElementById('se-reset-btn').style.display =
-        (m.homeScore !== null && m.awayScore !== null) ? 'block' : 'none';
+        (m.homeScore !== null && m.awayScore !== null) || m.status ? 'block' : 'none';
 
     // Big Match toggle inside score modal
     if (m.awayId !== 'BYE') {
@@ -6167,14 +6167,15 @@ function confirmScoreFromModal() {
 
 async function resetScoreFromModal() {
     if (_seMatchId === null) return;
+    const matchId = _seMatchId;
+    closeScoreModal();
     if (!await showConfirm('↩️ ยืนยันล้างผลและรีเซ็ทสถานะการแข่งขันคู่นี้?')) return;
-    let match = state.matches.find(m => m.id === _seMatchId);
+    let match = state.matches.find(m => m.id === matchId);
     if (!match) return;
     match.homeScore = null;
     match.awayScore = null;
     if (match.winnerId !== undefined) match.winnerId = null;
     match.status = null;
-    closeScoreModal();
     let fmt = state.tournamentFormat || 'league';
     if (fmt !== 'league') renderAdminDock();
     renderLeague(); saveDataToCloud();
