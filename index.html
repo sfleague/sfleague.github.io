@@ -5618,11 +5618,10 @@ async function resetMatchScore(matchId) {
     if (state.isViewOnly) return;
     if (!await showConfirm('↩️ ยืนยันแก้ไขผลการแข่งขันคู่นี้? คะแนนจะถูกล้างออก')) return;
     let match = state.matches.find(m => m.id === matchId); if (!match) return;
-    let savedStatus = match.status;
     match.homeScore = null;
     match.awayScore = null;
     if (match.winnerId !== undefined) match.winnerId = null;
-    match.status = savedStatus;
+    match.status = null;
     let fmt = state.tournamentFormat || 'league';
     if (fmt !== 'league') renderAdminDock();
     renderLeague(); saveDataToCloud();
@@ -6373,7 +6372,7 @@ function calculateStandings() {
     approvedTeams.forEach(t => standings[t.id] = { id: t.id, player: t.player, team: t.team, logo: t.logo, isFlag: t.isFlag, p:0, w:0, d:0, l:0, gf:0, ga:0, gd:0, pts:0, rem: totalMatchesPerTeam });
 
     state.matches.forEach(m => {
-        if (m.homeScore !== null && m.awayScore !== null) {
+        if (m.homeScore !== null && m.awayScore !== null && m.status === 'finished') {
             let hs = parseInt(m.homeScore), as = parseInt(m.awayScore);
             if (standings[m.homeId] && standings[m.awayId]) {
                 standings[m.homeId].p++; standings[m.awayId].p++; standings[m.homeId].rem--; standings[m.awayId].rem--;
@@ -7960,32 +7959,59 @@ function autoFillOddsFromHcap() {
 // ─── Auto-Calc Handicap from Hall of Fame + Season Stats ─────────────────────
 
 function _calcTeamStrength(teamId) {
-    // Current season stats
-    let w = 0, d = 0, l = 0;
-    state.matches.forEach(m => {
-        if (m.homeScore === null || m.awayScore === null) return;
-        if (m.homeId === teamId) {
-            if (m.homeScore > m.awayScore) w++;
-            else if (m.homeScore === m.awayScore) d++;
-            else l++;
-        } else if (m.awayId === teamId) {
-            if (m.awayScore > m.homeScore) w++;
-            else if (m.homeScore === m.awayScore) d++;
-            else l++;
-        }
-    });
-    let games = w + d + l;
-    let seasonPpg = games > 0 ? (w * 3 + d) / games : 0;
+    // Current season stats — only count matches that are confirmed FINISHED,
+    // otherwise scores entered but not yet confirmed would skew the rating.
+    // Sorted chronologically (by id) so we can also derive recent-form PPG.
+    let seasonMatches = state.matches.filter(m => {
+        if (m.status !== 'finished') return false;
+        if (m.homeScore === null || m.awayScore === null) return false;
+        return m.homeId === teamId || m.awayId === teamId;
+    }).sort((a, b) => (a.id || 0) - (b.id || 0));
 
-    // Hall of Fame lifetime stats
+    function _ppgOf(list) {
+        let w = 0, d = 0, l = 0;
+        list.forEach(m => {
+            let gf = m.homeId === teamId ? m.homeScore : m.awayScore;
+            let ga = m.homeId === teamId ? m.awayScore : m.homeScore;
+            if (gf > ga) w++; else if (gf === ga) d++; else l++;
+        });
+        let games = w + d + l;
+        return { games, ppg: games > 0 ? (w * 3 + d) / games : 0 };
+    }
+
+    let season = _ppgOf(seasonMatches);
+    let games = season.games;
+    let seasonPpg = season.ppg;
+
+    // Recent form: last 5 finished matches, weighted more heavily than the
+    // full-season average so a team on a hot/cold streak right now moves the
+    // handicap more than one that was strong/weak earlier in the season.
+    const RECENT_FORM_SIZE = 5;
+    let recent = _ppgOf(seasonMatches.slice(-RECENT_FORM_SIZE));
+    // If a team hasn't played enough games yet, recent === season anyway, so
+    // this blend never double-punishes small samples.
+    let formAdjustedPpg = games > 0 ? (seasonPpg * 0.4) + (recent.ppg * 0.6) : 0;
+
+    // Confidence factor: dampens the season component when a team has only
+    // played a handful of matches this season, so 1-2 lucky/unlucky results
+    // early on don't swing the handicap to the max right away.
+    const MIN_GAMES_FOR_FULL_CONFIDENCE = 4;
+    let seasonConfidence = games > 0 ? Math.min(games / MIN_GAMES_FOR_FULL_CONFIDENCE, 1) : 0;
+
+    // Hall of Fame lifetime stats (accumulated across past seasons)
     let hof = (state.hallOfFame && state.hallOfFame[teamId]) ? state.hallOfFame[teamId] : {};
-    let hofW = hof.w || 0, hofD = hof.d || 0, hofL = hof.l || 0;
+    let hofW = hof.wins || hof.w || 0, hofD = hof.draws || hof.d || 0, hofL = hof.losses || hof.l || 0;
     let hofGames = hofW + hofD + hofL;
     let hofPpg = hofGames > 0 ? (hofW * 3 + hofD) / hofGames : 0;
-    let trophyBonus = (hof.trophies || 0) * 0.15;
 
-    // Weighted blend: 60% season + 40% all-time
-    let blended = (games > 0 ? seasonPpg * 0.6 : 0) + (hofGames > 0 ? hofPpg * 0.4 : 0) + trophyBonus;
+    // Trophy bonus now uses diminishing returns (sqrt) instead of a flat
+    // linear add-on — a team with 6 trophies shouldn't rate 6x "stronger"
+    // than one with 1 trophy, or it ends up swamping the rest of the formula.
+    let trophies = hof.trophies || 0;
+    let trophyBonus = Math.sqrt(trophies) * 0.2;
+
+    // Weighted blend: 60% current form (season+recent blend, confidence-scaled) + 40% all-time HoF PPG + trophy prestige
+    let blended = (formAdjustedPpg * 0.6 * seasonConfidence) + (hofGames > 0 ? hofPpg * 0.4 : 0) + trophyBonus;
     return blended;
 }
 
