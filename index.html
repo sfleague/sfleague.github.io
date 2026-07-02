@@ -7969,29 +7969,32 @@ function _calcTeamStrength(teamId) {
         return m.homeId === teamId || m.awayId === teamId;
     }).sort((a, b) => (a.id || 0) - (b.id || 0));
 
-    function _ppgOf(list) {
-        let w = 0, d = 0, l = 0;
+    function _statsOf(list) {
+        let w = 0, d = 0, l = 0, gf = 0, ga = 0;
         list.forEach(m => {
-            let gf = m.homeId === teamId ? m.homeScore : m.awayScore;
-            let ga = m.homeId === teamId ? m.awayScore : m.homeScore;
-            if (gf > ga) w++; else if (gf === ga) d++; else l++;
+            let mGf = m.homeId === teamId ? m.homeScore : m.awayScore;
+            let mGa = m.homeId === teamId ? m.awayScore : m.homeScore;
+            gf += mGf; ga += mGa;
+            if (mGf > mGa) w++; else if (mGf === mGa) d++; else l++;
         });
         let games = w + d + l;
-        return { games, ppg: games > 0 ? (w * 3 + d) / games : 0 };
+        return { games, ppg: games > 0 ? (w * 3 + d) / games : 0, gdpg: games > 0 ? (gf - ga) / games : 0 };
     }
 
-    let season = _ppgOf(seasonMatches);
+    let season = _statsOf(seasonMatches);
     let games = season.games;
     let seasonPpg = season.ppg;
+    let seasonGdpg = season.gdpg;
 
     // Recent form: last 5 finished matches, weighted more heavily than the
     // full-season average so a team on a hot/cold streak right now moves the
     // handicap more than one that was strong/weak earlier in the season.
     const RECENT_FORM_SIZE = 5;
-    let recent = _ppgOf(seasonMatches.slice(-RECENT_FORM_SIZE));
+    let recent = _statsOf(seasonMatches.slice(-RECENT_FORM_SIZE));
     // If a team hasn't played enough games yet, recent === season anyway, so
     // this blend never double-punishes small samples.
     let formAdjustedPpg = games > 0 ? (seasonPpg * 0.4) + (recent.ppg * 0.6) : 0;
+    let formAdjustedGdpg = games > 0 ? (seasonGdpg * 0.4) + (recent.gdpg * 0.6) : 0;
 
     // Confidence factor: dampens the season component when a team has only
     // played a handful of matches this season, so 1-2 lucky/unlucky results
@@ -8004,6 +8007,8 @@ function _calcTeamStrength(teamId) {
     let hofW = hof.wins || hof.w || 0, hofD = hof.draws || hof.d || 0, hofL = hof.losses || hof.l || 0;
     let hofGames = hofW + hofD + hofL;
     let hofPpg = hofGames > 0 ? (hofW * 3 + hofD) / hofGames : 0;
+    let hofGf = hof.goalsFor || 0, hofGa = hof.goalsAgainst || 0;
+    let hofGdpg = hofGames > 0 ? (hofGf - hofGa) / hofGames : 0;
 
     // Trophy bonus now uses diminishing returns (sqrt) instead of a flat
     // linear add-on — a team with 6 trophies shouldn't rate 6x "stronger"
@@ -8011,8 +8016,13 @@ function _calcTeamStrength(teamId) {
     let trophies = hof.trophies || 0;
     let trophyBonus = Math.sqrt(trophies) * 0.2;
 
-    // Weighted blend: 60% current form (season+recent blend, confidence-scaled) + 40% all-time HoF PPG + trophy prestige
-    let blended = (formAdjustedPpg * 0.6 * seasonConfidence) + (hofGames > 0 ? hofPpg * 0.4 : 0) + trophyBonus;
+    // GD component (20% weight): blends season GD/game + HoF GD/game,
+    // capped at ±3 goals/game so outliers don't dominate the formula.
+    let rawGd = (formAdjustedGdpg * 0.6 * seasonConfidence) + (hofGames > 0 ? hofGdpg * 0.4 : 0);
+    let gdComponent = Math.max(-3, Math.min(3, rawGd)) * 0.2;
+
+    // Weighted blend: PPG-based strength + GD component + trophy prestige
+    let blended = (formAdjustedPpg * 0.6 * seasonConfidence) + (hofGames > 0 ? hofPpg * 0.4 : 0) + trophyBonus + gdComponent;
     return blended;
 }
 
@@ -8261,7 +8271,11 @@ function _calcH2HAdj(homeId, awayId) {
     if (hs.games === 0) return 0;
     let homePpg = (hs.w * 3 + hs.d) / hs.games;
     let awayPpg = (as_.w * 3 + as_.d) / as_.games;
-    return (homePpg - awayPpg) * 0.25;
+    let homeGdpg = (hs.gf - hs.ga) / hs.games;
+    let awayGdpg = (as_.gf - as_.ga) / as_.games;
+    let ppgAdj = (homePpg - awayPpg) * 0.25;
+    let gdAdj = Math.max(-2, Math.min(2, homeGdpg - awayGdpg)) * 0.05;
+    return ppgAdj + gdAdj;
 }
 
 function _h2hSummaryHTML(homeId, awayId) {
