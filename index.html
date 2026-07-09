@@ -369,7 +369,11 @@
             background: var(--wc-gold);
             box-shadow: 0 0 10px rgba(242,194,78,0.7);
         }
-        h2.title-standings { color: var(--h2-standings-color); }
+        @keyframes standingsTitleGlow {
+            0%,100% { color: var(--h2-standings-color); text-shadow: 0 0 8px rgba(242,194,78,0.25); }
+            50%     { color: #fff8dc;                   text-shadow: 0 0 18px rgba(242,194,78,0.75), 0 0 36px rgba(255,165,0,0.4); }
+        }
+        h2.title-standings { animation: standingsTitleGlow 3s ease-in-out infinite; }
         h2.title-fixtures { color: var(--h2-fixtures-color); }
         h2.title-fame { color: var(--h2-fame-color); }
         h2.title-details { color: var(--h2-details-color); }
@@ -389,12 +393,42 @@
         .p-name { font-weight: 700; font-size: 16px; color: #fff; }
         .t-name { font-size: 12px; color: var(--wc-text-sub); }
 
-        tr.champion-row { background: linear-gradient(90deg, rgba(223,180,75,0.2) 0%, rgba(223,180,75,0.02) 100%) !important; }
+        tr.champion-row { background: linear-gradient(90deg, rgba(223,180,75,0.2) 0%, rgba(223,180,75,0.02) 100%); box-shadow: inset 4px 0 0 #ffd700; }
         tr.champion-row td { color: #ffd700; font-weight: bold; }
-        .champion-badge { background: linear-gradient(135deg, #ffe899, var(--wc-gold)); color: #000; padding: 3px 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; margin-left: 10px; font-family: 'Orbitron', sans-serif; border-radius: 4px; }
-        tr.defending-champ-row { background: linear-gradient(90deg, rgba(139,92,246,0.14) 0%, rgba(139,92,246,0.02) 100%) !important; box-shadow: inset 4px 0 0 rgba(167,139,250,0.7); }
+        .champion-badge { background: linear-gradient(135deg, #ffe899, var(--wc-gold)); color: #000; padding: 4px 6px; font-size: 11px; line-height:1; font-weight: 800; text-transform: uppercase; margin-left: 10px; font-family: 'Orbitron', sans-serif; border-radius: 4px; }
+        tr.defending-champ-row { background: linear-gradient(90deg, rgba(139,92,246,0.14) 0%, rgba(139,92,246,0.02) 100%); box-shadow: inset 4px 0 0 rgba(167,139,250,0.7); }
         tr.defending-champ-row td { color: #e9d5ff !important; font-weight: 600; }
-        .defending-badge { display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(109,40,217,0.12)); border: 1px solid rgba(167,139,250,0.45); color: #c4b5fd; padding: 2px 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-left: 8px; font-family: 'Orbitron', sans-serif; border-radius: 4px; letter-spacing: 0.5px; box-shadow: 0 0 8px rgba(139,92,246,0.2); }
+        .defending-badge { display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(109,40,217,0.12)); border: 1px solid rgba(167,139,250,0.45); color: #c4b5fd; padding: 4px 6px; font-size: 11px; line-height:1; font-weight: 800; text-transform: uppercase; margin-left: 8px; font-family: 'Orbitron', sans-serif; border-radius: 4px; letter-spacing: 0.5px; box-shadow: 0 0 8px rgba(139,92,246,0.2); }
+        /* ── Prev Champ Badge — shimmer + glow + crown bounce ── */
+        @keyframes prevChampCrown {
+            0%   { transform:translateY(0) rotate(-8deg) scale(1);     filter:drop-shadow(0 0 3px rgba(167,139,250,0.5)); }
+            25%  { transform:translateY(-7px) rotate(5deg) scale(1.3);  filter:drop-shadow(0 0 12px rgba(216,180,254,0.95)); }
+            50%  { transform:translateY(-10px) rotate(9deg) scale(1.4); filter:drop-shadow(0 0 20px rgba(255,220,255,1)); }
+            75%  { transform:translateY(-4px) rotate(-3deg) scale(1.18);filter:drop-shadow(0 0 10px rgba(192,132,252,0.85)); }
+            100% { transform:translateY(0) rotate(-8deg) scale(1);     filter:drop-shadow(0 0 3px rgba(167,139,250,0.5)); }
+        }
+        @keyframes prevChampGlow {
+            0%,100% { transform:scale(1);    box-shadow:0 0 8px rgba(139,92,246,0.4),  0 0 22px rgba(109,40,217,0.18); border-color:rgba(167,139,250,0.55); }
+            33%     { transform:scale(1.06); box-shadow:0 0 20px rgba(167,139,250,0.85),0 0 44px rgba(139,92,246,0.5), 0 0 68px rgba(109,40,217,0.28); border-color:rgba(216,180,254,0.95); }
+            66%     { transform:scale(1.03); box-shadow:0 0 14px rgba(192,132,252,0.6), 0 0 32px rgba(139,92,246,0.38); border-color:rgba(192,132,252,0.8); }
+        }
+        @keyframes prevChampShimmer { 0%{ background-position:-300% center; } 100%{ background-position:300% center; } }
+        @keyframes prevChampTextGlow {
+            0%,100% { color:#c4b5fd; text-shadow:none; }
+            50%     { color:#ede9fe; text-shadow:0 0 10px rgba(216,180,254,0.95),0 0 20px rgba(167,139,250,0.7); }
+        }
+        .prev-champ-badge {
+            display:inline-flex; align-items:center; gap:4px;
+            background:linear-gradient(120deg,rgba(139,92,246,0.08) 0%,rgba(167,139,250,0.45) 30%,rgba(109,40,217,0.35) 50%,rgba(192,132,252,0.4) 70%,rgba(139,92,246,0.08) 100%);
+            background-size:300% auto;
+            border:1px solid rgba(167,139,250,0.55);
+            color:#c4b5fd; padding:4px 6px; font-size:11px; line-height:1; font-weight:800;
+            text-transform:uppercase; margin-left:8px; font-family:'Orbitron',sans-serif;
+            border-radius:5px; letter-spacing:0.5px; white-space:nowrap;
+            animation:prevChampGlow 2.4s ease-in-out infinite,prevChampShimmer 3s linear infinite;
+        }
+        .prev-champ-crown { display:inline-block; animation:prevChampCrown 2.2s ease-in-out infinite; font-size:11px; line-height:1; }
+        .prev-champ-text  { animation:prevChampTextGlow 2.4s ease-in-out infinite; }
 
         /* ══════════════════════════════════════ RANK #1 SPECTACULAR ══════════════════════════════════════ */
         /* ── World Cup 2026 entrance & ambient animations ── */
@@ -468,14 +502,40 @@
             animation: no1Shimmer 2.8s linear infinite;
             font-weight: 900 !important; font-size: 16px;
         }
+        @keyframes no1BadgeShimmer { 0%{ background-position:-300% center; } 100%{ background-position:300% center; } }
+        @keyframes no1BadgeCrown {
+            0%   { transform: translateY(0)   rotate(-10deg) scale(1);    filter: drop-shadow(0 0 3px rgba(255,215,0,0.5)); }
+            20%  { transform: translateY(-8px) rotate(6deg)  scale(1.28); filter: drop-shadow(0 0 14px rgba(255,235,100,0.95)); }
+            45%  { transform: translateY(-12px) rotate(10deg) scale(1.38); filter: drop-shadow(0 0 22px rgba(255,255,180,1)); }
+            70%  { transform: translateY(-5px) rotate(-4deg)  scale(1.15); filter: drop-shadow(0 0 10px rgba(255,215,0,0.8)); }
+            100% { transform: translateY(0)   rotate(-10deg) scale(1);    filter: drop-shadow(0 0 3px rgba(255,215,0,0.5)); }
+        }
+        @keyframes no1BadgeFire {
+            0%,100% { transform: scaleY(1)    rotate(-4deg) translateY(0);   filter: drop-shadow(0 0 4px rgba(255,140,0,0.7)); }
+            25%     { transform: scaleY(1.25) rotate(6deg)  translateY(-3px); filter: drop-shadow(0 0 12px rgba(255,80,0,1)); }
+            50%     { transform: scaleY(0.9)  rotate(-8deg) translateY(2px);  filter: drop-shadow(0 0 8px rgba(255,200,0,0.9)); }
+            75%     { transform: scaleY(1.18) rotate(4deg)  translateY(-2px); filter: drop-shadow(0 0 14px rgba(255,100,0,1)); }
+        }
+        .no1-badge-crown { display:inline-block; animation: no1BadgeCrown 2.2s ease-in-out infinite; line-height:1; }
+        .no1-badge-fire  { display:inline-block; animation: no1BadgeFire  1.6s ease-in-out infinite; line-height:1; }
+        @keyframes no1BadgeGlow {
+            0%,100% { transform:scale(1);    box-shadow:0 0 8px rgba(255,215,0,0.35), 0 0 18px rgba(255,180,0,0.15); border-color:rgba(255,215,0,0.55); }
+            50%     { transform:scale(1.06); box-shadow:0 0 18px rgba(255,215,0,0.75), 0 0 36px rgba(255,180,0,0.45), 0 0 55px rgba(255,140,0,0.22); border-color:rgba(255,235,100,0.9); }
+        }
         .no1-days-badge {
             display: inline-flex; align-items: center; gap: 4px;
-            background: linear-gradient(135deg, rgba(255,215,0,0.22), rgba(255,140,0,0.12));
+            background: linear-gradient(120deg,
+                rgba(255,215,0,0.08) 0%, rgba(255,215,0,0.5) 30%,
+                rgba(255,255,180,0.7) 50%, rgba(255,200,0,0.5) 70%,
+                rgba(255,215,0,0.08) 100%);
+            background-size: 300% auto;
             border: 1px solid rgba(255,215,0,0.55);
-            color: #ffd700; padding: 2px 9px; font-size: 10px; font-weight: 800;
-            border-radius: 4px; font-family: 'Orbitron', sans-serif;
-            animation: no1DaysPulse 2.2s ease-in-out infinite;
-            letter-spacing: 0.4px; white-space: nowrap; cursor: default;
+            color: #ffd700; padding: 4px 6px; font-size: 11px; line-height:1; font-weight: 800;
+            text-transform: uppercase;
+            border-radius: 5px; font-family: 'Orbitron', sans-serif;
+            animation: no1BadgeGlow 2.4s ease-in-out infinite, no1BadgeShimmer 3s linear infinite;
+            letter-spacing: 0.5px; white-space: nowrap; cursor: default;
+            flex-shrink: 0;
         }
         .no1-stars { display:flex; gap:3px; align-items:center; }
         .no1-star { font-size:11px; display:inline-block; animation: no1StarSpin 2s linear infinite; }
@@ -770,19 +830,45 @@
         .floating-action-btn { background: rgba(4, 12, 34, 0.75) !important; backdrop-filter: blur(12px) !important; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 50% !important; width: 46px !important; height: 46px !important; padding: 0 !important; cursor: pointer; display: flex !important; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(0,0,0,0.6); opacity: 0.75; transition: all 0.3s ease !important; text-decoration: none; }
         .floating-action-btn:hover { opacity: 1; transform: scale(1.1); box-shadow: 0 0 15px rgba(223, 180, 75, 0.4); }
 
-        #discord-floating-link { background: rgba(88, 101, 242, 0.2) !important; border-color: #5865F2 !important; }
-        #discord-floating-link:hover { background: #5865F2 !important; box-shadow: 0 0 15px rgba(88, 101, 242, 0.6); }
-        #discord-floating-link svg { width: 24px; height: 24px; fill: #ffffff; }
+        #social-hub-btn { background: linear-gradient(135deg, rgba(242,194,78,0.25), rgba(88,101,242,0.25)) !important; border-color: rgba(255,255,255,0.25) !important; font-size: 20px !important; }
+        #social-hub-btn:hover { background: linear-gradient(135deg, #F2C24E, #5865F2) !important; box-shadow: 0 0 15px rgba(242,194,78,0.6); }
+
+        #social-menu { position: absolute; bottom: 0; right: 58px; display: flex; flex-direction: column; gap: 10px; align-items: center; opacity: 0; visibility: hidden; transform: translateX(10px); transition: all 0.25s ease; }
+        #social-menu.open { opacity: 1; visibility: visible; transform: translateX(0); }
+        .social-link-btn { background: rgba(4, 12, 34, 0.75) !important; backdrop-filter: blur(12px) !important; border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 50% !important; width: 42px !important; height: 42px !important; padding: 0 !important; cursor: pointer; display: flex !important; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(0,0,0,0.6); transition: all 0.3s ease !important; text-decoration: none; }
+        .social-link-btn:hover { transform: scale(1.12); }
+        .social-link-btn svg { width: 20px; height: 20px; fill: #ffffff; }
+        .social-link-btn.disabled { opacity: 0.25; pointer-events: none; }
+        #social-link-discord { background: rgba(88, 101, 242, 0.2) !important; border-color: #5865F2 !important; }
+        #social-link-discord:hover { background: #5865F2 !important; box-shadow: 0 0 15px rgba(88, 101, 242, 0.6); }
+        #social-link-youtube { background: rgba(255, 0, 0, 0.2) !important; border-color: #FF0000 !important; }
+        #social-link-youtube:hover { background: #FF0000 !important; box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); }
+        #social-link-facebook { background: rgba(24, 119, 242, 0.2) !important; border-color: #1877F2 !important; }
+        #social-link-facebook:hover { background: #1877F2 !important; box-shadow: 0 0 15px rgba(24, 119, 242, 0.6); }
+        #social-link-tiktok { background: rgba(255, 255, 255, 0.15) !important; border-color: #ffffff !important; }
+        #social-link-tiktok:hover { background: #010101 !important; box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); }
+        #social-link-twitch { background: rgba(145, 70, 255, 0.2) !important; border-color: #9146FF !important; }
+        #social-link-twitch:hover { background: #9146FF !important; box-shadow: 0 0 15px rgba(145, 70, 255, 0.6); }
 
         #share-floating-btn { background: rgba(16, 185, 129, 0.2) !important; border-color: #10b981 !important; color: #10b981 !important; font-size: 18px !important; }
         #share-floating-btn:hover { background: #10b981 !important; color: #fff !important; box-shadow: 0 0 15px rgba(16, 185, 129, 0.6); }
 
-        #login-trigger-btn { color: var(--wc-gold) !important; opacity: 0.4; font-size: 20px !important; }
-        #login-trigger-btn:hover { border-color: var(--wc-gold) !important; background: var(--wc-card-bg) !important; opacity: 1; }
+        #login-btn { color: var(--wc-gold) !important; opacity: 0.5; font-size: 20px !important; }
+        #login-btn:hover { border-color: var(--wc-gold) !important; background: var(--wc-card-bg) !important; opacity: 1; }
+        #login-btn.player-in { background: rgba(220,38,38,0.25) !important; border-color: #ef4444 !important; color: #fca5a5 !important; font-size: 16px !important; opacity: 1; box-shadow: 0 0 10px rgba(220,38,38,0.4); display: inline-flex; flex-direction: column !important; gap: 1px !important; width: auto !important; min-width: 46px !important; border-radius: 24px !important; padding: 0 10px !important; }
+        #login-btn.player-in:hover { background: rgba(220,38,38,0.5) !important; box-shadow: 0 0 16px rgba(220,38,38,0.6); transform: scale(1.05); }
+        #login-btn.admin-in { background: rgba(242,194,78,0.2) !important; border-color: #F2C24E !important; color: #fde68a !important; font-size: 16px !important; opacity: 1; box-shadow: 0 0 10px rgba(242,194,78,0.4); display: inline-flex; flex-direction: column !important; gap: 1px !important; width: auto !important; min-width: 46px !important; border-radius: 24px !important; padding: 0 10px !important; }
+        #login-btn.admin-in:hover { background: rgba(242,194,78,0.4) !important; box-shadow: 0 0 16px rgba(242,194,78,0.6); transform: scale(1.05); }
+        #login-btn .logout-icon { font-size: 14px; line-height: 1; }
+        #login-btn .logout-label { font-size: 9px; font-weight: 700; color: #fde68a; line-height: 1; }
+        #login-btn .logout-name { font-size: 9px; font-weight: 700; max-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #fca5a5; line-height: 1; }
+        /* ── Role Status Bar ── */
+        #role-status-bar { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 9990; display: none; align-items: center; gap: 8px; background: rgba(4,12,34,0.88); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 5px 14px 5px 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); font-size: 12px; font-weight: 700; white-space: nowrap; }
+        #role-status-bar .rsb-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        #role-status-bar .rsb-text { letter-spacing: 0.3px; }
+        #role-status-bar .rsb-exit { margin-left: 6px; cursor: pointer; opacity: 0.6; font-size: 11px; }
+        #role-status-bar .rsb-exit:hover { opacity: 1; }
 
-        #player-login-btn { background: rgba(34,197,94,0.15) !important; border-color: #22c55e !important; color: #22c55e !important; font-size: 20px !important; opacity: 0.6; }
-        #player-login-btn:hover { background: rgba(34,197,94,0.35) !important; box-shadow: 0 0 15px rgba(34,197,94,0.5); opacity: 1; }
-        #player-login-btn.logged-in { background: rgba(34,197,94,0.35) !important; border-color: #22c55e !important; opacity: 1; box-shadow: 0 0 12px rgba(34,197,94,0.5); }
 
         .pending-badge { background: #eab308; color: #000; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; }
         .rejected-badge { background: #ff4466; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; }
@@ -1236,31 +1322,48 @@
         .bk-trophy-box { text-align: center; background: linear-gradient(135deg,rgba(255,215,0,0.1),rgba(223,180,75,0.03)); border: 1px solid rgba(255,215,0,0.25); border-radius: 10px; padding: 14px 12px; width: 100%; }
 
         /* ── Bracket Score Modal ── */
-        .bk-modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,5,18,0.82); z-index: 9500; align-items: center; justify-content: center; }
+        /* ── Score Modal ── */
+        .bk-modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,4,16,0.88); z-index: 9500; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
         .bk-modal-bg.open { display: flex; }
-        .bk-modal-box { background: #0b1828; border: 1px solid rgba(30,58,100,0.9); border-radius: 14px; min-width: 320px; max-width: 440px; width: 92%; box-shadow: 0 24px 64px rgba(0,0,0,0.75); overflow: hidden; }
-        .bk-modal-head { background: linear-gradient(90deg,rgba(18,38,68,0.98),rgba(9,22,44,0.98)); padding: 15px 20px 13px; border-bottom: 1px solid rgba(26,54,96,0.6); display: flex; justify-content: space-between; align-items: center; }
-        .bk-modal-title { font-family: 'Orbitron', sans-serif; font-size: 11px; color: #F2C24E; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
-        .bk-modal-close { background: none; border: none; color: #6a88a8; font-size: 22px; cursor: pointer; line-height: 1; padding: 0; }
-        .bk-modal-close:hover { color: #a1b7d6; }
-        .bk-modal-body { padding: 20px 22px 22px; }
-        .bk-modal-matchup { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; background: rgba(5,15,30,0.5); border-radius: 8px; padding: 12px 14px; }
-        .bk-modal-team-info { flex: 1; min-width: 0; }
-        .bk-modal-team-name { font-size: 13px; color: #e8f0ff; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .bk-modal-player-name { font-size: 11px; color: #5a7898; margin-top: 2px; }
-        .bk-modal-vs { font-family: 'Orbitron', sans-serif; font-size: 10px; color: #3a5070; font-weight: 700; flex-shrink: 0; }
-        .bk-modal-score-area { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
-        .bk-modal-inp { flex: 1; padding: 10px 6px; background: rgba(5,14,28,0.85); border: 1px solid rgba(30,58,100,0.8); border-radius: 8px; color: #fff; font-size: 26px; font-weight: 800; font-family: 'Orbitron', sans-serif; text-align: center; width: 100%; }
-        .bk-modal-inp:focus { outline: none; border-color: #F2C24E; }
-        .bk-modal-dash { font-family: 'Orbitron', sans-serif; font-size: 20px; color: #2a4060; }
-        .bk-modal-result-display { display: flex; align-items: center; justify-content: center; gap: 14px; background: rgba(5,14,28,0.7); border: 1px solid rgba(30,58,100,0.6); border-radius: 8px; padding: 12px; margin-bottom: 16px; }
-        .bk-modal-result-score { font-family: 'Orbitron', sans-serif; font-size: 26px; font-weight: 900; color: #fff; }
-        .bk-modal-result-team { font-size: 11px; color: #6a88a8; max-width: 80px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .bk-modal-winner-badge { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); color: #4ade80; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 6px; text-align: center; margin-bottom: 14px; }
-        .bk-modal-declare-btn { width: 100%; padding: 11px; background: linear-gradient(90deg,rgba(234,179,8,0.15),rgba(234,179,8,0.08)); border: 1px solid rgba(234,179,8,0.4); border-radius: 8px; color: #eab308; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Prompt', sans-serif; margin-bottom: 8px; }
-        .bk-modal-confirm { width: 100%; padding: 13px; background: linear-gradient(90deg,#16a34a,#15803d); border: none; border-radius: 8px; color: #fff; font-size: 14px; font-weight: 800; cursor: pointer; letter-spacing: .5px; font-family: 'Prompt', sans-serif; margin-bottom: 8px; transition: opacity 0.15s; }
-        .bk-modal-confirm:hover { opacity: 0.88; }
-        .bk-modal-reset { width: 100%; padding: 10px; background: transparent; border: 1px solid rgba(239,68,68,0.4); border-radius: 8px; color: #f87171; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Prompt', sans-serif; }
+        .bk-modal-box { background: linear-gradient(160deg,#0d1f38 0%,#080f1e 100%); border: 1px solid rgba(35,65,110,0.8); border-radius: 16px; min-width: 300px; max-width: 400px; width: 92%; box-shadow: 0 20px 60px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.03); overflow: hidden; }
+        .bk-modal-head { background: linear-gradient(90deg,rgba(10,24,50,0.98),rgba(5,12,28,0.98)); padding: 11px 14px 10px; border-bottom: 1px solid rgba(25,50,90,0.5); display: flex; justify-content: space-between; align-items: center; }
+        .bk-modal-title { font-family: 'Orbitron', sans-serif; font-size: 10px; color: #F2C24E; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
+        .bk-modal-close { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); color: #6a88a8; font-size: 14px; cursor: pointer; line-height: 1; padding: 4px 9px; border-radius: 6px; transition: all 0.15s; }
+        .bk-modal-close:hover { color: #fff; background: rgba(255,255,255,0.13); }
+        .bk-modal-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 8px; }
+
+        /* ── Score input row: team | input : input | team ── */
+        .bk-score-row { display: flex; align-items: center; gap: 8px; background: rgba(5,14,28,0.65); border: 1px solid rgba(30,58,100,0.45); border-radius: 10px; padding: 10px 12px; }
+        .bk-score-team { flex: 1; min-width: 0; }
+        .bk-score-team.right { text-align: right; }
+        .bk-score-tname { font-size: 12px; font-weight: 700; color: #d8e8ff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .bk-score-player { font-size: 10px; color: #3d5a78; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .bk-score-inputs { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+        .bk-modal-inp { width: 50px; padding: 7px 4px; background: rgba(3,10,24,0.9); border: 1px solid rgba(35,68,120,0.75); border-radius: 7px; color: #fff; font-size: 22px; font-weight: 900; font-family: 'Orbitron', sans-serif; text-align: center; transition: border-color 0.15s; }
+        .bk-modal-inp:focus { outline: none; border-color: #F2C24E; box-shadow: 0 0 0 2px rgba(242,194,78,0.12); }
+        .bk-modal-dash { font-family: 'Orbitron', sans-serif; font-size: 14px; color: #1e3455; font-weight: 900; }
+
+        /* ── Result card (view mode) ── */
+        .bk-result-card { background: rgba(5,14,28,0.65); border: 1px solid rgba(30,58,100,0.45); border-radius: 10px; padding: 12px; }
+        .bk-result-row { display: flex; align-items: center; gap: 10px; }
+        .bk-result-team { flex: 1; min-width: 0; }
+        .bk-result-team.right { text-align: right; }
+        .bk-result-tname { font-size: 12px; font-weight: 700; color: #d8e8ff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .bk-result-tname.win { color: #F2C24E; }
+        .bk-result-player { font-size: 10px; color: #3d5a78; margin-top: 1px; }
+        .bk-result-score { font-family: 'Orbitron', sans-serif; font-size: 26px; font-weight: 900; color: #fff; flex-shrink: 0; text-align: center; min-width: 64px; line-height: 1; }
+        .bk-result-score .s-win { color: #F2C24E; }
+        .bk-result-score .s-sep { font-size: 16px; color: #1e3455; margin: 0 2px; }
+
+        /* ── Winner / declare badge ── */
+        .bk-winner-badge { display: flex; align-items: center; gap: 8px; background: rgba(34,197,94,0.07); border: 1px solid rgba(34,197,94,0.22); border-radius: 8px; padding: 7px 12px; }
+        .bk-winner-badge span { font-size: 12px; font-weight: 700; color: #4ade80; }
+
+        /* ── Buttons ── */
+        .bk-modal-confirm { width: 100%; padding: 10px; background: linear-gradient(90deg,#16a34a,#15803d); border: none; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 800; cursor: pointer; font-family: 'Prompt', sans-serif; transition: opacity 0.15s; letter-spacing: 0.3px; }
+        .bk-modal-confirm:hover { opacity: 0.87; }
+        .bk-modal-declare-btn { width: 100%; padding: 9px; background: rgba(234,179,8,0.08); border: 1px solid rgba(234,179,8,0.3); border-radius: 8px; color: #eab308; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'Prompt', sans-serif; }
+        .bk-modal-reset { width: 100%; padding: 8px; background: transparent; border: 1px solid rgba(239,68,68,0.28); border-radius: 8px; color: #f87171; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'Prompt', sans-serif; }
 
         /* --- แบนเนอร์โฆษณาเพื่อนธีมน้ำเงิน-ทอง --- */
 #friend-ad-banner {
@@ -1574,45 +1677,54 @@
         .se-modal-close { background:none; border:none; color:#6a88a8; font-size:20px;
             cursor:pointer; line-height:1; padding:0; transition:color 0.2s; }
         .se-modal-close:hover { color:#fff; transform:none; box-shadow:none; }
-        .se-modal-body { padding:20px; }
-        .se-matchup { display:flex; align-items:center; gap:10px; margin-bottom:18px;
-            background:rgba(5,15,30,0.6); border-radius:10px; padding:14px 12px; }
-        .se-team { flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:5px; text-align:center; }
-        .se-team-logo { width:44px; height:44px; object-fit:contain; border-radius:6px; }
-        .se-team-logo.flag { height:29px; width:44px; object-fit:cover; border-radius:4px; }
-        .se-team-name { font-size:13px; font-weight:700; color:#e8f0ff; white-space:nowrap;
-            overflow:hidden; text-overflow:ellipsis; max-width:120px; }
-        .se-player-name { font-size:11px; color:#5a7898; }
-        .se-vs { font-family:'Orbitron',sans-serif; font-size:11px; color:#3a5070;
-            font-weight:700; flex-shrink:0; }
-        .se-score-row { display:flex; align-items:center; justify-content:center;
-            gap:12px; margin-bottom:16px; }
-        .se-score-inp { flex:1; max-width:90px; padding:10px 6px;
-            background:rgba(5,14,28,0.85); border:1px solid rgba(30,58,100,0.8);
-            border-radius:10px; color:#fff; font-size:30px; font-weight:800;
-            font-family:'Orbitron',sans-serif; text-align:center; }
-        .se-score-inp:focus { outline:none; border-color:#22c55e; box-shadow:0 0 10px rgba(34,197,94,0.2); }
-        .se-dash { font-family:'Orbitron',sans-serif; font-size:22px; color:#2a4060; }
-        .se-evidence-row { display:flex; gap:8px; flex-wrap:wrap; justify-content:center;
-            margin-bottom:16px; }
-        /* ── Score modal action buttons ── */
-        .se-modal-actions { display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; justify-content:center; }
-        .se-confirm-btn { flex:1; min-width:120px; max-width:200px; padding:10px 16px;
-            background:linear-gradient(135deg,#16a34a,#15803d);
-            border:none; border-radius:10px; color:#fff; font-size:13px; font-weight:800;
-            cursor:pointer; font-family:'Prompt',sans-serif; letter-spacing:.3px;
-            transition:opacity 0.15s; white-space:nowrap; }
-        .se-confirm-btn:hover { opacity:0.88; transform:none; box-shadow:none; }
-        .se-reset-btn { flex:1; min-width:100px; max-width:160px; padding:10px 14px;
-            background:transparent; border:1px solid rgba(239,68,68,0.45);
-            border-radius:10px; color:#f87171; font-size:12px; font-weight:700;
-            cursor:pointer; font-family:'Prompt',sans-serif; transition:all 0.2s; white-space:nowrap; }
-        .se-reset-btn:hover { background:rgba(239,68,68,0.12); transform:none; box-shadow:none; }
-        .se-close-btn { width:100%; padding:9px; background:rgba(255,255,255,0.04);
-            border:1px solid rgba(255,255,255,0.1); border-radius:10px;
-            color:#64748b; font-size:13px; font-weight:600; cursor:pointer;
-            font-family:'Prompt',sans-serif; transition:all 0.2s; letter-spacing:.3px; }
-        .se-close-btn:hover { background:rgba(255,255,255,0.08); color:#a1b7d6; transform:none; box-shadow:none; }
+        .se-modal-body { padding:12px 14px 14px; display:flex; flex-direction:column; gap:8px; }
+
+        /* ── Match card: team + score on one row ── */
+        .se-match-card { display:flex; align-items:center; gap:8px; background:rgba(5,14,28,0.65); border:1px solid rgba(30,58,100,0.45); border-radius:12px; padding:11px 10px; }
+        .se-mc-team { flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:3px; }
+        .se-mc-name { font-size:12px; font-weight:700; color:#d8e8ff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:90px; text-align:center; line-height:1.2; }
+        .se-mc-name.win { color:#F2C24E; }
+        .se-mc-player { font-size:10px; color:#3d5a78; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:90px; }
+        .se-mc-center { display:flex; align-items:center; gap:5px; flex-shrink:0; }
+        .se-team-logo { width:36px; height:36px; object-fit:contain; border-radius:6px; display:block; }
+        .se-team-logo.flag { height:24px; width:36px; object-fit:cover; border-radius:4px; }
+        .se-score-inp { width:52px; padding:8px 4px; background:rgba(3,10,24,0.9); border:1px solid rgba(35,68,120,0.75); border-radius:8px; color:#fff; font-size:22px; font-weight:900; font-family:'Orbitron',sans-serif; text-align:center; transition:border-color 0.15s; }
+        .se-score-inp:focus { outline:none; border-color:#22c55e; box-shadow:0 0 0 2px rgba(34,197,94,0.15); }
+        .se-dash { font-family:'Orbitron',sans-serif; font-size:14px; color:#1e3455; font-weight:900; }
+        .se-view-score-box { font-family:'Orbitron',sans-serif; font-size:22px; font-weight:900; color:#fff; white-space:nowrap; text-align:center; line-height:1; }
+        .se-view-score-pending { font-size:11px; color:#3d5a78; padding:4px 6px; text-align:center; }
+
+        /* ── Unified button system for score modal ── */
+        .se-btn { display:flex; align-items:center; justify-content:center; gap:4px; padding:8px 10px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; font-family:'Prompt',sans-serif; white-space:nowrap; border:1px solid transparent; line-height:1; transition:opacity 0.15s; }
+        .se-btn:hover { opacity:0.80; transform:none; box-shadow:none; }
+        .se-btn-green  { background:linear-gradient(135deg,#16a34a,#15803d); color:#fff; border-color:transparent; }
+        .se-btn-red    { background:rgba(239,68,68,0.06); border-color:rgba(239,68,68,0.32); color:#f87171; }
+        .se-btn-blue   { background:rgba(29,78,216,0.12); border-color:rgba(59,130,246,0.38); color:#60a5fa; }
+        .se-btn-gold   { background:rgba(242,194,78,0.07); border-color:rgba(242,194,78,0.28); color:rgba(242,194,78,0.85); }
+        /* ── Evidence dropdown popup ─────────────────────────────────── */
+        .ev-popup-wrap { position:relative; display:inline-block; }
+        @keyframes evPopIn { from{opacity:0;transform:translateY(-5px);} to{opacity:1;transform:translateY(0);} }
+        .ev-popup-menu { position:absolute; top:calc(100% + 6px); left:0; transform:none; background:#0f1f38; border:1px solid rgba(59,130,246,0.45); border-radius:10px; padding:6px; display:flex; flex-direction:column; gap:5px; min-width:170px; z-index:10000; box-shadow:0 8px 28px rgba(0,0,0,0.6); animation:evPopIn 0.13s ease; white-space:nowrap; }
+        .ev-popup-menu.hidden { display:none; }
+        .ev-popup-item { background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.22); color:#93c5fd; padding:9px 14px; border-radius:7px; cursor:pointer; font-size:13px; font-weight:600; text-align:left; width:100%; transition:all 0.15s; font-family:inherit; }
+        .ev-popup-item:hover { background:rgba(59,130,246,0.24); border-color:rgba(59,130,246,0.55); color:#bfdbfe; }
+        .ev-popup-item.ev-upload { background:rgba(242,194,78,0.08); border-color:rgba(242,194,78,0.28); color:rgba(242,194,78,0.9); }
+        .ev-popup-item.ev-upload:hover { background:rgba(242,194,78,0.2); border-color:rgba(242,194,78,0.55); color:#fcd34d; }
+        .se-btn-teal   { background:rgba(34,197,94,0.08); border-color:rgba(34,197,94,0.28); color:#4ade80; }
+        .se-btn-orange { background:rgba(255,107,0,0.07); border-color:rgba(255,107,0,0.32); border-style:dashed; color:rgba(255,107,0,0.7); }
+        .se-btn-orange.active { background:rgba(255,107,0,0.18); border-color:#ff6b00; border-style:solid; color:#ff8c42; }
+        .se-btn-ghost  { background:rgba(255,255,255,0.03); border-color:rgba(255,255,255,0.06); color:#3d5a78; font-size:10px; }
+        /* Button group — auto-width, wrap */
+        .se-btn-grid { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; }
+        .se-btn-wide { width:100%; justify-content:center; }
+        .se-btn { min-width:80px; }
+        /* Legacy aliases so existing static HTML still works */
+        .se-confirm-btn { display:flex; align-items:center; justify-content:center; gap:4px; padding:8px 10px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; font-family:'Prompt',sans-serif; border:none; background:linear-gradient(135deg,#16a34a,#15803d); color:#fff; line-height:1; }
+        .se-confirm-btn:hover { opacity:0.83; transform:none; box-shadow:none; }
+        .se-reset-btn { display:flex; align-items:center; justify-content:center; gap:4px; padding:8px 10px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer; font-family:'Prompt',sans-serif; background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.32); color:#f87171; line-height:1; }
+        .se-reset-btn:hover { opacity:0.80; transform:none; box-shadow:none; }
+        .se-close-btn { padding:7px 20px; border-radius:8px; font-size:10px; font-weight:600; cursor:pointer; font-family:'Prompt',sans-serif; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); color:#3d5a78; display:block; margin:0 auto; }
+        .se-close-btn:hover { opacity:0.75; transform:none; box-shadow:none; }
         .se-uploader-badge { text-align:center; font-size:10px; color:#64748b; margin-top:6px; }
 
         /* ── Custom Alert Modal ── */
@@ -1660,7 +1772,7 @@
             h1 { font-size: 20px; }
             /* standings table on very small screens */
             #standings-table .p-name { font-size: 12px; }
-            #standings-table .champion-badge, #standings-table .defending-badge { font-size: 9px; padding: 2px 5px; }
+            #standings-table .champion-badge, #standings-table .defending-badge, #standings-table .prev-champ-badge { font-size: 9px; padding: 2px 4px; }
             .match-row { gap: 3px; padding: 8px 4px; }
             .match-team { gap: 3px; padding: 2px; }
             .match-score { min-width: 62px; padding: 0; }
@@ -1792,6 +1904,18 @@
             color: #ff8c42; box-shadow: 0 0 8px rgba(255,107,0,0.28);
         }
         .bm-toggle-btn.active:hover { background: rgba(239,68,68,0.15); border-color: #ef4444; color: #fca5a5; }
+        /* ── Big Match row toggle (admin shortcut) ── */
+        .bm-row-toggle {
+            display: inline-flex; align-items: center; justify-content: center;
+            background: rgba(249,115,22,0.08); border: 1px solid rgba(249,115,22,0.25);
+            color: rgba(249,115,22,0.55); border-radius: 6px;
+            width: 30px; height: 22px; font-size: 13px; cursor: pointer;
+            transition: all 0.18s ease; margin-top: 5px; padding: 0;
+            line-height: 1;
+        }
+        .bm-row-toggle:hover { background: rgba(249,115,22,0.18); border-color: rgba(249,115,22,0.6); color: #f97316; }
+        .bm-row-toggle.active { background: rgba(249,115,22,0.22); border-color: #f97316; color: #f97316; box-shadow: 0 0 8px rgba(249,115,22,0.4); }
+
         /* viewer: small badge showing big match */
         .bm-viewer-badge { font-size: 10px; color: #ff8c42; display: inline-flex; align-items: center; gap: 3px; margin-top: 3px; font-weight: 700; }
 
@@ -2213,9 +2337,9 @@
             background: rgba(0,87,184,0.25) !important;
             border-bottom: 2px solid rgba(242,194,78,0.3) !important;
             font-family: 'Orbitron', sans-serif !important;
-            font-size: 11px !important;
-            letter-spacing: 1.5px !important;
-            padding: 14px 12px !important;
+            font-size: 10px !important;
+            letter-spacing: 0.8px !important;
+            padding: 7px 5px !important;
             color: rgba(242,194,78,0.9) !important;
             text-shadow: 0 0 10px rgba(242,194,78,0.5);
         }
@@ -2228,7 +2352,7 @@
         }
         .standings-table tbody tr td {
             border-bottom: 1px solid rgba(255,255,255,0.04) !important;
-            padding: 13px 12px !important;
+            padding: 8px 5px !important;
         }
         .rank-badge.rank-1 {
             background: linear-gradient(135deg, #FFD700, #FFA500) !important;
@@ -2856,14 +2980,45 @@
     </script>
 
     <div id="fixed-action-container">
-        <a id="discord-floating-link" class="floating-action-btn" href="https://discord.gg/ESMDUce5pf" target="_blank" title="เข้าร่วม Discord">
-            <svg viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg">
-                <path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.92,54.47,1,77.06A107.4,107.4,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,69.43,69.43,0,0,1-10.5-5c.9-.65,1.76-1.34,2.58-2a76.3,76.3,0,0,0,72.57,0c.82.71,1.68,1.4,2.58,2a69.52,69.52,0,0,1-10.5,5,77.7,77.7,0,0,0,6.63,10.85,107.36,107.36,0,0,0,31.06-19.3C129.86,48,123.47,25.42,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/>
-            </svg>
-        </a>
+        <div style="position: relative;">
+            <div id="social-menu">
+                <a id="social-link-discord" class="social-link-btn" href="https://discord.gg/ESMDUce5pf" target="_blank" title="Discord">
+                    <svg viewBox="0 0 127.14 96.36" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.92,54.47,1,77.06A107.4,107.4,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,69.43,69.43,0,0,1-10.5-5c.9-.65,1.76-1.34,2.58-2a76.3,76.3,0,0,0,72.57,0c.82.71,1.68,1.4,2.58,2a69.52,69.52,0,0,1-10.5,5,77.7,77.7,0,0,0,6.63,10.85,107.36,107.36,0,0,0,31.06-19.3C129.86,48,123.47,25.42,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/>
+                    </svg>
+                </a>
+                <a id="social-link-youtube" class="social-link-btn" href="#" target="_blank" title="YouTube">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8ZM9.6 15.6V8.4L15.8 12Z"/>
+                    </svg>
+                </a>
+                <a id="social-link-facebook" class="social-link-btn" href="#" target="_blank" title="Facebook">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12Z"/>
+                    </svg>
+                </a>
+                <a id="social-link-tiktok" class="social-link-btn" href="#" target="_blank" title="TikTok">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.6 5.8a4.3 4.3 0 0 1-3-3.8h-3v13.4a2.6 2.6 0 1 1-1.9-2.5v-3.1a5.7 5.7 0 1 0 4.9 5.6V9.4a7.3 7.3 0 0 0 4.3 1.4V7.7a4.3 4.3 0 0 1-1.3-1.9Z"/>
+                    </svg>
+                </a>
+                <a id="social-link-twitch" class="social-link-btn" href="#" target="_blank" title="Twitch">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 2 2.5 5.5v14H7V22h2.5l2-2.5H15L19.5 15V2Zm14 12-2.5 2.5h-3l-2 2v-2H7V4h11ZM15 7v5h-1.5V7Zm-4 0v5H9.5V7Z"/>
+                    </svg>
+                </a>
+            </div>
+            <button id="social-hub-btn" class="floating-action-btn" onclick="toggleSocialMenu()" title="ช่องทางโซเชียลของทัวร์นาเมนต์">🌐</button>
+        </div>
         <button id="share-floating-btn" class="floating-action-btn" onclick="userCopyShareLink()" title="คัดลอกลิงก์ส่งใบสมัครแชร์ให้เพื่อน 📤">📤</button>
-        <button id="player-login-btn" class="floating-action-btn" onclick="promptPlayerLogin()" title="ผู้แข่งขัน: ล็อกอินเพื่อส่งรูปหลักฐาน">⚽</button>
-        <button id="login-trigger-btn" class="floating-action-btn" onclick="promptAdminLogin()" title="เข้าสู่ระบบ Admin">🔑</button>
+        <button id="login-btn" class="floating-action-btn" onclick="openLoginModal()" title="เข้าสู่ระบบ">🔑</button>
+    </div>
+
+    <!-- ── Role Status Bar ── -->
+    <div id="role-status-bar">
+        <span class="rsb-dot" id="rsb-dot"></span>
+        <span class="rsb-text" id="rsb-text"></span>
+        <span class="rsb-exit" id="rsb-exit" onclick="_rsbExit()">✕ ออก</span>
     </div>
 
     <div class="fc-card" id="details-display-card">
@@ -3224,9 +3379,30 @@
                 </div>
             </div>
 
-            <div>
-                <label style="display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; color: #5865F2;">💬 ลิงก์ Discord ประจำทัวร์นาเมนต์:</label>
-                <input type="text" id="edit-discord-url" class="edit-input" style="border-color: #5865F2;">
+            <div style="border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:14px; background:rgba(255,255,255,0.03);">
+                <label style="display: block; margin-bottom: 8px; font-weight: 700; font-size: 13px; color: #fff;">🌐 ลิงก์ Social Media ประจำทัวร์นาเมนต์:</label>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    <div>
+                        <label style="display:block; margin-bottom:3px; font-size:12px; color:#5865F2; font-weight:600;">💬 Discord</label>
+                        <input type="text" id="edit-discord-url" class="edit-input" style="border-color: #5865F2;" placeholder="https://discord.gg/...">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:3px; font-size:12px; color:#FF0000; font-weight:600;">▶️ YouTube</label>
+                        <input type="text" id="edit-youtube-url" class="edit-input" style="border-color: #FF0000;" placeholder="https://youtube.com/@...">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:3px; font-size:12px; color:#1877F2; font-weight:600;">📘 Facebook</label>
+                        <input type="text" id="edit-facebook-url" class="edit-input" style="border-color: #1877F2;" placeholder="https://facebook.com/...">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:3px; font-size:12px; color:#e5e5e5; font-weight:600;">🎵 TikTok</label>
+                        <input type="text" id="edit-tiktok-url" class="edit-input" style="border-color: #e5e5e5;" placeholder="https://tiktok.com/@...">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:3px; font-size:12px; color:#9146FF; font-weight:600;">🎮 Twitch</label>
+                        <input type="text" id="edit-twitch-url" class="edit-input" style="border-color: #9146FF;" placeholder="https://twitch.tv/...">
+                    </div>
+                </div>
             </div>
             <div style="border:1px solid rgba(234,179,8,0.4); border-radius:10px; padding:14px; background:rgba(234,179,8,0.05);">
                 <label style="display:block; margin-bottom:6px; font-weight:700; font-size:13px; color:#fbbf24;">📢 ประกาศด่วน (Announcement Banner)</label>
@@ -3312,54 +3488,187 @@
     </div>
 </div>
 
-<div id="adminLoginModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 17, 38, 0.85); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 16px; box-sizing: border-box; overflow-y: auto;">
-    <div class="modal-content" style="background: var(--wc-card-bg); border: 2px solid var(--wc-gold); box-shadow: 0 0 30px rgba(223, 180, 75, 0.25); padding: 24px 20px; border-radius: 12px; width: 100%; max-width: 400px; max-height: calc(100dvh - 32px); overflow-y: auto; text-align: center; color: var(--wc-text-main); position: relative; box-sizing: border-box;">
-        <div style="font-size: 36px; margin-bottom: 8px;">🔑</div>
-        <h2 style="margin-top: 0; color: var(--wc-gold); border-bottom: 1px solid var(--wc-border); padding-bottom: 12px; font-family: 'Orbitron', sans-serif; letter-spacing: 2px; font-size: clamp(16px, 5vw, 22px);">ADMIN ACCESS</h2>
-        <div style="text-align: left; margin-bottom: 25px; margin-top: 20px;">
-            <div style="margin-bottom: 15px;">
-                <label style="font-size: 13px; color: var(--wc-text-sub); display: block; margin-bottom: 5px;">Admin Username :</label>
-                <input type="text" id="login-username" class="edit-input" placeholder="กรอกชื่อผู้ใช้งานแอดมิน" style="width: 100%; padding: 10px; background: rgba(5, 17, 38, 0.6); border: 1px solid var(--wc-border); border-radius: 6px; color: #fff; outline: none;">
+<!-- Unified Login Modal -->
+<div id="loginModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(5,17,38,0.88); backdrop-filter:blur(8px); z-index:9999; justify-content:center; align-items:center; padding:16px; box-sizing:border-box;">
+    <div class="modal-content" style="background:var(--wc-card-bg); border:2px solid var(--wc-gold); box-shadow:0 0 30px rgba(242,194,78,0.2); padding:28px 24px; border-radius:14px; width:100%; max-width:400px; text-align:center; color:var(--wc-text-main); position:relative; box-sizing:border-box;">
+
+        <!-- Step 1: ใส่ ID -->
+        <div id="lm-id-step">
+            <div style="font-size:38px; margin-bottom:8px;">🔑</div>
+            <h2 style="margin-top:0; color:var(--wc-gold); border-bottom:1px solid var(--wc-border); padding-bottom:12px; font-family:'Orbitron',sans-serif; letter-spacing:2px; font-size:clamp(15px,5vw,20px);">LOGIN</h2>
+            <p style="font-size:13px; color:var(--wc-text-sub); margin:14px 0 18px;">ใส่ ID ผู้แข่งขัน หรือ Username แอดมิน</p>
+            <div style="text-align:left; margin-bottom:18px;">
+                <label style="font-size:13px; color:var(--wc-text-sub); display:block; margin-bottom:6px;">ID / Username :</label>
+                <input type="text" id="lm-id-input" class="edit-input" placeholder="เช่น Mai, Sky หรือ admin" style="width:100%; padding:11px 14px; background:rgba(5,17,38,0.6); border:1px solid rgba(242,194,78,0.4); border-radius:8px; color:#fff; outline:none; font-size:15px;" onkeydown="if(event.key==='Enter') submitLoginId()">
             </div>
-            <div>
-                <label style="font-size: 13px; color: var(--wc-text-sub); display: block; margin-bottom: 5px;">Password :</label>
-                <input type="password" id="login-password" class="edit-input" placeholder="กรอกรหัสผ่าน" style="width: 100%; padding: 10px; background: rgba(5, 17, 38, 0.6); border: 1px solid var(--wc-border); border-radius: 6px; color: #fff; outline: none;" onkeydown="if(event.key === 'Enter') submitAdminLogin()">
+            <div style="display:flex; gap:12px;">
+                <button onclick="closeLoginModal()" style="flex:1; padding:11px; background:linear-gradient(135deg,#334155,#1e293b); color:#cbd5e1; border:none; border-radius:8px; cursor:pointer; font-weight:600;">ยกเลิก</button>
+                <button onclick="submitLoginId()" style="flex:1; padding:11px; background:linear-gradient(135deg,#F2C24E,#c49520); color:#020710; border:none; border-radius:8px; cursor:pointer; font-weight:700; box-shadow:0 4px 16px rgba(242,194,78,0.3);">ล๊อคอิน ⚡</button>
             </div>
         </div>
-        <div style="display: flex; gap: 12px;">
-            <button onclick="closeAdminLoginModal()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #334155 0%, #1e293b 100%); color: #cbd5e1; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">ยกเลิก</button>
-            <button onclick="submitAdminLogin()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #F2C24E 0%, #c49520 100%); color: #020710; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; box-shadow: 0 4px 20px rgba(242,194,78, 0.35);">ยืนยันล็อกอิน ⚡</button>
+
+        <!-- Step 2: รหัสผ่าน Admin (แสดงเมื่อ ID = admin) -->
+        <div id="lm-pass-step" style="display:none;">
+            <div style="font-size:38px; margin-bottom:8px;">🔐</div>
+            <h2 style="margin-top:0; color:var(--wc-gold); border-bottom:1px solid var(--wc-border); padding-bottom:12px; font-family:'Orbitron',sans-serif; letter-spacing:2px; font-size:clamp(15px,5vw,20px);">ADMIN ACCESS</h2>
+            <p style="font-size:13px; color:var(--wc-text-sub); margin:14px 0 18px;">ตรวจพบ Admin ID — กรุณากรอกรหัสผ่าน</p>
+            <div style="text-align:left; margin-bottom:18px;">
+                <label style="font-size:13px; color:var(--wc-text-sub); display:block; margin-bottom:6px;">Password :</label>
+                <input type="password" id="lm-pass-input" class="edit-input" placeholder="กรอกรหัสผ่าน" style="width:100%; padding:11px 14px; background:rgba(5,17,38,0.6); border:1px solid rgba(242,194,78,0.4); border-radius:8px; color:#fff; outline:none; font-size:15px;" onkeydown="if(event.key==='Enter') submitLoginPass()">
+            </div>
+            <div style="display:flex; gap:12px;">
+                <button onclick="_lmShowStep('id')" style="flex:1; padding:11px; background:linear-gradient(135deg,#334155,#1e293b); color:#cbd5e1; border:none; border-radius:8px; cursor:pointer; font-weight:600;">← ย้อนกลับ</button>
+                <button onclick="submitLoginPass()" style="flex:1; padding:11px; background:linear-gradient(135deg,#F2C24E,#c49520); color:#020710; border:none; border-radius:8px; cursor:pointer; font-weight:700; box-shadow:0 4px 16px rgba(242,194,78,0.3);">ยืนยัน ⚡</button>
+            </div>
         </div>
+
+        <!-- หน้า: ผู้แข่งขัน logged in -->
+        <div id="lm-player-info" style="display:none;">
+            <!-- header: logo + ชื่อทีม + ชื่อผู้เล่น -->
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--wc-border);">
+                <img id="lm-team-logo" src="" style="width:54px;height:54px;object-fit:contain;border-radius:10px;background:rgba(0,0,0,0.3);padding:4px;flex-shrink:0;">
+                <div>
+                    <div id="lm-team-name" style="font-size:16px;font-weight:800;color:#fff;font-family:'Orbitron',sans-serif;line-height:1.2;"></div>
+                    <div id="lm-player-name" style="font-size:12px;color:#22c55e;margin-top:3px;font-weight:600;"></div>
+                </div>
+            </div>
+
+            <!-- สถิติซีซันนี้ -->
+            <div style="font-size:10px;color:#64748b;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">ซีซันนี้</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;">
+                <div style="background:rgba(29,78,216,0.12);border:1px solid rgba(29,78,216,0.25);border-radius:8px;padding:8px 4px;text-align:center;">
+                    <div style="font-size:18px;font-weight:900;color:#60a5fa;font-family:'Orbitron',sans-serif;" id="lm-rank">—</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:2px;">อันดับ</div>
+                </div>
+                <div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);border-radius:8px;padding:8px 4px;text-align:center;">
+                    <div style="font-size:18px;font-weight:900;color:#22c55e;font-family:'Orbitron',sans-serif;" id="lm-pts">0</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:2px;">คะแนน</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px 4px;text-align:center;">
+                    <div style="font-size:13px;font-weight:700;color:#94a3b8;font-family:'Orbitron',sans-serif;" id="lm-wdl">0-0-0</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:2px;">ชนะ-เสมอ-แพ้</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px 4px;text-align:center;">
+                    <div style="font-size:13px;font-weight:700;color:#94a3b8;font-family:'Orbitron',sans-serif;" id="lm-gfga">0 / 0</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:2px;">ได้ / เสีย</div>
+                </div>
+            </div>
+
+            <!-- Hall of Fame -->
+            <div style="font-size:10px;color:#64748b;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Hall of Fame (ตลอดกาล)</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:18px;">
+                <div style="background:rgba(242,194,78,0.08);border:1px solid rgba(242,194,78,0.25);border-radius:8px;padding:8px 4px;text-align:center;">
+                    <div style="font-size:18px;font-weight:900;color:#F2C24E;font-family:'Orbitron',sans-serif;" id="lm-hof-trophies">0</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:2px;">🏆 แชมป์</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px 4px;text-align:center;">
+                    <div style="font-size:18px;font-weight:900;color:#22c55e;font-family:'Orbitron',sans-serif;" id="lm-hof-w">0</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:2px;">ชนะรวม</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px 4px;text-align:center;">
+                    <div style="font-size:18px;font-weight:900;color:#94a3b8;font-family:'Orbitron',sans-serif;" id="lm-hof-d">0</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:2px;">เสมอรวม</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px 4px;text-align:center;">
+                    <div style="font-size:18px;font-weight:900;color:#ef4444;font-family:'Orbitron',sans-serif;" id="lm-hof-l">0</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:2px;">แพ้รวม</div>
+                </div>
+            </div>
+
+            <div style="display:flex;gap:12px;">
+                <button onclick="closeLoginModal()" style="flex:1;padding:10px;background:linear-gradient(135deg,#334155,#1e293b);color:#cbd5e1;border:none;border-radius:8px;cursor:pointer;font-weight:600;">ปิด</button>
+                <button onclick="logoutPlayer()" style="flex:1;padding:10px;background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;">ออกจากระบบ</button>
+            </div>
+        </div>
+
+        <!-- หน้า: Admin logged in -->
+        <div id="lm-admin-info" style="display:none;">
+            <div style="font-size:38px; margin-bottom:8px;">🔐</div>
+            <h2 style="margin-top:0; color:var(--wc-gold); border-bottom:1px solid var(--wc-border); padding-bottom:12px; font-family:'Orbitron',sans-serif; letter-spacing:2px; font-size:clamp(15px,5vw,20px);">ADMIN MODE</h2>
+            <div style="background:rgba(242,194,78,0.08); border:1px solid rgba(242,194,78,0.35); border-radius:8px; padding:14px; margin:16px 0;">
+                <div style="font-size:12px; color:#a1b7d6; margin-bottom:4px;">เข้าสู่ระบบในฐานะ</div>
+                <div style="font-size:18px; font-weight:700; color:var(--wc-gold); font-family:'Orbitron',sans-serif;">ADMIN</div>
+            </div>
+            <div style="display:flex; gap:12px; margin-top:8px;">
+                <button onclick="closeLoginModal()" style="flex:1; padding:10px; background:linear-gradient(135deg,#334155,#1e293b); color:#cbd5e1; border:none; border-radius:8px; cursor:pointer; font-weight:600;">ปิด</button>
+                <button onclick="logoutAdmin()" style="flex:1; padding:10px; background:linear-gradient(135deg,#dc2626,#b91c1c); color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:700;">ออกจากระบบ</button>
+            </div>
+        </div>
+
     </div>
 </div>
 
-<!-- Player Login Modal -->
-<div id="playerLoginModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 17, 38, 0.88); backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center;">
-    <div class="modal-content" style="background: var(--wc-card-bg); border: 2px solid #22c55e; box-shadow: 0 0 30px rgba(34,197,94,0.2); padding: 30px; border-radius: 12px; width: 100%; max-width: 400px; text-align: center; color: var(--wc-text-main); position: relative;">
-        <div style="font-size: 40px; margin-bottom: 10px;">⚽</div>
-        <h2 id="playerLoginTitle" style="margin-top: 0; color: #22c55e; border-bottom: 1px solid var(--wc-border); padding-bottom: 12px; font-family: 'Orbitron', sans-serif; letter-spacing: 2px; font-size: 20px;">LOGIN ผู้แข่งขัน</h2>
-        <p style="font-size: 13px; color: var(--wc-text-sub); margin-bottom: 20px;">ใส่ ID ที่ลงทะเบียนไว้เพื่อส่งรูปหลักฐานการแข่งขัน</p>
-        <div id="playerLoginForm">
-            <div style="text-align: left; margin-bottom: 20px;">
-                <label style="font-size: 13px; color: var(--wc-text-sub); display: block; margin-bottom: 6px;">ID / รหัสผู้เล่น :</label>
-                <input type="text" id="player-login-id" class="edit-input" placeholder="เช่น Mai, Sky" style="width: 100%; padding: 10px; background: rgba(5,17,38,0.6); border: 1px solid #22c55e; border-radius: 6px; color: #fff; outline: none;" onkeydown="if(event.key==='Enter') submitPlayerLogin()">
-            </div>
-            <div style="display: flex; gap: 12px;">
-                <button onclick="closePlayerLoginModal()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #334155 0%, #1e293b 100%); color: #cbd5e1; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">ยกเลิก</button>
-                <button onclick="submitPlayerLogin()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; box-shadow: 0 4px 12px rgba(34,197,94,0.3);">เข้าสู่ระบบ ⚡</button>
-            </div>
-        </div>
-        <div id="playerLoggedInInfo" style="display:none;">
-            <div style="background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.4); border-radius: 8px; padding: 14px; margin-bottom: 20px;">
-                <div style="font-size: 13px; color: #a1b7d6; margin-bottom: 4px;">เข้าสู่ระบบในฐานะ</div>
-                <div id="playerLoggedInName" style="font-size: 18px; font-weight: 700; color: #22c55e; font-family: 'Orbitron', sans-serif;"></div>
-            </div>
-            <div style="display: flex; gap: 12px;">
-                <button onclick="closePlayerLoginModal()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #334155 0%, #1e293b 100%); color: #cbd5e1; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">ปิด</button>
-                <button onclick="logoutPlayer()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 700;">ออกจากระบบ</button>
-            </div>
-        </div>
+<!-- ── Player Submit Result Modal ── -->
+<div id="playerSubmitModal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(5,17,38,0.92);backdrop-filter:blur(10px);justify-content:center;align-items:flex-start;overflow-y:auto;padding:24px 12px;" onclick="if(event.target===this)closePlayerSubmitModal()">
+  <div style="background:linear-gradient(145deg,#0a1a36,#060e22);border:2px solid rgba(29,78,216,0.5);border-radius:16px;padding:24px;width:100%;max-width:480px;margin:auto;box-shadow:0 0 50px rgba(29,78,216,0.2);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#60a5fa;letter-spacing:1.5px;">⚽ ส่งผลการแข่งขัน</div>
+      <button onclick="closePlayerSubmitModal()" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:15px;flex-shrink:0;">✕</button>
     </div>
+    <div style="font-size:12px;color:#64748b;margin-bottom:16px;">เลือกคู่แข่งขันของทีมคุณ กรอกสกอร์ และแนบรูปหลักฐาน — แอดมินจะตรวจสอบก่อนบันทึกผล</div>
+
+    <!-- match picker (dropdown — hidden when locked) -->
+    <div id="psm-match-picker" style="margin-bottom:14px;">
+      <label style="font-size:12px;color:#a1b7d6;display:block;margin-bottom:6px;">🗓️ เลือกนัดการแข่งขัน :</label>
+      <select id="psm-match-select" style="width:100%;padding:10px;background:rgba(5,17,38,0.7);border:1px solid rgba(96,165,250,0.35);border-radius:8px;color:#fff;font-size:13px;outline:none;" onchange="onPsmMatchSelect()">
+        <option value="">-- กรุณาเลือกนัด --</option>
+      </select>
+    </div>
+    <!-- locked match display (shown when opened from a specific match) -->
+    <div id="psm-match-locked" style="display:none;margin-bottom:14px;">
+      <label style="font-size:12px;color:#a1b7d6;display:block;margin-bottom:6px;">🗓️ นัดการแข่งขัน :</label>
+      <div id="psm-match-locked-label" style="padding:10px 14px;background:rgba(5,17,38,0.7);border:1px solid rgba(96,165,250,0.35);border-radius:8px;color:#60a5fa;font-size:13px;font-weight:700;"></div>
+    </div>
+
+    <!-- score inputs -->
+    <div id="psm-score-area" style="display:none;margin-bottom:14px;">
+      <label style="font-size:12px;color:#a1b7d6;display:block;margin-bottom:8px;">📊 ผลการแข่งขัน :</label>
+      <div style="display:flex;align-items:center;gap:10px;background:rgba(0,0,0,0.25);border-radius:10px;padding:12px 14px;">
+        <div style="flex:1;text-align:right;">
+          <div id="psm-home-label" style="font-size:12px;color:#94a3b8;margin-bottom:4px;"></div>
+          <input type="number" id="psm-home-score" min="0" max="99" placeholder="0" style="width:64px;height:42px;text-align:center;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:22px;font-weight:900;font-family:'Orbitron',sans-serif;outline:none;">
+        </div>
+        <div style="font-size:20px;color:#475569;font-weight:700;flex-shrink:0;">:</div>
+        <div style="flex:1;text-align:left;">
+          <div id="psm-away-label" style="font-size:12px;color:#94a3b8;margin-bottom:4px;"></div>
+          <input type="number" id="psm-away-score" min="0" max="99" placeholder="0" style="width:64px;height:42px;text-align:center;background:rgba(0,0,0,0.45);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:22px;font-weight:900;font-family:'Orbitron',sans-serif;outline:none;">
+        </div>
+      </div>
+    </div>
+
+    <!-- photo upload -->
+    <div id="psm-photo-area" style="display:none;margin-bottom:18px;">
+      <label style="font-size:12px;color:#a1b7d6;display:block;margin-bottom:8px;">📸 รูปหลักฐาน <span style="color:#ef4444;">*จำเป็น</span> :</label>
+      <div id="psm-photo-preview" style="display:none;margin-bottom:8px;border-radius:8px;overflow:hidden;max-height:180px;text-align:center;background:rgba(0,0,0,0.3);">
+        <img id="psm-photo-img" src="" style="max-width:100%;max-height:180px;object-fit:contain;">
+      </div>
+      <button onclick="psmPickPhoto()" id="psm-photo-btn" style="width:100%;padding:11px;background:rgba(34,197,94,0.08);border:1px dashed rgba(34,197,94,0.45);border-radius:8px;color:#22c55e;font-size:13px;font-weight:700;cursor:pointer;">📷 เลือกรูปภาพจากอุปกรณ์</button>
+      <div id="psm-photo-name" style="font-size:11px;color:#64748b;margin-top:5px;text-align:center;"></div>
+    </div>
+
+    <!-- submit -->
+    <div style="text-align:center;">
+      <button onclick="submitPlayerResult()" style="padding:13px 32px;background:linear-gradient(135deg,#1d4ed8,#1e40af);color:#fff;border:none;border-radius:10px;font-weight:900;font-size:15px;cursor:pointer;letter-spacing:0.5px;box-shadow:0 4px 18px rgba(29,78,216,0.4);">✅ ส่งผลเพื่อรอตรวจสอบ</button>
+    </div>
+    <div id="psm-status" style="margin-top:10px;font-size:12px;text-align:center;color:#64748b;"></div>
+
+    <!-- my pending list -->
+    <div style="margin-top:20px;border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">
+      <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;">ผลที่ส่งไว้แล้ว</div>
+      <div id="psm-my-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Admin Pending Results Modal ── -->
+<div id="adminPendingModal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(5,17,38,0.92);backdrop-filter:blur(10px);justify-content:center;align-items:flex-start;overflow-y:auto;padding:24px 12px;" onclick="if(event.target===this)closeAdminPendingModal()">
+  <div style="background:linear-gradient(145deg,#0d1f3c,#081424);border:2px solid rgba(242,194,78,0.4);border-radius:16px;padding:24px;width:100%;max-width:620px;margin:auto;box-shadow:0 0 50px rgba(242,194,78,0.1);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#F2C24E;letter-spacing:1.5px;">📋 รอตรวจสอบผลการแข่งขัน</div>
+      <button onclick="closeAdminPendingModal()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:15px;line-height:1;">✕</button>
+    </div>
+    <div id="admin-pending-list"></div>
+  </div>
 </div>
 
 <!-- ── HOF Manage Modal (Admin Edit) ── -->
@@ -3415,7 +3724,7 @@
         <!-- H2H Summary inside odds modal -->
         <div id="odds-h2h-bar" style="display:none; background:rgba(59,130,246,0.07); border:1px solid rgba(59,130,246,0.18); border-radius:10px; padding:9px 12px; margin-bottom:10px; font-size:11px; color:#93c5fd; line-height:1.6;"></div>
         <div style="padding:0 0 10px; text-align:center;">
-            <button onclick="openH2HModal()" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;font-size:11px;font-weight:700;padding:6px 16px;border-radius:8px;cursor:pointer;width:100%;font-family:'Prompt',sans-serif;letter-spacing:0.5px;">📊 จัดการประวัติ H2H</button>
+            <button onclick="closeOddsModal();openH2HModal();" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;font-size:11px;font-weight:700;padding:6px 16px;border-radius:8px;cursor:pointer;width:100%;font-family:'Prompt',sans-serif;letter-spacing:0.5px;">📊 จัดการประวัติ H2H</button>
         </div>
         <div class="odds-modal-actions">
             <button class="odds-save-btn" onclick="saveOdds()">💾 บันทึก</button>
@@ -3549,22 +3858,15 @@
             <span class="se-modal-title">⚽ บันทึกผลการแข่งขัน</span>
         </div>
         <div class="se-modal-body">
-            <div class="se-matchup" id="se-matchup-area"></div>
-            <div class="se-score-row" id="se-score-edit-row">
-                <input type="number" class="se-score-inp" id="se-home-inp" min="0" placeholder="0">
-                <span class="se-dash">—</span>
-                <input type="number" class="se-score-inp" id="se-away-inp" min="0" placeholder="0">
-            </div>
-            <div id="se-score-view-row" style="display:none;" class="se-view-score-display"></div>
+            <div class="se-match-card" id="se-match-card"></div>
             <div id="se-ah-area"></div>
             <div class="se-evidence-row" id="se-evidence-area"></div>
-            <div id="se-bigmatch-area" style="text-align:center;margin-bottom:8px;"></div>
             <div id="se-h2h-area"></div>
-            <div class="se-modal-actions">
-                <button class="se-confirm-btn" id="se-confirm-btn" onclick="confirmScoreFromModal()">✅ บันทึกผล</button>
-                <button class="se-reset-btn" id="se-reset-btn" style="display:none;" onclick="resetScoreFromModal()">↩️ ล้างผล</button>
+            <div class="se-btn-grid">
+                <button class="se-btn se-btn-green" id="se-confirm-btn" onclick="confirmScoreFromModal()">✅ บันทึกผล</button>
+                <button class="se-btn se-btn-red" id="se-reset-btn" style="display:none;" onclick="resetScoreFromModal()">↩ ล้างผล</button>
             </div>
-            <button class="se-close-btn" onclick="closeScoreModal()">✕ ปิด</button>
+            <button class="se-close-btn" onclick="closeScoreModal()">ปิด</button>
         </div>
     </div>
 </div>
@@ -3914,6 +4216,7 @@ let state = {
     titleW3: "TOURNAMENT",
     tournamentDetails: "",
     discordUrl: "https://discord.gg/ESMDUce5pf",
+    socialLinks: { discord: "https://discord.gg/ESMDUce5pf", youtube: "", facebook: "", tiktok: "", twitch: "" },
     bgImageUrl: "",
     tournamentFormat: "league",
     cupConfig: { roundFormat: 'single', finalFormat: 'single', thirdPlace: false, consolation: false },
@@ -3926,6 +4229,7 @@ let state = {
     bigMatchIds: [],
     no1History: { teamId: null, since: null },
     trophyImg: "",
+    pendingResults: [],
     adBanner: {
         enabled: true,
         labelText: "โฆษณาต้าวเพื่อนใหม่",
@@ -4027,6 +4331,8 @@ function _applyCloudData(r) {
     state.tournamentFormat = r.tournamentFormat || state.tournamentFormat;
     state.cupChampionId = r.cupChampionId !== undefined ? r.cupChampionId : state.cupChampionId;
     state.cupConfig = r.cupConfig || state.cupConfig;
+    if (r.discordUrl) state.discordUrl = r.discordUrl;
+    if (r.socialLinks) state.socialLinks = Object.assign({}, state.socialLinks, r.socialLinks);
     if (r.announcement !== undefined) {
         const prevAnn = state.announcement;
         state.announcement = r.announcement || "";
@@ -4039,6 +4345,7 @@ function _applyCloudData(r) {
     // backward-compat: old data used bigMatchId (single), new uses bigMatchIds (array)
     state.bigMatchIds = Array.isArray(r.bigMatchIds) ? r.bigMatchIds : (r.bigMatchId ? [r.bigMatchId] : state.bigMatchIds || []);
     if (r.no1History) state.no1History = r.no1History;
+    if (Array.isArray(r.pendingResults)) state.pendingResults = r.pendingResults;
     if (r.adBanner !== undefined) state.adBanner = Object.assign({}, state.adBanner, r.adBanner);
     if (r.trophyImg !== undefined) state.trophyImg = r.trophyImg;
     _restoreEvidenceFromLocal();
@@ -4048,6 +4355,7 @@ function _applyCloudData(r) {
     renderAnnouncement();
     renderAdBanner();
     renderChangelog();
+    updateAdminPendingBadge();
 }
 
 // ─── Announcement Banner ─────────────────────────────────────────────────────
@@ -4299,100 +4607,206 @@ function setupAutocompleteLogic(inputId, listContainerId) {
     });
 }
 
-function promptAdminLogin() {
-    document.getElementById("login-username").value = "";
-    document.getElementById("login-password").value = "";
-    
-    const loginModal = document.getElementById("adminLoginModal");
-    loginModal.style.display = "flex";
-    
-    setTimeout(() => {
-        document.getElementById("login-username").focus();
-    }, 150);
+// ─── Unified Login Modal ─────────────────────────────────────────────────────
+function _lmShowStep(step) {
+    document.getElementById("lm-id-step").style.display    = step === 'id'     ? 'block' : 'none';
+    document.getElementById("lm-pass-step").style.display  = step === 'pass'   ? 'block' : 'none';
+    document.getElementById("lm-player-info").style.display= step === 'player' ? 'block' : 'none';
+    document.getElementById("lm-admin-info").style.display = step === 'admin'  ? 'block' : 'none';
 }
 
-function closeAdminLoginModal() {
-    document.getElementById("adminLoginModal").style.display = "none";
+function toggleSocialMenu() {
+    const menu = document.getElementById("social-menu");
+    if (menu) menu.classList.toggle("open");
 }
 
-function submitAdminLogin() {
-    const userVal = document.getElementById("login-username").value.trim();
-    const passVal = document.getElementById("login-password").value.trim();
+function openLoginModal() {
+    const modal = document.getElementById("loginModal");
+    modal.style.display = "flex";
+    if (!state.isViewOnly) {
+        _lmShowStep('admin');
+    } else if (state.playerTeamId) {
+        const t = state.teams.find(x => x.id.toLowerCase() === state.playerTeamId.toLowerCase());
 
-    if (!userVal || !passVal) {
-        showAlert("⚠️ กรุณากรอกทั้งชื่อผู้ใช้และรหัสผ่านให้ครบถ้วนครับ");
-        return;
+        // ชื่อทีม + ผู้เล่น + โลโก้
+        document.getElementById("lm-team-name").textContent  = t ? t.team   : state.playerTeamId;
+        document.getElementById("lm-player-name").textContent = t ? `${t.player} (${t.id})` : state.playerTeamId;
+        const logoEl = document.getElementById("lm-team-logo");
+        if (t && t.logo) { logoEl.src = t.logo; logoEl.style.display = "block"; }
+        else              { logoEl.style.display = "none"; }
+
+        // สถิติซีซันนี้ (calculateStandings)
+        try {
+            const standings = calculateStandings();
+            const ri = standings.findIndex(s => s.id.toLowerCase() === state.playerTeamId.toLowerCase());
+            const row = ri >= 0 ? standings[ri] : null;
+            document.getElementById("lm-rank").textContent  = ri >= 0 ? `#${ri + 1}` : "—";
+            document.getElementById("lm-pts").textContent   = row ? row.pts : 0;
+            document.getElementById("lm-wdl").textContent   = row ? `${row.w}-${row.d}-${row.l}` : "0-0-0";
+            document.getElementById("lm-gfga").textContent  = row ? `${row.gf} / ${row.ga}` : "0 / 0";
+        } catch(e) {
+            document.getElementById("lm-rank").textContent = "—";
+        }
+
+        // Hall of Fame (ตลอดกาล)
+        const hof = (state.hallOfFame || {})[state.playerTeamId] || {};
+        document.getElementById("lm-hof-trophies").textContent = hof.trophies || 0;
+        document.getElementById("lm-hof-w").textContent        = hof.wins    || 0;
+        document.getElementById("lm-hof-d").textContent        = hof.draws   || 0;
+        document.getElementById("lm-hof-l").textContent        = hof.losses  || 0;
+
+        _lmShowStep('player');
+    } else {
+        document.getElementById("lm-id-input").value = "";
+        _lmShowStep('id');
+        setTimeout(() => document.getElementById("lm-id-input").focus(), 150);
     }
+}
 
-    if (userVal === ADMIN_USER && passVal === ADMIN_PASS) {
+function closeLoginModal() {
+    document.getElementById("loginModal").style.display = "none";
+}
+// compat aliases
+function closeAdminLoginModal() { closeLoginModal(); }
+function closePlayerLoginModal() { closeLoginModal(); }
+function promptAdminLogin() { openLoginModal(); }
+function promptPlayerLogin() { openLoginModal(); }
+
+function submitLoginId() {
+    const idVal = document.getElementById("lm-id-input").value.trim();
+    if (!idVal) { showAlert("⚠️ กรุณากรอก ID ก่อนครับ"); return; }
+    if (idVal.toLowerCase() === ADMIN_USER.toLowerCase()) {
+        // เป็น admin → ขอรหัสผ่าน
+        document.getElementById("lm-pass-input").value = "";
+        _lmShowStep('pass');
+        setTimeout(() => document.getElementById("lm-pass-input").focus(), 150);
+    } else {
+        // ลองเป็นผู้เล่น
+        const team = state.teams.find(t => t.id.toLowerCase() === idVal.toLowerCase() && t.status === 'approved');
+        if (!team) {
+            showAlert("❌ ไม่พบ ID นี้ในรายชื่อผู้แข่งขันที่อนุมัติแล้ว\nกรุณาตรวจสอบ ID ให้ถูกต้อง หรือรอการอนุมัติจากแอดมินครับ");
+            return;
+        }
+        _doPlayerLogin(team);
+    }
+}
+
+function submitLoginPass() {
+    const passVal = document.getElementById("lm-pass-input").value.trim();
+    if (!passVal) { showAlert("⚠️ กรุณากรอกรหัสผ่านก่อนครับ"); return; }
+    if (passVal === ADMIN_PASS) {
         if (window._READONLY_MODE) {
             showAlert('🔒 Readonly Mode เปิดอยู่ — Admin UI ใช้งานได้ แต่จะไม่บันทึกข้อมูลขึ้น Cloud\nปิด ?readonly=1 ออกจาก URL เพื่อใช้งานจริง');
         }
         state.isViewOnly = false;
-        closeAdminLoginModal();
-        
+        closeLoginModal();
         document.getElementById("control-buttons").style.display = "flex";
         const dragHint = document.getElementById("admin-drag-hint");
-        if(dragHint) dragHint.style.display = "inline";
-        
-        renderHeader(); 
-        renderAdminDock(); 
-        renderLeague(); 
-        refreshUIState();
-        
+        if (dragHint) dragHint.style.display = "inline";
+        _setLoginBtn('admin');
+        _updateRoleStatusBar();
+        renderHeader(); renderAdminDock(); renderLeague(); refreshUIState();
         showStatus("🔓 Admin เข้าระบบแล้ว");
         showAlert("🎉 ยินดีต้อนรับครับแอดมิน! เมนูตัวควบคุมปลดล็อกเรียบร้อยแล้ว");
     } else {
-        showAlert("❌ รหัสผ่านหรือบัญชีผู้ใช้ไม่ถูกต้อง! กรุณาลองใหม่อีกครั้ง");
+        showAlert("❌ รหัสผ่านไม่ถูกต้อง! กรุณาลองใหม่อีกครั้ง");
     }
 }
+// compat alias
+function submitAdminLogin() { submitLoginPass(); }
+function submitPlayerLogin() { submitLoginId(); }
 
-// ─── Player Login ───────────────────────────────────────────────────────────
-function promptPlayerLogin() {
-    const modal = document.getElementById("playerLoginModal");
-    modal.style.display = "flex";
-    if (state.playerTeamId) {
-        // Already logged in — show info panel
-        document.getElementById("playerLoginForm").style.display = "none";
-        document.getElementById("playerLoggedInInfo").style.display = "block";
-        const t = state.teams.find(x => x.id.toLowerCase() === state.playerTeamId.toLowerCase());
-        document.getElementById("playerLoggedInName").textContent = t ? `${t.player} (${t.id})` : state.playerTeamId;
-    } else {
-        document.getElementById("playerLoginForm").style.display = "block";
-        document.getElementById("playerLoggedInInfo").style.display = "none";
-        document.getElementById("player-login-id").value = "";
-        setTimeout(() => document.getElementById("player-login-id").focus(), 150);
-    }
-}
-
-function closePlayerLoginModal() {
-    document.getElementById("playerLoginModal").style.display = "none";
-}
-
-function submitPlayerLogin() {
-    const idVal = document.getElementById("player-login-id").value.trim();
-    if (!idVal) { showAlert("⚠️ กรุณากรอก ID ของคุณก่อนครับ"); return; }
-    const team = state.teams.find(t => t.id.toLowerCase() === idVal.toLowerCase() && t.status === 'approved');
-    if (!team) {
-        showAlert("❌ ไม่พบ ID นี้ในรายชื่อผู้แข่งขันที่อนุมัติแล้ว\nกรุณาตรวจสอบ ID ให้ถูกต้อง หรือรอการอนุมัติจากแอดมินครับ");
-        return;
-    }
+function _doPlayerLogin(team) {
     state.playerTeamId = team.id;
-    const btn = document.getElementById("player-login-btn");
-    if (btn) btn.classList.add("logged-in");
-    closePlayerLoginModal();
+    _setLoginBtn('player', team.player || team.id);
+    _updateRoleStatusBar();
+    closeLoginModal();
     renderLeague();
     showStatus(`⚽ ยินดีต้อนรับ ${team.player}!`);
 }
 
+function _setLoginBtn(mode, label) {
+    const btn = document.getElementById("login-btn");
+    if (!btn) return;
+    btn.classList.remove("player-in", "admin-in");
+    if (mode === 'player') {
+        btn.classList.add("player-in");
+        btn.title = "ออกจากระบบ / ดูข้อมูลผู้แข่งขัน";
+        btn.onclick = openLoginModal;
+        btn.innerHTML = `<span class="logout-icon">🔓</span><span class="logout-name">${label}</span>`;
+    } else if (mode === 'admin') {
+        btn.classList.add("admin-in");
+        btn.title = "ออกจากระบบ Admin";
+        btn.onclick = openLoginModal;
+        btn.innerHTML = `<span class="logout-icon">🔐</span><span class="logout-label">ADMIN</span>`;
+    } else {
+        btn.title = "เข้าสู่ระบบ";
+        btn.onclick = openLoginModal;
+        btn.innerHTML = "🔑";
+    }
+}
+
 function logoutPlayer() {
+    closeLoginModal();   // ปิด modal ก่อนเสมอ ไม่ว่าขั้นตอนอื่นจะเกิดอะไรขึ้น
     state.playerTeamId = null;
-    const btn = document.getElementById("player-login-btn");
-    if (btn) btn.classList.remove("logged-in");
-    closePlayerLoginModal();
+    _setLoginBtn('none');
+    _updateRoleStatusBar();
     renderLeague();
     showStatus("👋 ออกจากระบบแล้ว");
 }
+
+function logoutAdmin() {
+    closeLoginModal();   // ปิด modal ก่อนเสมอ
+    state.isViewOnly = true;
+    _setLoginBtn('none');
+    const controlButtons = document.getElementById("control-buttons");
+    if (controlButtons) controlButtons.style.display = "none";
+    const dragHint = document.getElementById("admin-drag-hint");
+    if (dragHint) dragHint.style.display = "none";
+    _updateRoleStatusBar();
+    renderAdminDock();
+    renderLeague();
+    refreshUIState();
+    showStatus("🔒 ออกจากระบบ Admin แล้ว");
+}
+
+function _updateRoleStatusBar() {
+    const bar = document.getElementById("role-status-bar");
+    const dot = document.getElementById("rsb-dot");
+    const txt = document.getElementById("rsb-text");
+    const exitBtn = document.getElementById("rsb-exit");
+    if (!bar) return;
+
+    const isAdmin = !state.isViewOnly;
+    const isPlayer = !!state.playerTeamId;
+
+    if (isAdmin) {
+        bar.style.display = "flex";
+        bar.style.borderColor = "rgba(242,194,78,0.5)";
+        dot.style.background = "#F2C24E";
+        dot.style.boxShadow = "0 0 6px #F2C24E";
+        txt.style.color = "#fde68a";
+        txt.textContent = "🔑 Admin Mode";
+        exitBtn.textContent = "✕ ออก Admin";
+        exitBtn.style.display = "inline";
+        exitBtn.onclick = logoutAdmin;
+    } else if (isPlayer) {
+        bar.style.display = "flex";
+        bar.style.borderColor = "rgba(34,197,94,0.5)";
+        dot.style.background = "#22c55e";
+        dot.style.boxShadow = "0 0 6px #22c55e";
+        txt.style.color = "#86efac";
+        const t = state.teams.find(t => t.id === state.playerTeamId);
+        txt.textContent = "⚽ " + ((t && t.player) ? t.player : state.playerTeamId);
+        exitBtn.textContent = "✕ ออกระบบ";
+        exitBtn.style.display = "inline";
+        exitBtn.onclick = logoutPlayer;
+    } else {
+        bar.style.display = "none";
+    }
+}
+
+function _rsbExit() {}
 // ────────────────────────────────────────────────────────────────────────────
 
 function _toWikiThumb(url, size) {
@@ -5323,8 +5737,20 @@ function renderHeader() {
     _applyHeaderTrophy(state.trophyImg || "");
     }
 
-    const discordBtn = document.getElementById("discord-floating-link");
-    if (discordBtn) discordBtn.href = state.discordUrl || "https://discord.gg/ESMDUce5pf";
+    if (!state.socialLinks) state.socialLinks = { discord: "", youtube: "", facebook: "", tiktok: "", twitch: "" };
+    if (!state.socialLinks.discord) state.socialLinks.discord = state.discordUrl || "https://discord.gg/ESMDUce5pf";
+    ["discord", "youtube", "facebook", "tiktok", "twitch"].forEach(function (platform) {
+        const link = document.getElementById("social-link-" + platform);
+        if (!link) return;
+        const url = (state.socialLinks[platform] || "").trim();
+        if (url) {
+            link.href = url;
+            link.classList.remove("disabled");
+        } else {
+            link.href = "#";
+            link.classList.add("disabled");
+        }
+    });
 
     const detailsBox = document.getElementById("tournament-details-box");
     if (state.tournamentDetails && state.tournamentDetails.trim() !== "") {
@@ -5341,6 +5767,331 @@ function renderHeader() {
     }
     _applyHeaderTrophy(state.trophyImg || '');
 }
+
+// ════════════════════════════════════════════════════════════════════
+// PLAYER SUBMIT RESULT SYSTEM
+// ════════════════════════════════════════════════════════════════════
+
+let _psmPhotoBase64 = null;   // base64 of selected photo (for imgbb)
+let _psmPhotoUrl    = null;   // final URL after upload
+let _psmPhotoBlob   = null;   // local blob for preview
+
+function openPlayerSubmitModal(preSelectMatchId) {
+    if (!state.playerTeamId) { promptPlayerLogin(); return; }
+    _psmPhotoBase64 = null; _psmPhotoUrl = null; _psmPhotoBlob = null;
+
+    // Build match list — แสดงทุกนัดที่ยังไม่มีผล
+    const myId = state.playerTeamId;
+    const sel  = document.getElementById("psm-match-select");
+    const myMatches = (state.matches || []).filter(m =>
+        m.homeScore === null && m.awayScore === null &&
+        m.homeId !== 'BYE' && m.awayId !== 'BYE'
+    );
+
+    // Remove matches already submitted (pending)
+    const submittedMatchIds = new Set(
+        (state.pendingResults || [])
+            .filter(p => p.submittedBy === myId && p.status === 'pending')
+            .map(p => p.matchId)
+    );
+
+    sel.innerHTML = '<option value="">-- กรุณาเลือกนัด --</option>';
+    myMatches.forEach(m => {
+        const hTeam = state.teams.find(t => t.id === m.homeId);
+        const aTeam = state.teams.find(t => t.id === m.awayId);
+        const hName = hTeam ? hTeam.team : m.homeId;
+        const aName = aTeam ? aTeam.team : m.awayId;
+        const alreadySent = submittedMatchIds.has(m.id);
+        const opt = document.createElement("option");
+        opt.value = m.id;
+        opt.textContent = alreadySent ? `✅ (ส่งแล้ว) ${hName} vs ${aName}` : `${hName} vs ${aName}`;
+        if (alreadySent) opt.disabled = true;
+        sel.appendChild(opt);
+    });
+
+    // แสดง picker หรือ locked display ตาม preSelectMatchId
+    const pickerEl = document.getElementById("psm-match-picker");
+    const lockedEl = document.getElementById("psm-match-locked");
+    if (preSelectMatchId) {
+        sel.value = preSelectMatchId;
+        const mLock = state.matches.find(x => x.id == preSelectMatchId);
+        if (mLock) {
+            const hT = state.teams.find(t => t.id === mLock.homeId);
+            const aT = state.teams.find(t => t.id === mLock.awayId);
+            document.getElementById("psm-match-locked-label").textContent =
+                `${hT ? hT.team : mLock.homeId}  vs  ${aT ? aT.team : mLock.awayId}`;
+        }
+        pickerEl.style.display = "none";
+        lockedEl.style.display = "block";
+    } else {
+        pickerEl.style.display = "block";
+        lockedEl.style.display = "none";
+    }
+
+    // Reset UI
+    document.getElementById("psm-score-area").style.display = "none";
+    document.getElementById("psm-photo-area").style.display = "none";
+    document.getElementById("psm-photo-preview").style.display = "none";
+    document.getElementById("psm-photo-name").textContent = "";
+    document.getElementById("psm-status").textContent = "";
+    if (document.getElementById("psm-home-score")) document.getElementById("psm-home-score").value = "";
+    if (document.getElementById("psm-away-score")) document.getElementById("psm-away-score").value = "";
+
+    _renderPsmMyList();
+
+    const modal = document.getElementById("playerSubmitModal");
+    modal.style.display = "flex";
+
+    // trigger เลือกนัดอัตโนมัติหลัง modal เปิด
+    if (preSelectMatchId) setTimeout(() => onPsmMatchSelect(), 50);
+}
+
+function closePlayerSubmitModal() {
+    document.getElementById("playerSubmitModal").style.display = "none";
+}
+
+function onPsmMatchSelect() {
+    const matchId = parseInt(document.getElementById("psm-match-select").value);
+    const scoreArea = document.getElementById("psm-score-area");
+    const photoArea = document.getElementById("psm-photo-area");
+    if (!matchId) {
+        scoreArea.style.display = "none";
+        photoArea.style.display = "none";
+        return;
+    }
+    const m = state.matches.find(x => x.id === matchId);
+    if (!m) return;
+    const hTeam = state.teams.find(t => t.id === m.homeId);
+    const aTeam = state.teams.find(t => t.id === m.awayId);
+    document.getElementById("psm-home-label").textContent = hTeam ? hTeam.team : m.homeId;
+    document.getElementById("psm-away-label").textContent = aTeam ? aTeam.team : m.awayId;
+    scoreArea.style.display = "";
+    photoArea.style.display = "";
+    document.getElementById("psm-home-score").value = "";
+    document.getElementById("psm-away-score").value = "";
+    // reset photo
+    _psmPhotoBase64 = null; _psmPhotoUrl = null; _psmPhotoBlob = null;
+    document.getElementById("psm-photo-preview").style.display = "none";
+    document.getElementById("psm-photo-name").textContent = "";
+    document.getElementById("psm-photo-btn").textContent = "📷 เลือกรูปภาพจากอุปกรณ์";
+}
+
+function psmPickPhoto() {
+    const input = document.createElement("input");
+    input.type = "file"; input.accept = "image/*";
+    input.onchange = function(e) {
+        const file = e.target.files[0]; if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            const img = new Image();
+            img.onload = function() {
+                let w = img.width, h = img.height;
+                if (w > 1280) { h = Math.round(h * 1280 / w); w = 1280; }
+                const cvs = document.createElement("canvas");
+                cvs.width = w; cvs.height = h;
+                cvs.getContext("2d").drawImage(img, 0, 0, w, h);
+                _psmPhotoBase64 = cvs.toDataURL("image/jpeg", 0.78).split(",")[1];
+                _psmPhotoBlob   = cvs.toDataURL("image/jpeg", 0.78);
+                document.getElementById("psm-photo-img").src = _psmPhotoBlob;
+                document.getElementById("psm-photo-preview").style.display = "";
+                document.getElementById("psm-photo-name").textContent = "✅ " + file.name;
+                document.getElementById("psm-photo-btn").textContent = "🔄 เปลี่ยนรูปภาพ";
+            };
+            img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+    };
+    input.click();
+}
+
+async function submitPlayerResult() {
+    const matchId = parseInt(document.getElementById("psm-match-select").value);
+    if (!matchId) { _psmStatus("⚠️ กรุณาเลือกนัดการแข่งขัน", "#f59e0b"); return; }
+
+    const homeScoreStr = document.getElementById("psm-home-score").value.trim();
+    const awayScoreStr = document.getElementById("psm-away-score").value.trim();
+    if (homeScoreStr === "" || awayScoreStr === "") { _psmStatus("⚠️ กรุณากรอกสกอร์ให้ครบทั้งสองทีม", "#f59e0b"); return; }
+    const homeScore = parseInt(homeScoreStr);
+    const awayScore = parseInt(awayScoreStr);
+    if (isNaN(homeScore) || isNaN(awayScore) || homeScore < 0 || awayScore < 0) { _psmStatus("⚠️ สกอร์ไม่ถูกต้อง", "#f59e0b"); return; }
+
+    if (!_psmPhotoBase64) { _psmStatus("⚠️ กรุณาแนบรูปหลักฐานก่อนส่ง", "#f59e0b"); return; }
+
+    _psmStatus("⏳ กำลังอัปโหลดรูป...", "#60a5fa");
+
+    let imgUrl = _psmPhotoBlob; // fallback to local blob
+    if (IMGBB_API_KEY && IMGBB_API_KEY !== "ใส่_API_KEY_ของคุณตรงนี้") {
+        try {
+            const fd = new FormData();
+            fd.append("key", IMGBB_API_KEY);
+            fd.append("image", _psmPhotoBase64);
+            const res  = await fetch("https://api.imgbb.com/1/upload", { method: "POST", body: fd });
+            const data = await res.json();
+            if (data.success) imgUrl = data.data.url;
+        } catch(e) { /* use local blob */ }
+    }
+
+    if (!Array.isArray(state.pendingResults)) state.pendingResults = [];
+    state.pendingResults.push({
+        id:          Date.now(),
+        matchId:     matchId,
+        homeScore:   homeScore,
+        awayScore:   awayScore,
+        evidenceImg: imgUrl,
+        submittedBy: state.playerTeamId,
+        submittedAt: Date.now(),
+        status:      "pending"
+    });
+
+    _psmStatus("", "");
+    saveDataToCloud();
+    _psmStatus("✅ ส่งผลสำเร็จ! รอแอดมินตรวจสอบ", "#22c55e");
+    _renderPsmMyList();
+    updateAdminPendingBadge();
+    // reset UI
+    document.getElementById("psm-match-select").value = "";
+    document.getElementById("psm-score-area").style.display = "none";
+    document.getElementById("psm-photo-area").style.display = "none";
+    document.getElementById("psm-photo-preview").style.display = "none";
+    document.getElementById("psm-photo-name").textContent = "";
+    document.getElementById("psm-home-score").value = "";
+    document.getElementById("psm-away-score").value = "";
+    _psmPhotoBase64 = null; _psmPhotoUrl = null; _psmPhotoBlob = null;
+    // repopulate match picker (sent match now marked)
+    openPlayerSubmitModal();
+}
+
+function _psmStatus(msg, color) {
+    const el = document.getElementById("psm-status");
+    if (!el) return;
+    el.textContent = msg; el.style.color = color;
+}
+
+function _renderPsmMyList() {
+    const el = document.getElementById("psm-my-list"); if (!el) return;
+    const myId = state.playerTeamId;
+    const mine = (state.pendingResults || []).filter(p => p.submittedBy === myId);
+    if (!mine.length) { el.innerHTML = '<div style="font-size:12px;color:#475569;text-align:center;padding:8px;">ยังไม่มีรายการที่ส่ง</div>'; return; }
+    el.innerHTML = mine.map(p => {
+        const m = (state.matches || []).find(x => x.id === p.matchId);
+        const hTeam = m ? state.teams.find(t => t.id === m.homeId) : null;
+        const aTeam = m ? state.teams.find(t => t.id === m.awayId) : null;
+        const vs = hTeam && aTeam ? `${hTeam.team} vs ${aTeam.team}` : "นัดไม่ทราบ";
+        const sc = `${p.homeScore}:${p.awayScore}`;
+        const statusColor = p.status === 'approved' ? '#22c55e' : p.status === 'rejected' ? '#ef4444' : '#f59e0b';
+        const statusLabel = p.status === 'approved' ? '✅ อนุมัติแล้ว' : p.status === 'rejected' ? '❌ ปฏิเสธ' : '⏳ รอตรวจสอบ';
+        return `<div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.07);border-radius:8px;padding:10px 12px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+            <div>
+                <div style="font-size:13px;font-weight:700;color:#e2e8f0;">${vs}</div>
+                <div style="font-size:12px;color:#94a3b8;margin-top:2px;">สกอร์: <b style="color:#fff;">${sc}</b></div>
+            </div>
+            <div style="font-size:11px;font-weight:700;color:${statusColor};">${statusLabel}</div>
+        </div>`;
+    }).join("");
+}
+
+// ── Admin Pending Modal ──────────────────────────────────────────────────────
+
+function openAdminPendingModal() {
+    renderAdminPendingList();
+    document.getElementById("adminPendingModal").style.display = "flex";
+}
+
+function closeAdminPendingModal() {
+    document.getElementById("adminPendingModal").style.display = "none";
+}
+
+function updateAdminPendingBadge() {
+    const count = (state.pendingResults || []).filter(p => p.status === "pending").length;
+    const badge = document.getElementById("admin-pending-count");
+    if (!badge) return;
+    if (count > 0) { badge.textContent = count; badge.style.display = "inline-block"; }
+    else           { badge.style.display = "none"; }
+}
+
+function renderAdminPendingList() {
+    const el = document.getElementById("admin-pending-list"); if (!el) return;
+    const pending = (state.pendingResults || []).filter(p => p.status === "pending");
+    if (!pending.length) {
+        el.innerHTML = '<div style="text-align:center;padding:30px;color:#475569;font-size:14px;">✅ ไม่มีผลรอตรวจสอบขณะนี้</div>';
+        return;
+    }
+    el.innerHTML = pending.map(p => {
+        const m = (state.matches || []).find(x => x.id === p.matchId);
+        const hTeam = m ? (state.teams.find(t => t.id === m.homeId) || { team: m ? m.homeId : "?", player: "" }) : { team: "?", player: "" };
+        const aTeam = m ? (state.teams.find(t => t.id === m.awayId) || { team: m ? m.awayId : "?", player: "" }) : { team: "?", player: "" };
+        const submitter = state.teams.find(t => t.id === p.submittedBy);
+        const submitterName = submitter ? `${submitter.team} (${submitter.player})` : p.submittedBy;
+        const dateStr = new Date(p.submittedAt).toLocaleString("th-TH", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" });
+        return `<div style="background:rgba(0,0,0,0.25);border:1px solid rgba(242,194,78,0.2);border-radius:12px;padding:16px;margin-bottom:14px;" id="apd-${p.id}">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+                <div>
+                    <div style="font-size:14px;font-weight:700;color:#f1f5f9;">${hTeam.team} <span style="color:#475569;">vs</span> ${aTeam.team}</div>
+                    <div style="font-size:11px;color:#64748b;margin-top:2px;">ส่งโดย: <b style="color:#94a3b8;">${submitterName}</b> · ${dateStr}</div>
+                </div>
+                <div style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;color:#F2C24E;letter-spacing:2px;">${p.homeScore} : ${p.awayScore}</div>
+            </div>
+            <div style="margin-bottom:4px;">
+                <label style="font-size:11px;color:#64748b;">แก้ไขสกอร์ก่อนอนุมัติ (ถ้าต้องการ):</label>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+                    <span style="font-size:12px;color:#94a3b8;flex:1;text-align:right;">${hTeam.team}</span>
+                    <input type="number" id="aph-${p.id}" min="0" value="${p.homeScore}" style="width:52px;height:36px;text-align:center;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.15);border-radius:6px;color:#fff;font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;outline:none;">
+                    <span style="color:#475569;">:</span>
+                    <input type="number" id="apa-${p.id}" min="0" value="${p.awayScore}" style="width:52px;height:36px;text-align:center;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.15);border-radius:6px;color:#fff;font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;outline:none;">
+                    <span style="font-size:12px;color:#94a3b8;flex:1;">${aTeam.team}</span>
+                </div>
+            </div>
+            ${p.evidenceImg ? `<div style="margin:10px 0;border-radius:8px;overflow:hidden;max-height:220px;text-align:center;background:rgba(0,0,0,0.3);cursor:pointer;" onclick="window.open('${p.evidenceImg}','_blank')"><img src="${p.evidenceImg}" style="max-width:100%;max-height:220px;object-fit:contain;" onerror="this.style.display='none'"></div>` : ''}
+            <div style="display:flex;gap:10px;margin-top:12px;">
+                <button onclick="adminApprovePending(${p.id})" style="flex:1;padding:10px;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;">✅ อนุมัติ</button>
+                <button onclick="adminRejectPending(${p.id})" style="flex:1;padding:10px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.4);color:#f87171;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;">❌ ปฏิเสธ</button>
+            </div>
+        </div>`;
+    }).join("");
+}
+
+function adminApprovePending(pendingId) {
+    if (!Array.isArray(state.pendingResults)) return;
+    const p = state.pendingResults.find(x => x.id === pendingId);
+    if (!p) return;
+    const hInp = document.getElementById(`aph-${pendingId}`);
+    const aInp = document.getElementById(`apa-${pendingId}`);
+    const hs = hInp ? parseInt(hInp.value) : p.homeScore;
+    const as = aInp ? parseInt(aInp.value) : p.awayScore;
+    if (isNaN(hs) || isNaN(as) || hs < 0 || as < 0) { showToast("⚠️ สกอร์ไม่ถูกต้อง", "warning"); return; }
+
+    const match = (state.matches || []).find(m => m.id === p.matchId);
+    if (match) {
+        match.homeScore    = hs;
+        match.awayScore    = as;
+        match.scoredAt     = Date.now();
+        match.evidenceImg  = p.evidenceImg || match.evidenceImg;
+        match.evidenceUploadedBy = p.submittedBy;
+        _autoRecordH2H(match);
+    }
+    p.status = "approved";
+    const fmt = state.tournamentFormat || "league";
+    if (fmt !== "league") renderAdminDock();
+    renderLeague();
+    saveDataToCloud();
+    updateAdminPendingBadge();
+    renderAdminPendingList();
+    showToast("✅ อนุมัติผลการแข่งขันแล้ว", "success");
+}
+
+function adminRejectPending(pendingId) {
+    if (!Array.isArray(state.pendingResults)) return;
+    const p = state.pendingResults.find(x => x.id === pendingId);
+    if (p) p.status = "rejected";
+    saveDataToCloud();
+    updateAdminPendingBadge();
+    renderAdminPendingList();
+    showToast("❌ ปฏิเสธรายการแล้ว", "warning");
+}
+
+// ════════════════════════════════════════════════════════════════════
+// END PLAYER SUBMIT RESULT SYSTEM
+// ════════════════════════════════════════════════════════════════════
 
 function renderAdminDock() {
     const dock = document.getElementById("admin-actions-dock");
@@ -5371,6 +6122,7 @@ function renderAdminDock() {
         ${advanceHTML}
         ${consolAdvanceHTML}
         <button onclick="openTrophyEditor()" style="background:linear-gradient(135deg,rgba(255,215,0,0.18),rgba(180,130,0,0.12));border:1px solid rgba(255,215,0,0.55);color:#F2C24E;">🏆 ถ้วยรางวัล</button>
+        <button onclick="openAdminPendingModal()" id="admin-pending-btn" style="position:relative;background:linear-gradient(135deg,rgba(29,78,216,0.25),rgba(30,64,175,0.15));border:1px solid rgba(96,165,250,0.5);color:#60a5fa;font-weight:700;">📋 รอตรวจสอบ<span id="admin-pending-count" style="display:none;position:absolute;top:-7px;right:-7px;background:#ef4444;color:#fff;border-radius:99px;font-size:10px;font-weight:900;min-width:18px;height:18px;line-height:18px;text-align:center;padding:0 4px;font-family:'Prompt',sans-serif;"></span></button>
         <button onclick="openBigMatchPickerModal()" style="background:linear-gradient(135deg,#7c2d00,#c2410c);border:1px solid rgba(249,115,22,0.4);color:#fed7aa;">🔥 บิ๊กแมช</button>
         <button onclick="openAdBannerEditor()" style="background:linear-gradient(135deg,#1e3a5f,#0f2640);border:1px solid rgba(242,194,78,0.35);color:#F2C24E;">📢 Ad Banner</button>
         <button onclick="openEditTeamsModal()" style="background:linear-gradient(135deg,#F2C24E,#c49520);color:#020710;border:none;">✏️ จัดการผู้สมัคร</button>
@@ -5419,6 +6171,7 @@ function upgradeFlagcdnToCrests() {
 }
 
 function refreshUIState() {
+    if (typeof updateAdminPendingBadge === "function") updateAdminPendingBadge();
     const setupArea = document.getElementById("setup-area");
     const controlButtons = document.getElementById("control-buttons");
     const regTitle = document.getElementById("register-title");
@@ -5481,6 +6234,19 @@ function refreshUIState() {
 
     const hofEditBtn = document.getElementById('hof-edit-btn');
     if (hofEditBtn) hofEditBtn.style.display = state.isViewOnly ? 'none' : 'inline-block';
+
+    // ── Login button state ──
+    if (!state.isViewOnly) {
+        _setLoginBtn('admin');
+    } else if (state.playerTeamId) {
+        const t = state.teams.find(t => t.id === state.playerTeamId);
+        _setLoginBtn('player', (t && t.player) ? t.player : state.playerTeamId);
+    } else {
+        _setLoginBtn('none');
+    }
+
+    // ── Role status bar ──
+    _updateRoleStatusBar();
 }
 
 function adminStartTournament() {
@@ -5532,7 +6298,13 @@ function _renderEditTeamsModalUI() {
 
     document.getElementById("edit-tournament-details").value = state.tournamentDetails || "";
     document.getElementById("edit-bg-image-url").value = state.bgImageUrl || "";
-    document.getElementById("edit-discord-url").value = state.discordUrl || "https://discord.gg/ESMDUce5pf";
+    if (!state.socialLinks) state.socialLinks = { discord: "", youtube: "", facebook: "", tiktok: "", twitch: "" };
+    if (!state.socialLinks.discord) state.socialLinks.discord = state.discordUrl || "https://discord.gg/ESMDUce5pf";
+    document.getElementById("edit-discord-url").value = state.socialLinks.discord || "";
+    document.getElementById("edit-youtube-url").value = state.socialLinks.youtube || "";
+    document.getElementById("edit-facebook-url").value = state.socialLinks.facebook || "";
+    document.getElementById("edit-tiktok-url").value = state.socialLinks.tiktok || "";
+    document.getElementById("edit-twitch-url").value = state.socialLinks.twitch || "";
     document.getElementById("edit-announcement").value = state.announcement || "";
     selectClBadge('new');
     renderChangelogAdmin();
@@ -5659,6 +6431,13 @@ function saveEditedTeams() {
     state.tournamentDetails = document.getElementById("edit-tournament-details").value;
     state.bgImageUrl = document.getElementById("edit-bg-image-url").value.trim();
     state.discordUrl = document.getElementById("edit-discord-url").value.trim() || "https://discord.gg/ESMDUce5pf";
+    state.socialLinks = {
+        discord: state.discordUrl,
+        youtube: document.getElementById("edit-youtube-url").value.trim(),
+        facebook: document.getElementById("edit-facebook-url").value.trim(),
+        tiktok: document.getElementById("edit-tiktok-url").value.trim(),
+        twitch: document.getElementById("edit-twitch-url").value.trim()
+    };
     state.announcement = document.getElementById("edit-announcement").value.trim();
     renderAnnouncement();
 
@@ -5712,9 +6491,8 @@ async function resetToNextSeason() {
         state.consolationChampionId = null;
         state.playerTeamId = null;
 
-        // รีเซ็ท badge ปุ่ม player login
-        const plBtn = document.getElementById("player-login-btn");
-        if (plBtn) plBtn.classList.remove("logged-in");
+        // รีเซ็ท login button กลับเป็นสถานะปกติ
+        _setLoginBtn('none');
 
         state.teams = state.teams.filter(t => t.id !== "Bye").map(t => {
             return { id: t.id, player: t.player, team: t.team, logo: t.logo, isFlag: t.isFlag, status: 'pending', comment: "" };
@@ -5814,69 +6592,64 @@ function openScoreModal(matchId) {
             : `<img src="${info.logo}" class="se-team-logo" alt="${info.team}" onerror="_logoFallback(this,'${esc}')">`;
     }
 
-    document.getElementById('se-matchup-area').innerHTML = `
-        <div class="se-team">
+    // Admin mode: team + inputs on one row
+    document.getElementById('se-match-card').innerHTML = `
+        <div class="se-mc-team">
             ${teamLogoHTML(hInfo)}
-            <div class="se-team-name">${hInfo.team}</div>
-            <div class="se-player-name">${hInfo.player}</div>
+            <div class="se-mc-name">${hInfo.team}</div>
+            <div class="se-mc-player">${hInfo.player}</div>
         </div>
-        <div class="se-vs">VS</div>
-        <div class="se-team">
+        <div class="se-mc-center">
+            <input type="number" class="se-score-inp" id="se-home-inp" min="0" placeholder="0" value="${m.homeScore !== null ? m.homeScore : ''}">
+            <span class="se-dash">:</span>
+            <input type="number" class="se-score-inp" id="se-away-inp" min="0" placeholder="0" value="${m.awayScore !== null ? m.awayScore : ''}">
+        </div>
+        <div class="se-mc-team">
             ${teamLogoHTML(aInfo)}
-            <div class="se-team-name">${aInfo.team}</div>
-            <div class="se-player-name">${aInfo.player}</div>
+            <div class="se-mc-name">${aInfo.team}</div>
+            <div class="se-mc-player">${aInfo.player}</div>
         </div>
     `;
-
-    // Restore admin edit mode: show inputs, hide view display
-    document.getElementById('se-score-edit-row').style.display = 'flex';
-    document.getElementById('se-score-view-row').style.display = 'none';
     document.getElementById('se-confirm-btn').style.display = '';
+    document.getElementById('se-reset-btn').style.display = (m.homeScore !== null && m.homeScore !== undefined) ? '' : 'none';
     document.querySelector('.se-modal-title').textContent = '⚽ บันทึกผลการแข่งขัน';
 
-    document.getElementById('se-home-inp').value = m.homeScore !== null ? m.homeScore : '';
-    document.getElementById('se-away-inp').value = m.awayScore !== null ? m.awayScore : '';
-
     let hasEvidence = m.evidenceImg && m.evidenceImg.trim() !== '';
-    let evidenceBtnClass = hasEvidence ? 'evidence-btn has-img' : 'evidence-btn';
     let uploaderBadge = (hasEvidence && m.evidenceUploadedBy)
         ? `<div class="se-uploader-badge">📤 อัปโหลดโดย: <b style="color:#94a3b8;">${m.evidenceUploadedBy}</b></div>`
         : '';
-    // Build match status action buttons for admin
-    let matchStatusActionsHTML = '';
+    // Build match status action button for admin
+    let matchStatusBtn = '';
     if (m.awayId !== 'BYE') {
         if (!m.status) {
-            matchStatusActionsHTML = `<button class="match-start-btn" onclick="startMatch(${matchId});closeScoreModal();">▶ เริ่มแข่งขัน</button>`;
+            matchStatusBtn = `<button class="se-btn se-btn-blue" onclick="startMatch(${matchId});closeScoreModal();">▶ เริ่ม</button>`;
         } else if (m.status === 'playing') {
-            matchStatusActionsHTML = `<button class="match-finish-btn" onclick="finishMatch(${matchId});closeScoreModal();">✅ ยืนยันจบแข่งขัน</button>`;
+            matchStatusBtn = `<button class="se-btn se-btn-teal" onclick="finishMatch(${matchId});closeScoreModal();">✅ จบแข่ง</button>`;
         } else if (m.status === 'finished') {
-            matchStatusActionsHTML = `<span style="font-size:11px;color:#22c55e;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);padding:3px 9px;border-radius:4px;">✅ จบการแข่งขันแล้ว</span>`;
+            matchStatusBtn = `<div class="se-btn se-btn-teal" style="cursor:default;opacity:0.6;">✅ จบแล้ว</div>`;
         }
     }
+    const _evpId = `evp-${matchId}`;
+    const _evItems = hasEvidence
+        ? `<button class="ev-popup-item" onclick="_closeEvPopup();viewMatchEvidence(${matchId})">👁️ ดูหลักฐาน</button>
+           <button class="ev-popup-item ev-upload" onclick="_closeEvPopup();uploadMatchEvidenceFromModal(${matchId})">📸 อัปโหลดใหม่</button>`
+        : `<button class="ev-popup-item ev-upload" onclick="_closeEvPopup();uploadMatchEvidenceFromModal(${matchId})">📷 อัปโหลดหลักฐาน</button>`;
+    const _isBigM = m.awayId !== 'BYE' && (state.bigMatchIds || []).includes(matchId);
+    const _bmBtn = m.awayId !== 'BYE'
+        ? `<button id="se-bm-btn" class="se-btn se-btn-orange${_isBigM ? ' active' : ''}" onclick="toggleBigMatch(${matchId});_refreshSeBigMatchBtn(${matchId})">🔥 Big Match</button>`
+        : '';
     document.getElementById('se-evidence-area').innerHTML = `
-        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;">
-            ${hasEvidence ? `<button class="evidence-btn has-img" style="background:#1d4ed8;color:#fff;border-color:#3b82f6;width:auto;" onclick="viewMatchEvidence(${matchId})">👁️ ดูหลักฐาน</button>` : ''}
-            <button class="${evidenceBtnClass}" style="width:auto;" onclick="uploadMatchEvidenceFromModal(${matchId})">${hasEvidence ? '📸 อัปโหลดใหม่' : '📷 อัปโหลดหลักฐาน'}</button>
-            <button class="odds-score-btn" onclick="openOddsFromScoreModal(${matchId})">📊 ตั้งต่อรอง</button>
-            ${matchStatusActionsHTML}
+        <div class="se-btn-grid">
+            <div class="ev-popup-wrap">
+                <button class="se-btn ${hasEvidence ? 'se-btn-blue' : 'se-btn-gold'}" onclick="event.stopPropagation();_toggleEvPopup('${_evpId}')">📷 หลักฐาน${hasEvidence ? ' ▾' : ''}</button>
+                <div id="${_evpId}" class="ev-popup-menu hidden">${_evItems}</div>
+            </div>
+            <button class="se-btn se-btn-gold" onclick="openOddsFromScoreModal(${matchId})">📊 ต่อรอง</button>
+            ${_bmBtn}
+            ${matchStatusBtn}
         </div>
         ${uploaderBadge}
     `;
-
-    document.getElementById('se-reset-btn').style.display =
-        (m.homeScore !== null && m.awayScore !== null) || m.status ? 'block' : 'none';
-
-    // Big Match toggle inside score modal
-    if (m.awayId !== 'BYE') {
-        let isBigM = (state.bigMatchIds || []).includes(matchId);
-        document.getElementById('se-bigmatch-area').innerHTML =
-            `<button class="bm-toggle-btn${isBigM ? ' active' : ''}" style="font-size:12px;padding:5px 18px;"
-                onclick="toggleBigMatch(${matchId});_refreshSeBigMatchBtn(${matchId})">
-                ${isBigM ? '🔥 บิ๊กแมช ✓  — กดเพื่อยกเลิก' : '🔥 ตั้งเป็น Big Match ของสัปดาห์'}
-            </button>`;
-    } else {
-        document.getElementById('se-bigmatch-area').innerHTML = '';
-    }
 
     // AH explanation banner
     _renderAHExplain(m, hInfo, aInfo, 'se-ah-area');
@@ -5894,9 +6667,9 @@ function openScoreModal(matchId) {
         const rank2 = standings.findIndex(t => t.id === m.awayId) + 1;
         const rankLabel = r => r > 0 ? `อันดับ ${r}` : '—';
 
-        // Recent H2H matches (last 5) — logo cards
-        const records = _getH2HRecords(m.homeId, m.awayId);
-        const recentSorted = [...records].sort((a, b) => (b.season || 0) - (a.season || 0)).slice(0, 5);
+        // Recent H2H matches (last 5) — logo cards, exclude current match, oldest→newest (matches form-5 direction)
+        const records = _getH2HRecords(m.homeId, m.awayId).filter(r => r.matchId === undefined || r.matchId !== m.id);
+        const recentSorted = [...records].sort((a, b) => (a.season || 0) - (b.season || 0)).slice(-5);
         const h2hCardsHTML = _buildH2HCardsHTML(recentSorted, m.homeId, hInfo, aInfo);
 
         h2hArea.innerHTML = `
@@ -6080,7 +6853,55 @@ function openTeamStatsModal(teamId) {
     const winColor  = winRate >= 60 ? '#22c55e' : winRate >= 40 ? '#eab308' : '#ef4444';
     const barColor  = winRate >= 60 ? 'linear-gradient(90deg,#16a34a,#22c55e)' : winRate >= 40 ? 'linear-gradient(90deg,#ca8a04,#eab308)' : 'linear-gradient(90deg,#b91c1c,#ef4444)';
 
+    // --- Current ranking ---
+    const standings = calculateStandings();
+    const rankPos = standings.findIndex(t => t.id === teamId) + 1;
+    const totalTeams = standings.length;
+    const teamStanding = standings.find(t => t.id === teamId);
+    const pts = teamStanding ? teamStanding.pts : 0;
+
+    // Rank badge styling
+    const rankColor  = rankPos === 1 ? '#F2C24E' : rankPos === 2 ? '#c0c0c0' : rankPos === 3 ? '#cd7f32' : '#60a5fa';
+    const rankBg     = rankPos === 1 ? 'rgba(242,194,78,0.13)'  : rankPos === 2 ? 'rgba(192,192,192,0.10)' : rankPos === 3 ? 'rgba(205,127,50,0.10)' : 'rgba(96,165,250,0.08)';
+    const rankBorder = rankPos === 1 ? 'rgba(242,194,78,0.38)'  : rankPos === 2 ? 'rgba(192,192,192,0.28)' : rankPos === 3 ? 'rgba(205,127,50,0.28)' : 'rgba(96,165,250,0.22)';
+    // Crown symbols: gold crown emoji, silver ♛, bronze ♛
+    const rankIcon   = rankPos === 1 ? `<span style="font-size:26px;line-height:1;">👑</span>`
+                     : rankPos === 2 ? `<span style="font-size:24px;line-height:1;color:#c0c0c0;">♛</span>`
+                     : rankPos === 3 ? `<span style="font-size:24px;line-height:1;color:#cd7f32;">♛</span>`
+                     : `<span style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:${rankColor};">#${rankPos}</span>`;
+
+    // Rank + Winrate combined in one compact row (side by side)
+    const rankWinRow = rankPos > 0 ? `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="background:${rankBg};border:1px solid ${rankBorder};border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;min-height:62px;">
+                <div style="width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;flex-shrink:0;">${rankIcon}</div>
+                <div style="min-width:0;flex:1;">
+                    <div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.32);margin-bottom:4px;">อันดับล่าสุด</div>
+                    <div style="display:flex;align-items:baseline;gap:5px;flex-wrap:nowrap;">
+                        <span style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:${rankColor};line-height:1;white-space:nowrap;">อันดับ ${rankPos}</span>
+                        <span style="color:rgba(255,255,255,0.2);font-size:11px;">·</span>
+                        <span style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,0.55);white-space:nowrap;">${pts} <span style="font-size:9px;font-weight:600;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.5px;">pts</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="ts-winrate-wrap" style="margin:0;padding:10px 12px;min-height:62px;display:flex;flex-direction:column;justify-content:center;">
+                <div class="ts-winrate-top" style="margin-bottom:6px;">
+                    <span class="ts-winrate-label">Win Rate</span>
+                    <span class="ts-winrate-pct" style="color:${winColor};font-size:15px;">${winRate}%</span>
+                </div>
+                <div class="ts-winrate-bar"><div class="ts-winrate-fill" style="width:${winRate}%;background:${barColor};"></div></div>
+            </div>
+        </div>` : `
+        <div class="ts-winrate-wrap">
+            <div class="ts-winrate-top">
+                <span class="ts-winrate-label">Win Rate</span>
+                <span class="ts-winrate-pct" style="color:${winColor}">${winRate}%</span>
+            </div>
+            <div class="ts-winrate-bar"><div class="ts-winrate-fill" style="width:${winRate}%;background:${barColor};"></div></div>
+        </div>`;
+
     document.getElementById('ts-modal-body').innerHTML = `
+        ${rankWinRow}
         <div>
             <div class="ts-section-title">ผลการแข่งขัน · ${p} นัด</div>
             <div class="ts-wdl-grid">
@@ -6088,13 +6909,6 @@ function openTeamStatsModal(teamId) {
                 <div class="ts-wdl-box draw"><div class="ts-wdl-val">${d}</div><div class="ts-wdl-lbl">เสมอ</div></div>
                 <div class="ts-wdl-box loss"><div class="ts-wdl-val">${l}</div><div class="ts-wdl-lbl">แพ้</div></div>
             </div>
-        </div>
-        <div class="ts-winrate-wrap">
-            <div class="ts-winrate-top">
-                <span class="ts-winrate-label">Win Rate</span>
-                <span class="ts-winrate-pct" style="color:${winColor}">${winRate}%</span>
-            </div>
-            <div class="ts-winrate-bar"><div class="ts-winrate-fill" style="width:${winRate}%;background:${barColor};"></div></div>
         </div>
         <div>
             <div class="ts-section-title">สถิติประตู</div>
@@ -6196,52 +7010,41 @@ function openMatchViewModal(matchId) {
             : `<img src="${info.logo}" class="se-team-logo" alt="${info.team}" onerror="_logoFallback(this,'${esc}')">`;
     }
 
-    document.getElementById('se-matchup-area').innerHTML = `
-        <div class="se-team">
+    // View mode: team + score on one row
+    const hScore = m.homeScore, aScore = m.awayScore;
+    const hasResult = hScore !== null && aScore !== null;
+    const hWin = hasResult && hScore > aScore, aWin = hasResult && aScore > hScore;
+    const scoreCenter = hasResult
+        ? `<div class="se-view-score-box"><span style="color:${hWin?'#F2C24E':'#fff'}">${hScore}</span><span style="color:#1e3455;margin:0 4px;">—</span><span style="color:${aWin?'#F2C24E':'#fff'}">${aScore}</span></div>`
+        : `<div class="se-view-score-pending">⏳ ยังไม่มีผล</div>`;
+    document.getElementById('se-match-card').innerHTML = `
+        <div class="se-mc-team">
             ${teamLogoHTML(hInfo)}
-            <div class="se-team-name">${hInfo.team}</div>
-            <div class="se-player-name">${hInfo.player}</div>
+            <div class="se-mc-name${hWin?' win':''}">${hInfo.team}</div>
+            <div class="se-mc-player">${hInfo.player}</div>
         </div>
-        <div class="se-vs">VS</div>
-        <div class="se-team">
+        <div class="se-mc-center">${scoreCenter}</div>
+        <div class="se-mc-team">
             ${teamLogoHTML(aInfo)}
-            <div class="se-team-name">${aInfo.team}</div>
-            <div class="se-player-name">${aInfo.player}</div>
+            <div class="se-mc-name${aWin?' win':''}">${aInfo.team}</div>
+            <div class="se-mc-player">${aInfo.player}</div>
         </div>
     `;
 
-    // Switch to view mode: hide inputs, show score display
-    document.getElementById('se-score-edit-row').style.display = 'none';
-    let viewRow = document.getElementById('se-score-view-row');
-    viewRow.style.display = 'block';
-    if (m.homeScore !== null && m.awayScore !== null) {
-        viewRow.innerHTML = `<div class="se-view-score-box">${m.homeScore} — ${m.awayScore}</div>`;
+    // Evidence area (view-only mode)
+    let evBadge2 = hasEvidence && m.evidenceUploadedBy
+        ? `<div class="se-uploader-badge">📤 อัปโหลดโดย: <b style="color:#94a3b8;">${m.evidenceUploadedBy}</b></div>` : '';
+    let evBtns2 = '';
+    if (state.playerTeamId && !hasResult) {
+        // ผู้เล่น login + นัดยังไม่มีผล → ปุ่มส่งผล
+        evBtns2 = `<button class="se-btn se-btn-blue" onclick="closeScoreModal();openPlayerSubmitModal(${matchId})">⚽ ส่งผล</button>`;
+    } else if (hasEvidence) {
+        // admin อนุมัติแล้ว → ปุ่มดูรูป
+        evBtns2 = `<button class="se-btn se-btn-blue" onclick="viewMatchEvidence(${matchId});closeScoreModal();">🖼️ ดูรูป</button>`;
     } else {
-        viewRow.innerHTML = `<div class="se-view-score-pending">⏳ ยังไม่มีผล</div>`;
+        evBtns2 = `<div class="se-btn se-btn-ghost" style="cursor:default;">ยังไม่มีรูป</div>`;
     }
-
-    // Evidence + upload buttons (everyone can view)
-    let evidenceInnerHTML = '';
-    if (hasEvidence) {
-        let uploaderBadge = m.evidenceUploadedBy
-            ? `<div class="se-uploader-badge">📤 อัปโหลดโดย: <b style="color:#94a3b8;">${m.evidenceUploadedBy}</b></div>`
-            : '';
-        evidenceInnerHTML += `
-            <button class="evidence-btn has-img" style="background:#1d4ed8;color:#fff;border-color:#3b82f6;"
-                onclick="viewMatchEvidence(${matchId}); closeScoreModal();">👁️ ดูรูปหลักฐาน</button>
-            ${uploaderBadge}`;
-    }
-    if (state.playerTeamId) {
-        let cls = hasEvidence ? 'evidence-btn has-img' : 'evidence-btn';
-        evidenceInnerHTML += `
-            <button class="${cls}" onclick="uploadMatchEvidenceFromModal(${matchId})">
-                ${hasEvidence ? '📸 อัปโหลดหลักฐานใหม่' : '📷 ส่งรูปหลักฐาน'}
-            </button>`;
-    }
-    if (!hasEvidence && !state.playerTeamId) {
-        evidenceInnerHTML += `<div style="font-size:12px;color:#4a6080;text-align:center;padding:8px 0;">ยังไม่มีรูปหลักฐาน</div>`;
-    }
-    document.getElementById('se-evidence-area').innerHTML = `<div class="se-view-evidence-area">${evidenceInnerHTML}</div>`;
+    document.getElementById('se-evidence-area').innerHTML = `<div class="se-btn-grid">${evBtns2}</div>${evBadge2}`;
 
     // AH explanation banner (view-only)
     let hInfoV = state.teams.find(t => t.id === m.homeId) || { player: m.homeId, team: m.homeId, logo: '', isFlag: false };
@@ -6249,7 +7052,6 @@ function openMatchViewModal(matchId) {
     _renderAHExplain(m, hInfoV, aInfoV, 'se-ah-area');
 
     // ── H2H Preview (visible to all) ──────────────────────────────────────
-    document.getElementById('se-bigmatch-area').innerHTML = '';
     const h2hArea = document.getElementById('se-h2h-area');
     if (h2hArea) {
         const s1 = _h2hTeamStats(m.homeId, m.awayId);
@@ -6259,8 +7061,8 @@ function openMatchViewModal(matchId) {
         const rank1 = standings.findIndex(t => t.id === m.homeId) + 1;
         const rank2 = standings.findIndex(t => t.id === m.awayId) + 1;
         const rankLabel = r => r > 0 ? `อันดับ ${r}` : '—';
-        const records = _getH2HRecords(m.homeId, m.awayId);
-        const recentSorted = [...records].sort((a, b) => (b.season || 0) - (a.season || 0)).slice(0, 5);
+        const records = _getH2HRecords(m.homeId, m.awayId).filter(r => r.matchId === undefined || r.matchId !== m.id);
+        const recentSorted = [...records].sort((a, b) => (a.season || 0) - (b.season || 0)).slice(-5);
         const h2hCardsHTML = _buildH2HCardsHTML(recentSorted, m.homeId, hInfoV, aInfoV);
 
         h2hArea.innerHTML = `
@@ -6331,6 +7133,18 @@ async function resetScoreFromModal() {
     if (fmt !== 'league') renderAdminDock();
     renderLeague(); saveDataToCloud();
 }
+
+function _toggleEvPopup(id) {
+    document.querySelectorAll('.ev-popup-menu').forEach(el => { if (el.id !== id) el.classList.add('hidden'); });
+    const menu = document.getElementById(id);
+    if (menu) menu.classList.toggle('hidden');
+}
+function _closeEvPopup() {
+    document.querySelectorAll('.ev-popup-menu').forEach(el => el.classList.add('hidden'));
+}
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.ev-popup-wrap')) _closeEvPopup();
+}, true);
 
 function uploadMatchEvidenceFromModal(matchId) {
     closeScoreModal();
@@ -6732,6 +7546,60 @@ function _buildFormGuideHTML(teamId, n) {
     return `<div class="form-guide">${dots.join('')}</div>`;
 }
 
+// ── คำนวณแชมป์เก่าจาก H2H + HoF ───────────────────────────────────────────
+// ลำดับความสำคัญ:
+//  1. state.defendingChampId (ถ้ามี — set โดยอัตโนมัติเมื่อบันทึกแชมป์)
+//  2. ทีมที่ชนะ H2H มากสุดในซีซั่นที่แล้ว (ค้นจากทุกทีม ไม่ใช่แค่ HoF)
+//  3. fallback: ทีมใน HoF ที่มี trophies มากสุด
+function _computeDefendingChampId() {
+    // ขั้น 1: ใช้ค่าที่บันทึกไว้ตรงๆ ถ้ามี
+    if (state.defendingChampId) return state.defendingChampId;
+
+    // ขั้น 2: ค้นจาก H2H ซีซั่นที่แล้ว (ค้นทุกทีม ไม่จำกัดเฉพาะ HoF)
+    const prevSeason = (state.season || 1) - 1;
+    if (prevSeason >= 1 && state.h2h) {
+        // นับ win + pts (3/1/0) ต่อทีมในซีซั่นก่อน
+        const winCount = {}, ptsCount = {};
+        Object.values(state.h2h).forEach(records => {
+            (records || []).forEach(r => {
+                if ((r.season || 0) !== prevSeason) return;
+                const hs = r.hs ?? 0, as_ = r.as ?? 0;
+                const hId = r.homeId, aId = r.awayId;
+                if (!hId || !aId) return;
+                if (hs > as_) {
+                    winCount[hId] = (winCount[hId] || 0) + 1;
+                    ptsCount[hId] = (ptsCount[hId] || 0) + 3;
+                    ptsCount[aId] = (ptsCount[aId] || 0);
+                } else if (as_ > hs) {
+                    winCount[aId] = (winCount[aId] || 0) + 1;
+                    ptsCount[aId] = (ptsCount[aId] || 0) + 3;
+                    ptsCount[hId] = (ptsCount[hId] || 0);
+                } else {
+                    ptsCount[hId] = (ptsCount[hId] || 0) + 1;
+                    ptsCount[aId] = (ptsCount[aId] || 0) + 1;
+                }
+            });
+        });
+        // เลือกทีมที่มี pts สูงสุด (tie-break: wins)
+        const allIds = Object.keys(ptsCount);
+        if (allIds.length > 0) {
+            allIds.sort((a, b) => {
+                const pdiff = (ptsCount[b] || 0) - (ptsCount[a] || 0);
+                return pdiff !== 0 ? pdiff : (winCount[b] || 0) - (winCount[a] || 0);
+            });
+            if ((ptsCount[allIds[0]] || 0) > 0) return allIds[0];
+        }
+    }
+
+    // ขั้น 3: fallback — HoF trophy count
+    const hof = state.hallOfFame || {};
+    let best = null, bestTrophies = 0;
+    Object.keys(hof).forEach(id => {
+        if ((hof[id].trophies || 0) > bestTrophies) { bestTrophies = hof[id].trophies; best = id; }
+    });
+    return best;
+}
+
 function renderStandings() {
     let fmt = state.tournamentFormat || 'league';
     if (fmt !== 'league') { renderCupStatus(); return; }
@@ -6747,11 +7615,18 @@ function renderStandings() {
     const thead = document.getElementById("standings-table").querySelector("thead");
     if (thead) {
         thead.innerHTML = `<tr>
-            <th style="width:5%">#</th><th style="text-align:left; width:30%">ทีม / ผู้จัดการ</th>
-            <th>P</th><th style="color:#00ff88;">W</th><th>D</th><th style="color:#ff4466;">L</th>
-            <th>GF</th><th>GA</th><th>GD</th><th>PTS</th>
-            <th style="min-width:60px;">Streak</th>
-            <th style="min-width:110px;">5 นัดหลัง</th>
+            <th style="width:4%;padding:7px 3px">#</th>
+            <th style="text-align:left;width:42%;padding:7px 5px">ทีม / ผู้จัดการ</th>
+            <th style="padding:7px 2px">P</th>
+            <th style="color:#00ff88;padding:7px 2px">W</th>
+            <th style="padding:7px 2px">D</th>
+            <th style="color:#ff4466;padding:7px 2px">L</th>
+            <th style="padding:7px 2px">GF</th>
+            <th style="padding:7px 2px">GA</th>
+            <th style="padding:7px 2px">GD</th>
+            <th style="padding:7px 3px">PTS</th>
+            <th style="min-width:44px;padding:7px 2px">Streak</th>
+            <th style="min-width:78px;padding:7px 2px">5 นัดหลัง</th>
         </tr>`;
     }
 
@@ -6770,11 +7645,13 @@ function renderStandings() {
         }
     }
 
+    const _computedDefId = _computeDefendingChampId();
+    const _prevSeason = (state.season || 1) - 1;
     sorted.forEach((team, index) => {
-        const isDefending = state.defendingChampId && team.id === state.defendingChampId && !team.isChampion;
-        const isRankOne   = (index === 0) && !team.isChampion && !isDefending;
-        const isRankTwo   = (index === 1) && !team.isChampion && !isDefending;
-        const isRankThree = (index === 2) && !team.isChampion && !isDefending;
+        const isDefending = _computedDefId && team.id === _computedDefId && !team.isChampion;
+        const isRankOne   = (index === 0) && !team.isChampion;
+        const isRankTwo   = (index === 1) && !team.isChampion;
+        const isRankThree = (index === 2) && !team.isChampion;
         let tr = document.createElement("tr");
         if (team.isChampion)     tr.className = "champion-row";
         else if (isDefending)    tr.className = "defending-champ-row";
@@ -6782,7 +7659,8 @@ function renderStandings() {
         else if (isRankTwo)      tr.className = "rank-two-row";
         else if (isRankThree)    tr.className = "rank-three-row";
         let logoClass = team.isFlag ? "team-logo flag-img" : "team-logo club-img";
-        const defendingBadge = isDefending ? `<span class="defending-badge">👑 DEFENDING</span>` : "";
+        const prevSeasonLabel = _prevSeason >= 1 ? ` SS${_prevSeason}` : '';
+        const defendingBadge = isDefending ? `<span class="prev-champ-badge"><span class="prev-champ-crown">🏆</span><span class="prev-champ-text"> แชมป์เก่า${prevSeasonLabel}</span></span>` : "";
         let formHTML = _buildFormGuideHTML(team.id, 5);
         let streakHTML = _buildStreakHTML(team.id);
 
@@ -6791,16 +7669,19 @@ function renderStandings() {
         if (isRankOne) {
             const sinceMs = (state.no1History && state.no1History.since) ? state.no1History.since : Date.now();
             const days = Math.max(0, Math.floor((Date.now() - sinceMs) / 86400000));
-            const daysLabel = days === 0 ? 'วันนี้! 🔥' : `${days} วัน`;
+            const _c = '<span class="no1-badge-crown">👑</span>';
+            const _f = '<span class="no1-badge-fire">🔥</span>';
+            const daysLabel = days === 0 ? `${_c} ที่ 1 มา วันนี้! ${_f}` : `${_c} ที่ 1 มา ${days} วัน ${_f}`;
             rankCellHTML = `<div class="no1-rank-cell"><span class="no1-rank-num">1</span><span class="no1-crown">👑</span></div>`;
             teamCellHTML = `
                 <div class="player-team-box">
                     <img class="${logoClass}" src="${team.logo}" onerror="_logoFallback(this,'${team.team.replace(/'/g,"\\'")}')">
                     <div class="team-info">
                         <div class="no1-team-label">
-                            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
                                 <span class="no1-shimmer-name">${team.team}</span>
-                                <span class="no1-days-badge">🏆 ที่ 1 มา ${daysLabel}</span>
+                                <span class="no1-days-badge">${daysLabel}</span>
+                                ${isDefending ? defendingBadge : ''}
                             </div>
                             <div style="display:flex;align-items:center;gap:6px;margin-top:2px;">
                                 <span class="t-name" style="color:#a58c30;">Manager: ${team.player}</span>
@@ -6818,7 +7699,7 @@ function renderStandings() {
                         <div style="display:flex;flex-direction:column;gap:3px;">
                             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                                 <span class="no2-shimmer-name">${team.team}</span>
-                                <span class="no2-prize-badge">🥈 รองแชมป์</span>
+                                ${defendingBadge}
                             </div>
                             <span class="t-name" style="color:#909090;">Manager: ${team.player}</span>
                         </div>
@@ -6833,7 +7714,7 @@ function renderStandings() {
                         <div style="display:flex;flex-direction:column;gap:3px;">
                             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                                 <span class="no3-shimmer-name">${team.team}</span>
-                                <span class="no3-prize-badge">🥉 อันดับ 3</span>
+                                ${defendingBadge}
                             </div>
                             <span class="t-name" style="color:#9a7040;">Manager: ${team.player}</span>
                         </div>
@@ -6949,6 +7830,7 @@ function _buildMatchRowDiv(m, fmt) {
             <div class="match-bottom-center">${statusBadgeHTML}</div>
             <div class="match-bottom-away">${chips.awayChip || ''}</div>
         </div>` : '';
+
 
 
     let isBigMatch = Array.isArray(state.bigMatchIds) && state.bigMatchIds.includes(m.id);
@@ -7165,15 +8047,12 @@ function clearBigMatch() {
     showToast('✅ ยกเลิกบิ๊กแมชทั้งหมดแล้ว', 'info');
 }
 
-// Refresh big-match button text inside the open score modal (no full re-render)
+// Refresh big-match button state inside the open score modal
 function _refreshSeBigMatchBtn(matchId) {
-    const area = document.getElementById('se-bigmatch-area');
-    if (!area) return;
-    let isBigM = (state.bigMatchIds || []).includes(matchId);
-    area.innerHTML = `<button class="bm-toggle-btn${isBigM ? ' active' : ''}" style="font-size:12px;padding:5px 18px;"
-        onclick="toggleBigMatch(${matchId});_refreshSeBigMatchBtn(${matchId})">
-        ${isBigM ? '🔥 บิ๊กแมช ✓  — กดเพื่อยกเลิก' : '🔥 ตั้งเป็น Big Match ของสัปดาห์'}
-    </button>`;
+    const btn = document.getElementById('se-bm-btn');
+    if (!btn) return;
+    const isBigM = (state.bigMatchIds || []).includes(matchId);
+    btn.className = `se-btn se-btn-orange${isBigM ? ' active' : ''}`;
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -7504,6 +8383,7 @@ async function resetLeagueHard() {
                 titleW3: state.titleW3 || "TOURNAMENT",
                 tournamentDetails: "",
                 discordUrl: state.discordUrl || "https://discord.gg/ESMDUce5pf",
+                socialLinks: state.socialLinks || { discord: state.discordUrl || "https://discord.gg/ESMDUce5pf", youtube: "", facebook: "", tiktok: "", twitch: "" },
                 bgImageUrl: "",
                 tournamentFormat: "league",
                 cupConfig: { roundFormat: 'single', finalFormat: 'single', thirdPlace: false, consolation: false },
@@ -7572,6 +8452,7 @@ function _loadBinData(idToLoad) {
         state.tournamentStarted = r.tournamentStarted || false;
         state.titleW1 = r.titleW1 || "WORLD"; state.titleW2 = r.titleW2 || "CUP"; state.titleW3 = r.titleW3 || "TOURNAMENT";
         state.tournamentDetails = r.tournamentDetails || ""; state.discordUrl = r.discordUrl || "https://discord.gg/ESMDUce5pf"; state.bgImageUrl = r.bgImageUrl || "";
+        state.socialLinks = r.socialLinks || { discord: state.discordUrl, youtube: "", facebook: "", tiktok: "", twitch: "" };
         state.colors = r.colors || { w1: "#ffffff", w2: "#F2C24E", w3: "#ffffff", h2Standings: "#F2C24E", h2Fixtures: "#F2C24E", h2Fame: "#F2C24E", h2Details: "#F2C24E", bgColor: "#020710" };
         state.tournamentFormat = r.tournamentFormat || "league";
         state.cupConfig = r.cupConfig || { roundFormat: 'single', finalFormat: 'single', thirdPlace: false, consolation: false };
@@ -7779,50 +8660,74 @@ function openBracketModal(matchId) {
 
     let bodyHtml = '';
 
-    // Team matchup display
-    bodyHtml += `<div class="bk-modal-matchup">
-        <div class="bk-modal-team-info" style="text-align:right;">
-            <div class="bk-modal-team-name">${homeTeam ? homeTeam.team : m.homeId}</div>
-            <div class="bk-modal-player-name">${homeTeam ? homeTeam.player : ''}</div>
-        </div>
-        <div class="bk-modal-vs">VS</div>
-        <div class="bk-modal-team-info">
-            <div class="bk-modal-team-name">${awayTeam ? awayTeam.team : (m.awayId === 'BYE' ? 'BYE' : m.awayId)}</div>
-            <div class="bk-modal-player-name">${awayTeam ? awayTeam.player : ''}</div>
-        </div>
-    </div>`;
+    const hName = homeTeam ? homeTeam.team : m.homeId;
+    const hPlayer = homeTeam ? homeTeam.player : '';
+    const aName = awayTeam ? awayTeam.team : (m.awayId === 'BYE' ? 'BYE' : m.awayId);
+    const aPlayer = awayTeam ? awayTeam.player : '';
 
     if (m.awayId === 'BYE') {
-        bodyHtml += `<div style="text-align:center;color:#4ade80;font-size:14px;padding:12px;margin-bottom:12px;">🎟️ ผ่านอัตโนมัติ (BYE)</div>`;
+        // BYE — show team + auto-advance notice inline
+        bodyHtml += `
+        <div class="bk-score-row">
+            <div class="bk-score-team right">
+                <div class="bk-score-tname">${hName}</div>
+                <div class="bk-score-player">${hPlayer}</div>
+            </div>
+            <div style="padding:0 10px;font-size:12px;color:#4ade80;font-weight:700;flex-shrink:0;">🎟️ BYE</div>
+            <div class="bk-score-team">
+                <div class="bk-score-tname" style="color:#3d5a78;">—</div>
+            </div>
+        </div>
+        <div style="text-align:center;color:#4ade80;font-size:12px;font-weight:600;padding:4px 0;">ผ่านอัตโนมัติ</div>`;
     } else if (hasScore) {
-        // Show result
+        // ── View mode: result card ──
         let homeWon = winner === m.homeId, awayWon = winner === m.awayId;
-        let hColor = homeWon ? '#e07832' : '#3a5070';
-        let aColor = awayWon ? '#e07832' : '#3a5070';
-        bodyHtml += `<div class="bk-modal-result-display">
-            <div class="bk-modal-result-team">${homeTeam ? homeTeam.team : m.homeId}</div>
-            <div class="bk-modal-result-score"><span style="color:${hColor}">${m.homeScore}</span> — <span style="color:${aColor}">${m.awayScore}</span></div>
-            <div class="bk-modal-result-team">${awayTeam ? awayTeam.team : m.awayId}</div>
+        bodyHtml += `
+        <div class="bk-result-card">
+            <div class="bk-result-row">
+                <div class="bk-result-team right">
+                    <div class="bk-result-tname${homeWon ? ' win' : ''}">${hName}</div>
+                    <div class="bk-result-player">${hPlayer}</div>
+                </div>
+                <div class="bk-result-score">
+                    <span class="${homeWon ? 's-win' : ''}">${m.homeScore}</span><span class="s-sep">:</span><span class="${awayWon ? 's-win' : ''}">${m.awayScore}</span>
+                </div>
+                <div class="bk-result-team">
+                    <div class="bk-result-tname${awayWon ? ' win' : ''}">${aName}</div>
+                    <div class="bk-result-player">${aPlayer}</div>
+                </div>
+            </div>
         </div>`;
         if (winner) {
             let wt = state.teams.find(t => t.id === winner);
-            bodyHtml += `<div class="bk-modal-winner-badge">✅ ผ่านรอบ: ${wt ? wt.team : winner}</div>`;
+            bodyHtml += `<div class="bk-winner-badge"><span>✅ ผ่านรอบ: ${wt ? wt.team : winner}</span></div>`;
         } else if (m.homeScore === m.awayScore && !m.winnerId) {
-            bodyHtml += `<button class="bk-modal-declare-btn" onclick="closeBracketModal(); openDeclareWinner(${m.id},'${m.homeId}','${m.awayId}')">⚡ เสมอ — กดเพื่อเลือกผู้ผ่านรอบ</button>`;
+            bodyHtml += `<button class="bk-modal-declare-btn" onclick="closeBracketModal(); openDeclareWinner(${m.id},'${m.homeId}','${m.awayId}')">⚡ เสมอ — เลือกผู้ผ่านรอบ</button>`;
         }
         if (canEdit) {
-            bodyHtml += `<button class="bk-modal-reset" onclick="resetBracketMatchScore(${m.id})">↩️ แก้ไขผลการแข่งขัน</button>`;
+            bodyHtml += `<button class="bk-modal-reset" onclick="resetBracketMatchScore(${m.id})">↩ แก้ไขผล</button>`;
         }
     } else if (canEdit) {
-        // Input scores
-        bodyHtml += `<div class="bk-modal-score-area">
-            <input type="number" class="bk-modal-inp" id="bk-inp-home" min="0" placeholder="0" value="">
-            <div class="bk-modal-dash">—</div>
-            <input type="number" class="bk-modal-inp" id="bk-inp-away" min="0" placeholder="0" value="">
+        // ── Admin mode: inline score input ──
+        bodyHtml += `
+        <div class="bk-score-row">
+            <div class="bk-score-team right">
+                <div class="bk-score-tname">${hName}</div>
+                <div class="bk-score-player">${hPlayer}</div>
+            </div>
+            <div class="bk-score-inputs">
+                <input type="number" class="bk-modal-inp" id="bk-inp-home" min="0" placeholder="0" value="">
+                <div class="bk-modal-dash">:</div>
+                <input type="number" class="bk-modal-inp" id="bk-inp-away" min="0" placeholder="0" value="">
+            </div>
+            <div class="bk-score-team">
+                <div class="bk-score-tname">${aName}</div>
+                <div class="bk-score-player">${aPlayer}</div>
+            </div>
         </div>
-        <button class="bk-modal-confirm" onclick="confirmBracketScore()">✅ ยืนยันจบการแข่งขัน</button>`;
+        <button class="bk-modal-confirm" onclick="confirmBracketScore()">✅ ยืนยัน</button>`;
     } else {
-        bodyHtml += `<div style="text-align:center;color:#4a6080;padding:16px;font-size:13px;">ยังไม่มีผล — รอแอดมินกรอกคะแนน</div>`;
+        bodyHtml += `<div style="text-align:center;color:#3d5a78;padding:14px;font-size:12px;">ยังไม่มีผล — รอแอดมินกรอกคะแนน</div>`;
     }
 
     document.getElementById('bk-modal-title').textContent = modalTitle;
@@ -8906,6 +9811,7 @@ function exportBackup() {
         titleW3: state.titleW3,
         tournamentDetails: state.tournamentDetails,
         discordUrl: state.discordUrl,
+        socialLinks: state.socialLinks,
         bgImageUrl: state.bgImageUrl
     };
 
@@ -9002,6 +9908,7 @@ function confirmImportBackup() {
     if (data.titleW3)         state.titleW3             = data.titleW3;
     if (data.tournamentDetails !== undefined) state.tournamentDetails = data.tournamentDetails;
     if (data.discordUrl)      state.discordUrl          = data.discordUrl;
+    if (data.socialLinks)     state.socialLinks         = Object.assign({}, state.socialLinks, data.socialLinks);
     if (data.bgImageUrl !== undefined) state.bgImageUrl = data.bgImageUrl;
 
     // บันทึกขึ้น cloud ทันที
@@ -9019,7 +9926,7 @@ function confirmImportBackup() {
             adBanner: state.adBanner, colors: state.colors,
             titleW1: state.titleW1, titleW2: state.titleW2, titleW3: state.titleW3,
             tournamentDetails: state.tournamentDetails,
-            discordUrl: state.discordUrl, bgImageUrl: state.bgImageUrl
+            discordUrl: state.discordUrl, socialLinks: state.socialLinks, bgImageUrl: state.bgImageUrl
         };
         fetch(`https://api.jsonbin.io/v3/b/${state.binId}`, {
             method: "PUT",
