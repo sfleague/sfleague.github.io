@@ -481,6 +481,82 @@
         .no1-star { font-size:11px; display:inline-block; animation: no1StarSpin 2s linear infinite; }
         .no1-star:nth-child(2) { animation-delay:0.7s; font-size:13px; }
         .no1-star:nth-child(3) { animation-delay:1.4s; }
+
+        /* ── Rank 2 — Silver ────────────────────────────────────────────────────── */
+        @keyframes no2Shimmer { 0%{background-position:-400% center;} 100%{background-position:400% center;} }
+        @keyframes no2RowPulse { 0%,100%{box-shadow:inset 4px 0 0 #c0c0c0, 0 0 14px rgba(192,192,192,0.1);} 50%{box-shadow:inset 5px 0 0 #e8e8e8, 0 0 36px rgba(192,192,192,0.28), 0 3px 28px rgba(200,200,200,0.14);} }
+        @keyframes no2MedalBob { 0%,100%{transform:translateY(0) scale(1);} 50%{transform:translateY(-5px) scale(1.15);} }
+        @keyframes no2BadgePulse { 0%,100%{box-shadow:0 0 5px rgba(192,192,192,0.2);} 50%{box-shadow:0 0 12px rgba(220,220,220,0.5);} }
+
+        tr.rank-two-row {
+            background: linear-gradient(105deg, rgba(192,192,192,0.18) 0%, rgba(210,210,210,0.09) 40%, rgba(192,192,192,0.03) 100%) !important;
+            animation: no2RowPulse 3.5s ease-in-out infinite;
+            position: relative;
+        }
+        tr.rank-two-row td { color: #e8e8e8 !important; font-weight: 600; }
+        .no2-rank-cell { display:flex; flex-direction:column; align-items:center; gap:2px; }
+        .no2-rank-num {
+            display:inline-flex; align-items:center; justify-content:center;
+            width:30px; height:30px; border-radius:50%;
+            background: linear-gradient(135deg, #e8e8e8, #9e9e9e);
+            color:#111; font-weight:900; font-size:16px; font-family:'Orbitron',sans-serif;
+            box-shadow:0 0 12px rgba(200,200,200,0.6), 0 0 4px rgba(220,220,220,0.35);
+        }
+        .no2-medal { display:inline-block; font-size:16px; animation:no2MedalBob 2.8s ease-in-out infinite; line-height:1; filter:drop-shadow(0 0 5px rgba(200,200,200,0.7)); }
+        .no2-shimmer-name {
+            background: linear-gradient(90deg, #c0c0c0 0%, #fff 35%, #e0e0e0 55%, #a8a8a8 75%, #c0c0c0 100%);
+            background-size: 300% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: no2Shimmer 3s linear infinite;
+            font-weight:800 !important; font-size:15px;
+        }
+        .no2-prize-badge {
+            display:inline-flex; align-items:center; gap:4px;
+            background: linear-gradient(135deg, rgba(192,192,192,0.2), rgba(180,180,180,0.1));
+            border:1px solid rgba(192,192,192,0.5); color:#d8d8d8;
+            padding:2px 9px; font-size:10px; font-weight:800;
+            border-radius:4px; font-family:'Orbitron',sans-serif;
+            animation: no2BadgePulse 2.5s ease-in-out infinite;
+            letter-spacing:0.4px; white-space:nowrap;
+        }
+
+        /* ── Rank 3 — Bronze ────────────────────────────────────────────────────── */
+        @keyframes no3Shimmer { 0%{background-position:-400% center;} 100%{background-position:400% center;} }
+        @keyframes no3RowPulse { 0%,100%{box-shadow:inset 4px 0 0 #cd7f32, 0 0 12px rgba(205,127,50,0.1);} 50%{box-shadow:inset 5px 0 0 #e8a060, 0 0 30px rgba(205,127,50,0.26), 0 3px 24px rgba(230,140,60,0.13);} }
+        @keyframes no3MedalBob { 0%,100%{transform:translateY(0) scale(1);} 50%{transform:translateY(-4px) scale(1.12);} }
+        @keyframes no3BadgePulse { 0%,100%{box-shadow:0 0 5px rgba(205,127,50,0.2);} 50%{box-shadow:0 0 12px rgba(230,140,60,0.45);} }
+
+        tr.rank-three-row {
+            background: linear-gradient(105deg, rgba(205,127,50,0.17) 0%, rgba(220,140,60,0.08) 40%, rgba(205,127,50,0.03) 100%) !important;
+            animation: no3RowPulse 4s ease-in-out infinite;
+            position: relative;
+        }
+        tr.rank-three-row td { color: #e8c49a !important; font-weight: 600; }
+        .no3-rank-cell { display:flex; flex-direction:column; align-items:center; gap:2px; }
+        .no3-rank-num {
+            display:inline-flex; align-items:center; justify-content:center;
+            width:30px; height:30px; border-radius:50%;
+            background: linear-gradient(135deg, #e8a060, #8b4513);
+            color:#fff; font-weight:900; font-size:16px; font-family:'Orbitron',sans-serif;
+            box-shadow:0 0 12px rgba(205,127,50,0.55), 0 0 4px rgba(230,140,60,0.3);
+        }
+        .no3-medal { display:inline-block; font-size:16px; animation:no3MedalBob 3.2s ease-in-out infinite; line-height:1; filter:drop-shadow(0 0 5px rgba(205,127,50,0.7)); }
+        .no3-shimmer-name {
+            background: linear-gradient(90deg, #cd7f32 0%, #f5c99a 35%, #e8a060 55%, #b06820 75%, #cd7f32 100%);
+            background-size: 300% auto;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: no3Shimmer 3.4s linear infinite;
+            font-weight:800 !important; font-size:15px;
+        }
+        .no3-prize-badge {
+            display:inline-flex; align-items:center; gap:4px;
+            background: linear-gradient(135deg, rgba(205,127,50,0.2), rgba(180,100,30,0.1));
+            border:1px solid rgba(205,127,50,0.5); color:#e8a060;
+            padding:2px 9px; font-size:10px; font-weight:800;
+            border-radius:4px; font-family:'Orbitron',sans-serif;
+            animation: no3BadgePulse 2.8s ease-in-out infinite;
+            letter-spacing:0.4px; white-space:nowrap;
+        }
         /* ════════════════════════════════════════════════════════════════════════════════════════════════ */
 
         .round-title { background: linear-gradient(90deg, rgba(0,87,184,0.35), transparent); color: var(--h2-fixtures-color); font-family: 'Orbitron', 'Prompt', sans-serif; font-weight: 800; padding: 12px 20px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin-top: 30px; border-left: 3px solid var(--wc-gold); border-radius: 0 8px 8px 0; }
@@ -750,9 +826,9 @@
         /* ── Team Stats Modal ── */
         #team-stats-modal { display:none; position:fixed; inset:0; z-index:1200;
             background:rgba(0,0,0,0.87); backdrop-filter:blur(8px);
-            align-items:center; justify-content:center; padding:20px; }
+            align-items:center; justify-content:center; padding:16px; }
         .ts-modal-box {
-            position:relative; width:100%; max-width:520px; max-height:90vh;
+            position:relative; width:100%; max-width:480px; max-height:92vh;
             background:rgba(4,12,34,0.97); backdrop-filter:blur(28px);
             border:1px solid rgba(242,194,78,0.25);
             border-radius:20px; box-shadow:0 30px 90px rgba(0,0,0,0.85), 0 0 60px rgba(242,194,78,0.07);
@@ -760,36 +836,101 @@
         }
         .ts-modal-top { position:absolute; top:0; left:0; right:0; height:2px;
             background:linear-gradient(90deg,transparent,var(--wc-gold),transparent); }
-        .ts-modal-header { display:flex; align-items:center; gap:12px; padding:18px 20px 14px;
-            border-bottom:1px solid rgba(255,255,255,0.07); flex-shrink:0; }
-        .ts-modal-logo { width:44px; height:44px; object-fit:contain; border-radius:6px; flex-shrink:0; }
-        .ts-modal-logo.flag { width:52px; height:34px; border-radius:4px; object-fit:cover; }
-        .ts-modal-title { font-family:'Orbitron',sans-serif; font-size:15px; font-weight:900;
-            color:#fff; margin:0; }
-        .ts-modal-sub { font-size:12px; color:var(--wc-text-sub); margin:0; }
+
+        /* ── Header ── */
+        .ts-modal-header {
+            display:flex; align-items:center; gap:14px; padding:20px 18px 16px;
+            border-bottom:1px solid rgba(255,255,255,0.07); flex-shrink:0;
+            background:linear-gradient(180deg,rgba(242,194,78,0.05) 0%,transparent 100%);
+        }
+        .ts-modal-logo { width:52px; height:52px; object-fit:contain; border-radius:8px; flex-shrink:0;
+            box-shadow:0 0 14px rgba(242,194,78,0.18); }
+        .ts-modal-logo.flag { width:60px; height:40px; border-radius:5px; object-fit:cover; }
+        .ts-modal-title { font-family:'Orbitron',sans-serif; font-size:15px; font-weight:900; color:#fff; margin:0; }
+        .ts-modal-sub { font-size:11px; color:var(--wc-text-sub); margin:3px 0 0; }
         .ts-close-btn { margin-left:auto; width:34px !important; height:34px; border-radius:8px; display:flex;
             align-items:center; justify-content:center; background:rgba(255,255,255,0.05);
             border:1px solid rgba(255,255,255,0.1); color:#94a3b8; cursor:pointer;
             font-size:14px; padding:0; flex-shrink:0; transition:all 0.2s; }
         .ts-close-btn:hover { background:rgba(255,255,255,0.12); color:#fff; transform:none !important; box-shadow:none !important; }
-        .ts-modal-body { padding:18px 20px 20px; overflow-y:auto; flex:1; min-height:0; display:flex; flex-direction:column; gap:16px; }
+
+        /* ── Body ── */
+        .ts-modal-body { padding:16px 16px 20px; overflow-y:auto; flex:1; min-height:0; display:flex; flex-direction:column; gap:14px; }
+
+        /* ── Section label ── */
+        .ts-section-title {
+            font-size:10px; font-weight:800; text-transform:uppercase;
+            letter-spacing:1.5px; color:rgba(242,194,78,0.55); margin-bottom:8px;
+            display:flex; align-items:center; gap:8px;
+        }
+        .ts-section-title::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.06); }
+
+        /* ── W / D / L three boxes ── */
+        .ts-wdl-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+        .ts-wdl-box { border-radius:12px; padding:14px 8px 12px; text-align:center; }
+        .ts-wdl-box.win  { background:rgba(34,197,94,0.1);  border:1px solid rgba(34,197,94,0.25); }
+        .ts-wdl-box.draw { background:rgba(234,179,8,0.1);  border:1px solid rgba(234,179,8,0.25); }
+        .ts-wdl-box.loss { background:rgba(239,68,68,0.1);  border:1px solid rgba(239,68,68,0.25); }
+        .ts-wdl-val { font-family:'Orbitron',sans-serif; font-size:28px; font-weight:900; line-height:1; margin-bottom:5px; }
+        .ts-wdl-box.win  .ts-wdl-val { color:#22c55e; }
+        .ts-wdl-box.draw .ts-wdl-val { color:#eab308; }
+        .ts-wdl-box.loss .ts-wdl-val { color:#ef4444; }
+        .ts-wdl-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:rgba(255,255,255,0.38); }
+
+        /* ── Win-rate bar ── */
+        .ts-winrate-wrap { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:11px 14px; }
+        .ts-winrate-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+        .ts-winrate-label { font-size:11px; color:rgba(255,255,255,0.4); font-weight:700; text-transform:uppercase; letter-spacing:0.8px; }
+        .ts-winrate-pct { font-family:'Orbitron',sans-serif; font-size:17px; font-weight:900; }
+        .ts-winrate-bar { height:6px; background:rgba(255,255,255,0.08); border-radius:99px; overflow:hidden; }
+        .ts-winrate-fill { height:100%; border-radius:99px; }
+
+        /* ── Goals 3-col ── */
+        .ts-goals-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+        .ts-goals-box { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:11px 8px; text-align:center; }
+        .ts-goals-val { font-family:'Orbitron',sans-serif; font-size:20px; font-weight:800; line-height:1; margin-bottom:4px; }
+        .ts-goals-lbl { font-size:9px; color:rgba(255,255,255,0.36); text-transform:uppercase; letter-spacing:0.5px; font-weight:700; }
+
+        /* ── Form 5 — logo match cards, always 5 equal columns ── */
+        .ts-form-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; }
+        .ts-form-card {
+            background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07);
+            border-radius:10px; padding:8px 4px 7px; text-align:center;
+            display:flex; flex-direction:column; align-items:center; gap:4px;
+            min-width:0;
+        }
+        .ts-form-card.empty { border-style:dashed; opacity:0.25; pointer-events:none; }
+        /* result badge */
+        .ts-form-res { font-size:10px; font-weight:900; padding:2px 7px; border-radius:4px; line-height:1; flex-shrink:0; }
+        .ts-form-res.W { background:rgba(34,197,94,0.2);  color:#22c55e; border:1px solid rgba(34,197,94,0.35); }
+        .ts-form-res.D { background:rgba(234,179,8,0.18); color:#eab308; border:1px solid rgba(234,179,8,0.35); }
+        .ts-form-res.L { background:rgba(239,68,68,0.18); color:#ef4444; border:1px solid rgba(239,68,68,0.35); }
+        /* logo row */
+        .ts-form-logos { display:flex; align-items:center; justify-content:center; gap:3px; width:100%; }
+        .ts-form-logo-wrap { display:flex; flex-direction:column; align-items:center; gap:2px; flex:1; min-width:0; }
+        .ts-form-logo { width:26px; height:26px; object-fit:contain; border-radius:4px; display:block; }
+        .ts-form-logo.flag { width:30px; height:20px; border-radius:3px; object-fit:cover; }
+        .ts-form-logo-name { font-size:7.5px; color:rgba(255,255,255,0.32); line-height:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%; padding:0 1px; }
+        .ts-form-logo-name.me { color:rgba(255,255,255,0.32); }
+        /* score */
+        .ts-form-vs-score { font-family:'Orbitron',sans-serif; font-size:11px; font-weight:900; color:#fff; line-height:1; flex-shrink:0; padding:0 1px; }
+        .ts-form-fscore { font-family:'Orbitron',sans-serif; font-size:12px; font-weight:800; color:#fff; line-height:1; }
+        .ts-form-fopp { font-size:9px; color:rgba(255,255,255,0.36); line-height:1.3; word-break:break-word; padding:0 2px; }
+        .ts-form-fside { font-size:8px; color:rgba(255,255,255,0.2); }
+
+        /* ── Legacy classes kept for anything else that uses them ── */
         .ts-stat-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-        .ts-stat-box { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
-            border-radius:10px; padding:12px 8px; text-align:center; }
+        .ts-stat-box { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px 8px; text-align:center; }
         .ts-stat-val { font-family:'Orbitron',sans-serif; font-size:22px; font-weight:800; line-height:1; margin-bottom:4px; }
         .ts-stat-lbl { font-size:10px; color:var(--wc-text-sub); text-transform:uppercase; letter-spacing:0.5px; font-weight:700; }
         .ts-stat-box.win  .ts-stat-val { color:#22c55e; }
         .ts-stat-box.draw .ts-stat-val { color:#eab308; }
         .ts-stat-box.loss .ts-stat-val { color:#ef4444; }
         .ts-stat-row2 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-        .ts-stat-box2 { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06);
-            border-radius:8px; padding:10px 8px; text-align:center; }
+        .ts-stat-box2 { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px 8px; text-align:center; }
         .ts-stat-box2 .ts-stat-val { font-size:18px; color:var(--wc-gold); }
-        .ts-section-title { font-size:11px; font-weight:800; text-transform:uppercase;
-            letter-spacing:1px; color:var(--wc-text-sub); margin-bottom:6px; }
         .ts-form-row { display:flex; gap:6px; flex-wrap:wrap; }
-        .ts-form-item { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07);
-            border-radius:8px; padding:8px 12px; font-size:12px; display:flex; align-items:center; gap:8px; flex:1 1 auto; min-width:180px; }
+        .ts-form-item { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:8px 12px; font-size:12px; display:flex; align-items:center; gap:8px; }
         .ts-form-badge { font-size:11px; font-weight:800; padding:2px 7px; border-radius:4px; flex-shrink:0; }
         .ts-form-badge.W { background:rgba(34,197,94,0.2); color:#22c55e; border:1px solid rgba(34,197,94,0.35); }
         .ts-form-badge.D { background:rgba(234,179,8,0.2);  color:#fbbf24; border:1px solid rgba(234,179,8,0.35); }
@@ -1795,6 +1936,31 @@
         .h2h-win-pill.w { background:rgba(34,197,94,0.15); color:#22c55e; }
         .h2h-win-pill.d { background:rgba(100,116,139,0.15); color:#94a3b8; }
         .h2h-win-pill.l { background:rgba(239,68,68,0.12); color:#f87171; }
+
+        /* ── H2H logo match-cards (score modal) ── */
+        .se-h2h-wrap { margin:10px 0 0; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.07); border-radius:12px; padding:12px 12px 10px; }
+        .se-h2h-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+        .se-h2h-title { font-size:10px; font-weight:800; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:1.5px; }
+        .se-h2h-summary { display:flex; gap:5px; }
+        .se-h2h-pill { font-family:'Orbitron',sans-serif; font-size:11px; font-weight:900; padding:2px 8px; border-radius:5px; }
+        .se-h2h-pill.hw { background:rgba(96,165,250,0.15); color:#60a5fa; border:1px solid rgba(96,165,250,0.3); }
+        .se-h2h-pill.dr { background:rgba(234,179,8,0.12); color:#fbbf24; border:1px solid rgba(234,179,8,0.28); }
+        .se-h2h-pill.aw { background:rgba(248,113,113,0.15); color:#f87171; border:1px solid rgba(248,113,113,0.3); }
+        /* grid of cards */
+        .se-h2h-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(74px,1fr)); gap:5px; }
+        .se-h2h-card { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:8px 4px 7px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:4px; min-width:0; }
+        .se-h2h-season { font-family:'Orbitron',sans-serif; font-size:9px; font-weight:800; color:rgba(242,194,78,0.6); letter-spacing:0.5px; }
+        .se-h2h-logos { display:flex; align-items:center; justify-content:center; gap:3px; width:100%; }
+        .se-h2h-logo { width:24px; height:24px; object-fit:contain; border-radius:4px; display:block; flex-shrink:0; }
+        .se-h2h-logo.flag { width:28px; height:18px; border-radius:3px; object-fit:cover; }
+        .se-h2h-vscore { font-family:'Orbitron',sans-serif; font-size:11px; font-weight:900; color:#fff; flex-shrink:0; }
+        .se-h2h-res { font-size:9px; font-weight:900; padding:2px 6px; border-radius:4px; line-height:1; }
+        .se-h2h-res.W { background:rgba(34,197,94,0.18); color:#22c55e; border:1px solid rgba(34,197,94,0.32); }
+        .se-h2h-res.D { background:rgba(234,179,8,0.15); color:#eab308; border:1px solid rgba(234,179,8,0.3); }
+        .se-h2h-res.L { background:rgba(239,68,68,0.15); color:#ef4444; border:1px solid rgba(239,68,68,0.3); }
+        .se-h2h-empty { color:rgba(255,255,255,0.2); font-size:11px; text-align:center; padding:10px 0; }
+        /* note under card */
+        .se-h2h-note { font-size:8px; color:rgba(255,255,255,0.22); line-height:1.2; padding:0 2px; }
 
         /* ─── Custom Modal (Alert / Confirm / Prompt) ─── */
         .cm-overlay {
@@ -5608,6 +5774,7 @@ function confirmMatchScore(matchId) {
     }
     match.homeScore = homeScore;
     match.awayScore = awayScore;
+    match.scoredAt = Date.now(); // บันทึกเวลากรอกผลจริง เพื่อ sort ฟอร์มตามลำดับที่เล่นจริง
     _autoRecordH2H(match); // ✅ บันทึก H2H อัตโนมัติ
     let fmt = state.tournamentFormat || 'league';
     if (fmt !== 'league') renderAdminDock();
@@ -5727,49 +5894,27 @@ function openScoreModal(matchId) {
         const rank2 = standings.findIndex(t => t.id === m.awayId) + 1;
         const rankLabel = r => r > 0 ? `อันดับ ${r}` : '—';
 
-        // Recent H2H matches (last 3)
+        // Recent H2H matches (last 5) — logo cards
         const records = _getH2HRecords(m.homeId, m.awayId);
-        const recentSorted = [...records].sort((a, b) => (b.season || 0) - (a.season || 0)).slice(0, 3);
-        const recentHTML = recentSorted.length === 0
-            ? `<div style="color:#334155;font-size:11px;text-align:center;padding:6px 0;">ยังไม่มีประวัติการพบกัน</div>`
-            : recentSorted.map(r => {
-                const isH = r.homeId === m.homeId;
-                const lbl = isH ? `${r.hs} - ${r.as}` : `${r.as} - ${r.hs}`;
-                let result = r.hs === r.as ? '⚖️' : (isH ? (r.hs > r.as ? '🔵' : '🔴') : (r.as > r.hs ? '🔵' : '🔴'));
-                return `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 8px;border-radius:6px;background:rgba(255,255,255,0.03);margin-bottom:3px;font-size:11px;">
-                    <span style="color:#475569;font-size:10px;font-family:'Orbitron',sans-serif;">SS${r.season||'?'}</span>
-                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;color:#F2C24E;">${lbl}</span>
-                    <span>${result}</span>
-                </div>`;
-            }).join('');
+        const recentSorted = [...records].sort((a, b) => (b.season || 0) - (a.season || 0)).slice(0, 5);
+        const h2hCardsHTML = _buildH2HCardsHTML(recentSorted, m.homeId, hInfo, aInfo);
 
         h2hArea.innerHTML = `
-        <div style="margin:8px 0 10px;padding:12px 14px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.07);border-radius:12px;">
-            <div style="font-size:10px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">⚔️ HEAD-TO-HEAD</div>
-            <!-- Rank row -->
+        <div class="se-h2h-wrap">
+            <div class="se-h2h-header">
+                <span class="se-h2h-title">⚔️ HEAD-TO-HEAD</span>
+                ${total > 0 ? `<div class="se-h2h-summary">
+                    <span class="se-h2h-pill hw">${s1.w}W</span>
+                    <span class="se-h2h-pill dr">${s1.d}D</span>
+                    <span class="se-h2h-pill aw">${s2.w}W</span>
+                </div>` : ''}
+            </div>
             <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
                 <span style="font-size:11px;color:#60a5fa;font-weight:700;">${rankLabel(rank1)}</span>
                 <span style="font-size:10px;color:#334155;">ตาราง</span>
                 <span style="font-size:11px;color:#f87171;font-weight:700;">${rankLabel(rank2)}</span>
             </div>
-            <!-- W/D/L row -->
-            ${total === 0 ? `<div style="text-align:center;color:#334155;font-size:11px;padding:4px 0;">ยังไม่มีสถิติ H2H</div>` : `
-            <div style="display:flex;justify-content:center;gap:6px;margin-bottom:8px;">
-                <div style="text-align:center;padding:5px 10px;border-radius:7px;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);">
-                    <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#60a5fa;">${s1.w}</div>
-                    <div style="font-size:9px;color:#475569;font-weight:700;">ชนะ</div>
-                </div>
-                <div style="text-align:center;padding:5px 10px;border-radius:7px;background:rgba(234,179,8,0.1);border:1px solid rgba(234,179,8,0.25);">
-                    <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#fbbf24;">${s1.d}</div>
-                    <div style="font-size:9px;color:#475569;font-weight:700;">เสมอ</div>
-                </div>
-                <div style="text-align:center;padding:5px 10px;border-radius:7px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);">
-                    <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#f87171;">${s2.w}</div>
-                    <div style="font-size:9px;color:#475569;font-weight:700;">ชนะ</div>
-                </div>
-            </div>`}
-            <!-- Recent matches -->
-            ${recentHTML}
+            ${h2hCardsHTML}
         </div>`;
     } else if (h2hArea) {
         h2hArea.innerHTML = '';
@@ -5871,8 +6016,9 @@ function openTeamStatsModal(teamId) {
     const played = (state.matches || []).filter(m =>
         (m.homeId === teamId || m.awayId === teamId) &&
         m.homeId !== 'BYE' && m.awayId !== 'BYE' &&
+        m.status === 'finished' &&
         m.homeScore !== null && m.awayScore !== null
-    ).sort((a,b) => (a.id||0) - (b.id||0));
+    ).sort((a,b) => (a.scoredAt||a.id||0) - (b.scoredAt||b.id||0));
 
     played.forEach(m => {
         const isHome = m.homeId === teamId;
@@ -5887,49 +6033,80 @@ function openTeamStatsModal(teamId) {
     const gd = gf - ga;
     const winRate = p > 0 ? Math.round((w / p) * 100) : 0;
 
-    // Last 5 matches detail (oldest→newest: left to right)
-    const last5 = played.slice().sort((a, b) => (a.id || 0) - (b.id || 0)).slice(-5);
-    const last5HTML = last5.length > 0 ? last5.map(m => {
-        const isHome = m.homeId === teamId;
-        const oppId = isHome ? m.awayId : m.homeId;
-        const opp = state.teams.find(t => t.id === oppId);
-        const oppName = opp ? opp.team : oppId;
-        const myG = isHome ? parseInt(m.homeScore) : parseInt(m.awayScore);
-        const opG = isHome ? parseInt(m.awayScore) : parseInt(m.homeScore);
-        const scoreStr = isHome ? `${myG}–${opG}` : `${myG}–${opG}`;
-        const res = myG > opG ? 'W' : myG < opG ? 'L' : 'D';
-        const side = isHome ? '(H)' : '(A)';
-        return `<div class="ts-form-item">
-            <span class="ts-form-badge ${res}">${res}</span>
-            <span class="ts-form-score">${scoreStr}</span>
-            <span class="ts-form-opp">vs ${oppName} <span style="color:#475569;">${side}</span></span>
+    // Last 5 matches — logo match cards, fixed 5-slot grid
+    const last5 = played.slice(-5);
+    const slots = Array.from({length:5}, (_,i) => last5[i] || null);
+
+    function _tsLogoImg(t, isMe) {
+        if (!t) return `<div class="ts-form-logo-wrap${isMe?' me':''}"><div style="width:26px;height:26px;border-radius:4px;background:rgba(255,255,255,0.06);"></div><span class="ts-form-logo-name${isMe?' me':''}">?</span></div>`;
+        const cls = 'ts-form-logo' + (t.isFlag ? ' flag' : '');
+        const esc = (t.team||'').replace(/'/g,"\\'");
+        const short = (t.team||'').length > 7 ? (t.team||'').slice(0,6)+'…' : (t.team||'');
+        return `<div class="ts-form-logo-wrap${isMe?' me':''}">
+            <img class="${cls}" src="${t.logo||''}" onerror="_logoFallback(this,'${esc}')">
+            <span class="ts-form-logo-name${isMe?' me':''}">${short}</span>
         </div>`;
-    }).join('') : `<div style="font-size:12px;color:#475569;padding:8px 0;">ยังไม่มีผลการแข่งขัน</div>`;
+    }
+
+    const formGridHTML = slots.map(m => {
+        if (!m) return `<div class="ts-form-card empty">
+            <span class="ts-form-res" style="background:none;border:none;color:rgba(255,255,255,0.12);">—</span>
+            <div class="ts-form-logos">
+                <div style="width:26px;height:26px;border-radius:4px;background:rgba(255,255,255,0.04);"></div>
+                <span class="ts-form-vs-score" style="color:rgba(255,255,255,0.1);">-</span>
+                <div style="width:26px;height:26px;border-radius:4px;background:rgba(255,255,255,0.04);"></div>
+            </div>
+        </div>`;
+        const homeTeam = state.teams.find(t => t.id === m.homeId);
+        const awayTeam = state.teams.find(t => t.id === m.awayId);
+        const isHome   = m.homeId === teamId;
+        const hG = parseInt(m.homeScore);
+        const aG = parseInt(m.awayScore);
+        const myG = isHome ? hG : aG;
+        const opG = isHome ? aG : hG;
+        const res = myG > opG ? 'W' : myG < opG ? 'L' : 'D';
+        // card border colour by result
+        const cardBorder = res==='W' ? 'rgba(34,197,94,0.25)' : res==='L' ? 'rgba(239,68,68,0.2)' : 'rgba(234,179,8,0.2)';
+        return `<div class="ts-form-card" style="border-color:${cardBorder}">
+            <span class="ts-form-res ${res}">${res}</span>
+            <div class="ts-form-logos">
+                ${_tsLogoImg(homeTeam, m.homeId === teamId)}
+                <span class="ts-form-vs-score">${hG}–${aG}</span>
+                ${_tsLogoImg(awayTeam, m.awayId === teamId)}
+            </div>
+        </div>`;
+    }).join('');
+
+    const winColor  = winRate >= 60 ? '#22c55e' : winRate >= 40 ? '#eab308' : '#ef4444';
+    const barColor  = winRate >= 60 ? 'linear-gradient(90deg,#16a34a,#22c55e)' : winRate >= 40 ? 'linear-gradient(90deg,#ca8a04,#eab308)' : 'linear-gradient(90deg,#b91c1c,#ef4444)';
 
     document.getElementById('ts-modal-body').innerHTML = `
         <div>
-            <div class="ts-section-title">สถิติรวม · ${p} นัด</div>
-            <div class="ts-stat-row">
-                <div class="ts-stat-box win"><div class="ts-stat-val">${w}</div><div class="ts-stat-lbl">ชนะ</div></div>
-                <div class="ts-stat-box draw"><div class="ts-stat-val">${d}</div><div class="ts-stat-lbl">เสมอ</div></div>
-                <div class="ts-stat-box loss"><div class="ts-stat-val">${l}</div><div class="ts-stat-lbl">แพ้</div></div>
+            <div class="ts-section-title">ผลการแข่งขัน · ${p} นัด</div>
+            <div class="ts-wdl-grid">
+                <div class="ts-wdl-box win"><div class="ts-wdl-val">${w}</div><div class="ts-wdl-lbl">ชนะ</div></div>
+                <div class="ts-wdl-box draw"><div class="ts-wdl-val">${d}</div><div class="ts-wdl-lbl">เสมอ</div></div>
+                <div class="ts-wdl-box loss"><div class="ts-wdl-val">${l}</div><div class="ts-wdl-lbl">แพ้</div></div>
             </div>
+        </div>
+        <div class="ts-winrate-wrap">
+            <div class="ts-winrate-top">
+                <span class="ts-winrate-label">Win Rate</span>
+                <span class="ts-winrate-pct" style="color:${winColor}">${winRate}%</span>
+            </div>
+            <div class="ts-winrate-bar"><div class="ts-winrate-fill" style="width:${winRate}%;background:${barColor};"></div></div>
         </div>
         <div>
             <div class="ts-section-title">สถิติประตู</div>
-            <div class="ts-stat-row2">
-                <div class="ts-stat-box2"><div class="ts-stat-val">${gf}</div><div class="ts-stat-lbl">ยิงได้</div></div>
-                <div class="ts-stat-box2"><div class="ts-stat-val" style="color:#ef4444;">${ga}</div><div class="ts-stat-lbl">ยิงเสีย</div></div>
-                <div class="ts-stat-box2"><div class="ts-stat-val" style="color:${gd>=0?'#4ade80':'#f87171'}">${gd>0?'+':''}${gd}</div><div class="ts-stat-lbl">ต่างประตู</div></div>
+            <div class="ts-goals-grid">
+                <div class="ts-goals-box"><div class="ts-goals-val" style="color:#4ade80;">${gf}</div><div class="ts-goals-lbl">ยิงได้</div></div>
+                <div class="ts-goals-box"><div class="ts-goals-val" style="color:#f87171;">${ga}</div><div class="ts-goals-lbl">ยิงเสีย</div></div>
+                <div class="ts-goals-box"><div class="ts-goals-val" style="color:${gd>=0?'#4ade80':'#f87171'}">${gd>0?'+':''}${gd}</div><div class="ts-goals-lbl">ต่างประตู</div></div>
             </div>
-        </div>
-        <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;">
-            <span style="font-size:12px;color:var(--wc-text-sub);">Win Rate</span>
-            <span style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:800;color:${winRate>=50?'#22c55e':'#f87171'}">${winRate}%</span>
         </div>
         <div>
             <div class="ts-section-title">ฟอร์ม 5 นัดล่าสุด</div>
-            <div class="ts-form-row">${last5HTML}</div>
+            <div class="ts-form-grid">${formGridHTML}</div>
         </div>
     `;
 
@@ -6083,52 +6260,25 @@ function openMatchViewModal(matchId) {
         const rank2 = standings.findIndex(t => t.id === m.awayId) + 1;
         const rankLabel = r => r > 0 ? `อันดับ ${r}` : '—';
         const records = _getH2HRecords(m.homeId, m.awayId);
-        const recentSorted = [...records].sort((a, b) => (b.season || 0) - (a.season || 0)).slice(0, 3);
-        const hName = hInfoV.player || hInfoV.team || m.homeId;
-        const aName = aInfoV.player || aInfoV.team || m.awayId;
-        const recentHTML = recentSorted.length === 0
-            ? `<div style="color:#334155;font-size:11px;text-align:center;padding:6px 0;">ยังไม่มีประวัติการพบกัน</div>`
-            : recentSorted.map(r => {
-                const isH = r.homeId === m.homeId;
-                const lbl = isH ? `${r.hs} - ${r.as}` : `${r.as} - ${r.hs}`;
-                const result = r.hs === r.as ? '⚖️' : (isH ? (r.hs > r.as ? '🔵' : '🔴') : (r.as > r.hs ? '🔵' : '🔴'));
-                return `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 8px;border-radius:6px;background:rgba(255,255,255,0.03);margin-bottom:3px;font-size:11px;">
-                    <span style="color:#475569;font-size:10px;font-family:'Orbitron',sans-serif;">SS${r.season||'?'}</span>
-                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:900;color:#F2C24E;">${lbl}</span>
-                    <span>${result}</span>
-                </div>`;
-            }).join('');
+        const recentSorted = [...records].sort((a, b) => (b.season || 0) - (a.season || 0)).slice(0, 5);
+        const h2hCardsHTML = _buildH2HCardsHTML(recentSorted, m.homeId, hInfoV, aInfoV);
 
         h2hArea.innerHTML = `
-        <div style="margin:8px 0 10px;padding:12px 14px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.07);border-radius:12px;">
-            <div style="font-size:10px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">⚔️ HEAD-TO-HEAD</div>
-            <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:11px;">
-                <span style="color:#60a5fa;font-weight:700;">${rankLabel(rank1)} — ${hName}</span>
-                <span style="color:#f87171;font-weight:700;">${aName} — ${rankLabel(rank2)}</span>
+        <div class="se-h2h-wrap">
+            <div class="se-h2h-header">
+                <span class="se-h2h-title">⚔️ HEAD-TO-HEAD</span>
+                ${total > 0 ? `<div class="se-h2h-summary">
+                    <span class="se-h2h-pill hw">${s1.w}W</span>
+                    <span class="se-h2h-pill dr">${s1.d}D</span>
+                    <span class="se-h2h-pill aw">${s2.w}W</span>
+                </div>` : ''}
             </div>
-            ${total === 0
-                ? `<div style="text-align:center;color:#334155;font-size:11px;padding:4px 0 8px;">ยังไม่มีสถิติ H2H ระหว่างสองทีมนี้</div>`
-                : `<div style="display:flex;justify-content:center;gap:6px;margin-bottom:8px;">
-                    <div style="text-align:center;padding:5px 10px;border-radius:7px;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);">
-                        <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#60a5fa;">${s1.w}</div>
-                        <div style="font-size:9px;color:#475569;font-weight:700;">${hName.split(' ')[0]} ชนะ</div>
-                    </div>
-                    <div style="text-align:center;padding:5px 10px;border-radius:7px;background:rgba(234,179,8,0.1);border:1px solid rgba(234,179,8,0.25);">
-                        <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#fbbf24;">${s1.d}</div>
-                        <div style="font-size:9px;color:#475569;font-weight:700;">เสมอ</div>
-                    </div>
-                    <div style="text-align:center;padding:5px 10px;border-radius:7px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);">
-                        <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#f87171;">${s2.w}</div>
-                        <div style="font-size:9px;color:#475569;font-weight:700;">${aName.split(' ')[0]} ชนะ</div>
-                    </div>
-                </div>
-                <div style="height:6px;border-radius:4px;background:rgba(255,255,255,0.06);overflow:hidden;display:flex;margin-bottom:10px;">
-                    <div style="width:${total>0?(s1.w/total*100).toFixed(0):0}%;background:linear-gradient(90deg,#2563eb,#60a5fa);"></div>
-                    <div style="width:${total>0?(s1.d/total*100).toFixed(0):0}%;background:linear-gradient(90deg,#d97706,#fbbf24);"></div>
-                    <div style="width:${total>0?(s2.w/total*100).toFixed(0):0}%;background:linear-gradient(90deg,#dc2626,#f87171);"></div>
-                </div>`
-            }
-            ${recentHTML}
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                <span style="font-size:11px;color:#60a5fa;font-weight:700;">${rankLabel(rank1)}</span>
+                <span style="font-size:10px;color:#334155;">ตาราง</span>
+                <span style="font-size:11px;color:#f87171;font-weight:700;">${rankLabel(rank2)}</span>
+            </div>
+            ${h2hCardsHTML}
         </div>`;
     }
 
@@ -6158,6 +6308,7 @@ function confirmScoreFromModal() {
     if (!match) return;
     match.homeScore = homeScore;
     match.awayScore = awayScore;
+    match.scoredAt = Date.now(); // บันทึกเวลากรอกผลจริง เพื่อ sort ฟอร์มตามลำดับที่เล่นจริง
     _autoRecordH2H(match); // ✅ บันทึก H2H อัตโนมัติ
     closeScoreModal();
     let fmt = state.tournamentFormat || 'league';
@@ -6511,15 +6662,16 @@ async function saveCurrentChampToHistory() {
 
 // ── Form Guide helpers ────────────────────────────────────────────────────────
 function _getTeamForm(teamId, n) {
-    // Collect all matches this team played that have scores, sorted by match id (chronological)
+    // เฉพาะแมตช์ที่ finished แล้วเท่านั้น — ป้องกัน 0-0 playing โผล่เป็น draw ปลอม
     let played = (state.matches || []).filter(m =>
         (m.homeId === teamId || m.awayId === teamId) &&
         m.homeId !== 'BYE' && m.awayId !== 'BYE' &&
+        m.status === 'finished' &&
         m.homeScore !== null && m.homeScore !== undefined &&
         m.awayScore !== null && m.awayScore !== undefined
     );
-    // Sort by id ascending (id increments as matches are created)
-    played.sort((a, b) => (a.id || 0) - (b.id || 0));
+    // Sort by scoredAt (เวลากรอกผลจริง) ถ้าไม่มีให้ fallback เป็น id (ลำดับตาราง)
+    played.sort((a, b) => (a.scoredAt || a.id || 0) - (b.scoredAt || b.id || 0));
     // Take last n
     let recent = played.slice(-n);
     return recent.map(m => {
@@ -6536,10 +6688,11 @@ function _getWinStreak(teamId) {
     let played = (state.matches || []).filter(m =>
         (m.homeId === teamId || m.awayId === teamId) &&
         m.homeId !== 'BYE' && m.awayId !== 'BYE' &&
+        m.status === 'finished' &&
         m.homeScore !== null && m.homeScore !== undefined &&
         m.awayScore !== null && m.awayScore !== undefined
     );
-    played.sort((a, b) => (a.id || 0) - (b.id || 0));
+    played.sort((a, b) => (a.scoredAt || a.id || 0) - (b.scoredAt || b.id || 0));
     if (played.length === 0) return { type: 'none', count: 0 };
     let results = played.map(m => {
         let isHome = m.homeId === teamId;
@@ -6619,24 +6772,26 @@ function renderStandings() {
 
     sorted.forEach((team, index) => {
         const isDefending = state.defendingChampId && team.id === state.defendingChampId && !team.isChampion;
-        const isRankOne = (index === 0) && !team.isChampion;
+        const isRankOne   = (index === 0) && !team.isChampion && !isDefending;
+        const isRankTwo   = (index === 1) && !team.isChampion && !isDefending;
+        const isRankThree = (index === 2) && !team.isChampion && !isDefending;
         let tr = document.createElement("tr");
-        if (team.isChampion) tr.className = "champion-row";
-        else if (isDefending) tr.className = "defending-champ-row";
-        else if (isRankOne) tr.className = "rank-one-row";
+        if (team.isChampion)     tr.className = "champion-row";
+        else if (isDefending)    tr.className = "defending-champ-row";
+        else if (isRankOne)      tr.className = "rank-one-row";
+        else if (isRankTwo)      tr.className = "rank-two-row";
+        else if (isRankThree)    tr.className = "rank-three-row";
         let logoClass = team.isFlag ? "team-logo flag-img" : "team-logo club-img";
         const defendingBadge = isDefending ? `<span class="defending-badge">👑 DEFENDING</span>` : "";
         let formHTML = _buildFormGuideHTML(team.id, 5);
         let streakHTML = _buildStreakHTML(team.id);
 
-        // ── #1 rank cell & team cell ───────────────────────────────
+        // ── rank cell & team cell ──────────────────────────────────
         let rankCellHTML, teamCellHTML;
         if (isRankOne) {
-            // Days at #1
             const sinceMs = (state.no1History && state.no1History.since) ? state.no1History.since : Date.now();
             const days = Math.max(0, Math.floor((Date.now() - sinceMs) / 86400000));
             const daysLabel = days === 0 ? 'วันนี้! 🔥' : `${days} วัน`;
-
             rankCellHTML = `<div class="no1-rank-cell"><span class="no1-rank-num">1</span><span class="no1-crown">👑</span></div>`;
             teamCellHTML = `
                 <div class="player-team-box">
@@ -6654,17 +6809,56 @@ function renderStandings() {
                         </div>
                     </div>
                 </div>`;
+        } else if (isRankTwo) {
+            rankCellHTML = `<div class="no2-rank-cell"><span class="no2-rank-num">2</span><span class="no2-medal">🥈</span></div>`;
+            teamCellHTML = `
+                <div class="player-team-box">
+                    <img class="${logoClass}" src="${team.logo}" onerror="_logoFallback(this,'${team.team.replace(/'/g,"\\'")}')">
+                    <div class="team-info">
+                        <div style="display:flex;flex-direction:column;gap:3px;">
+                            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                                <span class="no2-shimmer-name">${team.team}</span>
+                                <span class="no2-prize-badge">🥈 รองแชมป์</span>
+                            </div>
+                            <span class="t-name" style="color:#909090;">Manager: ${team.player}</span>
+                        </div>
+                    </div>
+                </div>`;
+        } else if (isRankThree) {
+            rankCellHTML = `<div class="no3-rank-cell"><span class="no3-rank-num">3</span><span class="no3-medal">🥉</span></div>`;
+            teamCellHTML = `
+                <div class="player-team-box">
+                    <img class="${logoClass}" src="${team.logo}" onerror="_logoFallback(this,'${team.team.replace(/'/g,"\\'")}')">
+                    <div class="team-info">
+                        <div style="display:flex;flex-direction:column;gap:3px;">
+                            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                                <span class="no3-shimmer-name">${team.team}</span>
+                                <span class="no3-prize-badge">🥉 อันดับ 3</span>
+                            </div>
+                            <span class="t-name" style="color:#9a7040;">Manager: ${team.player}</span>
+                        </div>
+                    </div>
+                </div>`;
         } else {
             rankCellHTML = `<strong>${index + 1}</strong>`;
             teamCellHTML = `<div class="player-team-box"><img class="${logoClass}" src="${team.logo}" onerror="_logoFallback(this,'${team.team.replace(/'/g,"\\'")}')"><div class="team-info"><span class="p-name">${team.team}${team.isChampion ? '<span class="champion-badge">🏆 CHAMPION</span>' : ''}${defendingBadge}</span><span class="t-name">Manager: ${team.player}</span></div></div>`;
         }
+
+        // pts cell colour per rank
+        let ptsBg, ptsColor, ptsBorder;
+        if      (team.isChampion) { ptsBg = 'var(--wc-gold)';           ptsColor = '#000'; ptsBorder = ''; }
+        else if (isDefending)     { ptsBg = 'rgba(139,92,246,0.3)';     ptsColor = '#fff'; ptsBorder = ''; }
+        else if (isRankOne)       { ptsBg = 'rgba(255,215,0,0.25)';     ptsColor = '#ffe566'; ptsBorder = 'border:1px solid rgba(255,215,0,0.4);'; }
+        else if (isRankTwo)       { ptsBg = 'rgba(192,192,192,0.22)';   ptsColor = '#e8e8e8'; ptsBorder = 'border:1px solid rgba(192,192,192,0.4);'; }
+        else if (isRankThree)     { ptsBg = 'rgba(205,127,50,0.22)';    ptsColor = '#e8c49a'; ptsBorder = 'border:1px solid rgba(205,127,50,0.4);'; }
+        else                      { ptsBg = '#1a3660';                  ptsColor = '#fff'; ptsBorder = ''; }
 
         tr.innerHTML = `
             <td>${rankCellHTML}</td>
             <td>${teamCellHTML}</td>
             <td>${team.p}</td><td style="color:#00ff88;">${team.w}</td><td>${team.d}</td><td style="color:#ff4466;">${team.l}</td>
             <td>${team.gf}</td><td>${team.ga}</td><td style="font-weight:bold; color:${team.gd >= 0 ? 'var(--wc-gold)' : '#ff4466'}">${team.gd > 0 ? '+' + team.gd : team.gd}</td>
-            <td><span style="background:${team.isChampion ? 'var(--wc-gold)' : isDefending ? 'rgba(139,92,246,0.3)' : isRankOne ? 'rgba(255,215,0,0.25)' : '#1a3660'}; color:${team.isChampion ? '#000' : isRankOne ? '#ffe566' : '#fff'}; padding:3px 10px; font-weight:bold; border-radius:3px; ${isRankOne ? 'border:1px solid rgba(255,215,0,0.4);' : ''}">${team.pts}</span></td>
+            <td><span style="background:${ptsBg}; color:${ptsColor}; padding:3px 10px; font-weight:bold; border-radius:3px; ${ptsBorder}">${team.pts}</span></td>
             <td>${streakHTML}</td>
             <td>${formHTML}</td>
         `;
@@ -7936,6 +8130,8 @@ function finishMatch(matchId) {
     let m = state.matches.find(x => x.id === matchId);
     if (!m) return;
     m.status = 'finished';
+    // บันทึก scoredAt ถ้ายังไม่มี (กรณีกด finish โดยไม่ผ่าน confirmMatchScore)
+    if (!m.scoredAt) m.scoredAt = Date.now();
     renderLeague(); saveDataToCloud();
     showStatus('✅ ยืนยันจบการแข่งขันแล้ว!');
 }
@@ -8219,6 +8415,38 @@ let _h2hAwayId = null;
 
 function _h2hKey(a, b) { return [a, b].sort().join('|'); }
 function _getH2HRecords(aId, bId) { return (state.h2h || {})[_h2hKey(aId, bId)] || []; }
+
+// ── H2H logo match-cards (shared by score modal + view modal) ─────────────
+// records: array sorted newest-first; refHomeId: the team treated as "home" in this matchup
+function _buildH2HCardsHTML(records, refHomeId, hInfo, aInfo) {
+    if (!records || records.length === 0) {
+        return `<div class="se-h2h-empty">ยังไม่มีประวัติการพบกัน</div>`;
+    }
+    function _logoImg(info, cls) {
+        if (!info || !info.logo) return `<div style="width:24px;height:24px;border-radius:4px;background:rgba(255,255,255,0.06);flex-shrink:0;"></div>`;
+        const esc = (info.team||'').replace(/'/g,"\\'");
+        return `<img class="se-h2h-logo${info.isFlag?' flag':''}" src="${info.logo}" onerror="_logoFallback(this,'${esc}')">`;
+    }
+    return `<div class="se-h2h-grid">` + records.map(r => {
+        // always show left = home side of this matchup (hInfo), right = aInfo
+        const recordHomeIsRef = r.homeId === refHomeId;
+        const leftScore  = recordHomeIsRef ? r.hs : r.as;
+        const rightScore = recordHomeIsRef ? r.as : r.hs;
+        const res = leftScore === rightScore ? 'D' : leftScore > rightScore ? 'W' : 'L';
+        const resLabel = res === 'W' ? 'ชนะ' : res === 'D' ? 'เสมอ' : 'แพ้';
+        const note = r.note && r.note !== 'อัตโนมัติ' ? r.note : '';
+        return `<div class="se-h2h-card" style="border-color:${res==='W'?'rgba(34,197,94,0.25)':res==='L'?'rgba(239,68,68,0.22)':'rgba(234,179,8,0.22)'}">
+            <span class="se-h2h-season">SS${r.season||'?'}</span>
+            <div class="se-h2h-logos">
+                ${_logoImg(hInfo)}
+                <span class="se-h2h-vscore">${leftScore}–${rightScore}</span>
+                ${_logoImg(aInfo)}
+            </div>
+            <span class="se-h2h-res ${res}">${resLabel}</span>
+            ${note ? `<span class="se-h2h-note">${note}</span>` : ''}
+        </div>`;
+    }).join('') + `</div>`;
+}
 
 // ── Auto-record H2H from match result ──────────────────────────────────────
 function _autoRecordH2H(match) {
