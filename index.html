@@ -877,6 +877,17 @@
         #now-playing-pill .np-text { font-size:11px; font-weight:700; color:#e2e8f0; letter-spacing:0.3px; }
         #now-playing-pill .np-sub { font-size:9px; color:#22c55e; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; }
         #yt-music-frame { position:fixed; left:-9999px; top:-9999px; width:1px; height:1px; pointer-events:none; }
+        #playlist-modal { display:none; position:fixed; inset:0; z-index:6000; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; }
+        #playlist-modal.open { display:flex; }
+        .pl-box { background:rgba(4,12,34,0.98); backdrop-filter:blur(24px); border:1px solid rgba(34,197,94,0.35); border-radius:18px; padding:24px; width:min(520px,94vw); max-height:88vh; overflow-y:auto; position:relative; box-shadow:0 25px 70px rgba(0,0,0,0.8); }
+        .pl-title { font-family:'Orbitron',sans-serif; font-size:14px; font-weight:800; color:#4ade80; margin-bottom:18px; letter-spacing:1px; }
+        .pl-track-row { display:flex; align-items:center; gap:10px; padding:10px 12px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; margin-bottom:8px; }
+        .pl-track-num { font-size:11px; color:#64748b; font-weight:700; min-width:22px; text-align:center; }
+        .pl-track-name { flex:1; font-size:13px; color:#e2e8f0; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .pl-track-id { font-size:10px; color:#475569; font-family:monospace; }
+        .pl-del-btn { background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); color:#f87171; border-radius:6px; padding:4px 10px; font-size:12px; cursor:pointer; white-space:nowrap; font-family:'Prompt',sans-serif; }
+        .pl-del-btn:hover { background:rgba(239,68,68,0.25); }
+        .pl-default-badge { font-size:10px; color:#22c55e; background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.3); border-radius:4px; padding:2px 6px; white-space:nowrap; }
 
         #social-menu { position: absolute; bottom: 0; right: 58px; display: flex; flex-direction: column; gap: 10px; align-items: center; opacity: 0; visibility: hidden; transform: translateX(10px); transition: all 0.25s ease; }
         #social-menu.open { opacity: 1; visibility: visible; transform: translateX(0); }
@@ -1552,6 +1563,10 @@
         .ad-mode-btn:hover:not(.active) { background:rgba(255,255,255,0.08); color:#e2e8f0; }
         .ad-mode-panel { display:none; }
         .ad-mode-panel.visible { display:block; }
+        .ad-music-section { margin-bottom:12px; padding:10px 12px; background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.22); border-radius:10px; }
+        .ad-music-section .ad-editor-label { color:#4ade80; }
+        .ad-music-hint { font-size:11px; color:#4ade80; opacity:0.7; margin:5px 0 0; line-height:1.5; }
+        .ad-gif-label-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding:8px 12px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:8px; font-size:13px; font-weight:600; color:#a1b7d6; }
         .ad-toggle-track { position:relative; display:inline-block; width:42px; height:24px; cursor:pointer; }
         .ad-toggle-track input { opacity:0; width:0; height:0; position:absolute; }
         .ad-toggle-bg { position:absolute; inset:0; border-radius:12px; background:#1e3a5f; transition:0.2s; border:1px solid rgba(255,255,255,0.15); }
@@ -3823,7 +3838,13 @@
       <div id="psm-photo-preview" style="display:none;margin-bottom:8px;border-radius:8px;overflow:hidden;max-height:180px;text-align:center;background:rgba(0,0,0,0.3);">
         <img id="psm-photo-img" src="" style="max-width:100%;max-height:180px;object-fit:contain;">
       </div>
-      <button onclick="psmPickPhoto()" id="psm-photo-btn" style="width:100%;padding:11px;background:rgba(34,197,94,0.08);border:1px dashed rgba(34,197,94,0.45);border-radius:8px;color:#22c55e;font-size:13px;font-weight:700;cursor:pointer;">📷 เลือกรูปภาพจากอุปกรณ์</button>
+      <!-- hidden file inputs ใน DOM จริง — ทำงานได้บนมือถือทุกรุ่น -->
+      <input type="file" id="psm-file-gallery" accept="image/*" style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px;" onchange="psmHandleFile(this)">
+      <input type="file" id="psm-file-camera"  accept="image/*" capture="environment" style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px;" onchange="psmHandleFile(this)">
+      <div style="display:flex;gap:8px;">
+        <button onclick="document.getElementById('psm-file-gallery').click()" id="psm-gallery-btn" style="flex:1;padding:11px 8px;background:rgba(34,197,94,0.08);border:1px dashed rgba(34,197,94,0.45);border-radius:8px;color:#22c55e;font-size:13px;font-weight:700;cursor:pointer;">🖼️ คลังภาพ</button>
+        <button onclick="document.getElementById('psm-file-camera').click()"  id="psm-camera-btn" style="flex:1;padding:11px 8px;background:rgba(96,165,250,0.08);border:1px dashed rgba(96,165,250,0.45);border-radius:8px;color:#60a5fa;font-size:13px;font-weight:700;cursor:pointer;">📷 ถ่ายรูป</button>
+      </div>
       <div id="psm-photo-name" style="font-size:11px;color:#64748b;margin-top:5px;text-align:center;"></div>
     </div>
 
@@ -4410,6 +4431,7 @@ let state = {
     bigMatchIds: [],
     no1History: { teamId: null, since: null },
     trophyImg: "",
+    customPlaylist: [],
     pendingResults: [],
     adBanner: {
         enabled: true,
@@ -4420,6 +4442,8 @@ let state = {
         btnText: "ดูประวัติต้าวเพื่อนใหม่",
         linkUrl: "",
         gifUrl: "",
+        gifShowLabel: false,
+        gifMusicUrl: "",
         mode: "normal",
         width: 280
     }
@@ -4590,6 +4614,7 @@ function _applyCloudData(r) {
     if (Array.isArray(r.pendingResults)) state.pendingResults = r.pendingResults;
     if (r.adBanner !== undefined) state.adBanner = Object.assign({}, state.adBanner, r.adBanner);
     if (r.trophyImg !== undefined) state.trophyImg = r.trophyImg;
+    if (Array.isArray(r.customPlaylist)) { state.customPlaylist = r.customPlaylist; _applyCustomPlaylist(); }
     _restoreEvidenceFromLocal();
     renderHeader();
     renderLeague();
@@ -6126,45 +6151,50 @@ function onPsmMatchSelect() {
     _psmPhotoBase64 = null; _psmPhotoUrl = null; _psmPhotoBlob = null;
     document.getElementById("psm-photo-preview").style.display = "none";
     document.getElementById("psm-photo-name").textContent = "";
-    document.getElementById("psm-photo-btn").textContent = "📷 เลือกรูปภาพจากอุปกรณ์";
+    var gb2 = document.getElementById("psm-gallery-btn");
+    var cb2 = document.getElementById("psm-camera-btn");
+    if (gb2) gb2.textContent = "🖼️ คลังภาพ";
+    if (cb2) cb2.textContent = "📷 ถ่ายรูป";
 }
 
-function psmPickPhoto() {
-    const input = document.createElement("input");
-    input.type = "file"; input.accept = "image/*";
-    input.onchange = function(e) {
-        const file = e.target.files[0]; if (!file) return;
-        _psmStatus("⏳ กำลังโหลดรูป...", "#60a5fa");
-        const reader = new FileReader();
-        reader.onerror = function() { _psmStatus("❌ ไม่สามารถอ่านไฟล์รูปได้ กรุณาลองใหม่", "#ef4444"); };
-        reader.onload = function(ev) {
-            const img = new Image();
-            img.onerror = function() { _psmStatus("❌ ไฟล์รูปเสียหายหรือไม่รองรับ กรุณาลองใหม่", "#ef4444"); };
-            img.onload = function() {
-                try {
-                    let w = img.width, h = img.height;
-                    if (w > 1280) { h = Math.round(h * 1280 / w); w = 1280; }
-                    const cvs = document.createElement("canvas");
-                    cvs.width = w; cvs.height = h;
-                    cvs.getContext("2d").drawImage(img, 0, 0, w, h);
-                    _psmPhotoBase64 = cvs.toDataURL("image/jpeg", 0.78).split(",")[1];
-                    _psmPhotoBlob   = cvs.toDataURL("image/jpeg", 0.78);
-                    _psmPhotoUrl    = null;
-                    document.getElementById("psm-photo-img").src = _psmPhotoBlob;
-                    document.getElementById("psm-photo-preview").style.display = "";
-                    document.getElementById("psm-photo-name").textContent = "✅ " + file.name;
-                    document.getElementById("psm-photo-btn").textContent = "🔄 เปลี่ยนรูปภาพ";
-                    _psmPreUpload();
-                } catch(err) {
-                    _psmPhotoBase64 = null;
-                    _psmStatus("❌ เกิดข้อผิดพลาดในการประมวลผลรูป กรุณาลองใหม่", "#ef4444");
-                }
-            };
-            img.src = ev.target.result;
+function psmHandleFile(inputEl) {
+    const file = inputEl.files[0];
+    // reset value so the same file can be picked again if needed
+    inputEl.value = "";
+    if (!file) return;
+    _psmStatus("⏳ กำลังโหลดรูป...", "#60a5fa");
+    const reader = new FileReader();
+    reader.onerror = function() { _psmStatus("❌ ไม่สามารถอ่านไฟล์รูปได้ กรุณาลองใหม่", "#ef4444"); };
+    reader.onload = function(ev) {
+        const img = new Image();
+        img.onerror = function() { _psmStatus("❌ ไฟล์รูปเสียหายหรือไม่รองรับ กรุณาลองใหม่", "#ef4444"); };
+        img.onload = function() {
+            try {
+                let w = img.width, h = img.height;
+                if (w > 1280) { h = Math.round(h * 1280 / w); w = 1280; }
+                const cvs = document.createElement("canvas");
+                cvs.width = w; cvs.height = h;
+                cvs.getContext("2d").drawImage(img, 0, 0, w, h);
+                _psmPhotoBase64 = cvs.toDataURL("image/jpeg", 0.78).split(",")[1];
+                _psmPhotoBlob   = cvs.toDataURL("image/jpeg", 0.78);
+                _psmPhotoUrl    = null;
+                document.getElementById("psm-photo-img").src = _psmPhotoBlob;
+                document.getElementById("psm-photo-preview").style.display = "";
+                document.getElementById("psm-photo-name").textContent = "✅ " + file.name;
+                // update both buttons to show "เปลี่ยนรูป"
+                var gb = document.getElementById("psm-gallery-btn");
+                var cb = document.getElementById("psm-camera-btn");
+                if (gb) gb.textContent = "🔄 เปลี่ยนรูป (คลัง)";
+                if (cb) cb.textContent = "🔄 เปลี่ยนรูป (กล้อง)";
+                _psmPreUpload();
+            } catch(err) {
+                _psmPhotoBase64 = null;
+                _psmStatus("❌ เกิดข้อผิดพลาดในการประมวลผลรูป กรุณาลองใหม่", "#ef4444");
+            }
         };
-        reader.readAsDataURL(file);
+        img.src = ev.target.result;
     };
-    input.click();
+    reader.readAsDataURL(file);
 }
 
 async function _psmPreUpload() {
@@ -6236,6 +6266,10 @@ async function submitPlayerResult() {
     document.getElementById("psm-home-score").value = "";
     document.getElementById("psm-away-score").value = "";
     _psmPhotoBase64 = null; _psmPhotoUrl = null; _psmPhotoBlob = null;
+    var gb = document.getElementById("psm-gallery-btn");
+    var cb = document.getElementById("psm-camera-btn");
+    if (gb) gb.textContent = "🖼️ คลังภาพ";
+    if (cb) cb.textContent = "📷 ถ่ายรูป";
     // ปิด modal ทันทีหลังส่งผลสำเร็จ — ไม่ต้องเด้งให้กรอกคู่อื่น
     setTimeout(closePlayerSubmitModal, 1200);
 }
@@ -6407,6 +6441,7 @@ function renderAdminDock() {
         <button onclick="openEditTeamsModal()" style="background:linear-gradient(135deg,#F2C24E,#c49520);color:#020710;border:none;">✏️ จัดการผู้สมัคร</button>
         <button onclick="upgradeFlagcdnToCrests()" style="background:linear-gradient(135deg,#134e4a,#0f766e);border:1px solid rgba(20,184,166,0.4);color:#99f6e4;" title="รีเซ็ตทุกทีมให้แสดงธงชาติ">🏳️ รีเซ็ตธง</button>
         <button onclick="openH2HManager()" style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);border:1px solid rgba(96,165,250,0.4);color:#93c5fd;">📊 H2H</button>
+        <button onclick="openPlaylistManager()" style="background:linear-gradient(135deg,rgba(34,197,94,0.25),rgba(16,185,129,0.15));border:1px solid rgba(34,197,94,0.5);color:#4ade80;">🎵 เพลง</button>
         <div style="position:relative;display:inline-block;" id="data-btn-wrap">
             <button onclick="toggleDataDropdown(event)" style="background:linear-gradient(135deg,#0c4a6e,#0369a1);border:1px solid rgba(14,165,233,0.4);color:#7dd3fc;" title="Export / Import ข้อมูล">💾 ข้อมูล ▾</button>
             <div id="data-dropdown" style="display:none;position:absolute;top:calc(100% + 6px);right:0;z-index:9000;background:rgba(4,12,35,0.97);border:1px solid rgba(14,165,233,0.35);border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.7);overflow:hidden;min-width:160px;">
@@ -8479,13 +8514,14 @@ function renderAdBanner() {
     const closeBtn = `<button style="position:absolute;top:5px;right:5px;background:rgba(255,255,255,0.1);border:2px solid #d4af37;width:28px;height:28px;border-radius:50%;cursor:pointer;font-weight:bold;color:#d4af37;display:flex;align-items:center;justify-content:center;z-index:10;font-size:14px;line-height:1;padding:0;width:auto;padding:0 8px;height:28px;" onclick="this.closest('#friend-ad-banner').classList.add('ad-hidden')" title="ปิด">&times;</button>`;
 
     if (ad.mode === 'gif') {
-        /* ── GIF mode ── */
-        banner.innerHTML = closeBtn + `
-            <div style="padding:8px;text-align:center;">
-                <span class="ad-label" style="position:static;display:inline-block;margin-bottom:6px;">${_htmlEsc(ad.labelText || 'มีม')}</span>
-            </div>
-            <div id="_ad_gif_wrap" class="ad-gif-wrap" style="border-bottom:none;"></div>`;
+        /* GIF mode */
+        const _gifLabelHtml = (ad.gifShowLabel && ad.labelText)
+            ? `<div style="padding:8px;text-align:center;"><span class="ad-label" style="position:static;display:inline-block;margin-bottom:6px;">${_htmlEsc(ad.labelText)}</span></div>`
+            : '';
+        banner.innerHTML = closeBtn + _gifLabelHtml +
+            `<div id="_ad_gif_wrap" class="ad-gif-wrap" style="border-bottom:none;"></div>`;
         _injectGifInto(banner.querySelector('#_ad_gif_wrap'), ad.gifUrl || '', 220);
+        _playAdBannerMusic(ad.gifMusicUrl || '');
     } else {
         /* ── Normal mode ── */
         banner.innerHTML = closeBtn + `
@@ -8498,7 +8534,7 @@ function renderAdBanner() {
                 <div class="ad-desc">${_htmlEsc(ad.desc || '')}</div>
                 <button class="ad-button" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}">${_htmlEsc(ad.btnText || 'ดูเพิ่มเติม')}</button>
             </div>`;
-    }
+        }
 }
 
 function openAdPopup() {
@@ -8577,6 +8613,9 @@ function openAdBannerEditor() {
     if (fi('ad-desc-inp'))  fi('ad-desc-inp').value  = ad.desc || '';
     if (fi('ad-img-inp'))   fi('ad-img-inp').value   = ad.imgUrl || '';
     if (fi('ad-gif-inp'))   fi('ad-gif-inp').value   = ad.gifUrl || '';
+    const _gifLabelTgl = fi('ad-gif-show-label');
+    if (_gifLabelTgl) _gifLabelTgl.checked = ad.gifShowLabel || false;
+    if (fi('ad-gif-music-inp'))    fi('ad-gif-music-inp').value    = ad.gifMusicUrl    || '';
     _switchAdMode(ad.mode || 'normal');
     updateAdGifPreview();
     if (fi('ad-btn-inp'))   fi('ad-btn-inp').value   = ad.btnText || '';
@@ -8736,6 +8775,8 @@ function saveAdBanner() {
         desc:      (fi('ad-desc-inp')  || {}).value || '',
         imgUrl:    (fi('ad-img-inp')   || {}).value || '',
         gifUrl:    (fi('ad-gif-inp')   || {}).value || '',
+        gifShowLabel: !!(fi('ad-gif-show-label') || {}).checked,
+        gifMusicUrl:    (fi('ad-gif-music-inp')    || {}).value || '',
         mode:      (fi('ad-mode-normal') || {}).checked ? 'normal' : 'gif',
         btnText:   (fi('ad-btn-inp')   || {}).value || '',
         linkUrl:   (fi('ad-link-inp')  || {}).value || '',
@@ -9073,6 +9114,7 @@ function _loadBinData(idToLoad) {
         if (r.no1History) state.no1History = r.no1History;
         if (Array.isArray(r.changelog)) state.changelog = r.changelog;
         if (r.announcement !== undefined) state.announcement = r.announcement || "";
+        if (Array.isArray(r.customPlaylist)) { state.customPlaylist = r.customPlaylist; _applyCustomPlaylist(); }
         renderAdBanner();
         // บันทึก version เพื่อใช้ตรวจสอบการอัปเดต
         if (resData.metadata && resData.metadata.version) {
@@ -9515,6 +9557,21 @@ async function resetBracketMatchScore(matchId) {
                     <span id="ad-gif-preview-empty" style="font-size:11px;color:var(--wc-text-sub);">ใส่ URL GIF เพื่อดูตัวอย่าง</span>
                 </div>
                 <p style="font-size:11px;color:#64748b;margin:6px 0 0;">ใช้ URL จาก Giphy หรือ Tenor เช่น https://media.giphy.com/media/xxx/giphy.gif</p>
+            </div>
+            <!-- GIF label toggle -->
+            <div class="ad-gif-label-row">
+                <span>แสดงป้ายชื่อ (Label) บนมีม</span>
+                <label class="ad-toggle-track">
+                    <input type="checkbox" id="ad-gif-show-label">
+                    <span class="ad-toggle-bg"></span>
+                    <span class="ad-toggle-thumb"></span>
+                </label>
+            </div>
+            <!-- GIF custom music -->
+            <div class="ad-music-section">
+                <label class="ad-editor-label">🎵 เพลงประกอบ GIF (MP3 / Direct URL)</label>
+                <input type="text" id="ad-gif-music-inp" class="ad-editor-inp" placeholder="https://youtu.be/xxxxxxxx  หรือ  https://www.youtube.com/watch?v=xxxxxxxx" style="margin-top:4px;">
+                <p class="ad-music-hint">⚡ วาง URL YouTube เช่น https://youtu.be/xxxx — เพลงจะเล่นพร้อมมีมทันที ถ้าเพลง BG กำลังเล่นจะหยุดก่อนอัตโนมัติ</p>
             </div>
         </div>
 
@@ -10486,7 +10543,8 @@ function exportBackup() {
         tournamentDetails: state.tournamentDetails,
         discordUrl: state.discordUrl,
         socialLinks: state.socialLinks,
-        bgImageUrl: state.bgImageUrl
+        bgImageUrl: state.bgImageUrl,
+        customPlaylist: state.customPlaylist || []
     };
 
     const dateStr = new Date().toISOString().slice(0,10);
@@ -10584,6 +10642,7 @@ function confirmImportBackup() {
     if (data.discordUrl)      state.discordUrl          = data.discordUrl;
     if (data.socialLinks)     state.socialLinks         = Object.assign({}, state.socialLinks, data.socialLinks);
     if (data.bgImageUrl !== undefined) state.bgImageUrl = data.bgImageUrl;
+    if (Array.isArray(data.customPlaylist)) state.customPlaylist = data.customPlaylist;
 
     // บันทึกขึ้น cloud ทันที
     if (state.binId) {
@@ -10600,7 +10659,8 @@ function confirmImportBackup() {
             adBanner: state.adBanner, colors: state.colors,
             titleW1: state.titleW1, titleW2: state.titleW2, titleW3: state.titleW3,
             tournamentDetails: state.tournamentDetails,
-            discordUrl: state.discordUrl, socialLinks: state.socialLinks, bgImageUrl: state.bgImageUrl
+            discordUrl: state.discordUrl, socialLinks: state.socialLinks, bgImageUrl: state.bgImageUrl,
+            customPlaylist: state.customPlaylist || []
         };
         fetch(`https://api.jsonbin.io/v3/b/${state.binId}`, {
             method: "PUT",
@@ -10677,10 +10737,24 @@ function saveCommentFromPopup() {
 var _ytPlayer = null, _ytReady = false, _musicPlaying = false, _ytMuted = true;
 var _ytPrankUnlocked = false;
 
-/* Playlist: Don Miguelo → Haaland Ha Ha Ha → loop */
-var _ytPlaylist = ['16nZ6K7sim4', 'cixr-7fMWwU'];
-var _ytTrackNames = ['Don Miguelo - Y Que Fue?', 'CTID - Haaland (Ha Ha Ha)'];
+/* Default playlist */
+var _ytDefaultPlaylist = ['16nZ6K7sim4', 'cixr-7fMWwU'];
+var _ytDefaultNames    = ['Don Miguelo - Y Que Fue?', 'CTID - Haaland (Ha Ha Ha)'];
+var _ytPlaylist    = _ytDefaultPlaylist.slice();
+var _ytTrackNames  = _ytDefaultNames.slice();
 var _ytCurrentTrack = Math.floor(Math.random() * _ytPlaylist.length);
+
+function _getEffectivePlaylist() {
+    var cp = (typeof state !== 'undefined') ? (state.customPlaylist || []) : [];
+    if (cp.length > 0) return { ids: cp.map(function(s){ return s.id; }), names: cp.map(function(s){ return s.name; }) };
+    return { ids: _ytDefaultPlaylist.slice(), names: _ytDefaultNames.slice() };
+}
+function _applyCustomPlaylist() {
+    var pl = _getEffectivePlaylist();
+    _ytPlaylist = pl.ids;
+    _ytTrackNames = pl.names;
+    if (_ytCurrentTrack >= _ytPlaylist.length) _ytCurrentTrack = 0;
+}
 
 /* Load YT IFrame API */
 window.onYouTubeIframeAPIReady = function(){
@@ -10747,6 +10821,65 @@ window.onYouTubeIframeAPIReady = function(){
     document.head.appendChild(t);
 })();
 
+/* Ad Banner GIF Music via YouTube player */
+var _ytWasPausedByAd = false;
+var _adGifVideoId = null;
+
+function _ytExtractId(url) {
+    if (!url || !url.trim()) return null;
+    url = url.trim();
+    var m = url.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([A-Za-z0-9_-]{11})/);
+    if (m) return m[1];
+    if (/^[A-Za-z0-9_-]{11}$/.test(url)) return url;
+    return null;
+}
+
+function _playAdBannerMusic(url) {
+    var vid = _ytExtractId(url);
+    if (!vid) return;
+    _adGifVideoId = vid;
+    if (!_ytPlayer || !_ytReady) {
+        setTimeout(function(){ _playAdBannerMusic(url); }, 600);
+        return;
+    }
+    if (_musicPlaying) {
+        try { _ytPlayer.pauseVideo(); } catch(e) {}
+        _setMusicState(false);
+        _ytWasPausedByAd = true;
+    }
+    try {
+        _ytPrankUnlocked = true;
+        _ytMuted = false;
+        _ytPlayer.loadVideoById(vid);
+        _ytPlayer.unMute();
+        _ytPlayer.setVolume(75);
+        _setMusicState(true);
+    } catch(e) {}
+}
+
+function _stopAdBannerMusic() {
+    _adGifVideoId = null;
+    if (_ytWasPausedByAd && _ytPlayer) {
+        _ytWasPausedByAd = false;
+        _resumePlaylist();
+    }
+}
+
+function _resumePlaylist() {
+    var pl = _getEffectivePlaylist();
+    _ytPlaylist = pl.ids;
+    _ytTrackNames = pl.names;
+    if (_ytCurrentTrack >= _ytPlaylist.length) _ytCurrentTrack = 0;
+    try {
+        _ytPrankUnlocked = true;
+        _ytMuted = false;
+        _ytPlayer.loadVideoById(_ytPlaylist[_ytCurrentTrack]);
+        _ytPlayer.unMute();
+        _ytPlayer.setVolume(75);
+        _setMusicState(true);
+    } catch(e) {}
+}
+
 function toggleMusic(){
     if(!_ytPlayer){ setTimeout(toggleMusic, 500); return; }
     if(_musicPlaying){
@@ -10786,5 +10919,104 @@ function _setMusicState(p){
 }
 </script>
 
+<!-- Playlist Manager Modal -->
+<div id="playlist-modal" onclick="if(event.target===this)closePlaylistManager()">
+    <div class="pl-box">
+        <button onclick="closePlaylistManager()" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;font-family:'Prompt',sans-serif;">&#x2715;</button>
+        <div class="pl-title">🎵 จัดการเพลย์ลิสต์</div>
+        <div style="margin-bottom:18px;padding:14px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.22);border-radius:12px;">
+            <div style="font-size:11px;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">+ เพิ่มเพลงใหม่</div>
+            <div style="margin-bottom:8px;">
+                <label style="font-size:11px;color:#64748b;font-weight:700;display:block;margin-bottom:4px;">URL YouTube</label>
+                <input type="text" id="pl-url-inp" class="ad-editor-inp" placeholder="https://youtu.be/xxxxxxx  หรือ  https://www.youtube.com/watch?v=xxxxxxx" style="font-size:12px;">
+            </div>
+            <div style="margin-bottom:10px;">
+                <label style="font-size:11px;color:#64748b;font-weight:700;display:block;margin-bottom:4px;">ชื่อเพลง (แสดงใน NOW PLAYING)</label>
+                <input type="text" id="pl-name-inp" class="ad-editor-inp" placeholder="เช่น Don Miguelo - Y Que Fue?" style="font-size:12px;">
+            </div>
+            <button onclick="plAddTrack()" style="background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Prompt',sans-serif;width:100%;">+ เพิ่มเพลงนี้</button>
+        </div>
+        <div style="font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">เพลย์ลิสต์ปัจจุบัน</div>
+        <div id="pl-list"></div>
+        <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
+            <button onclick="plResetDefault()" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#f87171;border-radius:8px;padding:9px 16px;font-size:13px;cursor:pointer;font-family:'Prompt',sans-serif;">🔄 คืนค่าเดิม</button>
+            <button onclick="closePlaylistManager()" style="flex:1;background:linear-gradient(135deg,#F2C24E,#c49520);color:#020710;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Prompt',sans-serif;">&#x2713; ปิด</button>
+        </div>
+    </div>
+</div>
+<script>
+function openPlaylistManager() {
+    if (state.isViewOnly) return;
+    _renderPlList();
+    document.getElementById('playlist-modal').classList.add('open');
+}
+function closePlaylistManager() {
+    document.getElementById('playlist-modal').classList.remove('open');
+}
+function _renderPlList() {
+    var cp = state.customPlaylist || [];
+    var el = document.getElementById('pl-list');
+    if (!el) return;
+    if (cp.length === 0) {
+        el.innerHTML = _ytDefaultPlaylist.map(function(id, i) {
+            return '<div class="pl-track-row">'
+                + '<span class="pl-track-num">' + (i+1) + '</span>'
+                + '<div style="flex:1;min-width:0;">'
+                + '<div class="pl-track-name">' + _htmlEsc(_ytDefaultNames[i]) + '</div>'
+                + '<div class="pl-track-id">' + id + '</div></div>'
+                + '<span class="pl-default-badge">ค่าเริ่มต้น</span>'
+                + '</div>';
+        }).join('');
+        return;
+    }
+    el.innerHTML = cp.map(function(s, i) {
+        return '<div class="pl-track-row">'
+            + '<span class="pl-track-num">' + (i+1) + '</span>'
+            + '<div style="flex:1;min-width:0;">'
+            + '<div class="pl-track-name">' + _htmlEsc(s.name || s.id) + '</div>'
+            + '<div class="pl-track-id">' + s.id + '</div></div>'
+            + '<button class="pl-del-btn" onclick="plRemoveTrack(' + i + ')">✕ ลบ</button>'
+            + '</div>';
+    }).join('');
+}
+function plAddTrack() {
+    var urlEl = document.getElementById('pl-url-inp');
+    var nameEl = document.getElementById('pl-name-inp');
+    var url = (urlEl ? urlEl.value : '').trim();
+    var name = (nameEl ? nameEl.value : '').trim();
+    var vid = _ytExtractId(url);
+    if (!vid) { showToast('❌ URL ไม่ถูกต้อง — ใช้ลิงก์ YouTube', 'error'); return; }
+    if (!name) { showToast('❌ กรุณาใส่ชื่อเพลง', 'error'); return; }
+    if (!state.customPlaylist) state.customPlaylist = [];
+    if (state.customPlaylist.length === 0) {
+        state.customPlaylist = _ytDefaultPlaylist.map(function(id, i) {
+            return { id: id, name: _ytDefaultNames[i] };
+        });
+    }
+    state.customPlaylist.push({ id: vid, name: name });
+    if (urlEl) urlEl.value = '';
+    if (nameEl) nameEl.value = '';
+    _applyCustomPlaylist();
+    saveDataToCloud();
+    _renderPlList();
+    showToast('✅ เพิ่ม "' + name + '" เรียบร้อย!', 'success');
+}
+function plRemoveTrack(idx) {
+    if (!state.customPlaylist || !state.customPlaylist[idx]) return;
+    var name = state.customPlaylist[idx].name;
+    state.customPlaylist.splice(idx, 1);
+    _applyCustomPlaylist();
+    saveDataToCloud();
+    _renderPlList();
+    showToast('🗑️ ลบ "' + name + '" แล้ว', 'success');
+}
+function plResetDefault() {
+    state.customPlaylist = [];
+    _applyCustomPlaylist();
+    saveDataToCloud();
+    _renderPlList();
+    showToast('🔄 คืนค่า playlist เป็นค่าเริ่มต้นแล้ว', 'success');
+}
+</script>
 </body>
 </html>
