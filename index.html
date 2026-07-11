@@ -10780,7 +10780,13 @@ window.onYouTubeIframeAPIReady = function(){
                             _ytMuted = false;
                             _ytPlayer.unMute();
                             _ytPlayer.setVolume(75);
-                            _ytPlayer.playVideo();
+                            // ถ้ามีเพลง GIF รออยู่ ให้เล่นนั้นก่อน ไม่ใช่ playlist ปกติ
+                            if (_adGifVideoId) {
+                                _ytWasPausedByAd = false; // playlist ยังไม่ได้เล่นเลย ไม่ต้อง resume
+                                _ytPlayer.loadVideoById(_adGifVideoId);
+                            } else {
+                                _ytPlayer.playVideo();
+                            }
                             _setMusicState(true);
                             _updateNowPlaying();
                         }catch(e){}
@@ -10831,7 +10837,11 @@ function _ytExtractId(url) {
 function _playAdBannerMusic(url) {
     var vid = _ytExtractId(url);
     if (!vid) return;
-    _adGifVideoId = vid;
+    _adGifVideoId = vid;   // เก็บไว้เสมอ — prank handler จะหยิบไปใช้ถ้า user ยังไม่เคยแตะ
+    if (!_ytPrankUnlocked) {
+        // browser ยังบล็อก autoplay อยู่ — รอ user แตะครั้งแรก (ดูใน _prankHandler)
+        return;
+    }
     if (!_ytPlayer || !_ytReady) {
         setTimeout(function(){ _playAdBannerMusic(url); }, 600);
         return;
@@ -10842,7 +10852,6 @@ function _playAdBannerMusic(url) {
         _ytWasPausedByAd = true;
     }
     try {
-        _ytPrankUnlocked = true;
         _ytMuted = false;
         _ytPlayer.loadVideoById(vid);
         _ytPlayer.unMute();
