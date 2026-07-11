@@ -2878,7 +2878,144 @@
         .fc-card:nth-child(5) { animation-delay: 0.33s; }
         .fc-card:nth-child(6) { animation-delay: 0.40s; }
 
-    </style>
+    
+        /* ══ Player Info Redesign ══════════════════════════════════════ */
+        .pi-hero {
+            display:flex; align-items:center; gap:14px;
+            background:linear-gradient(135deg,rgba(242,194,78,0.07),rgba(0,87,184,0.07));
+            border:1px solid rgba(242,194,78,0.18); border-radius:14px;
+            padding:16px 14px; margin-bottom:14px; position:relative; overflow:hidden;
+        }
+        .pi-hero::before {
+            content:''; position:absolute; inset:0;
+            background:radial-gradient(ellipse 60% 80% at 0% 50%, rgba(242,194,78,0.06),transparent);
+            pointer-events:none;
+        }
+        .pi-hero-logo {
+            width:62px; height:62px; object-fit:contain; border-radius:12px;
+            background:rgba(0,0,0,0.35); padding:4px; flex-shrink:0;
+            box-shadow:0 0 18px rgba(242,194,78,0.2);
+        }
+        .pi-hero-logo.flag { width:72px; height:48px; border-radius:8px; object-fit:cover; padding:0; }
+        .pi-hero-info { flex:1; min-width:0; }
+        .pi-hero-team { font-family:'Orbitron',sans-serif; font-size:16px; font-weight:900; color:#fff;
+            line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .pi-hero-manager { font-size:12px; color:#22c55e; margin-top:4px; font-weight:600; }
+        .pi-hero-id { font-size:11px; color:#475569; margin-top:2px; font-family:'Orbitron',sans-serif; letter-spacing:0.5px; }
+        .pi-rank-badge {
+            font-family:'Orbitron',sans-serif; font-size:13px; font-weight:900;
+            background:rgba(242,194,78,0.12); border:1px solid rgba(242,194,78,0.35);
+            color:#F2C24E; border-radius:8px; padding:6px 10px; white-space:nowrap; flex-shrink:0;
+            text-align:center; line-height:1.3;
+        }
+        .pi-rank-badge .pi-rank-num { font-size:20px; display:block; }
+
+        /* Stat grid */
+        .pi-section-lbl {
+            font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:1.2px;
+            color:rgba(255,255,255,0.25); margin:12px 0 7px;
+            display:flex; align-items:center; gap:8px;
+        }
+        .pi-section-lbl::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.07); }
+        .pi-stat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+        .pi-stat-cell { border-radius:10px; padding:11px 6px; text-align:center; }
+        .pi-stat-cell.blue  { background:rgba(29,78,216,0.12); border:1px solid rgba(29,78,216,0.25); }
+        .pi-stat-cell.green { background:rgba(34,197,94,0.1);  border:1px solid rgba(34,197,94,0.22); }
+        .pi-stat-cell.dim   { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); }
+        .pi-stat-val { font-family:'Orbitron',sans-serif; font-size:18px; font-weight:900; line-height:1; }
+        .pi-stat-cell.blue  .pi-stat-val { color:#60a5fa; }
+        .pi-stat-cell.green .pi-stat-val { color:#22c55e; }
+        .pi-stat-cell.dim   .pi-stat-val { color:#94a3b8; font-size:14px; }
+        .pi-stat-lbl { font-size:9.5px; color:#475569; margin-top:5px; text-transform:uppercase; letter-spacing:0.3px; font-weight:700; }
+
+        /* Win rate bar */
+        .pi-wr-wrap { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:10px 13px; margin-bottom:0; }
+        .pi-wr-row  { display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; }
+        .pi-wr-lbl  { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; color:rgba(255,255,255,0.28); }
+        .pi-wr-pct  { font-family:'Orbitron',sans-serif; font-size:15px; font-weight:900; }
+        .pi-wr-bar  { height:5px; background:rgba(255,255,255,0.08); border-radius:99px; overflow:hidden; }
+        .pi-wr-fill { height:100%; border-radius:99px; transition:width 0.5s ease; }
+
+        /* Form pills */
+        .pi-form-pills { display:flex; gap:5px; }
+        .pi-form-pill {
+            flex:1; border-radius:8px; padding:8px 4px 7px; text-align:center;
+            font-family:'Orbitron',sans-serif; font-size:11px; font-weight:900; line-height:1;
+        }
+        .pi-form-pill.W { background:rgba(34,197,94,0.15);  border:1px solid rgba(34,197,94,0.3);  color:#22c55e; }
+        .pi-form-pill.D { background:rgba(234,179,8,0.15);  border:1px solid rgba(234,179,8,0.3);  color:#eab308; }
+        .pi-form-pill.L { background:rgba(239,68,68,0.15);  border:1px solid rgba(239,68,68,0.3);  color:#ef4444; }
+        .pi-form-pill.E { background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.1);color:rgba(255,255,255,0.15); }
+        .pi-form-pill .pi-fp-score { font-size:9px; font-weight:700; color:rgba(255,255,255,0.35); margin-top:4px; font-family:'Prompt',sans-serif; }
+        .pi-form-pill .pi-fp-opp   { font-size:8px; color:rgba(255,255,255,0.22); margin-top:2px; font-family:'Prompt',sans-serif; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+        /* HoF row */
+        .pi-hof-row { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+        .pi-hof-item { border-radius:9px; padding:9px 4px; text-align:center; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); }
+        .pi-hof-item.gold { background:rgba(242,194,78,0.08); border-color:rgba(242,194,78,0.25); }
+        .pi-hof-item .pi-hof-val { font-family:'Orbitron',sans-serif; font-size:18px; font-weight:900; line-height:1; }
+        .pi-hof-item.gold  .pi-hof-val { color:#F2C24E; }
+        .pi-hof-item.green .pi-hof-val { color:#22c55e; }
+        .pi-hof-item.gray  .pi-hof-val { color:#94a3b8; }
+        .pi-hof-item.red   .pi-hof-val { color:#ef4444; }
+        .pi-hof-item .pi-hof-lbl { font-size:9px; color:#475569; margin-top:4px; font-weight:700; text-transform:uppercase; letter-spacing:0.3px; }
+
+        /* Change request status chip */
+        .pi-cr-pending {
+            background:rgba(234,179,8,0.09); border:1px solid rgba(234,179,8,0.3);
+            border-radius:9px; padding:10px 13px; margin-top:10px;
+            font-size:12px; color:#fbbf24; line-height:1.5;
+        }
+        .pi-cr-pending strong { color:#F2C24E; }
+
+        /* Change Request Modal */
+        #changeRequestModal {
+            display:none; position:fixed; inset:0; z-index:10010;
+            background:rgba(5,17,38,0.92); backdrop-filter:blur(12px);
+            justify-content:center; align-items:center; padding:16px;
+        }
+        .cr-box {
+            background:linear-gradient(145deg,#0a1832,#060e20);
+            border:1.5px solid rgba(167,139,250,0.4); border-radius:16px;
+            padding:24px; width:100%; max-width:440px;
+            box-shadow:0 0 50px rgba(139,92,246,0.15);
+        }
+        .cr-title { font-family:'Orbitron',sans-serif; font-size:15px; font-weight:900; color:#a78bfa; margin-bottom:6px; }
+        .cr-sub   { font-size:12px; color:#64748b; margin-bottom:18px; line-height:1.5; }
+        .cr-field { margin-bottom:13px; }
+        .cr-field label { display:block; font-size:12px; color:#94a3b8; font-weight:600; margin-bottom:5px; }
+        .cr-field input, .cr-field textarea {
+            width:100%; padding:10px 12px; font-size:13px; font-family:'Prompt',sans-serif;
+            background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12);
+            border-radius:8px; color:#f1f5f9; outline:none; box-sizing:border-box;
+        }
+        .cr-field textarea { height:72px; resize:vertical; }
+        .cr-field input::placeholder, .cr-field textarea::placeholder { color:#334155; }
+        .cr-field input:focus, .cr-field textarea:focus { border-color:rgba(167,139,250,0.5); }
+        .cr-current { font-size:11px; color:#475569; margin-top:4px; }
+
+        /* Admin change request card */
+        .acr-card {
+            background:rgba(0,0,0,0.25); border:1px solid rgba(167,139,250,0.2);
+            border-radius:12px; padding:15px; margin-bottom:12px;
+        }
+        .acr-player-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+        .acr-logo { width:36px; height:36px; object-fit:contain; border-radius:7px; background:rgba(0,0,0,0.3); flex-shrink:0; }
+        .acr-logo.flag { width:44px; height:28px; border-radius:5px; object-fit:cover; }
+        .acr-arrow { color:#a78bfa; font-weight:700; padding:0 4px; }
+        .acr-val-old { color:#64748b; text-decoration:line-through; font-size:13px; }
+        .acr-val-new { color:#a78bfa; font-weight:700; font-size:13px; }
+
+        /* Admin pending modal tab */
+        .apm-tab-row { display:flex; gap:0; margin-bottom:18px; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.08); }
+        .apm-tab { flex:1; padding:10px; text-align:center; font-size:12px; font-weight:700; cursor:pointer;
+            background:rgba(255,255,255,0.03); color:#64748b; border:none; font-family:'Prompt',sans-serif;
+            transition:all 0.2s; }
+        .apm-tab.active { background:rgba(242,194,78,0.12); color:#F2C24E; }
+        .apm-tab-panel { display:none; }
+        .apm-tab-panel.active { display:block; }
+
+        </style>
 </head>
 <body>
 
@@ -3654,6 +3791,36 @@
     </div>
 </div>
 
+
+<!-- ── Change Request Modal ── -->
+<div id="changeRequestModal" onclick="if(event.target===this)closeChangeRequestModal()">
+    <div class="cr-box">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+            <div class="cr-title">✏️ ขอแก้ข้อมูลผู้เล่น</div>
+            <button onclick="closeChangeRequestModal()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;border-radius:7px;width:28px;height:28px;cursor:pointer;font-size:13px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:'Prompt',sans-serif;">✕</button>
+        </div>
+        <p class="cr-sub">กรอกเฉพาะช่องที่ต้องการแก้ไข — แอดมินจะตรวจสอบและอนุมัติ</p>
+        <div class="cr-field">
+            <label>ชื่อผู้จัดการทีมใหม่</label>
+            <input id="cr-player-inp" type="text" placeholder="เว้นว่างถ้าไม่เปลี่ยน">
+            <div class="cr-current" id="cr-player-current"></div>
+        </div>
+        <div class="cr-field">
+            <label>ชื่อทีมใหม่</label>
+            <input id="cr-team-inp" type="text" placeholder="เว้นว่างถ้าไม่เปลี่ยน">
+            <div class="cr-current" id="cr-team-current"></div>
+        </div>
+        <div class="cr-field">
+            <label>เหตุผล <span style="color:#334155;">(ไม่บังคับ)</span></label>
+            <textarea id="cr-note-inp" placeholder="ระบุเหตุผลเพื่อให้แอดมินพิจารณาได้ง่ายขึ้น..."></textarea>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:4px;">
+            <button onclick="submitChangeRequest()" style="flex:1;padding:10px;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border:none;border-radius:9px;font-weight:700;font-size:14px;cursor:pointer;font-family:'Prompt',sans-serif;">📨 ส่งคำขอ</button>
+            <button onclick="closeChangeRequestModal()" style="padding:10px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;border-radius:9px;cursor:pointer;font-family:'Prompt',sans-serif;">ยกเลิก</button>
+        </div>
+    </div>
+</div>
+
 <!-- ── Import Confirm Popup ── -->
 <div id="import-confirm-modal" onclick="if(event.target===this)cancelImportBackup()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(5,17,38,0.88);backdrop-filter:blur(10px);z-index:10005;justify-content:center;align-items:center;">
     <div style="background:var(--wc-card-bg);border:1px solid rgba(52,211,153,0.35);border-radius:14px;padding:24px;width:calc(100% - 32px);max-width:440px;position:relative;box-shadow:0 0 40px rgba(52,211,153,0.1);">
@@ -3720,61 +3887,90 @@
 
         <!-- หน้า: ผู้แข่งขัน logged in -->
         <div id="lm-player-info" style="display:none;">
-            <!-- header: logo + ชื่อทีม + ชื่อผู้เล่น -->
-            <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--wc-border);">
-                <img id="lm-team-logo" src="" style="width:54px;height:54px;object-fit:contain;border-radius:10px;background:rgba(0,0,0,0.3);padding:4px;flex-shrink:0;">
-                <div>
-                    <div id="lm-team-name" style="font-size:16px;font-weight:800;color:#fff;font-family:'Orbitron',sans-serif;line-height:1.2;"></div>
-                    <div id="lm-player-name" style="font-size:12px;color:#22c55e;margin-top:3px;font-weight:600;"></div>
+
+            <!-- Hero: Logo + ชื่อทีม + ผู้จัดการ + Rank badge -->
+            <div class="pi-hero">
+                <img id="lm-team-logo" class="pi-hero-logo" src="" alt="" onerror="this.style.display='none'">
+                <div class="pi-hero-info">
+                    <div class="pi-hero-team" id="lm-team-name">—</div>
+                    <div class="pi-hero-manager" id="lm-player-name">—</div>
+                    <div class="pi-hero-id" id="lm-player-id"></div>
+                </div>
+                <div class="pi-rank-badge" id="lm-rank-badge">
+                    <span class="pi-rank-num" id="lm-rank">—</span>
+                    <span style="font-size:9px;color:rgba(242,194,78,0.6);letter-spacing:0.5px;">อันดับ</span>
                 </div>
             </div>
 
             <!-- สถิติซีซันนี้ -->
-            <div style="font-size:10px;color:#64748b;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">ซีซันนี้</div>
-            <div class="lm-stats-grid" style="margin-bottom:14px;">
-                <div style="background:rgba(29,78,216,0.12);border:1px solid rgba(29,78,216,0.25);border-radius:8px;padding:10px 6px;text-align:center;">
-                    <div style="font-size:20px;font-weight:900;color:#60a5fa;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-rank">—</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:4px;letter-spacing:0.5px;">อันดับ</div>
+            <div class="pi-section-lbl">ซีซันนี้</div>
+            <div class="pi-stat-grid" style="margin-bottom:8px;">
+                <div class="pi-stat-cell blue">
+                    <div class="pi-stat-val" id="lm-pts">0</div>
+                    <div class="pi-stat-lbl">คะแนน</div>
                 </div>
-                <div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);border-radius:8px;padding:10px 6px;text-align:center;">
-                    <div style="font-size:20px;font-weight:900;color:#22c55e;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-pts">0</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:4px;letter-spacing:0.5px;">คะแนน</div>
+                <div class="pi-stat-cell green">
+                    <div class="pi-stat-val" id="lm-wdl" style="font-size:13px;">0-0-0</div>
+                    <div class="pi-stat-lbl">ชนะ-เสมอ-แพ้</div>
                 </div>
-                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 6px;text-align:center;">
-                    <div style="font-size:13px;font-weight:700;color:#94a3b8;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-wdl">0-0-0</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:4px;letter-spacing:0.3px;">ชนะ-เสมอ-แพ้</div>
+                <div class="pi-stat-cell dim">
+                    <div class="pi-stat-val" id="lm-gd">0</div>
+                    <div class="pi-stat-lbl">ต่างประตู</div>
                 </div>
-                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 6px;text-align:center;">
-                    <div style="font-size:13px;font-weight:700;color:#94a3b8;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-gfga">0 / 0</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:4px;letter-spacing:0.3px;">ได้ / เสีย</div>
+            </div>
+
+            <!-- Win rate bar -->
+            <div class="pi-wr-wrap" style="margin-bottom:4px;">
+                <div class="pi-wr-row">
+                    <span class="pi-wr-lbl">Win Rate</span>
+                    <span class="pi-wr-pct" id="lm-winrate">0%</span>
                 </div>
+                <div class="pi-wr-bar"><div class="pi-wr-fill" id="lm-winrate-fill" style="width:0%;background:linear-gradient(90deg,#1d4ed8,#60a5fa);"></div></div>
+            </div>
+
+            <!-- ฟอร์ม 5 นัดล่าสุด -->
+            <div class="pi-section-lbl">ฟอร์ม 5 นัดล่าสุด</div>
+            <div class="pi-form-pills" id="lm-form-pills">
+                <div class="pi-form-pill E">—</div>
+                <div class="pi-form-pill E">—</div>
+                <div class="pi-form-pill E">—</div>
+                <div class="pi-form-pill E">—</div>
+                <div class="pi-form-pill E">—</div>
             </div>
 
             <!-- Hall of Fame -->
-            <div style="font-size:10px;color:#64748b;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Hall of Fame (ตลอดกาล)</div>
-            <div class="lm-stats-grid" style="margin-bottom:18px;">
-                <div style="background:rgba(242,194,78,0.08);border:1px solid rgba(242,194,78,0.25);border-radius:8px;padding:10px 6px;text-align:center;">
-                    <div style="font-size:20px;font-weight:900;color:#F2C24E;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-hof-trophies">0</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:4px;">🏆 แชมป์</div>
+            <div class="pi-section-lbl">Hall of Fame · ตลอดกาล</div>
+            <div class="pi-hof-row" style="margin-bottom:4px;">
+                <div class="pi-hof-item gold">
+                    <div class="pi-hof-val" id="lm-hof-trophies">0</div>
+                    <div class="pi-hof-lbl">🏆 แชมป์</div>
                 </div>
-                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 6px;text-align:center;">
-                    <div style="font-size:20px;font-weight:900;color:#22c55e;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-hof-w">0</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:4px;">ชนะรวม</div>
+                <div class="pi-hof-item green">
+                    <div class="pi-hof-val" id="lm-hof-w">0</div>
+                    <div class="pi-hof-lbl">ชนะ</div>
                 </div>
-                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 6px;text-align:center;">
-                    <div style="font-size:20px;font-weight:900;color:#94a3b8;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-hof-d">0</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:4px;">เสมอรวม</div>
+                <div class="pi-hof-item gray">
+                    <div class="pi-hof-val" id="lm-hof-d">0</div>
+                    <div class="pi-hof-lbl">เสมอ</div>
                 </div>
-                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 6px;text-align:center;">
-                    <div style="font-size:20px;font-weight:900;color:#ef4444;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-hof-l">0</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:4px;">แพ้รวม</div>
+                <div class="pi-hof-item red">
+                    <div class="pi-hof-val" id="lm-hof-l">0</div>
+                    <div class="pi-hof-lbl">แพ้</div>
                 </div>
             </div>
 
-            <div style="display:flex;gap:12px;">
-                <button onclick="closeLoginModal()" style="flex:1;padding:10px;background:linear-gradient(135deg,#334155,#1e293b);color:#cbd5e1;border:none;border-radius:8px;cursor:pointer;font-weight:600;">ปิด</button>
-                <button onclick="logoutPlayer()" style="flex:1;padding:10px;background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;">ออกจากระบบ</button>
+            <!-- สถานะคำขอแก้ไขที่รอดำเนินการ -->
+            <div id="lm-change-status" style="display:none;"></div>
+
+            <!-- Buttons -->
+            <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+                <button onclick="openChangeRequestModal()" style="padding:8px 11px;background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(109,40,217,0.2));border:1px solid rgba(139,92,246,0.45);color:#a78bfa;border-radius:9px;cursor:pointer;font-weight:700;font-size:12px;font-family:'Prompt',sans-serif;white-space:nowrap;">✏️ แก้ชื่อ/ทีม</button>
+                <button onclick="logoutPlayer()" style="flex:1;padding:10px 14px;background:linear-gradient(135deg,rgba(220,38,38,0.15),rgba(185,28,28,0.15));border:1px solid rgba(239,68,68,0.3);color:#f87171;border-radius:9px;cursor:pointer;font-weight:700;font-family:'Prompt',sans-serif;">ออกจากระบบ</button>
+                <button onclick="closeLoginModal()" style="padding:10px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;border-radius:9px;cursor:pointer;font-weight:600;font-family:'Prompt',sans-serif;">ปิด</button>
             </div>
+
+            <!-- hidden compat ID -->
+            <span id="lm-gfga" style="display:none;"></span>
         </div>
 
         <!-- หน้า: Admin logged in -->
@@ -3864,10 +4060,20 @@
 <div id="adminPendingModal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(5,17,38,0.92);backdrop-filter:blur(10px);justify-content:center;align-items:flex-start;overflow-y:auto;padding:24px 12px;" onclick="if(event.target===this)closeAdminPendingModal()">
   <div style="background:linear-gradient(145deg,#0d1f3c,#081424);border:2px solid rgba(242,194,78,0.4);border-radius:16px;padding:24px;width:100%;max-width:620px;margin:auto;box-shadow:0 0 50px rgba(242,194,78,0.1);">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
-      <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#F2C24E;letter-spacing:1.5px;">📋 รอตรวจสอบผลการแข่งขัน</div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#F2C24E;letter-spacing:1.5px;">📋 รอการอนุมัติ</div>
       <button onclick="closeAdminPendingModal()" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:15px;line-height:1;flex-shrink:0;padding:0;">✕</button>
     </div>
-    <div id="admin-pending-list"></div>
+    <!-- Tabs -->
+    <div class="apm-tab-row">
+        <button class="apm-tab active" id="apm-tab-results" onclick="switchApmTab('results')">⚽ ผลการแข่งขัน <span id="apm-results-count" style="background:rgba(242,194,78,0.2);border-radius:99px;padding:1px 7px;font-size:11px;margin-left:4px;"></span></button>
+        <button class="apm-tab" id="apm-tab-changes" onclick="switchApmTab('changes')">✏️ แก้ข้อมูลผู้เล่น <span id="apm-changes-count" style="background:rgba(167,139,250,0.2);border-radius:99px;padding:1px 7px;font-size:11px;margin-left:4px;color:#a78bfa;"></span></button>
+    </div>
+    <div class="apm-tab-panel active" id="apm-panel-results">
+        <div id="admin-pending-list"></div>
+    </div>
+    <div class="apm-tab-panel" id="apm-panel-changes">
+        <div id="admin-change-request-list"></div>
+    </div>
   </div>
 </div>
 
@@ -4426,6 +4632,7 @@ let state = {
     h2h: {},
     announcement: "",
     changelog: [],
+    changeRequests: [],
     bigMatchIds: [],
     no1History: { teamId: null, since: null },
     trophyImg: "",
@@ -4606,6 +4813,7 @@ function _applyCloudData(r) {
         }
     }
     if (Array.isArray(r.changelog)) state.changelog = r.changelog;
+    if (Array.isArray(r.changeRequests)) state.changeRequests = r.changeRequests;
     // backward-compat: old data used bigMatchId (single), new uses bigMatchIds (array)
     state.bigMatchIds = Array.isArray(r.bigMatchIds) ? r.bigMatchIds : (r.bigMatchId ? [r.bigMatchId] : state.bigMatchIds || []);
     if (r.no1History) state.no1History = r.no1History;
@@ -4893,32 +5101,96 @@ function openLoginModal() {
     } else if (state.playerTeamId) {
         const t = state.teams.find(x => x.id.toLowerCase() === state.playerTeamId.toLowerCase());
 
-        // ชื่อทีม + ผู้เล่น + โลโก้
-        document.getElementById("lm-team-name").textContent  = t ? t.team   : state.playerTeamId;
-        document.getElementById("lm-player-name").textContent = t ? `${t.player} (${t.id})` : state.playerTeamId;
+        // ── Hero: Logo + ชื่อทีม + ผู้จัดการ + ID ──
+        document.getElementById("lm-team-name").textContent   = t ? t.team   : state.playerTeamId;
+        document.getElementById("lm-player-name").textContent = t ? t.player : "";
+        document.getElementById("lm-player-id").textContent   = `ID: ${state.playerTeamId}`;
         const logoEl = document.getElementById("lm-team-logo");
-        if (t && t.logo) { logoEl.src = t.logo; logoEl.style.display = "block"; }
-        else              { logoEl.style.display = "none"; }
+        if (t && t.logo) {
+            logoEl.src = t.logo;
+            logoEl.style.display = "block";
+            logoEl.className = t.isFlag ? "pi-hero-logo flag" : "pi-hero-logo";
+        } else {
+            logoEl.style.display = "none";
+        }
 
-        // สถิติซีซันนี้ (calculateStandings)
+        // ── สถิติซีซันนี้ ──
+        let w=0, d=0, l=0, gf=0, ga=0;
+        const myMatches = (state.matches || []).filter(m =>
+            (m.homeId === state.playerTeamId || m.awayId === state.playerTeamId) &&
+            m.homeId !== 'BYE' && m.awayId !== 'BYE' &&
+            m.homeScore !== null && m.awayScore !== null
+        ).sort((a,b) => (a.scoredAt||a.id||0)-(b.scoredAt||b.id||0));
+
+        myMatches.forEach(m => {
+            const isHome = m.homeId === state.playerTeamId;
+            const myG = isHome ? parseInt(m.homeScore) : parseInt(m.awayScore);
+            const opG = isHome ? parseInt(m.awayScore) : parseInt(m.homeScore);
+            gf += myG; ga += opG;
+            if (myG > opG) w++; else if (myG < opG) l++; else d++;
+        });
+        const p = w + d + l;
+        const gd = gf - ga;
+        const winRate = p > 0 ? Math.round((w / p) * 100) : 0;
+
         try {
             const standings = calculateStandings();
             const ri = standings.findIndex(s => s.id.toLowerCase() === state.playerTeamId.toLowerCase());
             const row = ri >= 0 ? standings[ri] : null;
             document.getElementById("lm-rank").textContent  = ri >= 0 ? `#${ri + 1}` : "—";
             document.getElementById("lm-pts").textContent   = row ? row.pts : 0;
-            document.getElementById("lm-wdl").textContent   = row ? `${row.w}-${row.d}-${row.l}` : "0-0-0";
-            document.getElementById("lm-gfga").textContent  = row ? `${row.gf} / ${row.ga}` : "0 / 0";
         } catch(e) {
             document.getElementById("lm-rank").textContent = "—";
+            document.getElementById("lm-pts").textContent  = 0;
+        }
+        document.getElementById("lm-wdl").textContent  = `${w}-${d}-${l}`;
+        document.getElementById("lm-gd").textContent   = (gd > 0 ? "+" : "") + gd;
+        const gdEl = document.getElementById("lm-gd");
+        if (gdEl) gdEl.style.color = gd > 0 ? "#4ade80" : gd < 0 ? "#f87171" : "#94a3b8";
+
+        // Win rate bar
+        const wrPct  = document.getElementById("lm-winrate");
+        const wrFill = document.getElementById("lm-winrate-fill");
+        if (wrPct)  wrPct.textContent = winRate + "%";
+        if (wrPct)  wrPct.style.color = winRate >= 60 ? "#22c55e" : winRate >= 40 ? "#eab308" : "#ef4444";
+        if (wrFill) {
+            wrFill.style.width = winRate + "%";
+            wrFill.style.background = winRate >= 60
+                ? "linear-gradient(90deg,#16a34a,#22c55e)"
+                : winRate >= 40 ? "linear-gradient(90deg,#ca8a04,#eab308)"
+                : "linear-gradient(90deg,#b91c1c,#ef4444)";
         }
 
-        // Hall of Fame (ตลอดกาล)
+        // ── ฟอร์ม 5 นัดล่าสุด ──
+        const last5 = myMatches.slice(-5);
+        const slots = Array.from({length:5}, (_,i) => last5[i] || null);
+        const pillsEl = document.getElementById("lm-form-pills");
+        if (pillsEl) {
+            pillsEl.innerHTML = slots.map(m => {
+                if (!m) return `<div class="pi-form-pill E">—</div>`;
+                const isHome = m.homeId === state.playerTeamId;
+                const myG    = isHome ? parseInt(m.homeScore) : parseInt(m.awayScore);
+                const opG    = isHome ? parseInt(m.awayScore) : parseInt(m.homeScore);
+                const res    = myG > opG ? "W" : myG < opG ? "L" : "D";
+                const opp    = state.teams.find(x => x.id === (isHome ? m.awayId : m.homeId));
+                const oppShort = opp ? (opp.team.length > 6 ? opp.team.slice(0,5)+"…" : opp.team) : "?";
+                return `<div class="pi-form-pill ${res}">
+                    ${res}
+                    <div class="pi-fp-score">${isHome?m.homeScore:m.awayScore}–${isHome?m.awayScore:m.homeScore}</div>
+                    <div class="pi-fp-opp">${oppShort}</div>
+                </div>`;
+            }).join("");
+        }
+
+        // ── Hall of Fame ──
         const hof = (state.hallOfFame || {})[state.playerTeamId] || {};
         document.getElementById("lm-hof-trophies").textContent = hof.trophies || 0;
         document.getElementById("lm-hof-w").textContent        = hof.wins    || 0;
         document.getElementById("lm-hof-d").textContent        = hof.draws   || 0;
         document.getElementById("lm-hof-l").textContent        = hof.losses  || 0;
+
+        // ── สถานะคำขอแก้ไขที่ค้างอยู่ ──
+        _renderPlayerChangeStatus();
 
         _lmShowStep('player');
     } else {
@@ -6302,6 +6574,8 @@ function _renderPsmMyList() {
 function openAdminPendingModal() {
     renderAdminPendingList();
     document.getElementById("adminPendingModal").style.display = "flex";
+    renderAdminChangeRequestList();
+    updateAdminPendingBadge();
 }
 
 function closeAdminPendingModal() {
@@ -6309,11 +6583,18 @@ function closeAdminPendingModal() {
 }
 
 function updateAdminPendingBadge() {
-    const count = (state.pendingResults || []).filter(p => p.status === "pending").length;
-    const badge = document.getElementById("admin-pending-count");
+    const results  = (state.pendingResults  || []).filter(p => p.status === "pending").length;
+    const changes  = (state.changeRequests  || []).filter(c => c.status === "pending").length;
+    const count    = results + changes;
+    const badge    = document.getElementById("admin-pending-count");
     if (!badge) return;
     if (count > 0) { badge.textContent = count; badge.style.display = "inline-block"; }
     else           { badge.style.display = "none"; }
+    // update tab counters if visible
+    const rc = document.getElementById("apm-results-count");
+    const cc = document.getElementById("apm-changes-count");
+    if (rc) rc.textContent = results > 0 ? results : "";
+    if (cc) cc.textContent = changes > 0 ? changes : "";
 }
 
 function renderAdminPendingList() {
@@ -7074,9 +7355,10 @@ function toggleChangelog() {
     const body = document.getElementById('changelog-body');
     const arrow = document.getElementById('changelog-arrow');
     if (!body) return;
-    // Auto-inject recent match results at the top each time we open
+    // Auto-inject recent match results and admin changelog each time we open
     if (!body.classList.contains('open')) {
         _injectAutoChangelog();
+        renderChangelog();
     }
     body.classList.toggle('open');
     arrow.classList.toggle('open');
@@ -7284,6 +7566,190 @@ function openTeamStatsModal(teamId, onlyForm) {
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
+
+
+// ════════════════════════════════════════════════════════════════════
+// PLAYER CHANGE REQUEST SYSTEM
+// ════════════════════════════════════════════════════════════════════
+
+function _renderPlayerChangeStatus() {
+    const el = document.getElementById("lm-change-status");
+    if (!el || !state.playerTeamId) return;
+    const pending = (state.changeRequests || []).filter(
+        c => c.playerId === state.playerTeamId && c.status === "pending"
+    );
+    if (pending.length === 0) { el.style.display = "none"; return; }
+    const c = pending[0];
+    const parts = [];
+    if (c.newPlayer && c.newPlayer !== c.oldPlayer) parts.push(`ชื่อ: <strong>${c.oldPlayer}</strong> → <strong style="color:#a78bfa;">${c.newPlayer}</strong>`);
+    if (c.newTeam   && c.newTeam   !== c.oldTeam)  parts.push(`ทีม: <strong>${c.oldTeam}</strong> → <strong style="color:#a78bfa;">${c.newTeam}</strong>`);
+    el.style.display = "block";
+    el.innerHTML = `<div class="pi-cr-pending">⏳ <strong>รอแอดมินอนุมัติ:</strong> ${parts.join(" · ")}</div>`;
+}
+
+function openChangeRequestModal() {
+    if (!state.playerTeamId) return;
+    const t = state.teams.find(x => x.id.toLowerCase() === state.playerTeamId.toLowerCase());
+    if (!t) return;
+
+    // Check for existing pending request
+    const existing = (state.changeRequests || []).find(
+        c => c.playerId === state.playerTeamId && c.status === "pending"
+    );
+    if (existing) {
+        showToast("⏳ มีคำขอที่รอดำเนินการอยู่แล้ว กรุณารอแอดมินอนุมัติก่อน", "warning");
+        return;
+    }
+
+    // Pre-fill current values
+    const playerInp = document.getElementById("cr-player-inp");
+    const teamInp   = document.getElementById("cr-team-inp");
+    const noteInp   = document.getElementById("cr-note-inp");
+    const playerCur = document.getElementById("cr-player-current");
+    const teamCur   = document.getElementById("cr-team-current");
+    if (playerInp) playerInp.value = "";
+    if (teamInp)   teamInp.value   = "";
+    if (noteInp)   noteInp.value   = "";
+    if (playerCur) playerCur.textContent = "ปัจจุบัน: " + t.player;
+    if (teamCur)   teamCur.textContent   = "ปัจจุบัน: " + t.team;
+
+    const modal = document.getElementById("changeRequestModal");
+    if (modal) modal.style.display = "flex";
+    closeLoginModal();
+}
+
+function closeChangeRequestModal() {
+    const modal = document.getElementById("changeRequestModal");
+    if (modal) modal.style.display = "none";
+}
+
+function submitChangeRequest() {
+    if (!state.playerTeamId) return;
+    const t = state.teams.find(x => x.id.toLowerCase() === state.playerTeamId.toLowerCase());
+    if (!t) return;
+
+    const newPlayer = (document.getElementById("cr-player-inp").value || "").trim();
+    const newTeam   = (document.getElementById("cr-team-inp").value   || "").trim();
+    const note      = (document.getElementById("cr-note-inp").value   || "").trim();
+
+    if (!newPlayer && !newTeam) {
+        showToast("⚠️ กรุณากรอกอย่างน้อยหนึ่งช่องที่ต้องการแก้ไข", "warning");
+        return;
+    }
+    if (newPlayer && newPlayer === t.player && newTeam === t.team) {
+        showToast("⚠️ ข้อมูลใหม่เหมือนเดิม ไม่จำเป็นต้องแก้ไข", "warning");
+        return;
+    }
+
+    if (!Array.isArray(state.changeRequests)) state.changeRequests = [];
+    const entry = {
+        id:        Date.now(),
+        playerId:  t.id,
+        oldPlayer: t.player,
+        newPlayer: newPlayer || t.player,
+        oldTeam:   t.team,
+        newTeam:   newTeam   || t.team,
+        note:      note,
+        status:    "pending",
+        submittedAt: Date.now()
+    };
+    state.changeRequests.push(entry);
+    closeChangeRequestModal();
+    saveDataToCloud();
+    showToast("📨 ส่งคำขอแล้ว รอแอดมินอนุมัติ", "success");
+    // Re-open player info to show pending status
+    openLoginModal();
+}
+
+function switchApmTab(tab) {
+    ["results","changes"].forEach(t => {
+        const btn   = document.getElementById("apm-tab-" + t);
+        const panel = document.getElementById("apm-panel-" + t);
+        if (btn)   btn.classList.toggle("active",   t === tab);
+        if (panel) panel.classList.toggle("active", t === tab);
+    });
+}
+
+function renderAdminChangeRequestList() {
+    const el = document.getElementById("admin-change-request-list");
+    if (!el) return;
+    const pending = (state.changeRequests || []).filter(c => c.status === "pending");
+    if (!pending.length) {
+        el.innerHTML = '<div style="text-align:center;padding:30px;color:#475569;font-size:14px;">✅ ไม่มีคำขอแก้ไขรอดำเนินการ</div>';
+        return;
+    }
+    el.innerHTML = pending.map(c => {
+        const t = state.teams.find(x => x.id === c.playerId);
+        const logoSrc = t && t.logo ? t.logo : "";
+        const isFlag  = t && t.isFlag;
+        const logoCls = "acr-logo" + (isFlag ? " flag" : "");
+        const dateStr = new Date(c.submittedAt).toLocaleString("th-TH", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" });
+
+        const playerChanged = c.newPlayer !== c.oldPlayer;
+        const teamChanged   = c.newTeam   !== c.oldTeam;
+
+        const diffRows = [];
+        if (playerChanged) diffRows.push(`<div style="margin-bottom:6px;">
+            <span style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;">ชื่อผู้จัดการ</span><br>
+            <span class="acr-val-old">${c.oldPlayer}</span>
+            <span class="acr-arrow">→</span>
+            <span class="acr-val-new">${c.newPlayer}</span>
+        </div>`);
+        if (teamChanged) diffRows.push(`<div style="margin-bottom:6px;">
+            <span style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.8px;">ทีม</span><br>
+            <span class="acr-val-old">${c.oldTeam}</span>
+            <span class="acr-arrow">→</span>
+            <span class="acr-val-new">${c.newTeam}</span>
+        </div>`);
+
+        return `<div class="acr-card" id="acr-${c.id}">
+            <div class="acr-player-row">
+                ${logoSrc ? `<img class="${logoCls}" src="${logoSrc}" onerror="this.style.display='none'">` : ""}
+                <div>
+                    <div style="font-size:13px;font-weight:700;color:#f1f5f9;">${c.oldPlayer} <span style="color:#475569;font-size:11px;">(${c.playerId})</span></div>
+                    <div style="font-size:11px;color:#475569;margin-top:1px;">${dateStr}</div>
+                </div>
+            </div>
+            ${diffRows.join("")}
+            ${c.note ? `<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:7px;padding:8px 10px;font-size:12px;color:#94a3b8;margin-bottom:10px;">💬 ${c.note}</div>` : ""}
+            <div style="display:flex;gap:10px;">
+                <button onclick="adminApproveChangeRequest(${c.id})" style="flex:1;padding:9px;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;font-family:'Prompt',sans-serif;">✅ อนุมัติ</button>
+                <button onclick="adminRejectChangeRequest(${c.id})" style="flex:1;padding:9px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.4);color:#f87171;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;font-family:'Prompt',sans-serif;">❌ ปฏิเสธ</button>
+            </div>
+        </div>`;
+    }).join("");
+}
+
+function adminApproveChangeRequest(reqId) {
+    if (!Array.isArray(state.changeRequests)) return;
+    const c = state.changeRequests.find(x => x.id === reqId);
+    if (!c) return;
+    const t = state.teams.find(x => x.id === c.playerId);
+    if (t) {
+        if (c.newPlayer !== c.oldPlayer) t.player = c.newPlayer;
+        if (c.newTeam   !== c.oldTeam)   t.team   = c.newTeam;
+    }
+    c.status = "approved";
+    renderLeague();
+    saveDataToCloud();
+    updateAdminPendingBadge();
+    renderAdminChangeRequestList();
+    showToast("✅ อนุมัติและอัปเดตข้อมูลผู้เล่นแล้ว", "success");
+}
+
+function adminRejectChangeRequest(reqId) {
+    if (!Array.isArray(state.changeRequests)) return;
+    const c = state.changeRequests.find(x => x.id === reqId);
+    if (c) c.status = "rejected";
+    saveDataToCloud();
+    updateAdminPendingBadge();
+    renderAdminChangeRequestList();
+    showToast("❌ ปฏิเสธคำขอแล้ว", "warning");
+}
+
+// ════════════════════════════════════════════════════════════════════
+// END PLAYER CHANGE REQUEST SYSTEM
+// ════════════════════════════════════════════════════════════════════
 
 function closeTeamStatsModal() {
     const modal = document.getElementById('team-stats-modal');
@@ -9107,6 +9573,7 @@ function _loadBinData(idToLoad) {
         // ── load fields that were missing from _loadBinData ──
         if (r.no1History) state.no1History = r.no1History;
         if (Array.isArray(r.changelog)) state.changelog = r.changelog;
+        if (Array.isArray(r.changeRequests)) state.changeRequests = r.changeRequests;
         if (r.announcement !== undefined) state.announcement = r.announcement || "";
         if (Array.isArray(r.customPlaylist)) { state.customPlaylist = r.customPlaylist; _applyCustomPlaylist(); }
         renderAdBanner();
@@ -9119,7 +9586,7 @@ function _loadBinData(idToLoad) {
             ? (window.location.origin + window.location.pathname)
             : (window.location.origin + window.location.pathname + "?id=" + state.binId);
         document.getElementById("spectator-link-path").textContent = shareBase;
-        showStatus("☁️ โหลดข้อมูลแล้ว"); renderHeader(); renderLeague(); refreshUIState(); renderAnnouncement();
+        showStatus("☁️ โหลดข้อมูลแล้ว"); renderHeader(); renderLeague(); refreshUIState(); renderAnnouncement(); renderChangelog();
         // เริ่ม auto-refresh สำหรับ viewer
         if (state.isViewOnly) _startAutoRefresh();
         // ถ้ามีข้อมูลที่เคยบันทึกขึ้นคลาวด์ไม่สำเร็จค้างไว้ในเครื่องนี้ ถามว่าจะกู้คืนไหม
