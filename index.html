@@ -620,16 +620,38 @@
         /* ════════════════════════════════════════════════════════════════════════════════════════════════ */
 
         .round-title { background: linear-gradient(90deg, rgba(0,87,184,0.35), transparent); color: var(--h2-fixtures-color); font-family: 'Orbitron', 'Prompt', sans-serif; font-weight: 800; padding: 12px 20px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin-top: 30px; border-left: 3px solid var(--wc-gold); border-radius: 0 8px 8px 0; }
+
+        .fx-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 16px; }
+        .fx-tab-btn { background: rgba(255,255,255,0.04); border: 1px solid var(--wc-border); color: var(--wc-text-sub); font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 13px; padding: 9px 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .fx-tab-btn:hover { background: rgba(255,255,255,0.08); color: var(--wc-text-main); }
+        .fx-tab-btn.active { background: linear-gradient(90deg, rgba(242,194,78,0.9), rgba(242,194,78,0.7)); color: #1a1305; border-color: transparent; }
+        .fx-tab-badge { background: rgba(232,16,43,0.85); color: #fff; font-size: 10px; font-weight: 800; border-radius: 10px; padding: 1px 6px; min-width: 16px; text-align: center; display: inline-block; }
+        .fx-tab-btn.active .fx-tab-badge { background: rgba(0,0,0,0.25); color: #1a1305; }
+        .fx-round-pager { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--wc-border); border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; }
+        .fx-pager-btn { background: rgba(255,255,255,0.06); border: 1px solid var(--wc-border); color: var(--wc-text-main); font-family: 'Prompt', sans-serif; font-weight: 600; font-size: 12px; padding: 7px 14px; border-radius: 8px; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+        .fx-pager-btn:hover:not(:disabled) { background: rgba(242,194,78,0.18); }
+        .fx-pager-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .fx-round-label { font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 800; color: var(--wc-gold); letter-spacing: 1px; text-align: center; flex: 1; }
+        .fx-empty-msg { text-align: center; color: var(--wc-text-sub); padding: 30px 16px; font-size: 14px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px dashed var(--wc-border); }
+        .fx-history-round-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+        .fx-history-round-header .fx-collapse-arrow { transition: transform 0.2s; font-size: 11px; color: var(--wc-text-sub); }
+        .fx-history-round-header.open .fx-collapse-arrow { transform: rotate(180deg); }
+        .fx-history-round-body { display: none; }
+        .fx-history-round-body.open { display: block; }
+        .fx-pending-round-tag { display: inline-block; font-size: 10px; font-weight: 800; color: #fca5a5; background: rgba(232,16,43,0.12); border: 1px solid rgba(232,16,43,0.3); border-radius: 6px; padding: 2px 8px; margin: 8px 12px 0; letter-spacing: 0.5px; }
         .match-row { display: flex; flex-direction: column; gap: 0; padding: 12px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.2); transition: background 0.2s; }
         .match-row:hover { background: rgba(255,255,255,0.03); }
 
         .match-row-main { display: flex; align-items: center; gap: 8px; }
         .match-row-bottom { display: flex; align-items: center; margin-top: 6px; }
-        .match-bottom-home { flex: 1 1 0; display: flex; justify-content: flex-end; padding-right: 30px; }
+        .match-bottom-home { flex: 1 1 0; display: flex; justify-content: flex-end; padding-right: 20px; }
         .match-bottom-center { flex: 0 0 auto; min-width: 110px; display: flex; justify-content: center; align-items: center; }
-        .match-bottom-away { flex: 1 1 0; display: flex; justify-content: flex-start; padding-left: 30px; }
+        .match-bottom-away { flex: 1 1 0; display: flex; justify-content: flex-start; padding-left: 20px; }
 
-        .match-team { flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 6px; }
+        /* Login panel stats grid */
+        .lm-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+
+        .match-team { flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 4px 8px; border-radius: 6px; }
         .match-team.admin-draggable { cursor: grab; }
         .match-team.admin-draggable:hover { background: rgba(223, 180, 75, 0.1); }
         .match-team.drag-over { background: rgba(34, 197, 94, 0.2) !important; border: 1px dashed #22c55e; }
@@ -964,6 +986,13 @@
         .ts-wdl-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:rgba(255,255,255,0.38); }
 
         /* ── Win-rate bar ── */
+        .ts-top-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+        .ts-stat-cell { border-radius:10px; padding:12px 14px; display:flex; align-items:center; gap:10px; }
+        .ts-stat-icon { width:34px; height:34px; border-radius:8px; background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px; line-height:1; }
+        .ts-stat-body { min-width:0; flex:1; }
+        .ts-stat-cap { font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:0.6px; color:rgba(255,255,255,0.32); margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .ts-stat-val { font-family:'Orbitron',sans-serif; font-size:18px; font-weight:900; line-height:1; white-space:nowrap; }
+        .ts-stat-val .unit { font-family:'Prompt',sans-serif; font-size:11px; font-weight:700; opacity:0.65; margin-left:3px; }
         .ts-winrate-wrap { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:11px 14px; }
         .ts-winrate-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
         .ts-winrate-label { font-size:11px; color:rgba(255,255,255,0.4); font-weight:700; text-transform:uppercase; letter-spacing:0.8px; }
@@ -1527,24 +1556,51 @@
             #standings-table .p-name { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; font-size: 13px; line-height: 1.4; word-break: break-word; white-space: normal; }
             #standings-table .t-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-            /* Match row: ทำให้พอดีจอมือถือ */
-            .match-row { padding: 8px 6px; gap: 4px; }
-            .match-team { gap: 5px; padding: 3px 4px; flex: 1 1 0; max-width: calc(50% - 40px); overflow: hidden; }
-            .match-score { min-width: 72px; flex: 0 0 72px; padding: 0 2px; }
+            /* Match row: ทำให้พอดีจอมือถือ และชิดกันมากที่สุดเท่าที่ยังอ่านง่าย */
+            .match-row { padding: 8px 6px; gap: 2px; }
+            .match-team { gap: 6px; padding: 2px 4px; flex: 1 1 0; max-width: calc(50% - 34px); overflow: hidden; }
+            .match-score { min-width: 64px; flex: 0 0 64px; padding: 0 2px; }
             .match-team .t-name { display: none; }
             .match-team .p-name { font-size: 12px; line-height: 1.2; word-break: break-word; white-space: normal; }
+            .match-team-info { gap: 0; }
+            .match-team-player { font-size: 10px !important; }
+            /* จอมือถือแคบมาก ชื่อทีม+โลโก้แย่งพื้นที่กันพออยู่แล้ว
+               ซ่อนชิปข้างโลโก้ แล้วสลับไปโชว์อันดับแบบฝังในชื่อทีมแทน
+               (ไม่กินพื้นที่ฝั่งโลโก้ ไม่ทำให้แถวสูงขึ้น)
+               หมายเหตุ: ต้องใส่ !important เพราะ base rule ของ
+               .match-team-rank / .match-team-rank-inline / .match-logo-wrap
+               ถูกประกาศทีหลังในไฟล์ (specificity เท่ากัน ตัวที่มาทีหลังชนะ
+               ต่อให้อยู่นอก media query) — ถ้าไม่ใส่ !important ค่าตรงนี้
+               จะถูกเขียนทับเงียบๆ และค่าจะไม่ขยับเลยแม้จะแก้ตรงนี้ */
+            .match-team-rank { display: none !important; }
+            .match-team-rank-inline { display: inline !important; font-size: 10px !important; margin-right: 2px !important; }
+            .badge-side { padding: 1px 4px !important; font-size: 9px !important; }
+
+            /* Tab buttons: ลดขนาดให้ 3 ปุ่มอยู่แถวเดียวบนมือถือ */
+            .fx-tabs { gap: 4px !important; flex-wrap: nowrap !important; margin-bottom: 10px !important; }
+            .fx-tab-btn { font-size: 10px !important; padding: 5px 8px !important; gap: 3px !important; border-radius: 14px !important; white-space: nowrap !important; }
 
             /* โลโก้ทีมในตารางแข่ง */
-            #fixtures-area .match-team img.club-img { width: 36px; height: 36px; }
-            #fixtures-area .match-team img.flag-img { width: 36px; height: 24px; }
-            img.club-img { width: 32px; height: 32px; }
-            img.flag-img { width: 36px; height: 24px; }
+            #fixtures-area .match-team img.club-img { width: 32px; height: 32px; }
+            #fixtures-area .match-team img.flag-img { width: 32px; height: 22px; }
+            img.club-img { width: 30px; height: 30px; }
+            img.flag-img { width: 32px; height: 22px; }
+            .match-logo-wrap { width: 32px !important; }
 
             /* กล่องสกอร์ */
-            .score-view-box { font-size: 13px; padding: 5px 8px; min-width: 60px; }
-            .score-input { width: 50px; height: 38px; font-size: 17px; }
-            .match-score .btn-secondary { font-size: 11px; padding: 5px 8px; }
+            .score-view-box { font-size: 13px; padding: 4px 6px; min-width: 52px; }
+            .score-input { width: 44px; height: 36px; font-size: 16px; }
+            .match-score .btn-secondary { font-size: 10px; padding: 4px 6px; }
             .ah-chip { font-size: 9px; padding: 2px 4px; }
+
+            /* Match row bottom: ลด padding เพื่อลด whitespace บนมือถือ */
+            .match-bottom-home { padding-right: 8px; }
+            .match-bottom-away { padding-left: 8px; }
+            .match-bottom-center { min-width: 80px; }
+            .odds-chips { flex-wrap: nowrap; }
+
+            /* Login panel: 2 คอลัมน์บนมือถือ */
+            .lm-stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
 
             /* ชื่อผู้เล่นในตารางคะแนน */
             .p-name { font-size: 14px; }
@@ -1685,6 +1741,12 @@
         .se-mc-name { font-size:12px; font-weight:700; color:#d8e8ff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:90px; text-align:center; line-height:1.2; }
         .se-mc-name.win { color:#F2C24E; }
         .se-mc-player { font-size:10px; color:#3d5a78; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:90px; }
+        .se-form-dots { display:flex; align-items:center; justify-content:center; gap:4px; margin-top:4px; }
+        .se-form-dot { width:8px; height:8px; border-radius:50%; display:inline-block; flex-shrink:0; }
+        .se-form-dot.w { background:#22c55e; box-shadow:0 0 4px rgba(34,197,94,0.6); }
+        .se-form-dot.d { background:#64748b; }
+        .se-form-dot.l { background:#ef4444; box-shadow:0 0 4px rgba(239,68,68,0.5); }
+        .se-form-empty { font-size:9px; color:rgba(255,255,255,0.22); margin-top:4px; }
         .se-mc-center { display:flex; align-items:center; gap:5px; flex-shrink:0; }
         .se-team-logo { width:36px; height:36px; object-fit:contain; border-radius:6px; display:block; }
         .se-team-logo.flag { height:24px; width:36px; object-fit:cover; border-radius:4px; }
@@ -1773,17 +1835,20 @@
             /* standings table on very small screens */
             #standings-table .p-name { font-size: 12px; }
             #standings-table .champion-badge, #standings-table .defending-badge, #standings-table .prev-champ-badge { font-size: 9px; padding: 2px 4px; }
-            .match-row { gap: 3px; padding: 8px 4px; }
-            .match-team { gap: 3px; padding: 2px; }
-            .match-score { min-width: 62px; padding: 0; }
+            .match-row { gap: 2px; padding: 6px 4px; }
+            .match-team { gap: 4px; padding: 1px 3px; max-width: calc(50% - 28px); }
+            .match-score { min-width: 52px; flex: 0 0 52px; padding: 0; }
             #fixtures-area .match-team img.club-img { width: 24px; height: 24px; }
             #fixtures-area .match-team img.flag-img { width: 24px; height: 16px; }
+            .match-logo-wrap { width: 24px !important; }
             .match-team .p-name { font-size: 10px; }
-            .score-view-box { font-size: 13px; padding: 5px 6px; min-width: 58px; }
-            .score-input { width: 42px; height: 34px; font-size: 15px; }
+            .match-team-player { font-size: 9px !important; }
+            .match-team-rank-inline { font-size: 9px !important; margin-right: 1px !important; }
+            .score-view-box { font-size: 12px; padding: 3px 5px; min-width: 46px; }
+            .score-input { width: 38px; height: 32px; font-size: 14px; }
             .fc-card { padding: 12px 10px; }
             .ah-chip { font-size: 8px; padding: 1px 3px; }
-            .badge-side { font-size: 9px; padding: 1px 4px; }
+            .badge-side { font-size: 8px; padding: 1px 3px; }
         }
 
         /* ══════════════════════════════════════════
@@ -2013,7 +2078,12 @@
         .match-status-badge { white-space:nowrap; }
         .match-status-badge { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:800; padding:2px 8px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px; }
         /* ── Logo wrapper (fixed width so logos always align) ── */
-        .match-logo-wrap { flex-shrink:0; display:flex; justify-content:center; align-items:center; width:68px; }
+        .match-logo-wrap { flex-shrink:0; display:flex; justify-content:center; align-items:center; width:62px; }
+        /* ── Standings-rank chip: sits inline on the same row, between the
+               name and the crest — adds zero extra height and never overlaps
+               the logo, so both the crest and the compact row stay intact ── */
+        .match-team-rank { display:none !important; }
+        .match-team-rank-inline { display:none !important; }
         /* ── Thai-style Asian Handicap Chips (under logo) ── */
         .ah-chip { display:inline-flex; align-items:center; font-size:10px; font-weight:900; padding:2px 6px; border-radius:4px; font-family:'Orbitron','Prompt',sans-serif; letter-spacing:0.2px; flex-shrink:0; white-space:nowrap; }
         .ah-fav  { background:rgba(239,68,68,0.14); color:#fca5a5; border:1px solid rgba(239,68,68,0.33); }
@@ -3288,6 +3358,23 @@
             <div id="cup-bracket-area" style="display:none;" class="cup-bracket-section"></div>
 
             <h2 class="title-fixtures">📅 MATCH SCHEDULE & LIVE RESULTS <span id="admin-drag-hint" style="display:none; font-size:12px; color:var(--wc-gold); font-weight:normal; margin-left:15px;">💡 ลากสลับทีมเพื่อเปลี่ยนสายได้เลย!</span></h2>
+
+            <div id="fixtures-tabs" class="fx-tabs" style="display:none;">
+                <button type="button" class="fx-tab-btn active" data-fx-tab="current" onclick="setFixturesTab('current')">🗓️ รอบปัจจุบัน</button>
+                <button type="button" class="fx-tab-btn" data-fx-tab="pending" onclick="setFixturesTab('pending')">⏳ นัดตกค้าง <span id="fx-pending-count" class="fx-tab-badge"></span></button>
+                <button type="button" class="fx-tab-btn" data-fx-tab="history" onclick="setFixturesTab('history')">📜 ผลย้อนหลังทั้งหมด</button>
+            </div>
+
+            <div id="fx-round-pager" class="fx-round-pager" style="display:none;">
+                <button type="button" class="fx-pager-btn" onclick="fxChangeRound(-1)">◀ รอบก่อนหน้า</button>
+                <span id="fx-round-label" class="fx-round-label"></span>
+                <button type="button" class="fx-pager-btn" onclick="fxChangeRound(1)">รอบถัดไป ▶</button>
+            </div>
+
+            <div id="fx-history-search" style="display:none; margin-bottom:14px;">
+                <input type="text" id="fx-history-search-input" class="edit-input" placeholder="🔍 ค้นหาทีม/ผู้เล่นในผลย้อนหลัง..." style="width:100%; max-width:360px;" oninput="renderLeague()">
+            </div>
+
             <div id="fixtures-area"></div>
         </div>
     </div>
@@ -3307,6 +3394,7 @@
             <div style="flex:1;min-width:0;">
                 <p class="ts-modal-title" id="ts-team-name">—</p>
                 <p class="ts-modal-sub" id="ts-manager-name">—</p>
+                <p class="ts-modal-sub" id="ts-rank-pts" style="margin-top:4px;display:none;"></p>
             </div>
             <button class="ts-close-btn" onclick="closeTeamStatsModal()">✕</button>
         </div>
@@ -3535,43 +3623,43 @@
 
             <!-- สถิติซีซันนี้ -->
             <div style="font-size:10px;color:#64748b;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">ซีซันนี้</div>
-            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px;">
-                <div style="background:rgba(29,78,216,0.12);border:1px solid rgba(29,78,216,0.25);border-radius:8px;padding:8px 4px;text-align:center;">
-                    <div style="font-size:18px;font-weight:900;color:#60a5fa;font-family:'Orbitron',sans-serif;" id="lm-rank">—</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:2px;">อันดับ</div>
+            <div class="lm-stats-grid" style="margin-bottom:14px;">
+                <div style="background:rgba(29,78,216,0.12);border:1px solid rgba(29,78,216,0.25);border-radius:8px;padding:10px 6px;text-align:center;">
+                    <div style="font-size:20px;font-weight:900;color:#60a5fa;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-rank">—</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:4px;letter-spacing:0.5px;">อันดับ</div>
                 </div>
-                <div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);border-radius:8px;padding:8px 4px;text-align:center;">
-                    <div style="font-size:18px;font-weight:900;color:#22c55e;font-family:'Orbitron',sans-serif;" id="lm-pts">0</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:2px;">คะแนน</div>
+                <div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);border-radius:8px;padding:10px 6px;text-align:center;">
+                    <div style="font-size:20px;font-weight:900;color:#22c55e;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-pts">0</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:4px;letter-spacing:0.5px;">คะแนน</div>
                 </div>
-                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px 4px;text-align:center;">
-                    <div style="font-size:13px;font-weight:700;color:#94a3b8;font-family:'Orbitron',sans-serif;" id="lm-wdl">0-0-0</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:2px;">ชนะ-เสมอ-แพ้</div>
+                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 6px;text-align:center;">
+                    <div style="font-size:13px;font-weight:700;color:#94a3b8;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-wdl">0-0-0</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:4px;letter-spacing:0.3px;">ชนะ-เสมอ-แพ้</div>
                 </div>
-                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px 4px;text-align:center;">
-                    <div style="font-size:13px;font-weight:700;color:#94a3b8;font-family:'Orbitron',sans-serif;" id="lm-gfga">0 / 0</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:2px;">ได้ / เสีย</div>
+                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 6px;text-align:center;">
+                    <div style="font-size:13px;font-weight:700;color:#94a3b8;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-gfga">0 / 0</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:4px;letter-spacing:0.3px;">ได้ / เสีย</div>
                 </div>
             </div>
 
             <!-- Hall of Fame -->
             <div style="font-size:10px;color:#64748b;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Hall of Fame (ตลอดกาล)</div>
-            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:18px;">
-                <div style="background:rgba(242,194,78,0.08);border:1px solid rgba(242,194,78,0.25);border-radius:8px;padding:8px 4px;text-align:center;">
-                    <div style="font-size:18px;font-weight:900;color:#F2C24E;font-family:'Orbitron',sans-serif;" id="lm-hof-trophies">0</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:2px;">🏆 แชมป์</div>
+            <div class="lm-stats-grid" style="margin-bottom:18px;">
+                <div style="background:rgba(242,194,78,0.08);border:1px solid rgba(242,194,78,0.25);border-radius:8px;padding:10px 6px;text-align:center;">
+                    <div style="font-size:20px;font-weight:900;color:#F2C24E;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-hof-trophies">0</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:4px;">🏆 แชมป์</div>
                 </div>
-                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px 4px;text-align:center;">
-                    <div style="font-size:18px;font-weight:900;color:#22c55e;font-family:'Orbitron',sans-serif;" id="lm-hof-w">0</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:2px;">ชนะรวม</div>
+                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 6px;text-align:center;">
+                    <div style="font-size:20px;font-weight:900;color:#22c55e;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-hof-w">0</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:4px;">ชนะรวม</div>
                 </div>
-                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px 4px;text-align:center;">
-                    <div style="font-size:18px;font-weight:900;color:#94a3b8;font-family:'Orbitron',sans-serif;" id="lm-hof-d">0</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:2px;">เสมอรวม</div>
+                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 6px;text-align:center;">
+                    <div style="font-size:20px;font-weight:900;color:#94a3b8;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-hof-d">0</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:4px;">เสมอรวม</div>
                 </div>
-                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px 4px;text-align:center;">
-                    <div style="font-size:18px;font-weight:900;color:#ef4444;font-family:'Orbitron',sans-serif;" id="lm-hof-l">0</div>
-                    <div style="font-size:10px;color:#64748b;margin-top:2px;">แพ้รวม</div>
+                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 6px;text-align:center;">
+                    <div style="font-size:20px;font-weight:900;color:#ef4444;font-family:'Orbitron',sans-serif;line-height:1;" id="lm-hof-l">0</div>
+                    <div style="font-size:10px;color:#64748b;margin-top:4px;">แพ้รวม</div>
                 </div>
             </div>
 
@@ -4246,6 +4334,57 @@ let draggedTeamId = null;
 let currentCrownedChampId = null;
 let _currentEvidenceMatchId = null;
 
+// ─── Reliability helpers: retry, local draft backup, unsaved-changes guard ────
+const DRAFT_STORAGE_PREFIX = 'wc_unsaved_draft_';
+let _hasUnsavedChanges = false;
+let _pendingSaveRetryTimer = null;
+
+function _draftKey() {
+    return `${DRAFT_STORAGE_PREFIX}${state.binId || 'local'}`;
+}
+
+// เก็บสำเนาข้อมูลปัจจุบันไว้ในเครื่อง ก่อนพยายามบันทึกขึ้นคลาวด์
+// ถ้าบันทึกไม่สำเร็จแล้วต้องรีเฟรชหน้า ข้อมูลนี้จะยังอยู่และกู้คืนได้
+function _saveLocalDraft() {
+    try {
+        localStorage.setItem(_draftKey(), JSON.stringify({ savedAt: Date.now(), data: _getStateForCloud() }));
+        _hasUnsavedChanges = true;
+    } catch (e) { /* localStorage อาจเต็ม เพิกเฉยได้ ไม่กระทบการทำงานหลัก */ }
+}
+
+function _clearLocalDraft() {
+    try { localStorage.removeItem(_draftKey()); } catch (e) {}
+    _hasUnsavedChanges = false;
+}
+
+function _getLocalDraft() {
+    try {
+        const raw = localStorage.getItem(_draftKey());
+        return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+}
+
+// เตือนก่อนปิด/รีเฟรชหน้า ถ้ายังมีข้อมูลที่บันทึกขึ้นคลาวด์ไม่สำเร็จค้างอยู่
+window.addEventListener('beforeunload', function (e) {
+    if (_hasUnsavedChanges) {
+        e.preventDefault();
+        e.returnValue = '';
+        return '';
+    }
+});
+
+// fetch พร้อมลองใหม่อัตโนมัติเมื่อเครือข่ายสะดุดหรือเซิร์ฟเวอร์ตอบช้า/พลาด
+function fetchWithRetry(url, options, retries = 3, delayMs = 1200) {
+    return fetch(url, options).then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+    }).catch(err => {
+        if (retries <= 0) throw err;
+        return new Promise(resolve => setTimeout(resolve, delayMs))
+            .then(() => fetchWithRetry(url, options, retries - 1, delayMs * 1.6));
+    });
+}
+
 // ─── Auto-Refresh (Live Update) ───────────────────────────────────────────────
 let _autoRefreshTimer = null;
 let _lastBinVersion = null;
@@ -4256,13 +4395,22 @@ function _startAutoRefresh() {
     _autoRefreshTimer = setInterval(_checkForCloudUpdates, AUTO_REFRESH_INTERVAL);
 }
 
+// หยุดโหลดอัตโนมัติเมื่อสลับแท็บ/ย่อหน้าต่างไปทำอย่างอื่น ลดโอกาสโดนจำกัดโควต้าฟรีของ jsonbin.io
+document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+        if (_autoRefreshTimer) { clearInterval(_autoRefreshTimer); _autoRefreshTimer = null; }
+    } else if (state.isViewOnly && state.binId && !_autoRefreshTimer) {
+        _checkForCloudUpdates();
+        _startAutoRefresh();
+    }
+});
+
 function manualRefresh() {
     if (!state.binId) return;
     showStatus('⏳ กำลังดึงข้อมูลล่าสุด...', true);
-    fetch(`https://api.jsonbin.io/v3/b/${state.binId}/latest`, {
+    fetchWithRetry(`https://api.jsonbin.io/v3/b/${state.binId}/latest`, {
         headers: { 'X-Master-Key': BIN_MASTER_KEY }
     })
-    .then(res => res.json())
     .then(resData => {
         const newVer = resData.metadata && resData.metadata.version;
         if (newVer && newVer !== _lastBinVersion) {
@@ -4279,10 +4427,9 @@ function manualRefresh() {
 
 function _checkForCloudUpdates() {
     if (!state.binId || !state.isViewOnly) return;
-    fetch(`https://api.jsonbin.io/v3/b/${state.binId}/latest`, {
+    fetchWithRetry(`https://api.jsonbin.io/v3/b/${state.binId}/latest`, {
         headers: { 'X-Master-Key': BIN_MASTER_KEY }
-    })
-    .then(res => res.json())
+    }, 1)
     .then(resData => {
         const newVer = resData.metadata && resData.metadata.version;
         if (newVer && _lastBinVersion !== null && newVer !== _lastBinVersion) {
@@ -4881,13 +5028,16 @@ function submitRegistration() {
         state.teams.push(newReg);
     }
 
-    fetch(`https://api.jsonbin.io/v3/b/${state.binId}`, {
+    // สำรองใบสมัครไว้ในเครื่องก่อน เผื่อบันทึกขึ้นคลาวด์ไม่สำเร็จ จะได้ไม่ต้องกรอกใหม่
+    _saveLocalDraft();
+
+    fetchWithRetry(`https://api.jsonbin.io/v3/b/${state.binId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", "X-Master-Key": BIN_MASTER_KEY },
         body: JSON.stringify(state)
     })
-    .then(res => res.json())
     .then(() => {
+        _clearLocalDraft();
         if (state.isViewOnly) {
             showStatus("☁️ ส่งใบสมัครแล้ว รอ Admin ยืนยัน");
             showAlert("📩 ส่งข้อมูลสมัครเรียบร้อยแล้ว! ใบสมัครของคุณกำลังรอการตรวจสอบ เพื่อปลดล็อกตารางแข่ง");
@@ -4904,7 +5054,10 @@ function submitRegistration() {
         refreshUIState();
         renderLeague();
     })
-    .catch(() => { showStatus("❌ เครือข่ายขัดข้อง"); });
+    .catch(() => {
+        showStatus("❌ เครือข่ายขัดข้อง — ข้อมูลสมัครถูกสำรองไว้ในเครื่องแล้ว");
+        showAlert("⚠️ ส่งใบสมัครไม่สำเร็จเพราะเครือข่ายขัดข้อง ระบบเก็บข้อมูลที่กรอกไว้ในเครื่องนี้แล้ว อย่ารีบปิดหน้านี้ ลองกด \"ส่งใบสมัคร\" อีกครั้งเมื่ออินเทอร์เน็ตกลับมาปกติ");
+    });
 }
 
 function adminAddPlayerFromModal() {
@@ -4926,13 +5079,15 @@ function adminAddPlayerFromModal() {
         status: 'approved', comment: ""
     });
 
-    fetch(`https://api.jsonbin.io/v3/b/${state.binId}`, {
+    _saveLocalDraft();
+
+    fetchWithRetry(`https://api.jsonbin.io/v3/b/${state.binId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", "X-Master-Key": BIN_MASTER_KEY },
         body: JSON.stringify(state)
     })
-    .then(res => res.json())
     .then(() => {
+        _clearLocalDraft();
         showStatus("✅ เพิ่มผู้เล่นสำเร็จ");
         showAlert(`✅ เพิ่มผู้เล่น [ ${playerVal} - ${teamVal} ] เข้าสู่ระบบและอนุมัติเรียบร้อยแล้ว!`);
 
@@ -4944,7 +5099,10 @@ function adminAddPlayerFromModal() {
         refreshUIState();
         renderLeague();
     })
-    .catch(() => { showStatus("❌ เครือข่ายขัดข้อง"); });
+    .catch(() => {
+        showStatus("❌ เครือข่ายขัดข้อง — ข้อมูลถูกสำรองไว้ในเครื่องแล้ว");
+        showAlert("⚠️ บันทึกไม่สำเร็จเพราะเครือข่ายขัดข้อง ข้อมูลผู้เล่นที่เพิ่งเพิ่มถูกสำรองไว้ในเครื่องนี้แล้ว อย่ารีบปิดหน้านี้ ลองกดเพิ่มผู้เล่นอีกครั้งเมื่ออินเทอร์เน็ตกลับมาปกติ");
+    });
 }
 
 function shuffle(array) {
@@ -6041,7 +6199,7 @@ function renderAdminPendingList() {
                     <span style="font-size:12px;color:#94a3b8;flex:1;">${aTeam.team}</span>
                 </div>
             </div>
-            ${p.evidenceImg ? `<div style="margin:10px 0;border-radius:8px;overflow:hidden;max-height:220px;text-align:center;background:rgba(0,0,0,0.3);cursor:pointer;" onclick="window.open('${p.evidenceImg}','_blank')"><img src="${p.evidenceImg}" style="max-width:100%;max-height:220px;object-fit:contain;" onerror="this.style.display='none'"></div>` : ''}
+            ${(() => { const _safeImg = _safeEvidenceUrl(p.evidenceImg); return _safeImg ? `<div style="margin:10px 0;border-radius:8px;overflow:hidden;max-height:220px;text-align:center;background:rgba(0,0,0,0.3);cursor:pointer;" onclick="window.open('${_escJsAttr(_safeImg)}','_blank')"><img src="${_safeImg}" style="max-width:100%;max-height:220px;object-fit:contain;" onerror="this.style.display='none'"></div>` : ''; })()}
             <div style="display:flex;gap:10px;margin-top:12px;">
                 <button onclick="adminApprovePending(${p.id})" style="flex:1;padding:10px;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;">✅ อนุมัติ</button>
                 <button onclick="adminRejectPending(${p.id})" style="flex:1;padding:10px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.4);color:#f87171;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;">❌ ปฏิเสธ</button>
@@ -6567,6 +6725,7 @@ async function resetMatchScore(matchId) {
     match.awayScore = null;
     if (match.winnerId !== undefined) match.winnerId = null;
     match.status = null;
+    _removeH2HRecordForMatch(match); // ล้างสถิติ H2H ที่เคยบันทึกไว้ของแมตช์นี้ด้วย
     let fmt = state.tournamentFormat || 'league';
     if (fmt !== 'league') renderAdminDock();
     renderLeague(); saveDataToCloud();
@@ -6574,6 +6733,30 @@ async function resetMatchScore(matchId) {
 
 // ── Score Entry Modal ──
 let _seMatchId = null;
+
+function _getLast5Form(teamId) {
+    const played = (state.matches || []).filter(m =>
+        (m.homeId === teamId || m.awayId === teamId) &&
+        m.homeId !== 'BYE' && m.awayId !== 'BYE' &&
+        m.status === 'finished' &&
+        m.homeScore !== null && m.awayScore !== null
+    ).sort((a, b) => (a.scoredAt || a.id || 0) - (b.scoredAt || b.id || 0));
+    return played.slice(-5).map(m => {
+        const isHome = m.homeId === teamId;
+        const myG = isHome ? parseInt(m.homeScore) : parseInt(m.awayScore);
+        const opG = isHome ? parseInt(m.awayScore) : parseInt(m.homeScore);
+        return myG > opG ? 'W' : myG < opG ? 'L' : 'D';
+    });
+}
+
+function _buildFormDotsHTML(teamId) {
+    if (!teamId || teamId === 'BYE') return '';
+    const form = _getLast5Form(teamId);
+    if (form.length === 0) return `<div class="se-form-empty">ยังไม่มีสถิติ</div>`;
+    const labels = { W: 'ชนะ', D: 'เสมอ', L: 'แพ้' };
+    const dots = form.map(r => `<span class="se-form-dot ${r.toLowerCase()}" title="${labels[r]}"></span>`).join('');
+    return `<div class="se-form-dots">${dots}</div>`;
+}
 
 function openScoreModal(matchId) {
     if (state.isViewOnly) return;
@@ -6598,6 +6781,7 @@ function openScoreModal(matchId) {
             ${teamLogoHTML(hInfo)}
             <div class="se-mc-name">${hInfo.team}</div>
             <div class="se-mc-player">${hInfo.player}</div>
+            ${_buildFormDotsHTML(m.homeId)}
         </div>
         <div class="se-mc-center">
             <input type="number" class="se-score-inp" id="se-home-inp" min="0" placeholder="0" value="${m.homeScore !== null ? m.homeScore : ''}">
@@ -6608,6 +6792,7 @@ function openScoreModal(matchId) {
             ${teamLogoHTML(aInfo)}
             <div class="se-mc-name">${aInfo.team}</div>
             <div class="se-mc-player">${aInfo.player}</div>
+            ${_buildFormDotsHTML(m.awayId)}
         </div>
     `;
     document.getElementById('se-confirm-btn').style.display = '';
@@ -6657,8 +6842,15 @@ function openScoreModal(matchId) {
     // ── H2H Preview ──────────────────────────────────
     const h2hArea = document.getElementById('se-h2h-area');
     if (h2hArea && m.awayId !== 'BYE') {
-        const s1 = _h2hTeamStats(m.homeId, m.awayId);
-        const s2 = _h2hTeamStats(m.awayId, m.homeId);
+        // Recent H2H matches — logo cards, exclude current match (it's the match this
+        // modal is showing, not "history"). Summary pills below are derived from this
+        // SAME filtered list so the "รวม" count always matches the visible cards.
+        const allRecords = _getH2HRecords(m.homeId, m.awayId);
+        const records = m.status === 'finished'
+            ? allRecords
+            : allRecords.filter(r => r.matchId === undefined || r.matchId !== m.id);
+        const s1 = _h2hStatsFromRecords(records, m.homeId);
+        const s2 = _h2hStatsFromRecords(records, m.awayId);
         const total = s1.games;
 
         // Standings rank
@@ -6667,8 +6859,7 @@ function openScoreModal(matchId) {
         const rank2 = standings.findIndex(t => t.id === m.awayId) + 1;
         const rankLabel = r => r > 0 ? `อันดับ ${r}` : '—';
 
-        // Recent H2H matches (last 5) — logo cards, exclude current match, oldest→newest (matches form-5 direction)
-        const records = _getH2HRecords(m.homeId, m.awayId).filter(r => r.matchId === undefined || r.matchId !== m.id);
+        // Recent H2H matches (last 5) — oldest→newest (matches form-5 direction)
         const recentSorted = [...records].sort((a, b) => (a.season || 0) - (b.season || 0)).slice(-5);
         const h2hCardsHTML = _buildH2HCardsHTML(recentSorted, m.homeId, hInfo, aInfo);
 
@@ -6783,9 +6974,10 @@ function openTeamStatsModal(teamId) {
     if (team.isFlag) { logoEl.className = 'ts-modal-logo flag'; } else { logoEl.className = 'ts-modal-logo'; }
     document.getElementById('ts-team-name').textContent = team.team;
     document.getElementById('ts-manager-name').textContent = 'Manager: ' + team.player;
+    document.getElementById('ts-rank-pts').style.display = 'none';
 
     // Calculate stats from state
-    let w=0, d=0, l=0, gf=0, ga=0;
+    let w=0, d=0, l=0, gf=0, ga=0, curWinStreak=0, maxWinStreak=0, cleanSheets=0;
     const played = (state.matches || []).filter(m =>
         (m.homeId === teamId || m.awayId === teamId) &&
         m.homeId !== 'BYE' && m.awayId !== 'BYE' &&
@@ -6798,13 +6990,14 @@ function openTeamStatsModal(teamId) {
         const myG = isHome ? parseInt(m.homeScore) : parseInt(m.awayScore);
         const opG = isHome ? parseInt(m.awayScore) : parseInt(m.homeScore);
         gf += myG; ga += opG;
-        if (myG > opG) w++;
-        else if (myG < opG) l++;
-        else d++;
+        if (opG === 0) cleanSheets++;
+        if (myG > opG) { w++; curWinStreak++; maxWinStreak = Math.max(maxWinStreak, curWinStreak); }
+        else { curWinStreak = 0; if (myG < opG) l++; else d++; }
     });
     const p = w + d + l;
     const gd = gf - ga;
     const winRate = p > 0 ? Math.round((w / p) * 100) : 0;
+    const trophies = (state.hallOfFame && state.hallOfFame[teamId] && state.hallOfFame[teamId].trophies) || 0;
 
     // Last 5 matches — logo match cards, fixed 5-slot grid
     const last5 = played.slice(-5);
@@ -6868,37 +7061,43 @@ function openTeamStatsModal(teamId) {
     const rankIcon   = rankPos === 1 ? `<span style="font-size:26px;line-height:1;">👑</span>`
                      : rankPos === 2 ? `<span style="font-size:24px;line-height:1;color:#c0c0c0;">♛</span>`
                      : rankPos === 3 ? `<span style="font-size:24px;line-height:1;color:#cd7f32;">♛</span>`
-                     : `<span style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:${rankColor};">#${rankPos}</span>`;
+                     : `<span style="font-size:18px;line-height:1;color:${rankColor};">📊</span>`;
 
-    // Rank + Winrate combined in one compact row (side by side)
-    const rankWinRow = rankPos > 0 ? `
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div style="background:${rankBg};border:1px solid ${rankBorder};border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;min-height:62px;">
-                <div style="width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;flex-shrink:0;">${rankIcon}</div>
-                <div style="min-width:0;flex:1;">
-                    <div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.32);margin-bottom:4px;">อันดับล่าสุด</div>
-                    <div style="display:flex;align-items:baseline;gap:5px;flex-wrap:nowrap;">
-                        <span style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:${rankColor};line-height:1;white-space:nowrap;">อันดับ ${rankPos}</span>
-                        <span style="color:rgba(255,255,255,0.2);font-size:11px;">·</span>
-                        <span style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,0.55);white-space:nowrap;">${pts} <span style="font-size:9px;font-weight:600;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.5px;">pts</span></span>
-                    </div>
-                </div>
+    // แสดงอันดับ + คะแนนใน header
+    const rankPtsEl = document.getElementById('ts-rank-pts');
+    if (rankPos > 0 && rankPtsEl) {
+        rankPtsEl.innerHTML = `<span style="color:${rankColor};font-weight:800;">อันดับ ${rankPos}</span><span style="color:rgba(255,255,255,0.35);margin:0 5px;">·</span><span style="color:#94a3b8;">${pts} แต้ม</span>`;
+        rankPtsEl.style.display = '';
+    }
+
+    const winRateCellHTML = `
+        <div class="ts-stat-cell" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);">
+            <div class="ts-stat-icon">🎯</div>
+            <div class="ts-stat-body">
+                <div class="ts-stat-cap">Win Rate</div>
+                <div class="ts-stat-val" style="color:${winColor};">${winRate}<span class="unit">%</span></div>
             </div>
-            <div class="ts-winrate-wrap" style="margin:0;padding:10px 12px;min-height:62px;display:flex;flex-direction:column;justify-content:center;">
-                <div class="ts-winrate-top" style="margin-bottom:6px;">
-                    <span class="ts-winrate-label">Win Rate</span>
-                    <span class="ts-winrate-pct" style="color:${winColor};font-size:15px;">${winRate}%</span>
-                </div>
-                <div class="ts-winrate-bar"><div class="ts-winrate-fill" style="width:${winRate}%;background:${barColor};"></div></div>
-            </div>
-        </div>` : `
-        <div class="ts-winrate-wrap">
-            <div class="ts-winrate-top">
-                <span class="ts-winrate-label">Win Rate</span>
-                <span class="ts-winrate-pct" style="color:${winColor}">${winRate}%</span>
-            </div>
-            <div class="ts-winrate-bar"><div class="ts-winrate-fill" style="width:${winRate}%;background:${barColor};"></div></div>
         </div>`;
+
+    const trophyCellHTML = `
+        <div class="ts-stat-cell" style="background:rgba(242,194,78,0.07);border:1px solid rgba(242,194,78,0.25);">
+            <div class="ts-stat-icon">🏆</div>
+            <div class="ts-stat-body">
+                <div class="ts-stat-cap">แชมป์</div>
+                <div class="ts-stat-val" style="color:#F2C24E;">${trophies}<span class="unit">สมัย</span></div>
+            </div>
+        </div>`;
+
+    const streakCellHTML = maxWinStreak >= 1 ? `
+        <div class="ts-stat-cell" style="background:rgba(96,165,250,0.07);border:1px solid rgba(96,165,250,0.22);">
+            <div class="ts-stat-icon">🔥</div>
+            <div class="ts-stat-body">
+                <div class="ts-stat-cap">ชนะรวดสูงสุด</div>
+                <div class="ts-stat-val" style="color:#60a5fa;">${maxWinStreak}<span class="unit">วิน</span></div>
+            </div>
+        </div>` : '';
+
+    const rankWinRow = `<div class="ts-top-grid">${winRateCellHTML}${trophyCellHTML}${streakCellHTML}</div>`;
 
     document.getElementById('ts-modal-body').innerHTML = `
         ${rankWinRow}
@@ -7022,12 +7221,14 @@ function openMatchViewModal(matchId) {
             ${teamLogoHTML(hInfo)}
             <div class="se-mc-name${hWin?' win':''}">${hInfo.team}</div>
             <div class="se-mc-player">${hInfo.player}</div>
+            ${_buildFormDotsHTML(m.homeId)}
         </div>
         <div class="se-mc-center">${scoreCenter}</div>
         <div class="se-mc-team">
             ${teamLogoHTML(aInfo)}
             <div class="se-mc-name${aWin?' win':''}">${aInfo.team}</div>
             <div class="se-mc-player">${aInfo.player}</div>
+            ${_buildFormDotsHTML(m.awayId)}
         </div>
     `;
 
@@ -7054,14 +7255,19 @@ function openMatchViewModal(matchId) {
     // ── H2H Preview (visible to all) ──────────────────────────────────────
     const h2hArea = document.getElementById('se-h2h-area');
     if (h2hArea) {
-        const s1 = _h2hTeamStats(m.homeId, m.awayId);
-        const s2 = _h2hTeamStats(m.awayId, m.homeId);
+        // Same fix as the edit-mode H2H block above: derive summary pills from the
+        // SAME filtered records used for the cards, so counts always agree.
+        const allRecordsV = _getH2HRecords(m.homeId, m.awayId);
+        const records = m.status === 'finished'
+            ? allRecordsV
+            : allRecordsV.filter(r => r.matchId === undefined || r.matchId !== m.id);
+        const s1 = _h2hStatsFromRecords(records, m.homeId);
+        const s2 = _h2hStatsFromRecords(records, m.awayId);
         const total = s1.games;
         const standings = calculateStandings();
         const rank1 = standings.findIndex(t => t.id === m.homeId) + 1;
         const rank2 = standings.findIndex(t => t.id === m.awayId) + 1;
         const rankLabel = r => r > 0 ? `อันดับ ${r}` : '—';
-        const records = _getH2HRecords(m.homeId, m.awayId).filter(r => r.matchId === undefined || r.matchId !== m.id);
         const recentSorted = [...records].sort((a, b) => (a.season || 0) - (b.season || 0)).slice(-5);
         const h2hCardsHTML = _buildH2HCardsHTML(recentSorted, m.homeId, hInfoV, aInfoV);
 
@@ -7129,6 +7335,7 @@ async function resetScoreFromModal() {
     match.awayScore = null;
     if (match.winnerId !== undefined) match.winnerId = null;
     match.status = null;
+    _removeH2HRecordForMatch(match); // ล้างสถิติ H2H ที่เคยบันทึกไว้ของแมตช์นี้ด้วย
     let fmt = state.tournamentFormat || 'league';
     if (fmt !== 'league') renderAdminDock();
     renderLeague(); saveDataToCloud();
@@ -7145,6 +7352,24 @@ function _closeEvPopup() {
 document.addEventListener('click', function(e) {
     if (!e.target.closest('.ev-popup-wrap')) _closeEvPopup();
 }, true);
+
+// ── Safe rendering helpers for user/cloud-supplied evidence image URLs ──────
+// evidenceImg is stored in shared cloud state, so it must never be trusted
+// as "our own data" when rendered back into HTML/attributes/URLs.
+// 1) Only allow http(s) or data:image URLs — blocks javascript:/vbscript:
+//    schemes from executing via window.open() or <a href>.
+// 2) Escape when interpolated into a quoted JS string inside an inline
+//    onclick handler, so a crafted value (e.g. containing `');...`) cannot
+//    break out of the string and inject arbitrary script.
+function _safeEvidenceUrl(url) {
+    if (typeof url !== 'string') return '';
+    const trimmed = url.trim();
+    if (/^https?:\/\//i.test(trimmed) || /^data:image\//i.test(trimmed)) return trimmed;
+    return '';
+}
+function _escJsAttr(str) {
+    return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/[\r\n]/g, '');
+}
 
 function uploadMatchEvidenceFromModal(matchId) {
     closeScoreModal();
@@ -7276,8 +7501,9 @@ function viewMatchEvidence(matchId) {
     const img = document.getElementById("evidence-lightbox-img");
     const dl = document.getElementById("evidence-lightbox-download");
     const delBtn = document.getElementById("evidence-lightbox-delete-btn");
-    img.src = match.evidenceImg;
-    dl.href = match.evidenceImg;
+    const _safeImg = _safeEvidenceUrl(match.evidenceImg);
+    img.src = _safeImg;
+    dl.href = _safeImg;
     if (delBtn) delBtn.style.display = !state.isViewOnly ? 'inline-block' : 'none';
     lb.classList.add("open");
     history.pushState({ lightboxOpen: true }, "");
@@ -7320,14 +7546,23 @@ let debounceTimer;
 function saveDataToCloud() {
     if (state.isViewOnly) return;
     if (window._READONLY_MODE) { showToast('🔒 Readonly Mode — ไม่บันทึกข้อมูล', 'info'); return; }
+    // สำรองข้อมูลไว้ในเครื่องทันที เผื่อบันทึกขึ้นคลาวด์ไม่สำเร็จแล้วต้องรีเฟรชหน้า
+    _saveLocalDraft();
+    clearTimeout(_pendingSaveRetryTimer);
     showStatus("⏳ กำลังบันทึก...", true); clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
-        fetch(`https://api.jsonbin.io/v3/b/${state.binId}`, {
+        fetchWithRetry(`https://api.jsonbin.io/v3/b/${state.binId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json", "X-Master-Key": BIN_MASTER_KEY },
             body: JSON.stringify(_getStateForCloud())
         })
-        .then(res => res.json()).then(() => { showStatus("☁️ บันทึกขึ้นคลาวด์แล้ว"); }).catch(() => { showStatus("❌ บันทึกล้มเหลว"); });
+        .then(() => { _clearLocalDraft(); showStatus("☁️ บันทึกขึ้นคลาวด์แล้ว"); })
+        .catch(() => {
+            showStatus("❌ บันทึกล้มเหลว — จะลองใหม่ให้อัตโนมัติ");
+            showToast('⚠️ บันทึกขึ้นคลาวด์ไม่สำเร็จ ระบบเก็บสำรองไว้ในเครื่องแล้ว และจะลองบันทึกซ้ำให้ อย่าเพิ่งปิดหน้านี้', 'warning');
+            // ลองบันทึกซ้ำอัตโนมัติอีกครั้งใน 15 วินาที แทนที่จะปล่อยให้ข้อมูลค้าง
+            _pendingSaveRetryTimer = setTimeout(saveDataToCloud, 15000);
+        });
     }, 1000);
 }
 
@@ -7678,7 +7913,7 @@ function renderStandings() {
                     <img class="${logoClass}" src="${team.logo}" onerror="_logoFallback(this,'${team.team.replace(/'/g,"\\'")}')">
                     <div class="team-info">
                         <div class="no1-team-label">
-                            <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+                            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                                 <span class="no1-shimmer-name">${team.team}</span>
                                 <span class="no1-days-badge">${daysLabel}</span>
                                 ${isDefending ? defendingBadge : ''}
@@ -7805,6 +8040,30 @@ function _buildMatchScoreHTML(m, fmt) {
     return scoreHTML;
 }
 
+// Current league rank for a team, cached per render pass. League-only —
+// rank isn't a meaningful concept mid-cup.
+function _matchRowRank(teamId, isLeague) {
+    if (!isLeague || !teamId || teamId === 'BYE') return null;
+    if (!_matchRowStandingsRankCache) {
+        _matchRowStandingsRankCache = new Map(calculateStandings().map((t, i) => [t.id, i + 1]));
+    }
+    return _matchRowStandingsRankCache.get(teamId) || null;
+}
+let _matchRowStandingsRankCache = null;
+// Desktop: "#N" chip sitting between the name and the crest (same row, no
+// extra height, logo stays unobstructed).
+function _matchRowRankChipHTML(rank) {
+    if (!rank) return '';
+    return `<span class="match-team-rank${rank <= 3 ? ' rank-top3' : ''}">#${rank}</span>`;
+}
+// Mobile: the chip has no spare width to sit in, so the rank rides inside
+// the name text itself instead of claiming its own flex slot — CSS toggles
+// which of the two (chip vs inline prefix) is visible per breakpoint.
+function _matchRowRankInlineHTML(rank) {
+    if (!rank) return '';
+    return `<span class="match-team-rank-inline${rank <= 3 ? ' rank-top3' : ''}">#${rank}</span> `;
+}
+
 function _buildMatchRowDiv(m, fmt) {
     let hInfo = state.teams.find(t => t.id === m.homeId) || { player: m.homeId === 'BYE' ? 'BYE' : 'Unknown', team: m.homeId === 'BYE' ? 'BYE' : 'Unknown', logo: '', isFlag: false, id: m.homeId };
     let aInfo = state.teams.find(t => t.id === m.awayId) || { player: m.awayId === 'BYE' ? 'BYE' : 'Unknown', team: m.awayId === 'BYE' ? 'BYE' : 'Unknown', logo: '', isFlag: false, id: m.awayId };
@@ -7812,6 +8071,12 @@ function _buildMatchRowDiv(m, fmt) {
     let awayLogoClass = aInfo.isFlag ? "team-logo flag-img" : "team-logo club-img";
     let scoreHTML = _buildMatchScoreHTML(m, fmt);
     let isLeague = fmt === 'league';
+    let homeRank = _matchRowRank(hInfo.id, isLeague);
+    let awayRank = _matchRowRank(aInfo.id, isLeague);
+    let homeRankBadgeHTML = _matchRowRankChipHTML(homeRank);
+    let awayRankBadgeHTML = _matchRowRankChipHTML(awayRank);
+    let homeRankInlineHTML = _matchRowRankInlineHTML(homeRank);
+    let awayRankInlineHTML = _matchRowRankInlineHTML(awayRank);
     let dragAttrs = (isLeague && !state.isViewOnly) ? `draggable="true" ondragstart="handleTeamDragStart(event)" ondragover="handleTeamDragOver(event)" ondragleave="handleTeamDragLeave(event)" ondrop="handleTeamDrop(event)"` : '';
     let draggableClass = (isLeague && !state.isViewOnly) ? 'admin-draggable' : '';
     let chips = _buildOddsChips(m);
@@ -8249,25 +8514,131 @@ function saveAdBanner() {
 
 // ══════════════════════════════════════════════════════════════════════════════
 
+// ─── Fixtures view state (round pager / pending / history tabs) ───────────────
+let _fxTab = 'current';        // 'current' | 'pending' | 'history'
+let _fxRoundPointer = null;    // currently viewed round number in the "current" tab
+let _fxHistoryOpenRounds = {}; // { [round]: true } which history rounds are expanded
+
+function _fxIsMatchUnfinished(m) {
+    return m.homeId !== 'BYE' && m.awayId !== 'BYE' &&
+           !(m.status === 'finished' && m.homeScore !== null && m.awayScore !== null);
+}
+
+function _fxDefaultRound(maxRound) {
+    for (let r = 1; r <= maxRound; r++) {
+        const roundMatches = state.matches.filter(m => m.round === r && m.homeId !== 'BYE' && m.awayId !== 'BYE');
+        const finishedCount = roundMatches.filter(m => m.status === 'finished' && m.homeScore !== null && m.awayScore !== null).length;
+        const hasUnfinished = roundMatches.some(_fxIsMatchUnfinished);
+        // ถ้ารอบนี้แข่งจบไปแล้วมากกว่า 3 คู่ ถือว่ารอบนี้ผ่านไปแล้ว ข้ามไปโชว์รอบถัดไปเป็นค่าเริ่มต้น
+        // (คู่ที่เหลือค้างในรอบนี้จะยังไปโผล่ในแท็บ "นัดตกค้าง" ตามปกติ)
+        if (hasUnfinished && finishedCount <= 3) return r;
+    }
+    return maxRound;
+}
+
+function setFixturesTab(tab) {
+    _fxTab = tab;
+    renderLeague();
+}
+
+function fxChangeRound(delta) {
+    const maxRound = Math.max(...state.matches.filter(m => m.round).map(m => m.round));
+    _fxRoundPointer = Math.min(maxRound, Math.max(1, (_fxRoundPointer || 1) + delta));
+    renderLeague();
+}
+
+function fxToggleHistoryRound(round) {
+    _fxHistoryOpenRounds[round] = !_fxHistoryOpenRounds[round];
+    renderLeague();
+}
+
 function renderLeague() {
     let fmt = state.tournamentFormat || 'league';
+    _matchRowStandingsRankCache = null; // recompute fresh ranks for this render pass
     renderStandings();
     renderCupBracket();
     let fixturesArea = document.getElementById("fixtures-area");
     fixturesArea.innerHTML = "";
-    if (state.matches.length === 0) return;
+    const tabsEl = document.getElementById("fixtures-tabs");
+    const pagerEl = document.getElementById("fx-round-pager");
+    const searchWrapEl = document.getElementById("fx-history-search");
+    if (state.matches.length === 0) { tabsEl.style.display = "none"; pagerEl.style.display = "none"; searchWrapEl.style.display = "none"; return; }
     document.getElementById("admin-drag-hint").style.display = (!state.isViewOnly && (fmt === 'league' || fmt === 'cup' || fmt === 'cup-2leg')) ? "inline-block" : "none";
 
     if (fmt === 'league') {
-        var maxRound = Math.max(...state.matches.map(m => m.round));
-        for (let r = 1; r <= maxRound; r++) {
-            let roundMatches = state.matches.filter(m => m.round === r);
-            var divRound = document.createElement("div"); divRound.className = "round-title"; divRound.innerText = `ROUND MATCH ${r} ${r <= maxRound/2 ? '(STAGE 1)' : '(STAGE 2)'}`;
-            fixturesArea.appendChild(divRound);
-            roundMatches.forEach(m => fixturesArea.appendChild(_buildMatchRowDiv(m, fmt)));
+        tabsEl.style.display = "flex";
+        document.querySelectorAll('#fixtures-tabs .fx-tab-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.fxTab === _fxTab));
+
+        const maxRound = Math.max(...state.matches.filter(m => m.round).map(m => m.round));
+        const nonByeMatches = state.matches.filter(m => m.homeId !== 'BYE' && m.awayId !== 'BYE');
+        // "ตกค้าง" = รอบที่มีอย่างน้อย 1 คู่แข่งจบแล้ว (แปลว่ารอบนี้เริ่มแข่งกันไปแล้ว)
+        // แต่ยังมีบางคู่ในรอบเดียวกันที่ยังไม่มีผลคะแนน — นับเฉพาะคู่ที่เหลือค้างในรอบนั้น
+        const roundsWithResult = new Set(nonByeMatches.filter(m => m.status === 'finished' && m.homeScore !== null && m.awayScore !== null).map(m => m.round));
+        const pendingMatches = nonByeMatches.filter(m => _fxIsMatchUnfinished(m) && roundsWithResult.has(m.round)).sort((a, b) => (a.round - b.round) || (a.id - b.id));
+        document.getElementById("fx-pending-count").textContent = pendingMatches.length > 0 ? pendingMatches.length : '';
+        document.getElementById("fx-pending-count").style.display = pendingMatches.length > 0 ? "inline-block" : "none";
+
+        if (_fxTab === 'current') {
+            pagerEl.style.display = "flex"; searchWrapEl.style.display = "none";
+            if (_fxRoundPointer === null) _fxRoundPointer = _fxDefaultRound(maxRound);
+            _fxRoundPointer = Math.min(maxRound, Math.max(1, _fxRoundPointer));
+            document.getElementById("fx-round-label").textContent = `ROUND MATCH ${_fxRoundPointer} ${_fxRoundPointer <= maxRound/2 ? '(STAGE 1)' : '(STAGE 2)'}`;
+            document.querySelectorAll('.fx-pager-btn')[0].disabled = _fxRoundPointer <= 1;
+            document.querySelectorAll('.fx-pager-btn')[1].disabled = _fxRoundPointer >= maxRound;
+
+            const roundMatches = state.matches.filter(m => m.round === _fxRoundPointer);
+            if (roundMatches.length === 0) {
+                fixturesArea.innerHTML = `<div class="fx-empty-msg">ไม่มีคู่แข่งขันในรอบนี้</div>`;
+            } else {
+                roundMatches.forEach(m => fixturesArea.appendChild(_buildMatchRowDiv(m, fmt)));
+            }
+        } else if (_fxTab === 'pending') {
+            pagerEl.style.display = "none"; searchWrapEl.style.display = "none";
+            if (pendingMatches.length === 0) {
+                fixturesArea.innerHTML = `<div class="fx-empty-msg">🎉 ไม่มีนัดตกค้าง แข่งกันครบทุกคู่ที่ถึงกำหนดแล้ว</div>`;
+            } else {
+                let lastRound = null;
+                pendingMatches.forEach(m => {
+                    if (m.round !== lastRound) {
+                        lastRound = m.round;
+                        const tag = document.createElement("div"); tag.className = "fx-pending-round-tag"; tag.textContent = `จากรอบที่ ${m.round}`;
+                        fixturesArea.appendChild(tag);
+                    }
+                    fixturesArea.appendChild(_buildMatchRowDiv(m, fmt));
+                });
+            }
+        } else if (_fxTab === 'history') {
+            pagerEl.style.display = "none"; searchWrapEl.style.display = "block";
+            const query = (document.getElementById("fx-history-search-input").value || '').trim().toLowerCase();
+            let finishedMatches = nonByeMatches.filter(m => m.status === 'finished' && m.homeScore !== null && m.awayScore !== null);
+            if (query) {
+                finishedMatches = finishedMatches.filter(m => {
+                    const h = state.teams.find(t => t.id === m.homeId), a = state.teams.find(t => t.id === m.awayId);
+                    const hay = [h && h.team, h && h.player, a && a.team, a && a.player].filter(Boolean).join(' ').toLowerCase();
+                    return hay.includes(query);
+                });
+            }
+            if (finishedMatches.length === 0) {
+                fixturesArea.innerHTML = `<div class="fx-empty-msg">ยังไม่มีผลการแข่งขัน${query ? 'ที่ตรงกับคำค้นหา' : ''}</div>`;
+            } else {
+                const rounds = [...new Set(finishedMatches.map(m => m.round))].sort((a, b) => b - a);
+                rounds.forEach((r, idx) => {
+                    const isOpen = query ? true : (_fxHistoryOpenRounds[r] !== undefined ? _fxHistoryOpenRounds[r] : idx === 0);
+                    const header = document.createElement("div");
+                    header.className = "round-title fx-history-round-header" + (isOpen ? " open" : "");
+                    header.onclick = () => fxToggleHistoryRound(r);
+                    header.innerHTML = `<span>ROUND MATCH ${r} ${r <= maxRound/2 ? '(STAGE 1)' : '(STAGE 2)'}</span><span class="fx-collapse-arrow">▲</span>`;
+                    fixturesArea.appendChild(header);
+                    const body = document.createElement("div");
+                    body.className = "fx-history-round-body" + (isOpen ? " open" : "");
+                    finishedMatches.filter(m => m.round === r).forEach(m => body.appendChild(_buildMatchRowDiv(m, fmt)));
+                    fixturesArea.appendChild(body);
+                });
+            }
         }
         return;
     }
+    tabsEl.style.display = "none"; pagerEl.style.display = "none"; searchWrapEl.style.display = "none";
 
     // Cup formats — render per-tieId based on actual leg count
     let cupRounds = [...new Set(state.matches.filter(m => !m.isThirdPlace && !m.isConsolation).map(m => m.cupRound || m.round))].sort((a, b) => a - b);
@@ -8439,7 +8810,7 @@ function _loadBinData(idToLoad) {
     state.binId = idToLoad;
     localStorage.setItem('wc_online_bin_id', idToLoad);
     showStatus("⏳ กำลังโหลด...", true);
-    fetch(`https://api.jsonbin.io/v3/b/${idToLoad}/latest`, { headers: { "X-Master-Key": BIN_MASTER_KEY } }).then(res => res.json())
+    fetchWithRetry(`https://api.jsonbin.io/v3/b/${idToLoad}/latest`, { headers: { "X-Master-Key": BIN_MASTER_KEY } })
     .then(resData => {
         let r = resData.record;
         state.teams = r.teams || [];
@@ -8480,7 +8851,30 @@ function _loadBinData(idToLoad) {
         showStatus("☁️ โหลดข้อมูลแล้ว"); renderHeader(); renderLeague(); refreshUIState(); renderAnnouncement();
         // เริ่ม auto-refresh สำหรับ viewer
         if (state.isViewOnly) _startAutoRefresh();
-    }).catch(() => showStatus("❌ โหลดไม่สำเร็จ"));
+        // ถ้ามีข้อมูลที่เคยบันทึกขึ้นคลาวด์ไม่สำเร็จค้างไว้ในเครื่องนี้ ถามว่าจะกู้คืนไหม
+        _offerLocalDraftRestore();
+    }).catch(() => {
+        showStatus("❌ โหลดไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ตแล้วลองกด \"รีเฟรชข้อมูล\" อีกครั้ง");
+        showToast('⚠️ โหลดข้อมูลจากคลาวด์ไม่สำเร็จ (ลองใหม่ให้อัตโนมัติแล้วแต่ยังไม่สำเร็จ)', 'warning');
+    });
+}
+
+// ถามผู้ใช้ว่าต้องการกู้คืนข้อมูลที่ยังไม่ได้บันทึกขึ้นคลาวด์จากครั้งก่อนหรือไม่
+function _offerLocalDraftRestore() {
+    if (state.isViewOnly) return; // มีแค่แอดมิน/ผู้เล่นที่แก้ไขข้อมูลได้ ถึงจะมีดราฟต์ค้าง
+    const draft = _getLocalDraft();
+    if (!draft || !draft.data) return;
+    const savedAgo = Math.round((Date.now() - draft.savedAt) / 60000);
+    showConfirm(`พบข้อมูลที่แก้ไขไว้เมื่อประมาณ ${savedAgo < 1 ? 'ไม่ถึง 1' : savedAgo} นาทีที่แล้ว แต่ยังบันทึกขึ้นคลาวด์ไม่สำเร็จ ต้องการกู้คืนและบันทึกใหม่อีกครั้งหรือไม่?`, 'กู้คืน', 'ทิ้งไป').then(ok => {
+        if (ok) {
+            Object.assign(state, draft.data);
+            renderHeader(); renderLeague(); refreshUIState(); renderAnnouncement();
+            saveDataToCloud();
+            showToast('✅ กู้คืนข้อมูลแล้ว กำลังบันทึกขึ้นคลาวด์อีกครั้ง', 'success');
+        } else {
+            _clearLocalDraft();
+        }
+    });
 }
 
 window.onload = function() {
@@ -8772,6 +9166,7 @@ async function resetBracketMatchScore(matchId) {
     m.homeScore = null;
     m.awayScore = null;
     if (m.winnerId !== undefined) m.winnerId = null;
+    _removeH2HRecordForMatch(m); // ล้างสถิติ H2H ที่เคยบันทึกไว้ของแมตช์นี้ด้วย
     closeBracketModal();
     let fmt = state.tournamentFormat || 'league';
     if (fmt !== 'league') renderAdminDock();
@@ -9321,6 +9716,19 @@ let _h2hAwayId = null;
 function _h2hKey(a, b) { return [a, b].sort().join('|'); }
 function _getH2HRecords(aId, bId) { return (state.h2h || {})[_h2hKey(aId, bId)] || []; }
 
+// Remove the auto-recorded H2H entry for a match whose score was cleared/reset.
+// Without this, resetting a match's score leaves its old (now-invalid) result
+// permanently counted in head-to-head history and stats.
+function _removeH2HRecordForMatch(match) {
+    if (!match || !match.homeId || !match.awayId) return;
+    if (match.homeId === 'BYE' || match.awayId === 'BYE') return;
+    if (!state.h2h) return;
+    let key = _h2hKey(match.homeId, match.awayId);
+    let list = state.h2h[key];
+    if (!list) return;
+    state.h2h[key] = list.filter(r => r.matchId !== match.id);
+}
+
 // ── H2H logo match-cards (shared by score modal + view modal) ─────────────
 // records: array sorted newest-first; refHomeId: the team treated as "home" in this matchup
 function _buildH2HCardsHTML(records, refHomeId, hInfo, aInfo) {
@@ -9338,7 +9746,6 @@ function _buildH2HCardsHTML(records, refHomeId, hInfo, aInfo) {
         const leftScore  = recordHomeIsRef ? r.hs : r.as;
         const rightScore = recordHomeIsRef ? r.as : r.hs;
         const res = leftScore === rightScore ? 'D' : leftScore > rightScore ? 'W' : 'L';
-        const resLabel = res === 'W' ? 'ชนะ' : res === 'D' ? 'เสมอ' : 'แพ้';
         const note = r.note && r.note !== 'อัตโนมัติ' ? r.note : '';
         return `<div class="se-h2h-card" style="border-color:${res==='W'?'rgba(34,197,94,0.25)':res==='L'?'rgba(239,68,68,0.22)':'rgba(234,179,8,0.22)'}">
             <span class="se-h2h-season">SS${r.season||'?'}</span>
@@ -9347,7 +9754,6 @@ function _buildH2HCardsHTML(records, refHomeId, hInfo, aInfo) {
                 <span class="se-h2h-vscore">${leftScore}–${rightScore}</span>
                 ${_logoImg(aInfo)}
             </div>
-            <span class="se-h2h-res ${res}">${resLabel}</span>
             ${note ? `<span class="se-h2h-note">${note}</span>` : ''}
         </div>`;
     }).join('') + `</div>`;
@@ -9383,9 +9789,17 @@ function _autoRecordH2H(match) {
 }
 
 function _h2hTeamStats(teamId, oppId) {
-    let records = _getH2HRecords(teamId, oppId);
+    return _h2hStatsFromRecords(_getH2HRecords(teamId, oppId), teamId);
+}
+
+// Same W/D/L/GF/GA aggregation as _h2hTeamStats, but from a caller-supplied
+// records array. Use this (instead of _h2hTeamStats) whenever the summary
+// pills must match a filtered card list (e.g. score modal excludes the
+// currently-open match) — otherwise the "รวม" count and the visible cards
+// disagree by however many records were filtered out.
+function _h2hStatsFromRecords(records, teamId) {
     let w = 0, d = 0, l = 0, gf = 0, ga = 0;
-    records.forEach(r => {
+    (records || []).forEach(r => {
         let isHome = r.homeId === teamId;
         let ts = isHome ? r.hs : r.as;
         let os = isHome ? r.as : r.hs;
