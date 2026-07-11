@@ -3438,7 +3438,7 @@
             <div id="fixtures-tabs" class="fx-tabs" style="display:none;">
                 <button type="button" class="fx-tab-btn active" data-fx-tab="current" onclick="setFixturesTab('current')">🗓️ รอบปัจจุบัน</button>
                 <button type="button" class="fx-tab-btn" data-fx-tab="pending" onclick="setFixturesTab('pending')">⏳ นัดตกค้าง <span id="fx-pending-count" class="fx-tab-badge"></span></button>
-                <button type="button" class="fx-tab-btn" data-fx-tab="history" onclick="setFixturesTab('history')">📜 ผลย้อนหลังทั้งหมด</button>
+                <button type="button" class="fx-tab-btn" data-fx-tab="history" onclick="setFixturesTab('history')">📜 ผลย้อนหลัง</button>
             </div>
 
             <div id="fx-round-pager" class="fx-round-pager" style="display:none;">
@@ -10526,36 +10526,115 @@ function saveCommentFromPopup() {
 
 <!-- ── YouTube IFrame API (music player) ── -->
 <script>
-var _ytPlayer = null, _ytReady = false, _musicPlaying = false;
-var _ytVideoId = '16nZ6K7sim4';
-(function(){ var t=document.createElement('script'); t.src='https://www.youtube.com/iframe_api'; document.head.appendChild(t); })();
-function onYouTubeIframeAPIReady(){
+var _ytPlayer = null, _ytReady = false, _musicPlaying = false, _ytMuted = true;
+var _ytPrankUnlocked = false;
+
+/* Playlist: Don Miguelo → Haaland Ha Ha Ha → loop */
+var _ytPlaylist = ['16nZ6K7sim4', 'cixr-7fMWwU'];
+var _ytTrackNames = ['Don Miguelo - Y Que Fue?', 'CTID - Haaland (Ha Ha Ha)'];
+var _ytCurrentTrack = 0;
+
+/* Load YT IFrame API */
+window.onYouTubeIframeAPIReady = function(){
     _ytPlayer = new YT.Player('yt-music-frame',{
-        height:'1',width:'1',videoId:_ytVideoId,
-        playerVars:{autoplay:1,controls:0,loop:1,playlist:_ytVideoId,playsinline:1,rel:0,modestbranding:1},
+        height:'1', width:'1', videoId:_ytPlaylist[0],
+        playerVars:{
+            autoplay:1,
+            mute:1,
+            controls:0,
+            loop:0,           /* we handle rotation manually */
+            playlist:_ytPlaylist.join(','),
+            playsinline:1,
+            rel:0,
+            modestbranding:1,
+            origin: location.origin
+        },
         events:{
             onReady:function(e){
-                _ytReady=true;
-                try{ e.target.playVideo(); setTimeout(function(){ var s=_ytPlayer.getPlayerState(); if(s===1||s===3) _setMusicState(true); },800); }catch(err){}
+                _ytReady = true;
+                try{ e.target.mute(); e.target.playVideo(); }catch(err){}
+                /* ── PRANK: unmute on very first user interaction ── */
+                var _prankHandler = function(){
+                    if(_ytPrankUnlocked) return;
+                    _ytPrankUnlocked = true;
+                    document.removeEventListener('click',     _prankHandler, true);
+                    document.removeEventListener('touchstart',_prankHandler, true);
+                    document.removeEventListener('keydown',   _prankHandler, true);
+                    setTimeout(function(){
+                        try{
+                            _ytMuted = false;
+                            _ytPlayer.unMute();
+                            _ytPlayer.setVolume(75);
+                            _ytPlayer.playVideo();
+                            _setMusicState(true);
+                        }catch(e){}
+                    }, 300);
+                };
+                document.addEventListener('click',     _prankHandler, true);
+                document.addEventListener('touchstart',_prankHandler, true);
+                document.addEventListener('keydown',   _prankHandler, true);
             },
             onStateChange:function(e){
-                if(e.data===1) _setMusicState(true);
-                if(e.data===2) _setMusicState(false);
-                if(e.data===0) _ytPlayer.playVideo();
-            }
+                /* video ended (0) → advance to next track */
+                if(e.data === 0){
+                    _ytCurrentTrack = (_ytCurrentTrack + 1) % _ytPlaylist.length;
+                    _updateNowPlaying();
+                    try{
+                        _ytPlayer.loadVideoById(_ytPlaylist[_ytCurrentTrack]);
+                        if(!_ytMuted){ _ytPlayer.unMute(); _ytPlayer.setVolume(75); }
+                    }catch(err){}
+                }
+                if(e.data === 1 && !_ytMuted) _setMusicState(true);
+                if(e.data === 2) _setMusicState(false);
+            },
+            onError:function(e){ console.warn('[music] YT error', e.data); }
         }
     });
-}
+};
+
+(function(){
+    var t = document.createElement('script');
+    t.src = 'https://www.youtube.com/iframe_api';
+    t.onerror = function(){ console.warn('[music] YT API failed to load'); };
+    document.head.appendChild(t);
+})();
+
 function toggleMusic(){
-    if(!_ytReady||!_ytPlayer){setTimeout(toggleMusic,400);return;}
-    if(_musicPlaying){_ytPlayer.pauseVideo();_setMusicState(false);}
-    else{_ytPlayer.playVideo();_setMusicState(true);}
+    if(!_ytPlayer){ setTimeout(toggleMusic, 500); return; }
+    if(_musicPlaying){
+        try{ _ytPlayer.pauseVideo(); }catch(e){}
+        _setMusicState(false);
+    } else {
+        try{
+            _ytPrankUnlocked = true;
+            _ytMuted = false;
+            _ytPlayer.unMute();
+            _ytPlayer.setVolume(75);
+            _ytPlayer.playVideo();
+        }catch(e){}
+        _setMusicState(true);
+    }
 }
+
+function _updateNowPlaying(){
+    var pill = document.getElementById('now-playing-pill');
+    if(!pill) return;
+    var txt = pill.querySelector('.np-text');
+    if(txt) txt.textContent = _ytTrackNames[_ytCurrentTrack];
+}
+
 function _setMusicState(p){
-    _musicPlaying=p;
-    var btn=document.getElementById('music-btn'), pill=document.getElementById('now-playing-pill');
-    if(p){btn.classList.add('playing');pill.classList.add('visible');}
-    else{btn.classList.remove('playing');pill.classList.remove('visible');}
+    _musicPlaying = p;
+    var btn  = document.getElementById('music-btn');
+    var pill = document.getElementById('now-playing-pill');
+    if(btn){
+        if(p){ btn.classList.add('playing'); }
+        else { btn.classList.remove('playing'); }
+    }
+    if(pill){
+        if(p){ pill.classList.add('visible'); _updateNowPlaying(); }
+        else { pill.classList.remove('visible'); }
+    }
 }
 </script>
 </body>
