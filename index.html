@@ -1384,7 +1384,7 @@
         .bk-modal-box { background: linear-gradient(160deg,#0d1f38 0%,#080f1e 100%); border: 1px solid rgba(35,65,110,0.8); border-radius: 16px; min-width: 300px; max-width: 400px; width: 92%; box-shadow: 0 20px 60px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.03); overflow: hidden; }
         .bk-modal-head { background: linear-gradient(90deg,rgba(10,24,50,0.98),rgba(5,12,28,0.98)); padding: 11px 14px 10px; border-bottom: 1px solid rgba(25,50,90,0.5); display: flex; justify-content: space-between; align-items: center; }
         .bk-modal-title { font-family: 'Orbitron', sans-serif; font-size: 10px; color: #F2C24E; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
-        .bk-modal-close { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); color: #6a88a8; font-size: 14px; cursor: pointer; line-height: 1; padding: 4px 9px; border-radius: 6px; transition: all 0.15s; }
+        .bk-modal-close { display:flex; align-items:center; justify-content:center; width:28px; height:28px; flex-shrink:0; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); color: #6a88a8; font-size: 14px; cursor: pointer; line-height: 1; padding: 0; border-radius: 6px; transition: all 0.15s; }
         .bk-modal-close:hover { color: #fff; background: rgba(255,255,255,0.13); }
         .bk-modal-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 8px; }
 
@@ -3782,7 +3782,7 @@
   <div style="background:linear-gradient(145deg,#0d1f3c,#081424);border:2px solid rgba(242,194,78,0.4);border-radius:16px;padding:24px;width:100%;max-width:620px;margin:auto;box-shadow:0 0 50px rgba(242,194,78,0.1);">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
       <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#F2C24E;letter-spacing:1.5px;">📋 รอตรวจสอบผลการแข่งขัน</div>
-      <button onclick="closeAdminPendingModal()" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:15px;line-height:1;">✕</button>
+      <button onclick="closeAdminPendingModal()" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:15px;line-height:1;flex-shrink:0;padding:0;">✕</button>
     </div>
     <div id="admin-pending-list"></div>
   </div>
@@ -3860,7 +3860,7 @@
         <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#60a5fa;letter-spacing:2px;">📊 H2H MANAGER</div>
         <div style="font-size:11px;color:#475569;margin-top:3px;">จัดการประวัติการพบกัน — บันทึกสถิติเก่าหรือปัจจุบัน</div>
       </div>
-      <button onclick="closeH2HManager()" style="width:34px;height:34px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;border-radius:8px;cursor:pointer;font-size:15px;font-weight:700;padding:0;">✕</button>
+      <button onclick="closeH2HManager()" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;border-radius:8px;cursor:pointer;font-size:15px;font-weight:700;padding:0;flex-shrink:0;">✕</button>
     </div>
 
     <!-- ── Add Record Form ── -->
@@ -3922,7 +3922,7 @@
                 <div style="font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;color:#60a5fa;letter-spacing:2px;">📊 H2H HISTORY</div>
                 <div id="h2h-modal-subtitle" style="font-size:11px;color:#64748b;margin-top:2px;"></div>
             </div>
-            <button onclick="closeH2HModal()" style="width:32px;height:32px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700;padding:0;">✕</button>
+            <button onclick="closeH2HModal()" style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700;padding:0;flex-shrink:0;">✕</button>
         </div>
         <div id="h2h-summary-bar" style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.15);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#93c5fd;line-height:1.7;flex-shrink:0;"></div>
         <div id="h2h-records-list" style="overflow:auto;flex:1;min-height:0;margin-bottom:12px;"></div>
