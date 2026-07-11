@@ -954,8 +954,8 @@
         .ts-modal-logo { width:52px; height:52px; object-fit:contain; border-radius:8px; flex-shrink:0;
             box-shadow:0 0 14px rgba(242,194,78,0.18); }
         .ts-modal-logo.flag { width:60px; height:40px; border-radius:5px; object-fit:cover; }
-        .ts-modal-title { font-family:'Orbitron',sans-serif; font-size:15px; font-weight:900; color:#fff; margin:0; }
-        .ts-modal-sub { font-size:11px; color:var(--wc-text-sub); margin:3px 0 0; }
+        .ts-modal-title { font-family:'Orbitron',sans-serif; font-size:17px; font-weight:900; color:#fff; margin:0; }
+        .ts-modal-sub { font-size:12px; color:var(--wc-text-sub); margin:3px 0 0; }
         .ts-close-btn { margin-left:auto; width:34px !important; height:34px; border-radius:8px; display:flex;
             align-items:center; justify-content:center; background:rgba(255,255,255,0.05);
             border:1px solid rgba(255,255,255,0.1); color:#94a3b8; cursor:pointer;
@@ -963,11 +963,11 @@
         .ts-close-btn:hover { background:rgba(255,255,255,0.12); color:#fff; transform:none !important; box-shadow:none !important; }
 
         /* ── Body ── */
-        .ts-modal-body { padding:16px 16px 20px; overflow-y:auto; flex:1; min-height:0; display:flex; flex-direction:column; gap:14px; }
+        .ts-modal-body { padding:16px 16px 20px; overflow-y:auto; overflow-x:hidden; flex:1; min-height:0; display:flex; flex-direction:column; gap:14px; max-width:100%; }
 
         /* ── Section label ── */
         .ts-section-title {
-            font-size:10px; font-weight:800; text-transform:uppercase;
+            font-size:11px; font-weight:800; text-transform:uppercase;
             letter-spacing:1.5px; color:rgba(242,194,78,0.55); margin-bottom:8px;
             display:flex; align-items:center; gap:8px;
         }
@@ -975,36 +975,36 @@
 
         /* ── W / D / L three boxes ── */
         .ts-wdl-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-        .ts-wdl-box { border-radius:12px; padding:14px 8px 12px; text-align:center; }
+        .ts-wdl-box { border-radius:12px; padding:14px 8px 12px; text-align:center; min-width:0; }
         .ts-wdl-box.win  { background:rgba(34,197,94,0.1);  border:1px solid rgba(34,197,94,0.25); }
         .ts-wdl-box.draw { background:rgba(234,179,8,0.1);  border:1px solid rgba(234,179,8,0.25); }
         .ts-wdl-box.loss { background:rgba(239,68,68,0.1);  border:1px solid rgba(239,68,68,0.25); }
-        .ts-wdl-val { font-family:'Orbitron',sans-serif; font-size:28px; font-weight:900; line-height:1; margin-bottom:5px; }
+        .ts-wdl-val { font-family:'Orbitron',sans-serif; font-size:30px; font-weight:900; line-height:1; margin-bottom:5px; }
         .ts-wdl-box.win  .ts-wdl-val { color:#22c55e; }
         .ts-wdl-box.draw .ts-wdl-val { color:#eab308; }
         .ts-wdl-box.loss .ts-wdl-val { color:#ef4444; }
-        .ts-wdl-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:rgba(255,255,255,0.38); }
+        .ts-wdl-lbl { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:rgba(255,255,255,0.38); }
 
         /* ── Win-rate bar ── */
         .ts-top-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-        .ts-stat-cell { border-radius:10px; padding:12px 14px; display:flex; align-items:center; gap:10px; }
+        .ts-stat-cell { border-radius:10px; padding:12px 14px; display:flex; align-items:center; gap:10px; min-width:0; }
         .ts-stat-icon { width:34px; height:34px; border-radius:8px; background:rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px; line-height:1; }
         .ts-stat-body { min-width:0; flex:1; }
-        .ts-stat-cap { font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:0.6px; color:rgba(255,255,255,0.32); margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .ts-stat-val { font-family:'Orbitron',sans-serif; font-size:18px; font-weight:900; line-height:1; white-space:nowrap; }
-        .ts-stat-val .unit { font-family:'Prompt',sans-serif; font-size:11px; font-weight:700; opacity:0.65; margin-left:3px; }
+        .ts-stat-cap { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.6px; color:rgba(255,255,255,0.32); margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .ts-stat-val { font-family:'Orbitron',sans-serif; font-size:19px; font-weight:900; line-height:1; white-space:nowrap; }
+        .ts-stat-val .unit { font-family:'Prompt',sans-serif; font-size:12px; font-weight:700; opacity:0.65; margin-left:3px; }
         .ts-winrate-wrap { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding:11px 14px; }
         .ts-winrate-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-        .ts-winrate-label { font-size:11px; color:rgba(255,255,255,0.4); font-weight:700; text-transform:uppercase; letter-spacing:0.8px; }
-        .ts-winrate-pct { font-family:'Orbitron',sans-serif; font-size:17px; font-weight:900; }
+        .ts-winrate-label { font-size:12px; color:rgba(255,255,255,0.4); font-weight:700; text-transform:uppercase; letter-spacing:0.8px; }
+        .ts-winrate-pct { font-family:'Orbitron',sans-serif; font-size:18px; font-weight:900; }
         .ts-winrate-bar { height:6px; background:rgba(255,255,255,0.08); border-radius:99px; overflow:hidden; }
         .ts-winrate-fill { height:100%; border-radius:99px; }
 
         /* ── Goals 3-col ── */
         .ts-goals-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-        .ts-goals-box { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:11px 8px; text-align:center; }
-        .ts-goals-val { font-family:'Orbitron',sans-serif; font-size:20px; font-weight:800; line-height:1; margin-bottom:4px; }
-        .ts-goals-lbl { font-size:9px; color:rgba(255,255,255,0.36); text-transform:uppercase; letter-spacing:0.5px; font-weight:700; }
+        .ts-goals-box { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:10px; padding:11px 8px; text-align:center; min-width:0; }
+        .ts-goals-val { font-family:'Orbitron',sans-serif; font-size:22px; font-weight:800; line-height:1; margin-bottom:4px; }
+        .ts-goals-lbl { font-size:10px; color:rgba(255,255,255,0.36); text-transform:uppercase; letter-spacing:0.5px; font-weight:700; }
 
         /* ── Form 5 — logo match cards, always 5 equal columns ── */
         .ts-form-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:5px; }
@@ -1015,8 +1015,35 @@
             min-width:0;
         }
         .ts-form-card.empty { border-style:dashed; opacity:0.25; pointer-events:none; }
+
+        @media (max-width:480px) {
+            #team-stats-modal { padding:8px; }
+            .ts-modal-box { max-width:calc(100vw - 16px); border-radius:16px; }
+            .ts-modal-header { padding:16px 12px 14px; gap:10px; }
+            .ts-modal-logo { width:44px; height:44px; }
+            .ts-modal-logo.flag { width:52px; height:34px; }
+            .ts-modal-title { font-size:15px; }
+            .ts-modal-body { padding:12px 10px 16px; gap:12px; }
+            .ts-top-grid { gap:6px; }
+            .ts-stat-cell { padding:9px 8px; gap:6px; }
+            .ts-stat-icon { width:28px; height:28px; font-size:15px; }
+            .ts-stat-cap { font-size:8.5px; }
+            .ts-stat-val { font-size:16px; }
+            .ts-wdl-grid, .ts-goals-grid { gap:6px; }
+            .ts-wdl-box { padding:10px 4px 9px; }
+            .ts-wdl-val { font-size:24px; }
+            .ts-goals-box { padding:9px 4px; }
+            .ts-goals-val { font-size:18px; }
+            .ts-form-grid { grid-template-columns:repeat(5,1fr); gap:3px; }
+            .ts-form-card { padding:6px 2px 5px; gap:3px; }
+            .ts-form-logo { width:20px; height:20px; }
+            .ts-form-logo.flag { width:24px; height:16px; }
+            .ts-form-logo-name { font-size:7px; }
+            .ts-form-res { font-size:9px; padding:1px 4px; }
+            .ts-form-vs-score { font-size:10px; }
+        }
         /* result badge */
-        .ts-form-res { font-size:10px; font-weight:900; padding:2px 7px; border-radius:4px; line-height:1; flex-shrink:0; }
+        .ts-form-res { font-size:11px; font-weight:900; padding:2px 7px; border-radius:4px; line-height:1; flex-shrink:0; }
         .ts-form-res.W { background:rgba(34,197,94,0.2);  color:#22c55e; border:1px solid rgba(34,197,94,0.35); }
         .ts-form-res.D { background:rgba(234,179,8,0.18); color:#eab308; border:1px solid rgba(234,179,8,0.35); }
         .ts-form-res.L { background:rgba(239,68,68,0.18); color:#ef4444; border:1px solid rgba(239,68,68,0.35); }
@@ -1025,33 +1052,33 @@
         .ts-form-logo-wrap { display:flex; flex-direction:column; align-items:center; gap:2px; flex:1; min-width:0; }
         .ts-form-logo { width:26px; height:26px; object-fit:contain; border-radius:4px; display:block; }
         .ts-form-logo.flag { width:30px; height:20px; border-radius:3px; object-fit:cover; }
-        .ts-form-logo-name { font-size:7.5px; color:rgba(255,255,255,0.32); line-height:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%; padding:0 1px; }
+        .ts-form-logo-name { font-size:8.5px; color:rgba(255,255,255,0.32); line-height:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%; padding:0 1px; }
         .ts-form-logo-name.me { color:rgba(255,255,255,0.32); }
         /* score */
-        .ts-form-vs-score { font-family:'Orbitron',sans-serif; font-size:11px; font-weight:900; color:#fff; line-height:1; flex-shrink:0; padding:0 1px; }
-        .ts-form-fscore { font-family:'Orbitron',sans-serif; font-size:12px; font-weight:800; color:#fff; line-height:1; }
-        .ts-form-fopp { font-size:9px; color:rgba(255,255,255,0.36); line-height:1.3; word-break:break-word; padding:0 2px; }
-        .ts-form-fside { font-size:8px; color:rgba(255,255,255,0.2); }
+        .ts-form-vs-score { font-family:'Orbitron',sans-serif; font-size:12px; font-weight:900; color:#fff; line-height:1; flex-shrink:0; padding:0 1px; }
+        .ts-form-fscore { font-family:'Orbitron',sans-serif; font-size:13px; font-weight:800; color:#fff; line-height:1; }
+        .ts-form-fopp { font-size:10px; color:rgba(255,255,255,0.36); line-height:1.3; word-break:break-word; padding:0 2px; }
+        .ts-form-fside { font-size:9px; color:rgba(255,255,255,0.2); }
 
         /* ── Legacy classes kept for anything else that uses them ── */
         .ts-stat-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
         .ts-stat-box { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:12px 8px; text-align:center; }
-        .ts-stat-val { font-family:'Orbitron',sans-serif; font-size:22px; font-weight:800; line-height:1; margin-bottom:4px; }
-        .ts-stat-lbl { font-size:10px; color:var(--wc-text-sub); text-transform:uppercase; letter-spacing:0.5px; font-weight:700; }
+        .ts-stat-val { font-family:'Orbitron',sans-serif; font-size:23px; font-weight:800; line-height:1; margin-bottom:4px; }
+        .ts-stat-lbl { font-size:11px; color:var(--wc-text-sub); text-transform:uppercase; letter-spacing:0.5px; font-weight:700; }
         .ts-stat-box.win  .ts-stat-val { color:#22c55e; }
         .ts-stat-box.draw .ts-stat-val { color:#eab308; }
         .ts-stat-box.loss .ts-stat-val { color:#ef4444; }
         .ts-stat-row2 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
         .ts-stat-box2 { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px 8px; text-align:center; }
-        .ts-stat-box2 .ts-stat-val { font-size:18px; color:var(--wc-gold); }
+        .ts-stat-box2 .ts-stat-val { font-size:19px; color:var(--wc-gold); }
         .ts-form-row { display:flex; gap:6px; flex-wrap:wrap; }
-        .ts-form-item { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:8px 12px; font-size:12px; display:flex; align-items:center; gap:8px; }
-        .ts-form-badge { font-size:11px; font-weight:800; padding:2px 7px; border-radius:4px; flex-shrink:0; }
+        .ts-form-item { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:8px 12px; font-size:13px; display:flex; align-items:center; gap:8px; }
+        .ts-form-badge { font-size:12px; font-weight:800; padding:2px 7px; border-radius:4px; flex-shrink:0; }
         .ts-form-badge.W { background:rgba(34,197,94,0.2); color:#22c55e; border:1px solid rgba(34,197,94,0.35); }
         .ts-form-badge.D { background:rgba(234,179,8,0.2);  color:#fbbf24; border:1px solid rgba(234,179,8,0.35); }
         .ts-form-badge.L { background:rgba(239,68,68,0.2);  color:#f87171; border:1px solid rgba(239,68,68,0.35); }
-        .ts-form-score { font-family:'Orbitron',sans-serif; font-size:12px; color:#fff; font-weight:700; }
-        .ts-form-opp { font-size:11px; color:var(--wc-text-sub); flex:1; }
+        .ts-form-score { font-family:'Orbitron',sans-serif; font-size:13px; color:#fff; font-weight:700; }
+        .ts-form-opp { font-size:12px; color:var(--wc-text-sub); flex:1; }
         /* clickable team name in fixtures */
         .fixture-team-clickable { cursor:pointer; border-bottom:1px dashed rgba(223,180,75,0.35); transition:color 0.2s, border-color 0.2s; display:inline; }
         .fixture-team-clickable:hover { color:var(--wc-gold) !important; border-bottom-color:var(--wc-gold); }
@@ -2115,6 +2142,8 @@
         /* ── H2H record row ── */
         /* ── Form Guide (last 5) ── */
         .form-guide { display:inline-flex; gap:3px; align-items:center; }
+        .form-guide-clickable { display:inline-flex; cursor:pointer; padding:4px; border-radius:8px; transition:background 0.15s, transform 0.15s; }
+        .form-guide-clickable:hover { background:rgba(242,194,78,0.1); transform:scale(1.05); }
         .form-dot { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:4px; font-size:10px; font-weight:800; font-family:'Orbitron','Prompt',sans-serif; }
         .form-dot.W { background:rgba(34,197,94,0.2); color:#22c55e; border:1px solid rgba(34,197,94,0.4); }
         .form-dot.D { background:rgba(100,116,139,0.2); color:#94a3b8; border:1px solid rgba(100,116,139,0.35); }
@@ -6962,7 +6991,11 @@ function _injectAutoChangelog() {
     }).join('');
 }
 
-function openTeamStatsModal(teamId) {
+function openTeamFormModal(teamId) {
+    openTeamStatsModal(teamId, true);
+}
+
+function openTeamStatsModal(teamId, onlyForm) {
     const team = state.teams.find(t => t.id === teamId);
     if (!team) return;
 
@@ -7099,7 +7132,13 @@ function openTeamStatsModal(teamId) {
 
     const rankWinRow = `<div class="ts-top-grid">${winRateCellHTML}${trophyCellHTML}${streakCellHTML}</div>`;
 
-    document.getElementById('ts-modal-body').innerHTML = `
+    const formSectionHTML = `
+        <div>
+            <div class="ts-section-title">ฟอร์ม 5 นัดล่าสุด</div>
+            <div class="ts-form-grid">${formGridHTML}</div>
+        </div>`;
+
+    document.getElementById('ts-modal-body').innerHTML = onlyForm ? formSectionHTML : `
         ${rankWinRow}
         <div>
             <div class="ts-section-title">ผลการแข่งขัน · ${p} นัด</div>
@@ -7117,10 +7156,7 @@ function openTeamStatsModal(teamId) {
                 <div class="ts-goals-box"><div class="ts-goals-val" style="color:${gd>=0?'#4ade80':'#f87171'}">${gd>0?'+':''}${gd}</div><div class="ts-goals-lbl">ต่างประตู</div></div>
             </div>
         </div>
-        <div>
-            <div class="ts-section-title">ฟอร์ม 5 นัดล่าสุด</div>
-            <div class="ts-form-grid">${formGridHTML}</div>
-        </div>
+        ${formSectionHTML}
     `;
 
     const modal = document.getElementById('team-stats-modal');
@@ -7896,7 +7932,7 @@ function renderStandings() {
         let logoClass = team.isFlag ? "team-logo flag-img" : "team-logo club-img";
         const prevSeasonLabel = _prevSeason >= 1 ? ` SS${_prevSeason}` : '';
         const defendingBadge = isDefending ? `<span class="prev-champ-badge"><span class="prev-champ-crown">🏆</span><span class="prev-champ-text"> แชมป์เก่า${prevSeasonLabel}</span></span>` : "";
-        let formHTML = _buildFormGuideHTML(team.id, 5);
+        let formHTML = `<div class="form-guide-clickable" title="คลิกดูฟอร์ม 5 นัดหลัง" onclick="openTeamFormModal('${team.id}')">${_buildFormGuideHTML(team.id, 5)}</div>`;
         let streakHTML = _buildStreakHTML(team.id);
 
         // ── rank cell & team cell ──────────────────────────────────
