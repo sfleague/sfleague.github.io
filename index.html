@@ -622,13 +622,13 @@
         .round-title { background: linear-gradient(90deg, rgba(0,87,184,0.35), transparent); color: var(--h2-fixtures-color); font-family: 'Orbitron', 'Prompt', sans-serif; font-weight: 800; padding: 12px 20px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin-top: 30px; border-left: 3px solid var(--wc-gold); border-radius: 0 8px 8px 0; }
 
         .fx-tabs { display: flex; flex-wrap: nowrap; gap: 8px; margin: 4px 0 16px; justify-content: center; }
-        .fx-tab-btn { background: rgba(255,255,255,0.04); border: 1px solid var(--wc-border); color: var(--wc-text-sub); font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 13px; padding: 9px 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+        .fx-tab-btn { background: rgba(255,255,255,0.04); border: 1px solid var(--wc-border); color: var(--wc-text-sub); font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 13px; padding: 0 20px; height: 40px; box-sizing: border-box; border-radius: 20px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: none; min-width: 130px; }
         .fx-tab-btn:hover { background: rgba(255,255,255,0.08); color: var(--wc-text-main); }
         .fx-tab-btn.active { background: linear-gradient(90deg, rgba(242,194,78,0.9), rgba(242,194,78,0.7)); color: #1a1305; border-color: transparent; }
         .fx-tab-badge { background: rgba(232,16,43,0.85); color: #fff; font-size: 10px; font-weight: 800; border-radius: 10px; padding: 1px 6px; min-width: 16px; text-align: center; display: inline-block; }
         .fx-tab-btn.active .fx-tab-badge { background: rgba(0,0,0,0.25); color: #1a1305; }
         .fx-round-pager { display: flex; align-items: center; justify-content: space-between; position: relative; padding: 10px 0; margin-bottom: 10px; }
-        .fx-pager-btn { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: var(--wc-text-sub); font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 11px; padding: 6px 14px; border-radius: 20px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.3px; z-index: 1; }
+        .fx-pager-btn { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: var(--wc-text-sub); font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 13px; padding: 0 18px; height: 40px; box-sizing: border-box; border-radius: 20px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.3px; z-index: 1; }
         .fx-pager-btn .pager-arrow { font-size: 14px; line-height: 1; }
         .fx-pager-btn:hover:not(:disabled) { background: rgba(242,194,78,0.1); border-color: rgba(242,194,78,0.35); color: var(--wc-gold); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,0.3); }
         .fx-pager-btn:active:not(:disabled) { transform: translateY(0); }
@@ -1628,12 +1628,12 @@
             .match-team-rank-inline { display: inline !important; font-size: 10px !important; margin-right: 2px !important; }
             .badge-side { padding: 1px 4px !important; font-size: 9px !important; }
 
-            /* Tab buttons: ขนาดเท่ากัน ดีไซน์เหมือนกัน mobile=desktop */
+            /* Tab buttons: ขนาดเท่ากันทุกปุ่ม ทั้ง desktop และ mobile */
             .fx-tabs { gap: 4px !important; flex-wrap: nowrap !important; margin-bottom: 10px !important; justify-content: center !important; }
-            .fx-tab-btn { font-size: 10px !important; padding: 6px 10px !important; gap: 3px !important; border-radius: 20px !important; white-space: nowrap !important; flex: 0 0 auto !important; }
+            .fx-tab-btn { font-size: 10px !important; padding: 0 12px !important; height: 34px !important; box-sizing: border-box !important; gap: 3px !important; border-radius: 17px !important; white-space: nowrap !important; flex: none !important; min-width: 90px !important; justify-content: center !important; align-items: center !important; }
 
             /* Pager buttons: ยกเว้นจาก button{} generic override — คง pill style ไว้ */
-            .fx-pager-btn { font-size: 10px !important; padding: 5px 11px !important; border-radius: 20px !important; white-space: nowrap !important; display: inline-flex !important; align-items: center !important; gap: 5px !important; }
+            .fx-pager-btn { font-size: 10px !important; padding: 0 14px !important; height: 34px !important; box-sizing: border-box !important; border-radius: 17px !important; white-space: nowrap !important; display: inline-flex !important; align-items: center !important; gap: 5px !important; }
             .fx-pager-btn .pager-arrow { font-size: 12px !important; line-height: 1 !important; }
 
             /* Floating action buttons: เล็กลงบนมือถือ ไม่รก */
@@ -1898,7 +1898,15 @@
             h1 { font-size: 20px; }
             /* standings table on very small screens */
             #standings-table .p-name { font-size: 12px; }
-            #standings-table .champion-badge, #standings-table .defending-badge, #standings-table .prev-champ-badge { font-size: 9px; padding: 2px 4px; }
+            #standings-table .champion-badge,
+            #standings-table .defending-badge,
+            #standings-table .prev-champ-badge,
+            #standings-table .no1-days-badge,
+            #standings-table .no2-prize-badge,
+            #standings-table .no3-prize-badge { font-size: 9px !important; padding: 2px 5px !important; letter-spacing: 0.3px !important; }
+            #standings-table .no1-badge-crown,
+            #standings-table .no1-badge-fire { font-size: 10px !important; }
+            #standings-table .prev-champ-crown { font-size: 9px !important; }
             .match-row { gap: 2px; padding: 6px 4px; }
             .match-team { gap: 4px; padding: 1px 3px; max-width: calc(50% - 28px); }
             .match-score { min-width: 52px; flex: 0 0 52px; padding: 0; }
@@ -3119,7 +3127,7 @@
     <div id="yt-music-frame"></div>
     <div id="now-playing-pill">
         <span class="np-dot"></span>
-        <div><div class="np-text">Don Miguelo - Y Que Fue?</div><div class="np-sub">♪ NOW PLAYING</div></div>
+        <div><div class="np-text"></div><div class="np-sub">♪ NOW PLAYING</div></div>
     </div>
     <div id="fixed-action-container">
         <button id="music-btn" class="floating-action-btn" onclick="toggleMusic()" title="เปิด/ปิดเพลง">
@@ -10532,18 +10540,17 @@ var _ytPrankUnlocked = false;
 /* Playlist: Don Miguelo → Haaland Ha Ha Ha → loop */
 var _ytPlaylist = ['16nZ6K7sim4', 'cixr-7fMWwU'];
 var _ytTrackNames = ['Don Miguelo - Y Que Fue?', 'CTID - Haaland (Ha Ha Ha)'];
-var _ytCurrentTrack = 0;
+var _ytCurrentTrack = Math.floor(Math.random() * _ytPlaylist.length);
 
 /* Load YT IFrame API */
 window.onYouTubeIframeAPIReady = function(){
     _ytPlayer = new YT.Player('yt-music-frame',{
-        height:'1', width:'1', videoId:_ytPlaylist[0],
+        height:'1', width:'1', videoId:_ytPlaylist[_ytCurrentTrack],
         playerVars:{
             autoplay:1,
             mute:1,
             controls:0,
             loop:0,           /* we handle rotation manually */
-            playlist:_ytPlaylist.join(','),
             playsinline:1,
             rel:0,
             modestbranding:1,
@@ -10567,6 +10574,7 @@ window.onYouTubeIframeAPIReady = function(){
                             _ytPlayer.setVolume(75);
                             _ytPlayer.playVideo();
                             _setMusicState(true);
+                            _updateNowPlaying();
                         }catch(e){}
                     }, 300);
                 };
