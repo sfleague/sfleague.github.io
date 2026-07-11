@@ -3838,13 +3838,11 @@
       <div id="psm-photo-preview" style="display:none;margin-bottom:8px;border-radius:8px;overflow:hidden;max-height:180px;text-align:center;background:rgba(0,0,0,0.3);">
         <img id="psm-photo-img" src="" style="max-width:100%;max-height:180px;object-fit:contain;">
       </div>
-      <!-- hidden file inputs ใน DOM จริง — ทำงานได้บนมือถือทุกรุ่น -->
-      <input type="file" id="psm-file-gallery" accept="image/*" style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px;" onchange="psmHandleFile(this)">
-      <input type="file" id="psm-file-camera"  accept="image/*" capture="environment" style="position:fixed;top:-9999px;left:-9999px;opacity:0;width:1px;height:1px;" onchange="psmHandleFile(this)">
-      <div style="display:flex;gap:8px;">
-        <button onclick="document.getElementById('psm-file-gallery').click()" id="psm-gallery-btn" style="flex:1;padding:11px 8px;background:rgba(34,197,94,0.08);border:1px dashed rgba(34,197,94,0.45);border-radius:8px;color:#22c55e;font-size:13px;font-weight:700;cursor:pointer;">🖼️ คลังภาพ</button>
-        <button onclick="document.getElementById('psm-file-camera').click()"  id="psm-camera-btn" style="flex:1;padding:11px 8px;background:rgba(96,165,250,0.08);border:1px dashed rgba(96,165,250,0.45);border-radius:8px;color:#60a5fa;font-size:13px;font-weight:700;cursor:pointer;">📷 ถ่ายรูป</button>
-      </div>
+      <!-- label-based: iOS Safari นับ label click เป็น direct user gesture เปิด picker ได้ทั้งคลังและกล้อง -->
+      <input type="file" id="psm-file-gallery" accept="image/*"
+             style="position:absolute;width:0;height:0;opacity:0;overflow:hidden;" onchange="psmHandleFile(this)">
+      <label for="psm-file-gallery" id="psm-gallery-btn"
+             style="display:flex;align-items:center;justify-content:center;width:100%;padding:11px;background:rgba(34,197,94,0.08);border:1px dashed rgba(34,197,94,0.45);border-radius:8px;color:#22c55e;font-size:13px;font-weight:700;cursor:pointer;user-select:none;-webkit-user-select:none;box-sizing:border-box;">📷 เลือกรูปภาพจากอุปกรณ์</label>
       <div id="psm-photo-name" style="font-size:11px;color:#64748b;margin-top:5px;text-align:center;"></div>
     </div>
 
@@ -6152,9 +6150,7 @@ function onPsmMatchSelect() {
     document.getElementById("psm-photo-preview").style.display = "none";
     document.getElementById("psm-photo-name").textContent = "";
     var gb2 = document.getElementById("psm-gallery-btn");
-    var cb2 = document.getElementById("psm-camera-btn");
-    if (gb2) gb2.textContent = "🖼️ คลังภาพ";
-    if (cb2) cb2.textContent = "📷 ถ่ายรูป";
+    if (gb2) gb2.textContent = "📷 เลือกรูปภาพจากอุปกรณ์";
 }
 
 function psmHandleFile(inputEl) {
@@ -6267,9 +6263,7 @@ async function submitPlayerResult() {
     document.getElementById("psm-away-score").value = "";
     _psmPhotoBase64 = null; _psmPhotoUrl = null; _psmPhotoBlob = null;
     var gb = document.getElementById("psm-gallery-btn");
-    var cb = document.getElementById("psm-camera-btn");
-    if (gb) gb.textContent = "🖼️ คลังภาพ";
-    if (cb) cb.textContent = "📷 ถ่ายรูป";
+    if (gb) gb.textContent = "📷 เลือกรูปภาพจากอุปกรณ์";
     // ปิด modal ทันทีหลังส่งผลสำเร็จ — ไม่ต้องเด้งให้กรอกคู่อื่น
     setTimeout(closePlayerSubmitModal, 1200);
 }
