@@ -1534,6 +1534,9 @@
 
 .ad-hidden { transform: scale(0) rotate(20deg); opacity: 0; pointer-events: none; }
 
+.ad-gif-wrap { width: 100%; overflow: hidden; border-bottom: 2px solid #d4af37; background: #000; display: flex; align-items: center; justify-content: center; }
+.ad-gif-wrap img { width: 100%; max-height: 160px; object-fit: contain; display: block; }
+
         /* ── Ad Banner Editor Modal ── */
         #ad-editor-modal { display:none; position:fixed; inset:0; z-index:4500; background:rgba(0,0,0,0.82); align-items:center; justify-content:center; }
         #ad-editor-modal.open { display:flex; }
@@ -1543,6 +1546,12 @@
         .ad-editor-inp:focus { outline:none; border-color:rgba(223,180,75,0.5); }
         /* toggle switch */
         .ad-toggle-wrap { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; padding:10px 14px; background:rgba(255,255,255,0.04); border-radius:8px; border:1px solid rgba(255,255,255,0.08); }
+        .ad-mode-picker { display:flex; gap:8px; margin-bottom:16px; }
+        .ad-mode-btn { flex:1; padding:9px 12px; border-radius:10px; border:1.5px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.04); color:#94a3b8; font-family:'Prompt',sans-serif; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.2s; text-align:center; }
+        .ad-mode-btn.active { border-color:#F2C24E; background:rgba(242,194,78,0.15); color:#F2C24E; }
+        .ad-mode-btn:hover:not(.active) { background:rgba(255,255,255,0.08); color:#e2e8f0; }
+        .ad-mode-panel { display:none; }
+        .ad-mode-panel.visible { display:block; }
         .ad-toggle-track { position:relative; display:inline-block; width:42px; height:24px; cursor:pointer; }
         .ad-toggle-track input { opacity:0; width:0; height:0; position:absolute; }
         .ad-toggle-bg { position:absolute; inset:0; border-radius:12px; background:#1e3a5f; transition:0.2s; border:1px solid rgba(255,255,255,0.15); }
@@ -4410,6 +4419,8 @@ let state = {
         imgUrl: "https://i.ibb.co/FqVzBVXW/S-12959754.jpg",
         btnText: "ดูประวัติต้าวเพื่อนใหม่",
         linkUrl: "",
+        gifUrl: "",
+        mode: "normal",
         width: 280
     }
 };
@@ -8465,19 +8476,29 @@ function renderAdBanner() {
         ? `window.open(${JSON.stringify(linkUrl)},'_blank')`
         : `openAdPopup()`;
 
-    banner.innerHTML = `
-        <button style="position:absolute;top:5px;right:5px;background:rgba(255,255,255,0.1);border:2px solid #d4af37;width:28px;height:28px;border-radius:50%;cursor:pointer;font-weight:bold;color:#d4af37;display:flex;align-items:center;justify-content:center;z-index:10;font-size:14px;line-height:1;padding:0;width:auto;padding:0 8px;height:28px;"
-            onclick="this.closest('#friend-ad-banner').classList.add('ad-hidden')" title="ปิด">&times;</button>
-        <div class="ad-image-container" style="cursor:pointer;" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}">
-            <span class="ad-label">${_htmlEsc(ad.labelText || 'โฆษณา')}</span>
-            <img src="${_htmlEsc(ad.imgUrl || '')}" alt="banner" onerror="this.style.opacity='0.15'">
-        </div>
-        <div class="ad-content">
-            <div class="ad-title">${_htmlEsc(ad.title || '')}</div>
-            <div class="ad-desc">${_htmlEsc(ad.desc || '')}</div>
-            <button class="ad-button" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}">${_htmlEsc(ad.btnText || 'ดูเพิ่มเติม')}</button>
-        </div>
-    `;
+    const closeBtn = `<button style="position:absolute;top:5px;right:5px;background:rgba(255,255,255,0.1);border:2px solid #d4af37;width:28px;height:28px;border-radius:50%;cursor:pointer;font-weight:bold;color:#d4af37;display:flex;align-items:center;justify-content:center;z-index:10;font-size:14px;line-height:1;padding:0;width:auto;padding:0 8px;height:28px;" onclick="this.closest('#friend-ad-banner').classList.add('ad-hidden')" title="ปิด">&times;</button>`;
+
+    if (ad.mode === 'gif') {
+        /* ── GIF mode ── */
+        banner.innerHTML = closeBtn + `
+            <div style="padding:8px;text-align:center;">
+                <span class="ad-label" style="position:static;display:inline-block;margin-bottom:6px;">${_htmlEsc(ad.labelText || 'มีม')}</span>
+            </div>
+            <div id="_ad_gif_wrap" class="ad-gif-wrap" style="border-bottom:none;"></div>`;
+        _injectGifInto(banner.querySelector('#_ad_gif_wrap'), ad.gifUrl || '', 220);
+    } else {
+        /* ── Normal mode ── */
+        banner.innerHTML = closeBtn + `
+            <div class="ad-image-container" style="cursor:pointer;" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}">
+                <span class="ad-label">${_htmlEsc(ad.labelText || 'โฆษณา')}</span>
+                <img src="${_htmlEsc(ad.imgUrl || '')}" alt="banner" onerror="this.style.opacity='0.15'">
+            </div>
+            <div class="ad-content">
+                <div class="ad-title">${_htmlEsc(ad.title || '')}</div>
+                <div class="ad-desc">${_htmlEsc(ad.desc || '')}</div>
+                <button class="ad-button" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}">${_htmlEsc(ad.btnText || 'ดูเพิ่มเติม')}</button>
+            </div>`;
+    }
 }
 
 function openAdPopup() {
@@ -8555,6 +8576,9 @@ function openAdBannerEditor() {
     if (fi('ad-title-inp')) fi('ad-title-inp').value = ad.title || '';
     if (fi('ad-desc-inp'))  fi('ad-desc-inp').value  = ad.desc || '';
     if (fi('ad-img-inp'))   fi('ad-img-inp').value   = ad.imgUrl || '';
+    if (fi('ad-gif-inp'))   fi('ad-gif-inp').value   = ad.gifUrl || '';
+    _switchAdMode(ad.mode || 'normal');
+    updateAdGifPreview();
     if (fi('ad-btn-inp'))   fi('ad-btn-inp').value   = ad.btnText || '';
     if (fi('ad-link-inp'))  fi('ad-link-inp').value  = ad.linkUrl || '';
     const slider = fi('ad-width-slider');
@@ -8567,6 +8591,95 @@ function openAdBannerEditor() {
 function closeAdBannerEditor() {
     const modal = document.getElementById('ad-editor-modal');
     if (modal) modal.classList.remove('open');
+}
+
+/* รองรับ: tenor.com/view/... | media.tenor.com | c.tenor.com | Giphy | URL .gif ทั่วไป
+   สร้าง element จริงผ่าน createElement (ไม่ใช้ innerHTML) เพื่อให้ iframe โหลดได้ */
+function _injectGifInto(container, url, maxHeight) {
+    if (!container) return;
+    container.innerHTML = '';
+    maxHeight = maxHeight || 220;
+    if (!url) return;
+
+    // decode ก่อน รองรับ URL ที่มีอักขระไทยหรือถูก percent-encode
+    let decoded = url;
+    try { decoded = decodeURIComponent(url); } catch(e) {}
+
+    // Tenor share page: tenor.com/view/...
+    const isTenorView = decoded.includes('tenor.com/view/') || url.includes('tenor.com/view/');
+    if (isTenorView) {
+        // ดึง ID: ตัวเลข 5+ หลักสุดท้ายในพาธ (ก่อน ? / # / ท้ายสุด)
+        const m = decoded.match(/(\d{5,})(?:[?#].*)?$/) || url.match(/(\d{5,})(?:[?#].*)?$/);
+        if (m) {
+            const f = document.createElement('iframe');
+            f.src             = 'https://tenor.com/embed/' + m[1];
+            f.width           = '100%';
+            f.height          = maxHeight;
+            f.frameBorder     = '0';
+            f.scrolling       = 'no';
+            f.allowFullscreen = true;
+            f.style.cssText   = 'display:block;border:none;width:100%;';
+            container.appendChild(f);
+            return;
+        }
+    }
+
+    const imgStyle = 'max-width:100%;max-height:' + maxHeight + 'px;object-fit:contain;display:block;';
+
+    // Tenor direct media (media.tenor.com / c.tenor.com)
+    if (/(?:media|c)\.tenor\.com/.test(url)) {
+        const img = document.createElement('img');
+        img.src = url; img.alt = 'gif'; img.style.cssText = imgStyle;
+        img.onerror = function() {
+            const v = document.createElement('video');
+            v.autoplay = true; v.loop = true; v.muted = true;
+            v.setAttribute('playsinline', ''); v.style.cssText = imgStyle;
+            const s = document.createElement('source'); s.src = url;
+            v.appendChild(s);
+            if (img.parentNode) img.parentNode.replaceChild(v, img);
+        };
+        container.appendChild(img);
+        return;
+    }
+
+    // Giphy / URL .gif ทั่วไป
+    const img = document.createElement('img');
+    img.src = url; img.alt = 'gif'; img.style.cssText = imgStyle;
+    img.onerror = function() { this.style.opacity = '0.2'; };
+    container.appendChild(img);
+}
+
+function updateAdGifPreview() {
+    const gifInp  = document.getElementById('ad-gif-inp');
+    const wrap    = document.getElementById('ad-gif-preview');
+    const emptyEl = document.getElementById('ad-gif-preview-empty');
+    if (!gifInp || !wrap) return;
+    const url = gifInp.value.trim();
+    if (url) {
+        if (emptyEl) emptyEl.style.display = 'none';
+        _injectGifInto(wrap, url, 130);
+        if (emptyEl && !wrap.contains(emptyEl)) wrap.appendChild(emptyEl);
+    } else {
+        wrap.innerHTML = '';
+        if (emptyEl) { emptyEl.style.display = ''; wrap.appendChild(emptyEl); }
+    }
+}
+
+function _switchAdMode(mode) {
+    const normalBtn = document.getElementById('ad-mode-normal-btn');
+    const gifBtn    = document.getElementById('ad-mode-gif-btn');
+    const normalPanel = document.getElementById('ad-panel-normal');
+    const gifPanel    = document.getElementById('ad-panel-gif');
+    const normalRadio = document.getElementById('ad-mode-normal');
+    const gifRadio    = document.getElementById('ad-mode-gif');
+    if (!normalBtn) return;
+    const isGif = mode === 'gif';
+    normalBtn.classList.toggle('active', !isGif);
+    gifBtn.classList.toggle('active', isGif);
+    normalPanel.classList.toggle('visible', !isGif);
+    gifPanel.classList.toggle('visible', isGif);
+    if (normalRadio) normalRadio.checked = !isGif;
+    if (gifRadio)    gifRadio.checked    = isGif;
 }
 
 function updateAdImgPreview() {
@@ -8622,6 +8735,8 @@ function saveAdBanner() {
         title:     (fi('ad-title-inp') || {}).value || '',
         desc:      (fi('ad-desc-inp')  || {}).value || '',
         imgUrl:    (fi('ad-img-inp')   || {}).value || '',
+        gifUrl:    (fi('ad-gif-inp')   || {}).value || '',
+        mode:      (fi('ad-mode-normal') || {}).checked ? 'normal' : 'gif',
         btnText:   (fi('ad-btn-inp')   || {}).value || '',
         linkUrl:   (fi('ad-link-inp')  || {}).value || '',
         width:     parseInt((fi('ad-width-slider') || {}).value) || 280
@@ -9354,30 +9469,55 @@ async function resetBracketMatchScore(matchId) {
             </label>
         </div>
 
-        <div style="margin-bottom:12px;"><label class="ad-editor-label">ป้ายชื่อ (Label มุมแบนเนอร์)</label><input type="text" id="ad-label-inp" class="ad-editor-inp" placeholder="โฆษณา"></div>
-        <div style="margin-bottom:12px;"><label class="ad-editor-label">ชื่อหัวเรื่อง</label><input type="text" id="ad-title-inp" class="ad-editor-inp" placeholder="หัวเรื่อง..."></div>
-        <div style="margin-bottom:12px;"><label class="ad-editor-label">คำอธิบาย</label><textarea id="ad-desc-inp" class="ad-editor-inp" rows="2" style="resize:vertical;" placeholder="รายละเอียด..."></textarea></div>
-        <div style="margin-bottom:12px;">
-            <label class="ad-editor-label">รูปภาพ</label>
-            <div style="display:flex;gap:8px;margin-bottom:6px;">
-                <input type="text" id="ad-img-inp" class="ad-editor-inp" placeholder="https://... หรืออัปโหลดรูปด้านล่าง" oninput="updateAdImgPreview()" style="flex:1;">
+        <!-- Mode picker -->
+        <div class="ad-mode-picker">
+            <input type="radio" id="ad-mode-normal" name="ad-mode" value="normal" style="display:none" checked>
+            <input type="radio" id="ad-mode-gif"    name="ad-mode" value="gif"    style="display:none">
+            <button type="button" id="ad-mode-normal-btn" class="ad-mode-btn active" onclick="_switchAdMode('normal')">🖼️ แบนเนอร์ปกติ</button>
+            <button type="button" id="ad-mode-gif-btn"    class="ad-mode-btn"        onclick="_switchAdMode('gif')">🎞️ GIF มีม</button>
+        </div>
+
+        <div style="margin-bottom:12px;"><label class="ad-editor-label">ป้ายชื่อ (Label มุมแบนเนอร์)</label><input type="text" id="ad-label-inp" class="ad-editor-inp" placeholder="โฆษณา / มีม"></div>
+
+        <!-- Normal mode panel -->
+        <div id="ad-panel-normal" class="ad-mode-panel visible">
+            <div style="margin-bottom:12px;"><label class="ad-editor-label">ชื่อหัวเรื่อง</label><input type="text" id="ad-title-inp" class="ad-editor-inp" placeholder="หัวเรื่อง..."></div>
+            <div style="margin-bottom:12px;"><label class="ad-editor-label">คำอธิบาย</label><textarea id="ad-desc-inp" class="ad-editor-inp" rows="2" style="resize:vertical;" placeholder="รายละเอียด..."></textarea></div>
+            <div style="margin-bottom:12px;">
+                <label class="ad-editor-label">รูปภาพ</label>
+                <div style="display:flex;gap:8px;margin-bottom:6px;">
+                    <input type="text" id="ad-img-inp" class="ad-editor-inp" placeholder="https://... หรืออัปโหลดรูปด้านล่าง" oninput="updateAdImgPreview()" style="flex:1;">
+                </div>
+                <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+                    <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(59,130,246,0.12);border:1px dashed rgba(59,130,246,0.45);border-radius:8px;padding:9px 12px;cursor:pointer;font-size:12px;font-weight:700;color:#60a5fa;transition:all 0.2s;" onmouseover="this.style.background='rgba(59,130,246,0.2)'" onmouseout="this.style.background='rgba(59,130,246,0.12)'" title="อัปโหลดรูปจากเครื่อง">
+                        <span id="ad-upload-label-text">📁 เลือกรูปจากเครื่อง</span>
+                        <input type="file" id="ad-img-file" accept="image/*" style="display:none;" onchange="uploadAdImageFromFile(this)">
+                    </label>
+                </div>
+                <div id="ad-upload-progress" style="display:none;font-size:11px;color:#60a5fa;margin-bottom:6px;padding:6px 10px;background:rgba(59,130,246,0.08);border-radius:6px;border:1px solid rgba(59,130,246,0.2);">⏳ กำลังอัปโหลด...</div>
+                <div id="ad-img-preview" style="width:100%;height:110px;border-radius:8px;overflow:hidden;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;">
+                    <img id="ad-img-preview-tag" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;" onerror="this.style.display='none';document.getElementById('ad-img-preview-empty').style.display=''">
+                    <span id="ad-img-preview-empty" style="font-size:12px;color:var(--wc-text-sub);">ยังไม่มีรูปภาพ</span>
+                </div>
             </div>
-            <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
-                <label style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(59,130,246,0.12);border:1px dashed rgba(59,130,246,0.45);border-radius:8px;padding:9px 12px;cursor:pointer;font-size:12px;font-weight:700;color:#60a5fa;transition:all 0.2s;" onmouseover="this.style.background='rgba(59,130,246,0.2)'" onmouseout="this.style.background='rgba(59,130,246,0.12)'" title="อัปโหลดรูปจากเครื่อง">
-                    <span id="ad-upload-label-text">📁 เลือกรูปจากเครื่อง</span>
-                    <input type="file" id="ad-img-file" accept="image/*" style="display:none;" onchange="uploadAdImageFromFile(this)">
-                </label>
-            </div>
-            <div id="ad-upload-progress" style="display:none;font-size:11px;color:#60a5fa;margin-bottom:6px;padding:6px 10px;background:rgba(59,130,246,0.08);border-radius:6px;border:1px solid rgba(59,130,246,0.2);">⏳ กำลังอัปโหลด...</div>
-            <div id="ad-img-preview" style="width:100%;height:110px;border-radius:8px;overflow:hidden;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;">
-                <img id="ad-img-preview-tag" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:none;" onerror="this.style.display='none';document.getElementById('ad-img-preview-empty').style.display=''">
-                <span id="ad-img-preview-empty" style="font-size:12px;color:var(--wc-text-sub);">ยังไม่มีรูปภาพ</span>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+                <div style="flex:1;min-width:130px;"><label class="ad-editor-label">ข้อความปุ่ม</label><input type="text" id="ad-btn-inp" class="ad-editor-inp" placeholder="ดูเพิ่มเติม"></div>
+                <div style="flex:1;min-width:130px;"><label class="ad-editor-label">ลิงก์ปุ่ม <span style="color:#64748b;font-weight:400;">(ว่าง = เด้งรูป)</span></label><input type="text" id="ad-link-inp" class="ad-editor-inp" placeholder="https://... หรือเว้นว่าง"></div>
             </div>
         </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
-            <div style="flex:1;min-width:130px;"><label class="ad-editor-label">ข้อความปุ่ม</label><input type="text" id="ad-btn-inp" class="ad-editor-inp" placeholder="ดูเพิ่มเติม"></div>
-            <div style="flex:1;min-width:130px;"><label class="ad-editor-label">ลิงก์ปุ่ม <span style="color:#64748b;font-weight:400;">(ว่าง = เด้งรูป)</span></label><input type="text" id="ad-link-inp" class="ad-editor-inp" placeholder="https://... หรือเว้นว่าง"></div>
+
+        <!-- GIF mode panel -->
+        <div id="ad-panel-gif" class="ad-mode-panel">
+            <div style="margin-bottom:12px;">
+                <label class="ad-editor-label">URL ของ GIF</label>
+                <input type="text" id="ad-gif-inp" class="ad-editor-inp" placeholder="https://tenor.com/view/name-12345  หรือ  https://media.giphy.com/media/.../giphy.gif" oninput="updateAdGifPreview()" style="margin-bottom:8px;">
+                <div id="ad-gif-preview" style="width:100%;min-height:80px;max-height:160px;border-radius:8px;overflow:hidden;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;">
+                    <span id="ad-gif-preview-empty" style="font-size:11px;color:var(--wc-text-sub);">ใส่ URL GIF เพื่อดูตัวอย่าง</span>
+                </div>
+                <p style="font-size:11px;color:#64748b;margin:6px 0 0;">ใช้ URL จาก Giphy หรือ Tenor เช่น https://media.giphy.com/media/xxx/giphy.gif</p>
+            </div>
         </div>
+
         <div style="margin-bottom:18px;"><label class="ad-editor-label">ขนาดแบนเนอร์: <span id="ad-width-val">280</span>px</label><input type="range" id="ad-width-slider" min="200" max="420" step="10" oninput="document.getElementById('ad-width-val').textContent=this.value" style="width:100%;accent-color:#dfb44b;"></div>
 
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
@@ -10645,5 +10785,6 @@ function _setMusicState(p){
     }
 }
 </script>
+
 </body>
 </html>
