@@ -8529,9 +8529,9 @@ function _fxDefaultRound(maxRound) {
         const roundMatches = state.matches.filter(m => m.round === r && m.homeId !== 'BYE' && m.awayId !== 'BYE');
         const finishedCount = roundMatches.filter(m => m.status === 'finished' && m.homeScore !== null && m.awayScore !== null).length;
         const hasUnfinished = roundMatches.some(_fxIsMatchUnfinished);
-        // ถ้ารอบนี้แข่งจบไปแล้วมากกว่า 3 คู่ ถือว่ารอบนี้ผ่านไปแล้ว ข้ามไปโชว์รอบถัดไปเป็นค่าเริ่มต้น
+        // ถ้ารอบนี้แข่งจบไปแล้วตั้งแต่ 3 คู่ขึ้นไป ถือว่ารอบนี้ผ่านไปแล้ว ข้ามไปโชว์รอบถัดไปเป็นค่าเริ่มต้นเสมอ
         // (คู่ที่เหลือค้างในรอบนี้จะยังไปโผล่ในแท็บ "นัดตกค้าง" ตามปกติ)
-        if (hasUnfinished && finishedCount <= 3) return r;
+        if (hasUnfinished && finishedCount < 3) return r;
     }
     return maxRound;
 }
