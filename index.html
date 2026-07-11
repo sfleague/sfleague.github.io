@@ -627,11 +627,13 @@
         .fx-tab-btn.active { background: linear-gradient(90deg, rgba(242,194,78,0.9), rgba(242,194,78,0.7)); color: #1a1305; border-color: transparent; }
         .fx-tab-badge { background: rgba(232,16,43,0.85); color: #fff; font-size: 10px; font-weight: 800; border-radius: 10px; padding: 1px 6px; min-width: 16px; text-align: center; display: inline-block; }
         .fx-tab-btn.active .fx-tab-badge { background: rgba(0,0,0,0.25); color: #1a1305; }
-        .fx-round-pager { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: rgba(255,255,255,0.03); border: 1px solid var(--wc-border); border-radius: 10px; padding: 10px 14px; margin-bottom: 14px; }
-        .fx-pager-btn { background: rgba(255,255,255,0.06); border: 1px solid var(--wc-border); color: var(--wc-text-main); font-family: 'Prompt', sans-serif; font-weight: 600; font-size: 12px; padding: 7px 14px; border-radius: 8px; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
-        .fx-pager-btn:hover:not(:disabled) { background: rgba(242,194,78,0.18); }
-        .fx-pager-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-        .fx-round-label { font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 800; color: var(--wc-gold); letter-spacing: 1px; text-align: center; flex: 1; }
+        .fx-round-pager { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--wc-border); border-radius: 10px; padding: 8px 10px; margin-bottom: 14px; }
+        .fx-pager-btn { background: rgba(255,255,255,0.06); border: 1px solid var(--wc-border); color: var(--wc-text-sub); font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 11px; padding: 5px 10px; border-radius: 7px; cursor: pointer; transition: background 0.2s, color 0.2s; white-space: nowrap; flex-shrink: 0; }
+        .fx-pager-btn:hover:not(:disabled) { background: rgba(242,194,78,0.15); color: var(--wc-gold); }
+        .fx-pager-btn:disabled { opacity: 0.28; cursor: not-allowed; }
+        .fx-round-label { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; flex: 1; min-width: 0; }
+        .fx-round-label .rl-round { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 900; color: var(--wc-gold); letter-spacing: 1.5px; line-height: 1; }
+        .fx-round-label .rl-stage { font-family: 'Prompt', sans-serif; font-size: 10px; font-weight: 600; color: var(--wc-text-sub); letter-spacing: 0.5px; line-height: 1; text-transform: uppercase; }
         .fx-empty-msg { text-align: center; color: var(--wc-text-sub); padding: 30px 16px; font-size: 14px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px dashed var(--wc-border); }
         .fx-history-round-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
         .fx-history-round-header .fx-collapse-arrow { transition: transform 0.2s; font-size: 11px; color: var(--wc-text-sub); }
@@ -8660,7 +8662,7 @@ function renderLeague() {
             pagerEl.style.display = "flex"; searchWrapEl.style.display = "none";
             if (_fxRoundPointer === null) _fxRoundPointer = _fxDefaultRound(maxRound);
             _fxRoundPointer = Math.min(maxRound, Math.max(1, _fxRoundPointer));
-            document.getElementById("fx-round-label").textContent = `ROUND MATCH ${_fxRoundPointer} ${_fxRoundPointer <= maxRound/2 ? '(STAGE 1)' : '(STAGE 2)'}`;
+            document.getElementById("fx-round-label").innerHTML = `<span class="rl-round">ROUND ${_fxRoundPointer}</span><span class="rl-stage">${_fxRoundPointer <= maxRound/2 ? 'STAGE 1' : 'STAGE 2'}</span>`;
             document.querySelectorAll('.fx-pager-btn')[0].disabled = _fxRoundPointer <= 1;
             document.querySelectorAll('.fx-pager-btn')[1].disabled = _fxRoundPointer >= maxRound;
 
