@@ -621,19 +621,21 @@
 
         .round-title { background: linear-gradient(90deg, rgba(0,87,184,0.35), transparent); color: var(--h2-fixtures-color); font-family: 'Orbitron', 'Prompt', sans-serif; font-weight: 800; padding: 12px 20px; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; margin-top: 30px; border-left: 3px solid var(--wc-gold); border-radius: 0 8px 8px 0; }
 
-        .fx-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 16px; }
+        .fx-tabs { display: flex; flex-wrap: nowrap; gap: 8px; margin: 4px 0 16px; justify-content: center; }
         .fx-tab-btn { background: rgba(255,255,255,0.04); border: 1px solid var(--wc-border); color: var(--wc-text-sub); font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 13px; padding: 9px 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
         .fx-tab-btn:hover { background: rgba(255,255,255,0.08); color: var(--wc-text-main); }
         .fx-tab-btn.active { background: linear-gradient(90deg, rgba(242,194,78,0.9), rgba(242,194,78,0.7)); color: #1a1305; border-color: transparent; }
         .fx-tab-badge { background: rgba(232,16,43,0.85); color: #fff; font-size: 10px; font-weight: 800; border-radius: 10px; padding: 1px 6px; min-width: 16px; text-align: center; display: inline-block; }
         .fx-tab-btn.active .fx-tab-badge { background: rgba(0,0,0,0.25); color: #1a1305; }
-        .fx-round-pager { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: rgba(255,255,255,0.03); border: 1px solid var(--wc-border); border-radius: 10px; padding: 8px 10px; margin-bottom: 14px; }
-        .fx-pager-btn { background: rgba(255,255,255,0.06); border: 1px solid var(--wc-border); color: var(--wc-text-sub); font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 11px; padding: 5px 10px; border-radius: 7px; cursor: pointer; transition: background 0.2s, color 0.2s; white-space: nowrap; flex-shrink: 0; }
-        .fx-pager-btn:hover:not(:disabled) { background: rgba(242,194,78,0.15); color: var(--wc-gold); }
-        .fx-pager-btn:disabled { opacity: 0.28; cursor: not-allowed; }
-        .fx-round-label { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; flex: 1; min-width: 0; }
-        .fx-round-label .rl-round { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 900; color: var(--wc-gold); letter-spacing: 1.5px; line-height: 1; }
-        .fx-round-label .rl-stage { font-family: 'Prompt', sans-serif; font-size: 10px; font-weight: 600; color: var(--wc-text-sub); letter-spacing: 0.5px; line-height: 1; text-transform: uppercase; }
+        .fx-round-pager { display: flex; align-items: center; justify-content: space-between; position: relative; padding: 10px 0; margin-bottom: 10px; }
+        .fx-pager-btn { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: var(--wc-text-sub); font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 11px; padding: 6px 14px; border-radius: 20px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.3px; z-index: 1; }
+        .fx-pager-btn .pager-arrow { font-size: 14px; line-height: 1; }
+        .fx-pager-btn:hover:not(:disabled) { background: rgba(242,194,78,0.1); border-color: rgba(242,194,78,0.35); color: var(--wc-gold); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,0.3); }
+        .fx-pager-btn:active:not(:disabled) { transform: translateY(0); }
+        .fx-pager-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+        .fx-round-label { position: absolute; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 4px; pointer-events: none; }
+        .fx-round-label .rl-round { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; color: var(--wc-gold); letter-spacing: 2px; line-height: 1; }
+        .fx-round-label .rl-stage { font-family: 'Prompt', sans-serif; font-size: 10px; font-weight: 700; color: var(--wc-text-sub); letter-spacing: 1.5px; line-height: 1; text-transform: uppercase; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); border-radius: 20px; padding: 2px 10px; }
         .fx-empty-msg { text-align: center; color: var(--wc-text-sub); padding: 30px 16px; font-size: 14px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px dashed var(--wc-border); }
         .fx-history-round-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
         .fx-history-round-header .fx-collapse-arrow { transition: transform 0.2s; font-size: 11px; color: var(--wc-text-sub); }
@@ -858,94 +860,22 @@
         #social-hub-btn:hover { background: linear-gradient(135deg, #F2C24E, #5865F2) !important; box-shadow: 0 0 15px rgba(242,194,78,0.6); }
 
         /* ── Music Player Button ── */
-        #music-btn {
-            background: linear-gradient(135deg, rgba(34,197,94,0.22), rgba(16,185,129,0.18)) !important;
-            border-color: rgba(34,197,94,0.4) !important;
-            font-size: 18px !important;
-            position: relative;
-        }
+        #music-btn { background: linear-gradient(135deg, rgba(34,197,94,0.22), rgba(16,185,129,0.18)) !important; border-color: rgba(34,197,94,0.4) !important; font-size: 18px !important; }
         #music-btn:hover { background: linear-gradient(135deg, rgba(34,197,94,0.5), rgba(16,185,129,0.4)) !important; box-shadow: 0 0 18px rgba(34,197,94,0.55) !important; }
-        #music-btn.playing {
-            background: linear-gradient(135deg, rgba(34,197,94,0.45), rgba(16,185,129,0.35)) !important;
-            border-color: rgba(34,197,94,0.75) !important;
-            box-shadow: 0 0 16px rgba(34,197,94,0.45) !important;
-            opacity: 1 !important;
-            animation: musicPulse 2s ease-in-out infinite;
-        }
-        @keyframes musicPulse {
-            0%,100% { box-shadow: 0 0 10px rgba(34,197,94,0.35), 0 0 0 0 rgba(34,197,94,0.3); }
-            50%      { box-shadow: 0 0 22px rgba(34,197,94,0.6), 0 0 0 6px rgba(34,197,94,0); }
-        }
-        /* bars animation inside button */
+        #music-btn.playing { background: linear-gradient(135deg, rgba(34,197,94,0.45), rgba(16,185,129,0.35)) !important; border-color: rgba(34,197,94,0.75) !important; box-shadow: 0 0 16px rgba(34,197,94,0.45) !important; opacity: 1 !important; animation: musicPulse 2s ease-in-out infinite; }
+        @keyframes musicPulse { 0%,100%{box-shadow:0 0 10px rgba(34,197,94,0.35),0 0 0 0 rgba(34,197,94,0.3);} 50%{box-shadow:0 0 22px rgba(34,197,94,0.6),0 0 0 6px rgba(34,197,94,0);} }
         #music-bars { display:none; align-items:flex-end; gap:2px; height:16px; }
         #music-btn.playing #music-bars { display:flex; }
         #music-btn.playing #music-icon { display:none; }
-        #music-bars span {
-            display:inline-block; width:3px; background:#22c55e; border-radius:2px;
-            animation: barBounce 0.8s ease-in-out infinite;
-        }
-        #music-bars span:nth-child(1){ height:6px;  animation-delay:0s; }
-        #music-bars span:nth-child(2){ height:12px; animation-delay:0.15s; }
-        #music-bars span:nth-child(3){ height:9px;  animation-delay:0.3s; }
-        #music-bars span:nth-child(4){ height:14px; animation-delay:0.1s; }
-        @keyframes barBounce {
-            0%,100% { transform:scaleY(1); }
-            50%      { transform:scaleY(0.35); }
-        }
-        /* Now Playing pill */
-        #now-playing-pill {
-            position: fixed;
-            bottom: 25px;
-            right: 84px;
-            background: rgba(4,14,36,0.88);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(34,197,94,0.4);
-            border-radius: 20px;
-            padding: 6px 14px 6px 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 12px rgba(34,197,94,0.15);
-            z-index: 998;
-            opacity: 0;
-            transform: translateX(12px);
-            visibility: hidden;
-            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-            pointer-events: none;
-        }
-        #now-playing-pill.visible {
-            opacity: 1;
-            transform: translateX(0);
-            visibility: visible;
-        }
-        #now-playing-pill .np-dot {
-            width: 7px; height: 7px; border-radius: 50%;
-            background: #22c55e;
-            flex-shrink: 0;
-            animation: musicPulseDot 1.2s ease-in-out infinite;
-        }
-        @keyframes musicPulseDot {
-            0%,100% { opacity:1; transform:scale(1); }
-            50%      { opacity:0.4; transform:scale(0.7); }
-        }
-        #now-playing-pill .np-text {
-            font-size: 11px;
-            font-weight: 700;
-            color: #e2e8f0;
-            letter-spacing: 0.3px;
-            max-width: 180px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        #now-playing-pill .np-sub {
-            font-size: 9px;
-            color: #22c55e;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-        /* hide YouTube iframe off-screen */
+        #music-bars span { display:inline-block; width:3px; background:#22c55e; border-radius:2px; animation:barBounce 0.8s ease-in-out infinite; }
+        #music-bars span:nth-child(1){height:6px;animation-delay:0s;} #music-bars span:nth-child(2){height:12px;animation-delay:0.15s;} #music-bars span:nth-child(3){height:9px;animation-delay:0.3s;} #music-bars span:nth-child(4){height:14px;animation-delay:0.1s;}
+        @keyframes barBounce { 0%,100%{transform:scaleY(1);} 50%{transform:scaleY(0.35);} }
+        #now-playing-pill { position:fixed; bottom:25px; right:84px; background:rgba(4,14,36,0.88); backdrop-filter:blur(16px); border:1px solid rgba(34,197,94,0.4); border-radius:20px; padding:6px 14px 6px 10px; display:flex; align-items:center; gap:8px; white-space:nowrap; box-shadow:0 4px 20px rgba(0,0,0,0.5),0 0 12px rgba(34,197,94,0.15); z-index:998; opacity:0; transform:translateX(12px); visibility:hidden; transition:opacity 0.3s ease,transform 0.3s ease,visibility 0.3s; pointer-events:none; }
+        #now-playing-pill.visible { opacity:1; transform:translateX(0); visibility:visible; }
+        #now-playing-pill .np-dot { width:7px; height:7px; border-radius:50%; background:#22c55e; flex-shrink:0; animation:musicPulseDot 1.2s ease-in-out infinite; }
+        @keyframes musicPulseDot { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.4;transform:scale(0.7);} }
+        #now-playing-pill .np-text { font-size:11px; font-weight:700; color:#e2e8f0; letter-spacing:0.3px; }
+        #now-playing-pill .np-sub { font-size:9px; color:#22c55e; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; }
         #yt-music-frame { position:fixed; left:-9999px; top:-9999px; width:1px; height:1px; pointer-events:none; }
 
         #social-menu { position: absolute; bottom: 0; right: 58px; display: flex; flex-direction: column; gap: 10px; align-items: center; opacity: 0; visibility: hidden; transform: translateX(10px); transition: all 0.25s ease; }
@@ -1632,6 +1562,8 @@
         .standings-scroll-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         .standings-scroll-wrap table { min-width: 480px; }
 
+        #admin-buttons-bar { overflow: visible; padding-top: 10px; }
+
         @media (max-width: 768px) {
             body { padding: 10px 10px 60px 10px; }
             .container { width: 100%; max-width: 100%; }
@@ -1651,7 +1583,7 @@
             .btn-container button { width: 100% !important; }
 
             /* ── Admin button grid on mobile ── */
-            #admin-buttons-bar { display: flex; flex-wrap: wrap; gap: 8px !important; }
+            #admin-buttons-bar { display: flex; flex-wrap: wrap; gap: 8px !important; overflow: visible !important; padding-top: 10px !important; }
             #admin-buttons-bar button,
             #admin-buttons-bar .import-backup-label { 
                 flex: 1 1 calc(50% - 4px) !important;
@@ -1696,9 +1628,21 @@
             .match-team-rank-inline { display: inline !important; font-size: 10px !important; margin-right: 2px !important; }
             .badge-side { padding: 1px 4px !important; font-size: 9px !important; }
 
-            /* Tab buttons: ลดขนาดให้ 3 ปุ่มอยู่แถวเดียวบนมือถือ */
-            .fx-tabs { gap: 4px !important; flex-wrap: nowrap !important; margin-bottom: 10px !important; }
-            .fx-tab-btn { font-size: 10px !important; padding: 5px 8px !important; gap: 3px !important; border-radius: 14px !important; white-space: nowrap !important; }
+            /* Tab buttons: ขนาดเท่ากัน ดีไซน์เหมือนกัน mobile=desktop */
+            .fx-tabs { gap: 4px !important; flex-wrap: nowrap !important; margin-bottom: 10px !important; justify-content: center !important; }
+            .fx-tab-btn { font-size: 10px !important; padding: 6px 10px !important; gap: 3px !important; border-radius: 20px !important; white-space: nowrap !important; flex: 0 0 auto !important; }
+
+            /* Pager buttons: ยกเว้นจาก button{} generic override — คง pill style ไว้ */
+            .fx-pager-btn { font-size: 10px !important; padding: 5px 11px !important; border-radius: 20px !important; white-space: nowrap !important; display: inline-flex !important; align-items: center !important; gap: 5px !important; }
+            .fx-pager-btn .pager-arrow { font-size: 12px !important; line-height: 1 !important; }
+
+            /* Floating action buttons: เล็กลงบนมือถือ ไม่รก */
+            #fixed-action-container { bottom: 16px !important; right: 14px !important; gap: 8px !important; }
+            .floating-action-btn { width: 38px !important; height: 38px !important; box-shadow: 0 3px 12px rgba(0,0,0,0.5) !important; opacity: 0.85 !important; }
+            #login-btn.player-in, #login-btn.admin-in { min-width: 38px !important; border-radius: 19px !important; padding: 0 8px !important; }
+            #login-btn .logout-name { max-width: 44px !important; font-size: 8px !important; }
+            #login-btn .logout-label { font-size: 8px !important; }
+            #now-playing-pill { right: 60px !important; bottom: 16px !important; font-size: 10px !important; }
 
             /* โลโก้ทีมในตารางแข่ง */
             #fixtures-area .match-team img.club-img { width: 32px; height: 32px; }
@@ -3173,18 +3117,12 @@
 
     <!-- YouTube hidden player -->
     <div id="yt-music-frame"></div>
-    <!-- Now Playing pill -->
     <div id="now-playing-pill">
         <span class="np-dot"></span>
-        <div>
-            <div class="np-text">Don Miguelo - Y Que Fue?</div>
-            <div class="np-sub">♪ NOW PLAYING</div>
-        </div>
+        <div><div class="np-text">Don Miguelo - Y Que Fue?</div><div class="np-sub">♪ NOW PLAYING</div></div>
     </div>
-
     <div id="fixed-action-container">
-        <!-- Music button -->
-        <button id="music-btn" class="floating-action-btn" onclick="toggleMusic()" title="เปิด/ปิดเพลง — Don Miguelo - Y Que Fue?">
+        <button id="music-btn" class="floating-action-btn" onclick="toggleMusic()" title="เปิด/ปิดเพลง">
             <span id="music-icon">🎵</span>
             <span id="music-bars"><span></span><span></span><span></span><span></span></span>
         </button>
@@ -3504,9 +3442,9 @@
             </div>
 
             <div id="fx-round-pager" class="fx-round-pager" style="display:none;">
-                <button type="button" class="fx-pager-btn" onclick="fxChangeRound(-1)">◀ รอบก่อนหน้า</button>
+                <button type="button" class="fx-pager-btn" onclick="fxChangeRound(-1)"><span class="pager-arrow">←</span> รอบก่อนหน้า</button>
                 <span id="fx-round-label" class="fx-round-label"></span>
-                <button type="button" class="fx-pager-btn" onclick="fxChangeRound(1)">รอบถัดไป ▶</button>
+                <button type="button" class="fx-pager-btn" onclick="fxChangeRound(1)">รอบถัดไป <span class="pager-arrow">→</span></button>
             </div>
 
             <div id="fx-history-search" style="display:none; margin-bottom:14px;">
@@ -6179,14 +6117,10 @@ function psmPickPhoto() {
         const file = e.target.files[0]; if (!file) return;
         _psmStatus("⏳ กำลังโหลดรูป...", "#60a5fa");
         const reader = new FileReader();
-        reader.onerror = function() {
-            _psmStatus("❌ ไม่สามารถอ่านไฟล์รูปได้ กรุณาลองใหม่", "#ef4444");
-        };
+        reader.onerror = function() { _psmStatus("❌ ไม่สามารถอ่านไฟล์รูปได้ กรุณาลองใหม่", "#ef4444"); };
         reader.onload = function(ev) {
             const img = new Image();
-            img.onerror = function() {
-                _psmStatus("❌ ไฟล์รูปเสียหายหรือไม่รองรับ กรุณาลองใหม่", "#ef4444");
-            };
+            img.onerror = function() { _psmStatus("❌ ไฟล์รูปเสียหายหรือไม่รองรับ กรุณาลองใหม่", "#ef4444"); };
             img.onload = function() {
                 try {
                     let w = img.width, h = img.height;
@@ -6196,12 +6130,11 @@ function psmPickPhoto() {
                     cvs.getContext("2d").drawImage(img, 0, 0, w, h);
                     _psmPhotoBase64 = cvs.toDataURL("image/jpeg", 0.78).split(",")[1];
                     _psmPhotoBlob   = cvs.toDataURL("image/jpeg", 0.78);
-                    _psmPhotoUrl    = null; // reset — will be filled by pre-upload
+                    _psmPhotoUrl    = null;
                     document.getElementById("psm-photo-img").src = _psmPhotoBlob;
                     document.getElementById("psm-photo-preview").style.display = "";
                     document.getElementById("psm-photo-name").textContent = "✅ " + file.name;
                     document.getElementById("psm-photo-btn").textContent = "🔄 เปลี่ยนรูปภาพ";
-                    // อัปโหลดขึ้น imgbb ทันที (background) — ไม่ต้องรอตอน submit
                     _psmPreUpload();
                 } catch(err) {
                     _psmPhotoBase64 = null;
@@ -6218,9 +6151,7 @@ function psmPickPhoto() {
 async function _psmPreUpload() {
     if (!_psmPhotoBase64) return;
     if (!IMGBB_API_KEY || IMGBB_API_KEY === "ใส่_API_KEY_ของคุณตรงนี้") {
-        // ไม่มี API key — ใช้ local blob ได้เลย ถือว่าพร้อม
-        _psmStatus("✅ รูปพร้อมแล้ว — กดส่งผลได้เลย", "#22c55e");
-        return;
+        _psmStatus("✅ รูปพร้อมแล้ว — กดส่งผลได้เลย", "#22c55e"); return;
     }
     _psmStatus("⏳ กำลังอัปโหลดรูปขึ้นคลาวด์...", "#60a5fa");
     try {
@@ -6229,17 +6160,9 @@ async function _psmPreUpload() {
         fd.append("image", _psmPhotoBase64);
         const res  = await fetch("https://api.imgbb.com/1/upload", { method: "POST", body: fd });
         const data = await res.json();
-        if (data.success) {
-            _psmPhotoUrl = data.data.url;
-            _psmStatus("✅ อัปโหลดรูปสำเร็จ — กดส่งผลได้เลย", "#22c55e");
-        } else {
-            // imgbb ตอบกลับแต่ไม่ success — ใช้ blob แทน
-            _psmStatus("⚠️ อัปโหลดคลาวด์ไม่สำเร็จ แต่ยังส่งผลได้", "#f59e0b");
-        }
-    } catch(e) {
-        // เน็ตมีปัญหา — ใช้ blob แทน ยังส่งได้
-        _psmStatus("⚠️ ไม่สามารถเชื่อมต่อคลาวด์ได้ แต่ยังส่งผลได้", "#f59e0b");
-    }
+        if (data.success) { _psmPhotoUrl = data.data.url; _psmStatus("✅ อัปโหลดรูปสำเร็จ — กดส่งผลได้เลย", "#22c55e"); }
+        else { _psmStatus("⚠️ อัปโหลดคลาวด์ไม่สำเร็จ แต่ยังส่งผลได้", "#f59e0b"); }
+    } catch(e) { _psmStatus("⚠️ ไม่สามารถเชื่อมต่อคลาวด์ได้ แต่ยังส่งผลได้", "#f59e0b"); }
 }
 
 async function submitPlayerResult() {
@@ -6255,8 +6178,7 @@ async function submitPlayerResult() {
 
     if (!_psmPhotoBase64) { _psmStatus("⚠️ กรุณาแนบรูปหลักฐานก่อนส่ง", "#f59e0b"); return; }
 
-    // ถ้าอัปโหลดล่วงหน้าไม่สำเร็จ ให้ลองใหม่ตอน submit
-    let imgUrl = _psmPhotoUrl || _psmPhotoBlob; // ใช้ URL ที่อัปโหลดไว้แล้ว ถ้าไม่มีใช้ local blob
+    let imgUrl = _psmPhotoUrl || _psmPhotoBlob;
     if (!_psmPhotoUrl && IMGBB_API_KEY && IMGBB_API_KEY !== "ใส่_API_KEY_ของคุณตรงนี้") {
         _psmStatus("⏳ กำลังอัปโหลดรูป...", "#60a5fa");
         try {
@@ -6295,8 +6217,8 @@ async function submitPlayerResult() {
     document.getElementById("psm-home-score").value = "";
     document.getElementById("psm-away-score").value = "";
     _psmPhotoBase64 = null; _psmPhotoUrl = null; _psmPhotoBlob = null;
-    // repopulate match picker (sent match now marked)
-    openPlayerSubmitModal();
+    // ปิด modal ทันทีหลังส่งผลสำเร็จ — ไม่ต้องเด้งให้กรอกคู่อื่น
+    setTimeout(closePlayerSubmitModal, 1200);
 }
 
 function _psmStatus(msg, color) {
@@ -6460,7 +6382,7 @@ function renderAdminDock() {
         ${advanceHTML}
         ${consolAdvanceHTML}
         <button onclick="openTrophyEditor()" style="background:linear-gradient(135deg,rgba(255,215,0,0.18),rgba(180,130,0,0.12));border:1px solid rgba(255,215,0,0.55);color:#F2C24E;">🏆 ถ้วยรางวัล</button>
-        <button onclick="openAdminPendingModal()" id="admin-pending-btn" style="position:relative;background:linear-gradient(135deg,rgba(29,78,216,0.25),rgba(30,64,175,0.15));border:1px solid rgba(96,165,250,0.5);color:#60a5fa;font-weight:700;">📋 รอตรวจสอบ<span id="admin-pending-count" style="display:none;position:absolute;top:-7px;right:-7px;background:#ef4444;color:#fff;border-radius:99px;font-size:10px;font-weight:900;min-width:18px;height:18px;line-height:18px;text-align:center;padding:0 4px;font-family:'Prompt',sans-serif;"></span></button>
+        <button onclick="openAdminPendingModal()" id="admin-pending-btn" style="position:relative;overflow:visible;background:linear-gradient(135deg,rgba(29,78,216,0.25),rgba(30,64,175,0.15));border:1px solid rgba(96,165,250,0.5);color:#60a5fa;font-weight:700;">📋 รอตรวจสอบ<span id="admin-pending-count" style="display:none;position:absolute;top:-7px;right:-7px;background:#ef4444;color:#fff;border-radius:99px;font-size:10px;font-weight:900;min-width:18px;height:18px;line-height:18px;text-align:center;padding:0 4px;font-family:'Prompt',sans-serif;"></span></button>
         <button onclick="openBigMatchPickerModal()" style="background:linear-gradient(135deg,#7c2d00,#c2410c);border:1px solid rgba(249,115,22,0.4);color:#fed7aa;">🔥 บิ๊กแมช</button>
         <button onclick="openAdBannerEditor()" style="background:linear-gradient(135deg,#1e3a5f,#0f2640);border:1px solid rgba(242,194,78,0.35);color:#F2C24E;">📢 Ad Banner</button>
         <button onclick="openEditTeamsModal()" style="background:linear-gradient(135deg,#F2C24E,#c49520);color:#020710;border:none;">✏️ จัดการผู้สมัคร</button>
@@ -7522,7 +7444,10 @@ async function resetScoreFromModal() {
     match.awayScore = null;
     if (match.winnerId !== undefined) match.winnerId = null;
     match.status = null;
+    match.evidenceImg = '';
+    match.evidenceUploadedBy = '';
     _removeH2HRecordForMatch(match); // ล้างสถิติ H2H ที่เคยบันทึกไว้ของแมตช์นี้ด้วย
+    _saveEvidenceToLocal(); // ล้าง evidence ออกจาก localStorage ด้วย
     let fmt = state.tournamentFormat || 'league';
     if (fmt !== 'league') renderAdminDock();
     renderLeague(); saveDataToCloud();
@@ -10598,73 +10523,39 @@ function saveCommentFromPopup() {
     </div>
 </div>
 
+
 <!-- ── YouTube IFrame API (music player) ── -->
 <script>
-// ════════════════════════════════════════════════════
-// MUSIC PLAYER — Don Miguelo - Y Que Fue?
-// ════════════════════════════════════════════════════
-var _ytPlayer     = null;
-var _ytReady      = false;
-var _musicPlaying = false;
-var _ytVideoId    = '16nZ6K7sim4';
-
-// Load YT IFrame API asynchronously
-(function() {
-    var tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.head.appendChild(tag);
-})();
-
-// Called by YT API when ready
-function onYouTubeIframeAPIReady() {
-    _ytPlayer = new YT.Player('yt-music-frame', {
-        height: '1', width: '1',
-        videoId: _ytVideoId,
-        playerVars: {
-            autoplay: 0,
-            controls: 0,
-            loop: 1,
-            playlist: _ytVideoId,
-            playsinline: 1,
-            rel: 0,
-            modestbranding: 1
-        },
-        events: {
-            onReady: function() { _ytReady = true; },
-            onStateChange: function(e) {
-                // YT.PlayerState.ENDED = 0 → loop: restart
-                if (e.data === 0) { _ytPlayer.playVideo(); }
+var _ytPlayer = null, _ytReady = false, _musicPlaying = false;
+var _ytVideoId = '16nZ6K7sim4';
+(function(){ var t=document.createElement('script'); t.src='https://www.youtube.com/iframe_api'; document.head.appendChild(t); })();
+function onYouTubeIframeAPIReady(){
+    _ytPlayer = new YT.Player('yt-music-frame',{
+        height:'1',width:'1',videoId:_ytVideoId,
+        playerVars:{autoplay:1,controls:0,loop:1,playlist:_ytVideoId,playsinline:1,rel:0,modestbranding:1},
+        events:{
+            onReady:function(e){
+                _ytReady=true;
+                try{ e.target.playVideo(); setTimeout(function(){ var s=_ytPlayer.getPlayerState(); if(s===1||s===3) _setMusicState(true); },800); }catch(err){}
+            },
+            onStateChange:function(e){
+                if(e.data===1) _setMusicState(true);
+                if(e.data===2) _setMusicState(false);
+                if(e.data===0) _ytPlayer.playVideo();
             }
         }
     });
 }
-
-function toggleMusic() {
-    if (!_ytReady || !_ytPlayer) {
-        // API not ready yet — retry after short delay
-        setTimeout(toggleMusic, 400);
-        return;
-    }
-    if (_musicPlaying) {
-        _ytPlayer.pauseVideo();
-        _setMusicState(false);
-    } else {
-        _ytPlayer.playVideo();
-        _setMusicState(true);
-    }
+function toggleMusic(){
+    if(!_ytReady||!_ytPlayer){setTimeout(toggleMusic,400);return;}
+    if(_musicPlaying){_ytPlayer.pauseVideo();_setMusicState(false);}
+    else{_ytPlayer.playVideo();_setMusicState(true);}
 }
-
-function _setMusicState(playing) {
-    _musicPlaying = playing;
-    var btn  = document.getElementById('music-btn');
-    var pill = document.getElementById('now-playing-pill');
-    if (playing) {
-        btn.classList.add('playing');
-        pill.classList.add('visible');
-    } else {
-        btn.classList.remove('playing');
-        pill.classList.remove('visible');
-    }
+function _setMusicState(p){
+    _musicPlaying=p;
+    var btn=document.getElementById('music-btn'), pill=document.getElementById('now-playing-pill');
+    if(p){btn.classList.add('playing');pill.classList.add('visible');}
+    else{btn.classList.remove('playing');pill.classList.remove('visible');}
 }
 </script>
 </body>
