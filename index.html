@@ -10743,11 +10743,23 @@ function _getEffectivePlaylist() {
     if (cp.length > 0) return { ids: cp.map(function(s){ return s.id; }), names: cp.map(function(s){ return s.name; }) };
     return { ids: _ytDefaultPlaylist.slice(), names: _ytDefaultNames.slice() };
 }
-function _applyCustomPlaylist() {
+function _applyCustomPlaylist(switchNow) {
     var pl = _getEffectivePlaylist();
     _ytPlaylist = pl.ids;
     _ytTrackNames = pl.names;
     if (_ytCurrentTrack >= _ytPlaylist.length) _ytCurrentTrack = 0;
+    // switchNow=true → switch player to track 0 immediately (used when admin adds/removes songs)
+    if (switchNow && _ytPlayer && _ytReady && _ytPrankUnlocked && !_adGifVideoId) {
+        try {
+            _ytCurrentTrack = 0;
+            _ytMuted = false;
+            _ytPlayer.loadVideoById(_ytPlaylist[0]);
+            _ytPlayer.unMute();
+            _ytPlayer.setVolume(75);
+            _setMusicState(true);
+            _updateNowPlaying();
+        } catch(e) {}
+    }
 }
 
 /* Load YT IFrame API */
@@ -10797,8 +10809,13 @@ window.onYouTubeIframeAPIReady = function(){
                 document.addEventListener('keydown',   _prankHandler, true);
             },
             onStateChange:function(e){
-                /* video ended (0) → advance to next track */
+                /* video ended (0) */
                 if(e.data === 0){
+                    // ถ้าเพลง GIF กำลังเล่นอยู่ ให้ loop เพลงนั้นซ้ำ ไม่ใช่ advance playlist
+                    if(_adGifVideoId){
+                        try{ _ytPlayer.loadVideoById(_adGifVideoId); }catch(err){}
+                        return;
+                    }
                     _ytCurrentTrack = (_ytCurrentTrack + 1) % _ytPlaylist.length;
                     _updateNowPlaying();
                     try{
@@ -10999,7 +11016,7 @@ function plAddTrack() {
     state.customPlaylist.push({ id: vid, name: name });
     if (urlEl) urlEl.value = '';
     if (nameEl) nameEl.value = '';
-    _applyCustomPlaylist();
+    _applyCustomPlaylist(true);
     saveDataToCloud();
     _renderPlList();
     showToast('✅ เพิ่ม "' + name + '" เรียบร้อย!', 'success');
@@ -11008,14 +11025,14 @@ function plRemoveTrack(idx) {
     if (!state.customPlaylist || !state.customPlaylist[idx]) return;
     var name = state.customPlaylist[idx].name;
     state.customPlaylist.splice(idx, 1);
-    _applyCustomPlaylist();
+    _applyCustomPlaylist(true);
     saveDataToCloud();
     _renderPlList();
     showToast('🗑️ ลบ "' + name + '" แล้ว', 'success');
 }
 function plResetDefault() {
     state.customPlaylist = [];
-    _applyCustomPlaylist();
+    _applyCustomPlaylist(true);
     saveDataToCloud();
     _renderPlList();
     showToast('🔄 คืนค่า playlist เป็นค่าเริ่มต้นแล้ว', 'success');
