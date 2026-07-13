@@ -3997,6 +3997,16 @@
       <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#60a5fa;letter-spacing:1.5px;">⚽ ส่งผลการแข่งขัน</div>
       <button onclick="closePlayerSubmitModal()" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:15px;flex-shrink:0;">✕</button>
     </div>
+    <!-- ── success view (shown after a successful submit) ── -->
+    <div id="psm-success-view" style="display:none;text-align:center;padding:22px 8px 10px;">
+      <div style="font-size:52px;line-height:1;margin-bottom:14px;">✅</div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#22c55e;margin-bottom:8px;">ส่งผลเรียบร้อยแล้ว!</div>
+      <div style="font-size:13px;color:#a1b7d6;margin-bottom:22px;line-height:1.6;">ผลการแข่งขันของคุณถูกส่งเข้าระบบแล้ว<br>รอแอดมินตรวจสอบและยืนยันผลอีกครั้ง</div>
+      <button onclick="closePlayerSubmitModal()" style="padding:12px 40px;background:linear-gradient(135deg,#1d4ed8,#1e40af);color:#fff;border:none;border-radius:10px;font-weight:900;font-size:14px;cursor:pointer;letter-spacing:0.5px;box-shadow:0 4px 18px rgba(29,78,216,0.4);">ปิดหน้าต่าง</button>
+    </div>
+
+    <!-- ── form view ── -->
+    <div id="psm-form-wrap">
     <div style="font-size:12px;color:#64748b;margin-bottom:16px;">เลือกคู่แข่งขันของทีมคุณ กรอกสกอร์ และแนบรูปหลักฐาน — แอดมินจะตรวจสอบก่อนบันทึกผล</div>
 
     <!-- match picker (dropdown — hidden when locked) -->
@@ -4052,6 +4062,7 @@
     <div style="margin-top:20px;border-top:1px solid rgba(255,255,255,0.06);padding-top:16px;">
       <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;">ผลที่ส่งไว้แล้ว</div>
       <div id="psm-my-list"></div>
+    </div>
     </div>
   </div>
 </div>
@@ -6385,6 +6396,12 @@ function openPlayerSubmitModal(preSelectMatchId) {
     if (document.getElementById("psm-home-score")) document.getElementById("psm-home-score").value = "";
     if (document.getElementById("psm-away-score")) document.getElementById("psm-away-score").value = "";
 
+    // กลับไปแสดงหน้าฟอร์มเสมอเมื่อเปิด modal ใหม่ (เผื่อครั้งก่อนค้างอยู่ที่หน้า "ส่งสำเร็จ")
+    const formWrap = document.getElementById("psm-form-wrap");
+    const successView = document.getElementById("psm-success-view");
+    if (formWrap) formWrap.style.display = "block";
+    if (successView) successView.style.display = "none";
+
     _renderPsmMyList();
 
     const modal = document.getElementById("playerSubmitModal");
@@ -6522,7 +6539,6 @@ async function submitPlayerResult() {
 
     _psmStatus("", "");
     saveDataToCloud(true);
-    _psmStatus("✅ ส่งผลสำเร็จ! รอแอดมินตรวจสอบ", "#22c55e");
     _renderPsmMyList();
     updateAdminPendingBadge();
     // reset UI
@@ -6536,8 +6552,11 @@ async function submitPlayerResult() {
     _psmPhotoBase64 = null; _psmPhotoUrl = null; _psmPhotoBlob = null;
     var gb = document.getElementById("psm-gallery-btn");
     if (gb) gb.textContent = "📷 เลือกรูปภาพจากอุปกรณ์";
-    // ปิด modal ทันทีหลังส่งผลสำเร็จ — ไม่ต้องเด้งให้กรอกคู่อื่น
-    setTimeout(closePlayerSubmitModal, 1200);
+    // แสดงหน้ายืนยันว่าส่งสำเร็จแล้ว พร้อมปุ่มให้กดปิดเอง แทนที่จะปิด modal ทิ้งไปเฉยๆ
+    var formWrap = document.getElementById("psm-form-wrap");
+    var successView = document.getElementById("psm-success-view");
+    if (formWrap) formWrap.style.display = "none";
+    if (successView) successView.style.display = "block";
 }
 
 function _psmStatus(msg, color) {
