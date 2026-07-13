@@ -6521,7 +6521,7 @@ async function submitPlayerResult() {
     });
 
     _psmStatus("", "");
-    saveDataToCloud();
+    saveDataToCloud(true);
     _psmStatus("✅ ส่งผลสำเร็จ! รอแอดมินตรวจสอบ", "#22c55e");
     _renderPsmMyList();
     updateAdminPendingBadge();
@@ -7655,7 +7655,7 @@ function submitChangeRequest() {
     };
     state.changeRequests.push(entry);
     closeChangeRequestModal();
-    saveDataToCloud();
+    saveDataToCloud(true);
     showToast("📨 ส่งคำขอแล้ว รอแอดมินอนุมัติ", "success");
     // Re-open player info to show pending status
     openLoginModal();
@@ -8169,8 +8169,11 @@ window.addEventListener("popstate", function(e) {
 });
 
 let debounceTimer;
-function saveDataToCloud() {
-    if (state.isViewOnly) return;
+function saveDataToCloud(allowPlayerSubmit) {
+    // ผู้เล่น (isViewOnly = true) ปกติจะแก้ไขข้อมูลทัวร์นาเมนต์ไม่ได้
+    // แต่การ "ส่งผลการแข่งขัน" และ "ส่งคำขอแก้ไขข้อมูล" เป็นการกระทำที่ผู้เล่นทำได้
+    // จึงต้องส่งค่า allowPlayerSubmit = true เพื่อให้บันทึกขึ้นคลาวด์จริง ไม่ใช่แค่ค้างอยู่ในเครื่อง
+    if (state.isViewOnly && !allowPlayerSubmit) return;
     if (window._READONLY_MODE) { showToast('🔒 Readonly Mode — ไม่บันทึกข้อมูล', 'info'); return; }
     // สำรองข้อมูลไว้ในเครื่องทันที เผื่อบันทึกขึ้นคลาวด์ไม่สำเร็จแล้วต้องรีเฟรชหน้า
     _saveLocalDraft();
