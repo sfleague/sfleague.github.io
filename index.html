@@ -4072,7 +4072,10 @@
   <div style="background:linear-gradient(145deg,#0d1f3c,#081424);border:2px solid rgba(242,194,78,0.4);border-radius:16px;padding:24px;width:100%;max-width:620px;margin:auto;box-shadow:0 0 50px rgba(242,194,78,0.1);">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
       <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#F2C24E;letter-spacing:1.5px;">📋 รอการอนุมัติ</div>
-      <button onclick="closeAdminPendingModal()" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:15px;line-height:1;flex-shrink:0;padding:0;">✕</button>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button id="apm-refresh-btn" onclick="adminRefreshPending()" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.35);color:#4ade80;border-radius:8px;padding:0 12px;height:32px;cursor:pointer;font-size:12px;font-weight:700;font-family:'Prompt',sans-serif;flex-shrink:0;">🔄 รีเฟรชข้อมูลล่าสุด</button>
+        <button onclick="closeAdminPendingModal()" style="display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:15px;line-height:1;flex-shrink:0;padding:0;">✕</button>
+      </div>
     </div>
     <!-- Tabs -->
     <div class="apm-tab-row">
@@ -6591,10 +6594,40 @@ function _renderPsmMyList() {
 // ── Admin Pending Modal ──────────────────────────────────────────────────────
 
 function openAdminPendingModal() {
-    renderAdminPendingList();
     document.getElementById("adminPendingModal").style.display = "flex";
+    // ดึงข้อมูลล่าสุดจากคลาวด์ทุกครั้งที่เปิดหน้านี้ ป้องกันแอดมินเห็นข้อมูลเก่าค้าง (เช่น ผลที่ผู้เล่นเพิ่งส่งจากเครื่องอื่น)
+    adminRefreshPending();
+}
+
+// ดึงข้อมูลล่าสุดจากคลาวด์มาอัปเดต "ผลรอตรวจสอบ" และ "คำขอแก้ไขข้อมูล" ให้แอดมิน
+// เดิมแอดมินไม่มีทางรีเฟรชข้อมูลนี้เลยนอกจากปิดหน้าแล้วเปิดใหม่ทั้งหมด
+function adminRefreshPending() {
+    renderAdminPendingList();
     renderAdminChangeRequestList();
     updateAdminPendingBadge();
+    if (!state.binId) return;
+    const btn = document.getElementById("apm-refresh-btn");
+    if (btn) { btn.disabled = true; btn.textContent = "⏳ กำลังโหลด..."; }
+    fetchWithRetry(`https://api.jsonbin.io/v3/b/${state.binId}/latest`, {
+        headers: { 'X-Master-Key': BIN_MASTER_KEY }
+    }, 1)
+    .then(resData => {
+        const newVer = resData.metadata && resData.metadata.version;
+        if (newVer) _lastBinVersion = newVer;
+        if (resData.record && Array.isArray(resData.record.pendingResults)) {
+            state.pendingResults = resData.record.pendingResults;
+        }
+        if (resData.record && Array.isArray(resData.record.changeRequests)) {
+            state.changeRequests = resData.record.changeRequests;
+        }
+        renderAdminPendingList();
+        renderAdminChangeRequestList();
+        updateAdminPendingBadge();
+    })
+    .catch(() => { /* เงียบไว้ — ยังมีข้อมูลที่มีอยู่แล้วให้ดูตามปกติ */ })
+    .finally(() => {
+        if (btn) { btn.disabled = false; btn.textContent = "🔄 รีเฟรชข้อมูลล่าสุด"; }
+    });
 }
 
 function closeAdminPendingModal() {
@@ -9596,6 +9629,8 @@ function _loadBinData(idToLoad) {
         if (r.no1History) state.no1History = r.no1History;
         if (Array.isArray(r.changelog)) state.changelog = r.changelog;
         if (Array.isArray(r.changeRequests)) state.changeRequests = r.changeRequests;
+        // สำคัญ: ต้องโหลด "ผลที่ผู้เล่นส่งมารอตรวจสอบ" กลับมาด้วย ไม่งั้นแอดมินเปิดหน้าใหม่แล้วจะไม่เห็นเลย
+        state.pendingResults = Array.isArray(r.pendingResults) ? r.pendingResults : [];
         if (r.announcement !== undefined) state.announcement = r.announcement || "";
         if (Array.isArray(r.customPlaylist)) { state.customPlaylist = r.customPlaylist; _applyCustomPlaylist(); }
         renderAdBanner();
