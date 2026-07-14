@@ -1733,7 +1733,30 @@
             }
             .btn-save-hof { font-size: 14px; padding: 11px 20px; }
             .btn-danger-small { font-size: 13px; padding: 9px 14px; min-height: 36px; }
-        }
+        
+            /* ── MOBILE PERFORMANCE FIXES ──
+               backdrop-filter: blur() หนักมากบน iOS Safari → ปิดบนมือถือ */
+            .fc-card,
+            .autocomplete-suggestions,
+            .floating-action-btn,
+            .social-link-btn,
+            #now-playing-pill,
+            #role-status-bar,
+            .pl-box,
+            .ad-editor-box,
+            .ad-popup-box,
+            .modal > div,
+            .bk-modal-bg > div {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+            }
+            /* ปิด ambient orbs บนมือถือ (ลด GPU overdraw) */
+            .ambient-orbs { display: none !important; }
+            /* ปิด body::before grid pattern บนมือถือ */
+            body::before { display: none !important; }
+            /* ลด animation บนมือถือ */
+            .fc-card { animation: none !important; will-change: auto !important; }
+}
 
         /* ── Score View Box — Clickable for all users ── */
         .score-view-box.score-clickable {
@@ -3226,6 +3249,8 @@
 <script>
 /* Loading screen — mini star field on the overlay canvas */
 (function(){
+  // มือถือ: ข้ามการวาด canvas loading — ประหยัด memory
+  if (window.innerWidth <= 900) return;
   var c = document.getElementById('ilo-stars-canvas');
   if (!c) return;
   var ctx = c.getContext('2d');
@@ -3261,6 +3286,12 @@
 <script>
 (function() {
     'use strict';
+    // บนมือถือ: ปิด particle canvas (ประหยัด CPU/GPU, ป้องกันหน้าค้าง)
+    if (window.innerWidth <= 900) {
+        var cv = document.getElementById('particles-canvas');
+        if (cv) cv.style.display = 'none';
+        return;
+    }
     const canvas = document.getElementById('particles-canvas');
     const ctx = canvas.getContext('2d');
 
