@@ -3125,6 +3125,7 @@
 <canvas id="particles-canvas"></canvas>
 
 <!-- ── หน้าจอโหลดข้อมูลตอนเข้าเว็บครั้งแรก (กันหน้าเปล่าโผล่มาก่อนข้อมูลจริง) ── -->
+<script>window._iloStartTime = Date.now();</script>
 <style>
 @keyframes initLoadSpin { to { transform: rotate(360deg); } }
 @keyframes ilo-bg-breathe  { 0%,100%{opacity:.45} 50%{opacity:.85} }
@@ -4997,8 +4998,13 @@ function _hideInitialLoadOverlay() {
     const el = document.getElementById('initial-load-overlay');
     if (!el || el.dataset.hidden) return;
     el.dataset.hidden = '1';
-    el.style.opacity = '0';
-    setTimeout(() => el.remove(), 400);
+    // บังคับแสดงขั้นต่ำ 1800ms ให้ animation ทุก layer ได้รันครบก่อน fade out
+    const elapsed = Date.now() - (window._iloStartTime || Date.now());
+    const remaining = Math.max(0, 1800 - elapsed);
+    setTimeout(() => {
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 420);
+    }, remaining);
 }
 
 // เตือนก่อนปิด/รีเฟรชหน้า ถ้ายังมีข้อมูลที่บันทึกขึ้นคลาวด์ไม่สำเร็จค้างอยู่
