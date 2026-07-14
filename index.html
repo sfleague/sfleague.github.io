@@ -6707,6 +6707,7 @@ function adminApprovePending(pendingId) {
         match.scoredAt     = Date.now();
         match.evidenceImg  = p.evidenceImg || match.evidenceImg;
         match.evidenceUploadedBy = p.submittedBy;
+        match.status       = 'finished';
         _autoRecordH2H(match);
     }
     p.status = "approved";
@@ -11466,7 +11467,7 @@ function _setMusicState(p){
 <!-- Playlist Manager Modal -->
 <div id="playlist-modal" onclick="if(event.target===this)closePlaylistManager()">
     <div class="pl-box">
-        <button onclick="closePlaylistManager()" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;font-family:'Prompt',sans-serif;">&#x2715;</button>
+        <button onclick="closePlaylistManager()" style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;font-family:'Prompt',sans-serif;display:flex;align-items:center;justify-content:center;padding:0;line-height:1;">&#x2715;</button>
         <div class="pl-title">🎵 จัดการเพลย์ลิสต์</div>
         <div style="margin-bottom:18px;padding:14px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.22);border-radius:12px;">
             <div style="font-size:11px;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">+ เพิ่มเพลงใหม่</div>
