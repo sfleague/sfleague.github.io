@@ -6,6 +6,9 @@
     <title>FC 26 SF LEAGUE</title>
     <link rel="icon" href="wc2026-trophy.png" type="image/png">
     <link rel="apple-touch-icon" href="wc2026-trophy.png">
+    <!-- เชื่อมต่อล่วงหน้ากับเซิร์ฟเวอร์ข้อมูล (jsonbin.io) เพื่อลดเวลาหน่วงตอนโหลดข้อมูลครั้งแรก -->
+    <link rel="preconnect" href="https://api.jsonbin.io">
+    <link rel="dns-prefetch" href="https://api.jsonbin.io">
 
     <!-- ===== แก้ข้อความตอนแชร์ลิงก์ใน Line/Facebook ตรงนี้เลย ===== -->
     <meta property="og:title"       content="FC 26 SF LEAGUE 🏆">
@@ -3030,6 +3033,15 @@
 <!-- ── Canvas Particle System ── -->
 <canvas id="particles-canvas"></canvas>
 
+<!-- ── หน้าจอโหลดข้อมูลตอนเข้าเว็บครั้งแรก (กันหน้าเปล่าโผล่มาก่อนข้อมูลจริง) ── -->
+<div id="initial-load-overlay" style="position:fixed;inset:0;z-index:99998;background:#020710;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .35s ease;">
+    <div style="width:46px;height:46px;border-radius:50%;border:4px solid rgba(242,194,78,.25);border-top-color:#F2C24E;animation:initLoadSpin .8s linear infinite;"></div>
+    <div style="color:#e5e7eb;font-family:Prompt,sans-serif;font-size:14px;letter-spacing:.5px;">กำลังโหลดข้อมูล...</div>
+</div>
+<style>
+@keyframes initLoadSpin { to { transform: rotate(360deg); } }
+</style>
+
 <script>
 (function() {
     'use strict';
@@ -4702,6 +4714,45 @@ function _getLocalDraft() {
     } catch (e) { return null; }
 }
 
+// ─── แคชข้อมูลล่าสุดที่เคยเห็นไว้ในเครื่อง เพื่อแสดงผลได้ทันทีตอนเปิดเว็บ ─────────
+// (ลดปัญหา "หน้าเปล่าโผล่มาก่อน แล้วค่อยขึ้นข้อมูล" เพราะปกติต้องรอ fetch จาก jsonbin.io ก่อนถึงจะเห็นอะไร)
+// เมื่อโหลดจากแคชนี้ หน้าจะแสดงข้อมูล "ล่าสุดที่เคยเห็น" ทันที แล้วเบื้องหลังจะดึงของจริงจากคลาวด์มาซ้อนทับให้ถูกต้องอีกที
+function _lastKnownCacheKey(binId) { return `wc_last_known_${binId || 'local'}`; }
+
+function _saveLastKnownCache(binId) {
+    try {
+        localStorage.setItem(_lastKnownCacheKey(binId), JSON.stringify({ savedAt: Date.now(), data: _getStateForCloud() }));
+    } catch (e) { /* localStorage อาจเต็ม เพิกเฉยได้ ไม่กระทบการทำงานหลัก */ }
+}
+
+function _getLastKnownCache(binId) {
+    try {
+        const raw = localStorage.getItem(_lastKnownCacheKey(binId));
+        return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+}
+
+// แสดงข้อมูลจากแคชทันทีก่อนข้อมูลจริงจากคลาวด์จะมาถึง (ถ้ามีแคชอยู่)
+function _renderFromCacheInstantly(binId) {
+    const cached = _getLastKnownCache(binId);
+    if (!cached || !cached.data) return false;
+    Object.assign(state, cached.data);
+    state.binId = binId;
+    try {
+        renderHeader(); renderLeague(); refreshUIState(); renderAnnouncement(); renderAdBanner(); renderChangelog();
+    } catch (e) { return false; }
+    _hideInitialLoadOverlay();
+    return true;
+}
+
+function _hideInitialLoadOverlay() {
+    const el = document.getElementById('initial-load-overlay');
+    if (!el || el.dataset.hidden) return;
+    el.dataset.hidden = '1';
+    el.style.opacity = '0';
+    setTimeout(() => el.remove(), 400);
+}
+
 // เตือนก่อนปิด/รีเฟรชหน้า ถ้ายังมีข้อมูลที่บันทึกขึ้นคลาวด์ไม่สำเร็จค้างอยู่
 window.addEventListener('beforeunload', function (e) {
     if (_hasUnsavedChanges) {
@@ -4907,6 +4958,9 @@ function _applyCloudData(r) {
     renderAdBanner();
     renderChangelog();
     updateAdminPendingBadge();
+    _hideInitialLoadOverlay();
+    // เก็บสำเนาข้อมูลล่าสุดไว้ในเครื่อง เผื่อครั้งหน้าเข้าเว็บใหม่จะได้แสดงผลได้ทันที
+    _saveLastKnownCache(state.binId);
 }
 
 // ─── Announcement Banner ─────────────────────────────────────────────────────
@@ -9743,6 +9797,9 @@ function _loadBinData(idToLoad) {
             : (window.location.origin + window.location.pathname + "?id=" + state.binId);
         document.getElementById("spectator-link-path").textContent = shareBase;
         showStatus("☁️ โหลดข้อมูลแล้ว"); renderHeader(); renderLeague(); refreshUIState(); renderAnnouncement(); renderChangelog();
+        _hideInitialLoadOverlay();
+        // เก็บสำเนาไว้ในเครื่อง เพื่อให้ครั้งหน้าที่เข้าเว็บ แสดงข้อมูลนี้ได้ทันทีโดยไม่ต้องรอโหลด
+        _saveLastKnownCache(state.binId);
         // เริ่ม auto-refresh สำหรับ viewer
         if (state.isViewOnly) _startAutoRefresh();
         // ถ้ามีข้อมูลที่เคยบันทึกขึ้นคลาวด์ไม่สำเร็จค้างไว้ในเครื่องนี้ ถามว่าจะกู้คืนไหม
@@ -9750,6 +9807,8 @@ function _loadBinData(idToLoad) {
     }).catch(() => {
         showStatus("❌ โหลดไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ตแล้วลองกด \"รีเฟรชข้อมูล\" อีกครั้ง");
         showToast('⚠️ โหลดข้อมูลจากคลาวด์ไม่สำเร็จ (ลองใหม่ให้อัตโนมัติแล้วแต่ยังไม่สำเร็จ)', 'warning');
+        // ถึงจะโหลดไม่สำเร็จ ก็ต้องปิดหน้าจอโหลดอยู่ดี ไม่งั้นผู้ใช้จะติดอยู่ที่หน้าเปล่าตลอดไป
+        _hideInitialLoadOverlay();
     });
 }
 
@@ -9791,11 +9850,14 @@ window.onload = function() {
 
     if (FIXED_BIN_ID) {
         // โหมดลิงก์เดียว: ใช้ ID ที่ฝังไว้เสมอ ไม่สนใจ URL params
+        // ถ้าเคยเปิดเว็บนี้มาก่อน ให้โชว์ข้อมูลล่าสุดที่เคยเห็นทันที ไม่ต้องรอโหลดจากคลาวด์ก่อนแล้วค่อยเห็นอะไรขึ้นมา
+        _renderFromCacheInstantly(FIXED_BIN_ID);
         _loadBinData(FIXED_BIN_ID);
     } else {
         const urlParams = new URLSearchParams(window.location.search);
         const idParam = urlParams.get('id');
         if (idParam) {
+            _renderFromCacheInstantly(idParam);
             _loadBinData(idParam);
         } else {
             const cachedId = localStorage.getItem('wc_online_bin_id');
