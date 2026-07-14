@@ -1569,6 +1569,14 @@
         .ad-music-section { margin-bottom:12px; padding:10px 12px; background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.22); border-radius:10px; }
         .ad-music-section .ad-editor-label { color:#4ade80; }
         .ad-music-hint { font-size:11px; color:#4ade80; opacity:0.7; margin:5px 0 0; line-height:1.5; }
+        .gif-pl-item { display:flex; align-items:center; gap:6px; background:rgba(34,197,94,0.07); border:1px solid rgba(34,197,94,0.2); border-radius:8px; padding:6px 10px; }
+        .gif-pl-num { font-size:11px; color:#4ade80; font-weight:700; flex-shrink:0; }
+        .gif-pl-name { flex:1; font-size:11px; color:#e2e8f0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .gif-pl-del { background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#f87171; border-radius:6px; padding:2px 8px; font-size:11px; cursor:pointer; flex-shrink:0; font-family:'Prompt',sans-serif; }
+        .gif-pl-del:hover { background:rgba(239,68,68,0.3); }
+        .gif-pl-empty { font-size:11px; color:#475569; text-align:center; padding:10px 0; }
+        .gif-pl-add-btn { background:linear-gradient(135deg,rgba(34,197,94,0.3),rgba(16,185,129,0.2)); border:1px solid rgba(34,197,94,0.5); color:#4ade80; padding:7px 12px; border-radius:8px; font-family:'Prompt',sans-serif; font-size:12px; font-weight:700; cursor:pointer; width:100%; margin-top:4px; }
+        .gif-pl-add-btn:hover { background:linear-gradient(135deg,rgba(34,197,94,0.5),rgba(16,185,129,0.35)); }
         .ad-gif-label-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding:8px 12px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:8px; font-size:13px; font-weight:600; color:#a1b7d6; }
         .ad-toggle-track { position:relative; display:inline-block; width:42px; height:24px; cursor:pointer; }
         .ad-toggle-track input { opacity:0; width:0; height:0; position:absolute; }
@@ -4675,6 +4683,7 @@ let state = {
         gifUrl: "",
         gifShowLabel: false,
         gifMusicUrl: "",
+        gifPlaylist: [],
         mode: "normal",
         width: 280
     }
@@ -9196,7 +9205,11 @@ function renderAdBanner() {
         banner.innerHTML = closeBtn + _gifLabelHtml +
             `<div id="_ad_gif_wrap" class="ad-gif-wrap" style="border-bottom:none;"></div>`;
         _injectGifInto(banner.querySelector('#_ad_gif_wrap'), ad.gifUrl || '', 220);
-        _playAdBannerMusic(ad.gifMusicUrl || '');
+        // เล่น GIF playlist (ถ้ามี) หรือ fallback ไปใช้ gifMusicUrl เดิม (backward compat)
+        var gifPl = Array.isArray(ad.gifPlaylist) && ad.gifPlaylist.length > 0
+            ? ad.gifPlaylist
+            : (ad.gifMusicUrl ? [{ id: _ytExtractId(ad.gifMusicUrl) || '', name: 'GIF Music' }].filter(function(s){ return s.id; }) : []);
+        _playAdBannerGifPlaylist(gifPl);
     } else {
         /* ── Normal mode ── */
         banner.innerHTML = closeBtn + `
@@ -9277,6 +9290,47 @@ function saveTrophyImg() {
     showToast(url ? '🏆 บันทึกรูปถ้วยแล้ว!' : '🏆 รีเซ็ตถ้วยเป็น emoji แล้ว', 'success');
 }
 
+// ── GIF Playlist Editor (admin UI) ───────────────────────────────────────────
+var _gifPlaylistEditorData = []; // working copy ขณะเปิด editor
+
+function _renderGifPlaylistEditor() {
+    var list = document.getElementById('gif-playlist-list');
+    if (!list) return;
+    if (_gifPlaylistEditorData.length === 0) {
+        list.innerHTML = '<div class="gif-pl-empty">ยังไม่มีเพลงในเพลยลิสต์</div>';
+        return;
+    }
+    list.innerHTML = _gifPlaylistEditorData.map(function(s, i) {
+        return '<div class="gif-pl-item">' +
+            '<span class="gif-pl-num">' + (i + 1) + '.</span>' +
+            '<span class="gif-pl-name" title="' + (s.name || s.id) + '">' + (s.name || s.id) + '</span>' +
+            '<button class="gif-pl-del" onclick="removeGifPlaylistTrack(' + i + ')">✕</button>' +
+        '</div>';
+    }).join('');
+}
+
+function addGifPlaylistTrack() {
+    var nameInp = document.getElementById('ad-gif-music-name');
+    var urlInp  = document.getElementById('ad-gif-music-inp');
+    if (!nameInp || !urlInp) return;
+    var url  = urlInp.value.trim();
+    var name = nameInp.value.trim();
+    var vid  = _ytExtractId(url);
+    if (!vid) { showToast('⚠️ URL YouTube ไม่ถูกต้อง กรุณาตรวจสอบ link อีกครั้ง', 'warning'); return; }
+    if (!name) name = 'Track ' + (_gifPlaylistEditorData.length + 1);
+    _gifPlaylistEditorData.push({ id: vid, name: name });
+    nameInp.value = '';
+    urlInp.value  = '';
+    _renderGifPlaylistEditor();
+    showToast('✅ เพิ่ม "' + name + '" เข้าเพลยลิสต์แล้ว', 'success');
+}
+
+function removeGifPlaylistTrack(idx) {
+    var removed = _gifPlaylistEditorData.splice(idx, 1);
+    _renderGifPlaylistEditor();
+    if (removed.length) showToast('🗑️ ลบ "' + (removed[0].name || 'เพลง') + '" ออกแล้ว', 'info');
+}
+
 function openAdBannerEditor() {
     if (state.isViewOnly) return;
     const ad = state.adBanner || {};
@@ -9290,7 +9344,13 @@ function openAdBannerEditor() {
     if (fi('ad-gif-inp'))   fi('ad-gif-inp').value   = ad.gifUrl || '';
     const _gifLabelTgl = fi('ad-gif-show-label');
     if (_gifLabelTgl) _gifLabelTgl.checked = ad.gifShowLabel || false;
-    if (fi('ad-gif-music-inp'))    fi('ad-gif-music-inp').value    = ad.gifMusicUrl    || '';
+    // โหลด GIF playlist เข้า editor (พร้อม backward compat gifMusicUrl)
+    _gifPlaylistEditorData = Array.isArray(ad.gifPlaylist) && ad.gifPlaylist.length > 0
+        ? ad.gifPlaylist.map(function(s){ return Object.assign({}, s); })
+        : (ad.gifMusicUrl
+            ? (function(){ var vid = _ytExtractId(ad.gifMusicUrl); return vid ? [{ id: vid, name: 'GIF Music' }] : []; })()
+            : []);
+    _renderGifPlaylistEditor();
     _switchAdMode(ad.mode || 'normal');
     updateAdGifPreview();
     if (fi('ad-btn-inp'))   fi('ad-btn-inp').value   = ad.btnText || '';
@@ -9451,7 +9511,7 @@ function saveAdBanner() {
         imgUrl:    (fi('ad-img-inp')   || {}).value || '',
         gifUrl:    (fi('ad-gif-inp')   || {}).value || '',
         gifShowLabel: !!(fi('ad-gif-show-label') || {}).checked,
-        gifMusicUrl:    (fi('ad-gif-music-inp')    || {}).value || '',
+        gifPlaylist:    _gifPlaylistEditorData.slice(),
         mode:      (fi('ad-mode-normal') || {}).checked ? 'normal' : 'gif',
         btnText:   (fi('ad-btn-inp')   || {}).value || '',
         linkUrl:   (fi('ad-link-inp')  || {}).value || '',
@@ -10255,11 +10315,16 @@ async function resetBracketMatchScore(matchId) {
                     <span class="ad-toggle-thumb"></span>
                 </label>
             </div>
-            <!-- GIF custom music -->
+            <!-- GIF Playlist Music -->
             <div class="ad-music-section">
-                <label class="ad-editor-label">🎵 เพลงประกอบ GIF (MP3 / Direct URL)</label>
-                <input type="text" id="ad-gif-music-inp" class="ad-editor-inp" placeholder="https://youtu.be/xxxxxxxx  หรือ  https://www.youtube.com/watch?v=xxxxxxxx" style="margin-top:4px;">
-                <p class="ad-music-hint">⚡ วาง URL YouTube เช่น https://youtu.be/xxxx — เพลงจะเล่นพร้อมมีมทันที ถ้าเพลง BG กำลังเล่นจะหยุดก่อนอัตโนมัติ</p>
+                <label class="ad-editor-label">🎵 เพลยลิสต์ประกอบ GIF</label>
+                <div id="gif-playlist-list" style="margin:8px 0 6px;max-height:150px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;"></div>
+                <div style="display:flex;flex-direction:column;gap:5px;margin-top:4px;">
+                    <input type="text" id="ad-gif-music-name" class="ad-editor-inp" placeholder="ชื่อเพลง เช่น Don Miguelo - Y Que Fue?" style="margin:0;">
+                    <input type="text" id="ad-gif-music-inp" class="ad-editor-inp" placeholder="URL YouTube เช่น https://youtu.be/xxxxxxxx" style="margin:0;">
+                    <button onclick="addGifPlaylistTrack()" class="gif-pl-add-btn">➕ เพิ่มเพลงเข้าเพลยลิสต์</button>
+                </div>
+                <p class="ad-music-hint">⚡ เพลงเล่นเรียงตามลำดับพร้อมมีม ขึ้น Now Playing ทุกเพลง • ถ้าเพลง BG กำลังเล่นจะหยุดก่อนอัตโนมัติ</p>
             </div>
         </div>
 
@@ -11505,7 +11570,15 @@ window.onYouTubeIframeAPIReady = function(){
             onStateChange:function(e){
                 /* video ended (0) */
                 if(e.data === 0){
-                    // ถ้าเพลง GIF กำลังเล่นอยู่ ให้ loop เพลงนั้นซ้ำ ไม่ใช่ advance playlist
+                    // ถ้า GIF playlist กำลังเล่นอยู่ → เล่นเพลงถัดไป (วนซ้ำ)
+                    if(_adGifVideoId && _adGifPlaylist.length > 0){
+                        _adGifTrackIndex = (_adGifTrackIndex + 1) % _adGifPlaylist.length;
+                        _adGifVideoId = _adGifPlaylist[_adGifTrackIndex].id;
+                        _updateNowPlaying();
+                        try{ _ytPlayer.loadVideoById(_adGifVideoId); }catch(err){}
+                        return;
+                    }
+                    // ถ้า GIF มีแค่ URL เดียว (legacy) → loop
                     if(_adGifVideoId){
                         try{ _ytPlayer.loadVideoById(_adGifVideoId); }catch(err){}
                         return;
@@ -11535,6 +11608,8 @@ window.onYouTubeIframeAPIReady = function(){
 /* Ad Banner GIF Music via YouTube player */
 var _ytWasPausedByAd = false;
 var _adGifVideoId = null;
+var _adGifPlaylist = [];   // [{id, name}, ...] เพลยลิสต์ประกอบ GIF
+var _adGifTrackIndex = 0;  // เพลงที่กำลังเล่นอยู่ใน GIF playlist
 
 function _ytExtractId(url) {
     if (!url || !url.trim()) return null;
@@ -11545,16 +11620,22 @@ function _ytExtractId(url) {
     return null;
 }
 
-function _playAdBannerMusic(url) {
-    var vid = _ytExtractId(url);
-    if (!vid) return;
-    _adGifVideoId = vid;   // เก็บไว้เสมอ — prank handler จะหยิบไปใช้ถ้า user ยังไม่เคยแตะ
-    if (!_ytPrankUnlocked) {
-        // browser ยังบล็อก autoplay อยู่ — รอ user แตะครั้งแรก (ดูใน _prankHandler)
+// ── GIF Playlist Music Player ──────────────────────────────────────────────
+// เล่นเพลยลิสต์ประกอบ GIF Banner (array of {id, name})
+// เมื่อแต่ละเพลงจบจะเล่นเพลงถัดไปวนซ้ำ แสดงชื่อใน Now Playing
+function _playAdBannerGifPlaylist(playlist) {
+    if (!Array.isArray(playlist) || playlist.length === 0) {
+        _adGifVideoId = null;
+        _adGifPlaylist = [];
         return;
     }
+    _adGifPlaylist = playlist.filter(function(s){ return s && s.id; });
+    if (_adGifPlaylist.length === 0) return;
+    _adGifTrackIndex = 0;
+    _adGifVideoId = _adGifPlaylist[0].id;
+    if (!_ytPrankUnlocked) return;  // รอ user แตะก่อน (prank handler จะเล่นให้)
     if (!_ytPlayer || !_ytReady) {
-        setTimeout(function(){ _playAdBannerMusic(url); }, 600);
+        setTimeout(function(){ _playAdBannerGifPlaylist(playlist); }, 600);
         return;
     }
     if (_musicPlaying) {
@@ -11564,15 +11645,25 @@ function _playAdBannerMusic(url) {
     }
     try {
         _ytMuted = false;
-        _ytPlayer.loadVideoById(vid);
+        _ytPlayer.loadVideoById(_adGifVideoId);
         _ytPlayer.unMute();
         _ytPlayer.setVolume(75);
         _setMusicState(true);
+        _updateNowPlaying();
     } catch(e) {}
+}
+
+// compat wrapper สำหรับโค้ดเก่าที่อาจเรียก _playAdBannerMusic(url)
+function _playAdBannerMusic(url) {
+    var vid = _ytExtractId(url);
+    if (!vid) return;
+    _playAdBannerGifPlaylist([{ id: vid, name: 'GIF Music' }]);
 }
 
 function _stopAdBannerMusic() {
     _adGifVideoId = null;
+    _adGifPlaylist = [];
+    _adGifTrackIndex = 0;
     if (_ytWasPausedByAd && _ytPlayer) {
         _ytWasPausedByAd = false;
         _resumePlaylist();
@@ -11615,7 +11706,20 @@ function _updateNowPlaying(){
     var pill = document.getElementById('now-playing-pill');
     if(!pill) return;
     var txt = pill.querySelector('.np-text');
-    if(txt) txt.textContent = _ytTrackNames[_ytCurrentTrack];
+    var sub = pill.querySelector('.np-sub');
+    // ถ้ากำลังเล่น GIF playlist → แสดงชื่อเพลง GIF + หมายเลขเพลง
+    if(_adGifVideoId && _adGifPlaylist.length > 0){
+        var gifTrack = _adGifPlaylist[_adGifTrackIndex];
+        if(txt) txt.textContent = gifTrack ? (gifTrack.name || 'GIF Music') : 'GIF Music';
+        if(sub){
+            sub.textContent = _adGifPlaylist.length > 1
+                ? '🎬 GIF PLAYLIST  ' + (_adGifTrackIndex + 1) + ' / ' + _adGifPlaylist.length
+                : '🎬 GIF MUSIC';
+        }
+    } else {
+        if(txt) txt.textContent = _ytTrackNames[_ytCurrentTrack] || '';
+        if(sub) sub.textContent = '♪ NOW PLAYING';
+    }
 }
 
 function _setMusicState(p){
