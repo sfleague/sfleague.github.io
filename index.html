@@ -633,15 +633,35 @@
         .fx-tab-btn.active { background: linear-gradient(90deg, rgba(242,194,78,0.9), rgba(242,194,78,0.7)); color: #1a1305; border-color: transparent; }
         .fx-tab-badge { background: rgba(232,16,43,0.85); color: #fff; font-size: 10px; font-weight: 800; border-radius: 10px; padding: 1px 6px; min-width: 16px; text-align: center; display: inline-block; }
         .fx-tab-btn.active .fx-tab-badge { background: rgba(0,0,0,0.25); color: #1a1305; }
-        .fx-round-pager { display: flex; align-items: center; justify-content: space-between; position: relative; padding: 10px 0; margin-bottom: 10px; }
+        .fx-round-pager { display: flex; align-items: center; justify-content: space-between; position: relative; padding: 16px 0; margin-bottom: 12px; }
         .fx-pager-btn { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: var(--wc-text-sub); font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 13px; padding: 0 18px; height: 40px; box-sizing: border-box; border-radius: 20px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.3px; z-index: 1; }
         .fx-pager-btn .pager-arrow { font-size: 14px; line-height: 1; }
         .fx-pager-btn:hover:not(:disabled) { background: rgba(242,194,78,0.1); border-color: rgba(242,194,78,0.35); color: var(--wc-gold); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,0.3); }
         .fx-pager-btn:active:not(:disabled) { transform: translateY(0); }
         .fx-pager-btn:disabled { opacity: 0.2; cursor: not-allowed; }
-        .fx-round-label { position: absolute; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 4px; pointer-events: none; }
-        .fx-round-label .rl-round { font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; color: var(--wc-gold); letter-spacing: 2px; line-height: 1; }
-        .fx-round-label .rl-stage { font-family: 'Prompt', sans-serif; font-size: 10px; font-weight: 700; color: var(--wc-text-sub); letter-spacing: 1.5px; line-height: 1; text-transform: uppercase; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); border-radius: 20px; padding: 2px 10px; }
+        .fx-round-label { position: absolute; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; pointer-events: none; white-space: nowrap; }
+        .fx-round-label .rl-round {
+            font-family: 'Orbitron', sans-serif; font-size: 26px; font-weight: 900;
+            background: linear-gradient(160deg, #ffe57a 0%, #F2C24E 45%, #c49520 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            letter-spacing: 5px; line-height: 1;
+            filter: drop-shadow(0 0 10px rgba(242,194,78,0.65)) drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            animation: rlGlowPulse 3s ease-in-out infinite;
+        }
+        @keyframes rlGlowPulse {
+            0%,100% { filter: drop-shadow(0 0 8px rgba(242,194,78,0.55)) drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
+            50%      { filter: drop-shadow(0 0 18px rgba(242,194,78,0.9)) drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
+        }
+        .fx-round-label .rl-stage-wrap { display: flex; align-items: center; gap: 8px; }
+        .fx-round-label .rl-deco { width: 28px; height: 1px; background: linear-gradient(90deg, transparent, rgba(242,194,78,0.55)); }
+        .fx-round-label .rl-deco.r { background: linear-gradient(270deg, transparent, rgba(242,194,78,0.55)); }
+        .fx-round-label .rl-stage {
+            font-family: 'Orbitron', sans-serif; font-size: 9px; font-weight: 700;
+            color: #F2C24E; letter-spacing: 3px; line-height: 1; text-transform: uppercase;
+            background: linear-gradient(135deg, rgba(242,194,78,0.1), rgba(242,194,78,0.04));
+            border: 1px solid rgba(242,194,78,0.4); border-radius: 20px; padding: 4px 14px;
+            box-shadow: 0 0 14px rgba(242,194,78,0.18), inset 0 0 8px rgba(242,194,78,0.06);
+        }
         .fx-empty-msg { text-align: center; color: var(--wc-text-sub); padding: 30px 16px; font-size: 14px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px dashed var(--wc-border); }
         .fx-history-round-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
         .fx-history-round-header .fx-collapse-arrow { transition: transform 0.2s; font-size: 11px; color: var(--wc-text-sub); }
@@ -684,30 +704,6 @@
         .evidence-btn:hover { background: var(--wc-gold); color: #000; }
         .evidence-btn.has-img { background: rgba(34, 197, 94, 0.1); border-color: #22c55e; color: #22c55e; }
         .evidence-btn.has-img:hover { background: #22c55e; color: #fff; }
-
-        /* ── Toast Notification ── */
-        #toast-container { position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
-            z-index:999999; display:flex; flex-direction:column; gap:8px; align-items:center;
-            pointer-events:none; }
-        .toast-pill { display:flex; align-items:center; gap:9px;
-            background:rgba(8,18,36,0.96); border:1px solid rgba(255,255,255,0.1);
-            border-radius:50px; padding:9px 18px 9px 14px;
-            font-family:'Prompt',sans-serif; font-size:13px; font-weight:600;
-            color:#e2e8f0; white-space:nowrap;
-            box-shadow:0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
-            animation:toastIn 0.28s cubic-bezier(0.34,1.56,0.64,1);
-            pointer-events:auto; }
-        .toast-pill.toast-out { animation:toastOut 0.3s ease forwards; }
-        .toast-pill .t-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-        .toast-pill.t-success .t-dot { background:#22c55e; box-shadow:0 0 8px #22c55e; }
-        .toast-pill.t-error   .t-dot { background:#ef4444; box-shadow:0 0 8px #ef4444; }
-        .toast-pill.t-loading .t-dot { background:#eab308; box-shadow:0 0 8px #eab308;
-            animation:pulseDot 0.9s ease-in-out infinite; }
-        .toast-pill.t-info    .t-dot { background:#60a5fa; box-shadow:0 0 8px #60a5fa; }
-        @keyframes toastIn { from { opacity:0; transform:translateY(16px) scale(0.92); }
-            to { opacity:1; transform:translateY(0) scale(1); } }
-        @keyframes toastOut { to { opacity:0; transform:translateY(8px) scale(0.94); } }
-        @keyframes pulseDot { 0%,100%{opacity:1;} 50%{opacity:0.35;} }
         /* legacy hidden ref */
         .sync-badge { display:none !important; }
 
@@ -1914,25 +1910,6 @@
         .se-close-btn:hover { opacity:0.75; transform:none; box-shadow:none; }
         .se-uploader-badge { text-align:center; font-size:10px; color:#64748b; margin-top:6px; }
 
-        /* ── Custom Alert Modal ── */
-        #custom-alert-modal { display:none; position:fixed; inset:0; z-index:99999;
-            background:rgba(0,0,0,0.82); backdrop-filter:blur(10px);
-            align-items:center; justify-content:center; padding:20px; }
-        .cal-box { background:linear-gradient(145deg,#0d1f3c,#081424);
-            border:1px solid rgba(223,180,75,0.35); border-radius:18px;
-            padding:30px 26px 24px; max-width:360px; width:100%; text-align:center;
-            box-shadow:0 0 50px rgba(223,180,75,0.12), 0 24px 64px rgba(0,0,0,0.6); }
-        .cal-top { width:50px; height:4px; background:linear-gradient(90deg,#F2C24E,#c49520);
-            border-radius:2px; margin:0 auto 18px; }
-        .cal-icon { font-size:34px; margin-bottom:12px; }
-        .cal-msg { font-family:'Prompt',sans-serif; font-size:14px; color:#cbd5e1;
-            line-height:1.7; margin-bottom:22px; white-space:pre-line; text-align:left; }
-        .cal-ok { background:linear-gradient(135deg,#F2C24E,#c49520); color:#020710;
-            border:none; border-radius:9px; padding:10px 40px; font-size:13px;
-            font-weight:800; cursor:pointer; font-family:'Orbitron',sans-serif;
-            letter-spacing:1px; transition:opacity 0.15s; }
-        .cal-ok:hover { opacity:0.88; transform:none; box-shadow:none; }
-
         /* ── ปุ่มบันทึกผลในแต่ละคู่ (แทนที่ inline inputs) ── */
         .score-action-btn {
             background:linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.05));
@@ -2034,6 +2011,70 @@
             background: linear-gradient(120deg, transparent 30%, rgba(255,110,0,0.07) 50%, transparent 70%);
             animation: bigMatchShimmer 3s linear infinite;
             pointer-events: none;
+        }
+
+        /* ══════════════════════════════════════════
+           DECISIVE MATCH — ชี้ชะตา
+        ══════════════════════════════════════════ */
+        @keyframes decisivePulse {
+            0%,100% { box-shadow: 0 0 14px rgba(139,92,246,0.55), 0 0 34px rgba(99,102,241,0.22), inset 0 0 18px rgba(139,92,246,0.07); }
+            50%      { box-shadow: 0 0 30px rgba(167,139,250,0.85), 0 0 56px rgba(99,102,241,0.38), inset 0 0 28px rgba(139,92,246,0.14); }
+        }
+        @keyframes decisiveBorderColor {
+            0%   { border-color: #7c3aed; }
+            25%  { border-color: #a78bfa; }
+            50%  { border-color: #6366f1; }
+            75%  { border-color: #c4b5fd; }
+            100% { border-color: #7c3aed; }
+        }
+        @keyframes decisiveShimmer {
+            0%   { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        @keyframes swordSpin {
+            0%,100% { transform: rotate(-8deg) scale(1); }
+            50%      { transform: rotate(8deg) scale(1.12); }
+        }
+        .decisive-match-wrapper { position: relative; margin: 4px 0 18px; }
+        .decisive-match-banner {
+            background: linear-gradient(90deg, #160030 0%, #3b0764 22%, #7c3aed 50%, #3b0764 78%, #160030 100%);
+            background-size: 200% 100%;
+            animation: decisiveShimmer 3.2s linear infinite;
+            border-left: 4px solid #7c3aed;
+            padding: 9px 18px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            font-family: 'Orbitron', 'Prompt', sans-serif;
+            font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 2.5px;
+            color: #ede9fe; text-shadow: 0 0 12px rgba(167,139,250,0.95), 0 0 24px rgba(139,92,246,0.6);
+        }
+        .dm-sword { font-size: 16px; display: inline-block; animation: swordSpin 1.2s ease-in-out infinite; }
+        .dm-sword:last-child { animation-delay: 0.6s; }
+        .dm-rank-badge {
+            background: rgba(167,139,250,0.22); border: 1px solid rgba(167,139,250,0.6);
+            border-radius: 50%; width: 22px; height: 22px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 900; color: #c4b5fd; flex-shrink: 0;
+            box-shadow: 0 0 8px rgba(167,139,250,0.4);
+        }
+        .decisive-match-row {
+            border: 2px solid #7c3aed !important;
+            animation: decisivePulse 2.8s ease-in-out infinite, decisiveBorderColor 5s linear infinite;
+            background: linear-gradient(135deg, rgba(109,40,217,0.14) 0%, rgba(8,4,22,0.55) 50%, rgba(99,102,241,0.1) 100%) !important;
+            position: relative; overflow: hidden;
+        }
+        .decisive-match-row::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(120deg, transparent 30%, rgba(139,92,246,0.08) 50%, transparent 70%);
+            background-size: 200% 100%;
+            animation: decisiveShimmer 3.5s linear infinite;
+            pointer-events: none;
+        }
+        .dm-clinch-tag {
+            display: inline-block; background: rgba(250,204,21,0.18); border: 1px solid rgba(250,204,21,0.55);
+            color: #fde047; border-radius: 20px; font-size: 9px; font-weight: 800;
+            padding: 2px 10px; letter-spacing: 2px; text-transform: uppercase;
+            font-family: 'Orbitron', sans-serif; margin-left: 4px;
+            text-shadow: 0 0 8px rgba(250,204,21,0.7);
         }
 
         /* ── Big Match Picker Modal ── */
@@ -4516,18 +4557,7 @@
     </div>
 </div>
 
-<!-- ── Toast Container ── -->
-<div id="toast-container"></div>
 
-<!-- ── Custom Alert Modal ── -->
-<div id="custom-alert-modal" onclick="if(event.target===this)closeCustomAlert()">
-    <div class="cal-box">
-        <div class="cal-top"></div>
-        <div class="cal-icon" id="cal-icon">ℹ️</div>
-        <div class="cal-msg" id="cal-msg"></div>
-        <button class="cal-ok" onclick="closeCustomAlert()">OK</button>
-    </div>
-</div>
 
 <!-- ── Score Entry Modal ── -->
 <div id="score-entry-modal" onclick="if(event.target===this)closeScoreModal()">
@@ -5118,7 +5148,6 @@ document.addEventListener('visibilitychange', function () {
 
 function manualRefresh() {
     if (!state.binId) return;
-    showStatus('⏳ กำลังดึงข้อมูลล่าสุด...', true);
     fetchWithRetry(`https://api.jsonbin.io/v3/b/${state.binId}/latest`, {
         headers: { 'X-Master-Key': BIN_MASTER_KEY }
     })
@@ -5127,13 +5156,10 @@ function manualRefresh() {
         if (newVer && newVer !== _lastBinVersion) {
             _lastBinVersion = newVer;
             _applyCloudData(resData.record);
-            showStatus('✅ อัปเดตข้อมูลล่าสุดแล้ว');
-            showToast('🔄 โหลดข้อมูลใหม่เรียบร้อย!', 'info');
         } else {
-            showStatus('✅ ข้อมูลล่าสุดอยู่แล้ว');
         }
     })
-    .catch(() => showStatus('❌ โหลดไม่สำเร็จ'));
+    .catch(() => 
 }
 
 function _checkForCloudUpdates() {
@@ -5148,7 +5174,6 @@ function _checkForCloudUpdates() {
         if (newVer && _lastBinVersion !== null && newVer !== _lastBinVersion) {
             _lastBinVersion = newVer;
             _applyCloudData(resData.record);
-            showToast('🔔 มีการอัปเดตข้อมูลล่าสุด!', 'info');
         } else if (_lastBinVersion === null && newVer) {
             _lastBinVersion = newVer;
         }
@@ -5253,7 +5278,6 @@ function clearAnnouncement() {
     state.announcement = '';
     renderAnnouncement();
     saveDataToCloud();
-    showStatus('🗑️ ล้างประกาศแล้ว');
 }
 
 // ─── Changelog Admin ──────────────────────────────────────────────────────────
@@ -5297,7 +5321,7 @@ function closeClEntryModal() {
 function saveClEntry() {
     if (state.isViewOnly) return;
     const text = (document.getElementById('cl-popup-text').value || '').trim();
-    if (!text) { showToast('⚠️ กรุณาพิมพ์ข้อความก่อน', 'error'); return; }
+    if (!text) { return; }
     const badge = _selectedClBadge || 'new';
     const now = new Date();
     const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
@@ -5309,7 +5333,6 @@ function saveClEntry() {
     renderChangelogAdmin();
     renderChangelog();
     saveDataToCloud();
-    showToast('✅ เพิ่ม Changelog แล้ว', 'success');
 }
 
 function addChangelogEntry() { openClEntryModal(); }
@@ -5320,7 +5343,6 @@ function deleteChangelogEntry(id) {
     renderChangelogAdmin();
     renderChangelog();
     saveDataToCloud();
-    showToast('🗑️ ลบ Changelog แล้ว', 'success');
 }
 
 function renderChangelog() {
@@ -5399,18 +5421,6 @@ function _cmPromptClose() {
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
-function showToast(msg, type) {
-    const container = document.getElementById('toast-container');
-    if (!container) return;
-    const pill = document.createElement('div');
-    pill.className = `toast-pill t-${type || 'info'}`;
-    pill.innerHTML = `<div class="t-dot"></div><span>${msg}</span>`;
-    container.appendChild(pill);
-    setTimeout(() => {
-        pill.classList.add('toast-out');
-        setTimeout(() => pill.remove(), 350);
-    }, 3500);
-}
 
 function initTeamAutocomplete() {
     setupAutocompleteLogic("reg-team", "autocomplete-list");
@@ -5605,7 +5615,7 @@ function promptPlayerLogin() { openLoginModal(); }
 
 function submitLoginId() {
     const idVal = document.getElementById("lm-id-input").value.trim();
-    if (!idVal) { showAlert("⚠️ กรุณากรอก ID ก่อนครับ"); return; }
+    if (!idVal) { return; }
     if (idVal.toLowerCase() === ADMIN_USER.toLowerCase()) {
         // เป็น admin → ขอรหัสผ่าน
         document.getElementById("lm-pass-input").value = "";
@@ -5615,7 +5625,6 @@ function submitLoginId() {
         // ลองเป็นผู้เล่น
         const team = state.teams.find(t => t.id.toLowerCase() === idVal.toLowerCase() && t.status === 'approved');
         if (!team) {
-            showAlert("❌ ไม่พบ ID นี้ในรายชื่อผู้แข่งขันที่อนุมัติแล้ว\nกรุณาตรวจสอบ ID ให้ถูกต้อง หรือรอการอนุมัติจากแอดมินครับ");
             return;
         }
         _doPlayerLogin(team);
@@ -5624,10 +5633,9 @@ function submitLoginId() {
 
 function submitLoginPass() {
     const passVal = document.getElementById("lm-pass-input").value.trim();
-    if (!passVal) { showAlert("⚠️ กรุณากรอกรหัสผ่านก่อนครับ"); return; }
+    if (!passVal) { return; }
     if (passVal === ADMIN_PASS) {
         if (window._READONLY_MODE) {
-            showAlert('🔒 Readonly Mode เปิดอยู่ — Admin UI ใช้งานได้ แต่จะไม่บันทึกข้อมูลขึ้น Cloud\nปิด ?readonly=1 ออกจาก URL เพื่อใช้งานจริง');
         }
         state.isViewOnly = false;
         closeLoginModal();
@@ -5637,10 +5645,7 @@ function submitLoginPass() {
         _setLoginBtn('admin');
         _updateRoleStatusBar();
         renderHeader(); renderAdminDock(); renderLeague(); refreshUIState();
-        showStatus("🔓 Admin เข้าระบบแล้ว");
-        showAlert("🎉 ยินดีต้อนรับครับแอดมิน! เมนูตัวควบคุมปลดล็อกเรียบร้อยแล้ว");
     } else {
-        showAlert("❌ รหัสผ่านไม่ถูกต้อง! กรุณาลองใหม่อีกครั้ง");
     }
 }
 // compat alias
@@ -5653,7 +5658,6 @@ function _doPlayerLogin(team) {
     _updateRoleStatusBar();
     closeLoginModal();
     renderLeague();
-    showStatus(`⚽ ยินดีต้อนรับ ${team.player}!`);
 }
 
 function _setLoginBtn(mode, label) {
@@ -5683,7 +5687,6 @@ function logoutPlayer() {
     _setLoginBtn('none');
     _updateRoleStatusBar();
     renderLeague();
-    showStatus("👋 ออกจากระบบแล้ว");
 }
 
 function logoutAdmin() {
@@ -5698,7 +5701,6 @@ function logoutAdmin() {
     renderAdminDock();
     renderLeague();
     refreshUIState();
-    showStatus("🔒 ออกจากระบบ Admin แล้ว");
 }
 
 function _updateRoleStatusBar() {
@@ -5779,20 +5781,18 @@ function generateLogoAndFlag(teamName) {
 }
 
 function submitRegistration() {
-    if (state.tournamentStarted) { showAlert("❌ ทัวร์นาเมนต์เริ่มไปแล้ว ปิดรับสมัครใน SS นี้ครับ!"); return; }
+    if (state.tournamentStarted) { return; }
 
     const idVal = document.getElementById("reg-id").value.trim();
     const playerVal = document.getElementById("reg-player").value.trim();
     const teamVal = document.getElementById("reg-team").value.trim();
 
-    if (!idVal || !playerVal || !teamVal) { showAlert("⚠️ กรุณากรอกข้อมูลให้ครบถ้วนทุกช่องครับ"); return; }
+    if (!idVal || !playerVal || !teamVal) { return; }
 
     const existingIndex = state.teams.findIndex(t => t.id.toLowerCase() === idVal.toLowerCase());
     if (existingIndex !== -1 && state.teams[existingIndex].status !== 'rejected' && state.isViewOnly) {
-        showAlert("❌ ID นี้มีผู้ใช้งานแล้ว กรุณาใช้ ID อื่นครับ"); return;
+        return;
     }
-
-    showStatus("⏳ กำลังบันทึกข้อมูล...", true);
     const media = generateLogoAndFlag(teamVal);
     const finalStatus = state.isViewOnly ? 'pending' : 'approved';
 
@@ -5823,12 +5823,8 @@ function submitRegistration() {
     .then(() => {
         _clearLocalDraft();
         if (state.isViewOnly) {
-            showStatus("☁️ ส่งใบสมัครแล้ว รอ Admin ยืนยัน");
-            showAlert("📩 ส่งข้อมูลสมัครเรียบร้อยแล้ว! ใบสมัครของคุณกำลังรอการตรวจสอบ เพื่อปลดล็อกตารางแข่ง");
             localStorage.setItem(`my_player_id_ss_${state.season}`, idVal);
         } else {
-            showStatus("✅ เพิ่มผู้เล่นสำเร็จ");
-            showAlert(`✅ เพิ่มผู้เล่น [ ${playerVal} - ${teamVal} ] เข้าสู่ระบบและอนุมัติเรียบร้อยแล้ว!`);
 
             document.getElementById("reg-id").value = "";
             document.getElementById("reg-player").value = "";
@@ -5839,8 +5835,6 @@ function submitRegistration() {
         renderLeague();
     })
     .catch(() => {
-        showStatus("❌ เครือข่ายขัดข้อง — ข้อมูลสมัครถูกสำรองไว้ในเครื่องแล้ว");
-        showAlert("⚠️ ส่งใบสมัครไม่สำเร็จเพราะเครือข่ายขัดข้อง ระบบเก็บข้อมูลที่กรอกไว้ในเครื่องนี้แล้ว อย่ารีบปิดหน้านี้ ลองกด \"ส่งใบสมัคร\" อีกครั้งเมื่ออินเทอร์เน็ตกลับมาปกติ");
     });
 }
 
@@ -5849,12 +5843,10 @@ function adminAddPlayerFromModal() {
     const playerVal = document.getElementById("admin-add-player").value.trim();
     const teamVal = document.getElementById("admin-add-team").value.trim();
 
-    if (!idVal || !playerVal || !teamVal) { showAlert("⚠️ กรุณากรอกข้อมูลผู้เล่นให้ครบทุกช่องครับ"); return; }
+    if (!idVal || !playerVal || !teamVal) { return; }
 
     const existingIndex = state.teams.findIndex(t => t.id.toLowerCase() === idVal.toLowerCase());
-    if (existingIndex !== -1) { showAlert("❌ ID นี้มีผู้ใช้งานแล้ว กรุณาใช้ ID อื่นครับ"); return; }
-
-    showStatus("⏳ กำลังเพิ่มผู้เล่น...", true);
+    if (existingIndex !== -1) { return; }
     const media = generateLogoAndFlag(teamVal);
 
     state.teams.push({
@@ -5872,8 +5864,6 @@ function adminAddPlayerFromModal() {
     })
     .then(() => {
         _clearLocalDraft();
-        showStatus("✅ เพิ่มผู้เล่นสำเร็จ");
-        showAlert(`✅ เพิ่มผู้เล่น [ ${playerVal} - ${teamVal} ] เข้าสู่ระบบและอนุมัติเรียบร้อยแล้ว!`);
 
         document.getElementById("admin-add-id").value = "";
         document.getElementById("admin-add-player").value = "";
@@ -5884,8 +5874,6 @@ function adminAddPlayerFromModal() {
         renderLeague();
     })
     .catch(() => {
-        showStatus("❌ เครือข่ายขัดข้อง — ข้อมูลถูกสำรองไว้ในเครื่องแล้ว");
-        showAlert("⚠️ บันทึกไม่สำเร็จเพราะเครือข่ายขัดข้อง ข้อมูลผู้เล่นที่เพิ่งเพิ่มถูกสำรองไว้ในเครื่องนี้แล้ว อย่ารีบปิดหน้านี้ ลองกดเพิ่มผู้เล่นอีกครั้งเมื่ออินเทอร์เน็ตกลับมาปกติ");
     });
 }
 
@@ -6174,7 +6162,7 @@ function bracketDrop(e, matchId, slot, currentTeamId) {
     let srcMatch = state.matches.find(m => m.id === srcMatchId);
     let tgtMatch = state.matches.find(m => m.id === tgtMatchId);
     if (!srcMatch || !tgtMatch) return;
-    if (tgtMatch.homeScore !== null || tgtMatch.awayScore !== null) { showAlert('⚠️ ไม่สามารถลากสลับได้ เพราะคู่นั้นกรอกคะแนนไปแล้ว'); return; }
+    if (tgtMatch.homeScore !== null || tgtMatch.awayScore !== null) { return; }
     // Swap team in leg1 of both matches
     let swapIn = (m, oldId, newId) => { if (m.homeId === oldId) m.homeId = newId; else if (m.awayId === oldId) m.awayId = newId; };
     swapIn(srcMatch, srcTeamId, currentTeamId);
@@ -6230,7 +6218,6 @@ async function confirmStartTournament() {
         state.matches = buildKnockoutCustom(shuffled, state.cupConfig);
     }
     renderAdminDock(); renderLeague(); refreshUIState(); saveDataToCloud();
-    showAlert("🎉 เริ่มการแข่งขันเรียบร้อยแล้ว สู้ๆ ครับ!");
 }
 
 function buildKnockoutCustom(teamObjs, config) {
@@ -6462,7 +6449,6 @@ async function saveCupChampToHistory() {
     });
     state.hallOfFame[state.cupChampionId].trophies += 1;
     state.defendingChampId = state.cupChampionId;
-    showAlert("💾 บันทึกลง Hall of Fame เรียบร้อยแล้ว!");
     renderLeague(); saveDataToCloud();
 }
 
@@ -6499,7 +6485,6 @@ function advanceKnockoutRound() {
     let allCupRounds = [...new Set(state.matches.filter(m => !m.isThirdPlace && !m.isConsolation).map(m => m.cupRound || m.round))];
     let currentCupRound = Math.max(...allCupRounds);
     if (!isCupRoundComplete(currentCupRound)) {
-        showAlert("⚠️ ยังมีคู่ที่ยังไม่สรุปผลครับ กรุณากรอกผลและกำหนดผู้ชนะในคู่ที่เสมอให้ครบก่อน");
         return;
     }
     let crMatches = state.matches.filter(m => (m.cupRound || m.round) === currentCupRound && !m.isThirdPlace && !m.isConsolation);
@@ -6513,10 +6498,9 @@ function advanceKnockoutRound() {
         state.cupChampionId = winners[0];
         let champ = state.teams.find(t => t.id === winners[0]);
         renderAdminDock(); renderLeague(); saveDataToCloud();
-        showAlert(`🏆 ผู้ชนะถ้วยคือ [ ${champ ? champ.team + ' — ' + champ.player : winners[0]} ]! ยินดีด้วยครับ!`);
         return;
     }
-    if (winners.length === 0) { showAlert("⚠️ ไม่พบผู้ชนะในรอบนี้"); return; }
+    if (winners.length === 0) { return; }
 
     // Consolation bracket: collect losers and create consolation matches
     if (config.consolation) {
@@ -6563,7 +6547,6 @@ function advanceKnockoutRound() {
     let nextMatches = buildNextRoundCustom(winners, nextCupRound, nextFmt);
     state.matches = [...state.matches, ...nextMatches];
     renderAdminDock(); renderLeague(); saveDataToCloud();
-    showAlert(`🎉 เปิดรอบที่ ${nextCupRound} แล้ว! ทีมที่ผ่านรอบ: ${winners.length} ทีม`);
 }
 
 // ─── CONSOLATION BRACKET ─────────────────────────────────────────────────────
@@ -6589,9 +6572,8 @@ function advanceConsolationRound() {
     if (state.isViewOnly) return;
     _cupMatchIdCounter = Math.max(0, ...state.matches.map(m => m.id || 0)) + 1;
     let currentRound = getConsolationCurrentRound();
-    if (currentRound === 0) { showAlert("⚠️ ยังไม่มีการแข่งขันสายล่าง"); return; }
+    if (currentRound === 0) { return; }
     if (!isConsolationRoundComplete(currentRound)) {
-        showAlert("⚠️ ยังมีคู่สายล่างที่ยังไม่สรุปผล กรุณากรอกผลให้ครบก่อน");
         return;
     }
     let roundMatches = state.matches.filter(m => m.isConsolation && m.consolationRound === currentRound);
@@ -6604,10 +6586,9 @@ function advanceConsolationRound() {
         state.consolationChampionId = winners[0];
         let champ = state.teams.find(t => t.id === winners[0]);
         renderAdminDock(); renderLeague(); saveDataToCloud();
-        showAlert(`🥈 ผู้ชนะสายล่างคือ [ ${champ ? champ.team + ' — ' + champ.player : winners[0]} ]!`);
         return;
     }
-    if (winners.length < 2) { showAlert("⚠️ ต้องการผู้ชนะอย่างน้อย 2 คนเพื่อเปิดรอบถัดไป"); return; }
+    if (winners.length < 2) { return; }
     let nextRound = currentRound + 1;
     let cTieId = 10000 + nextRound * 100;
     let shuffled = shuffle([...winners.map(id => state.teams.find(t => t.id === id)).filter(Boolean)]);
@@ -6619,42 +6600,10 @@ function advanceConsolationRound() {
         state.matches.push({ id: _cupMatchIdCounter++, round: 9000 + nextRound, cupRound: 9000 + nextRound, homeId: a.id, awayId: 'BYE', homeScore: 3, awayScore: 0, evidenceImg: "", tieId: cTieId + Math.floor(shuffled.length/2), leg: 1, winnerId: a.id, isConsolation: true, consolationRound: nextRound });
     }
     renderAdminDock(); renderLeague(); saveDataToCloud();
-    showAlert(`🎉 เปิดรอบสายล่าง ${nextRound} แล้ว! ${winners.length} ทีม`);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-// ── Toast notification system ──
-let _toastLoadingEl = null;
-let _toastTimer = null;
-let _toastPill = null;
-function showStatus(text, isLoading=false) {
-    const container = document.getElementById('toast-container');
-    if (!container) return;
-    // Dismiss ALL existing toasts before showing new one
-    if (_toastLoadingEl) { _toastLoadingEl.remove(); _toastLoadingEl = null; }
-    if (_toastPill) { _toastPill.remove(); _toastPill = null; }
-    if (_toastTimer) { clearTimeout(_toastTimer); _toastTimer = null; }
-    // Determine type
-    let type = 'info';
-    if (isLoading) type = 'loading';
-    else if (text.includes('❌') || text.includes('ล้มเหลว') || text.includes('ไม่สำเร็จ')) type = 'error';
-    else if (text.includes('✅') || text.includes('☁️') || text.includes('📸') || text.includes('🎉') || text.includes('🔓') || text.includes('⚽') || text.includes('👋') || text.includes('🔴')) type = 'success';
-    // Build pill
-    const pill = document.createElement('div');
-    pill.className = `toast-pill t-${type}`;
-    pill.innerHTML = `<span class="t-dot"></span><span>${text}</span>`;
-    container.appendChild(pill);
-    if (isLoading) {
-        _toastLoadingEl = pill;
-    } else {
-        _toastPill = pill;
-        _toastTimer = setTimeout(() => {
-            pill.classList.add('toast-out');
-            setTimeout(() => { pill.remove(); if (_toastPill === pill) _toastPill = null; }, 320);
-        }, 3000);
-    }
-}
 
 function renderHeader() {
     document.title = `FC 26 SF LEAGUE SS${state.season}`;
@@ -7080,7 +7029,7 @@ function adminApprovePending(pendingId) {
     const aInp = document.getElementById(`apa-${pendingId}`);
     const hs = hInp ? parseInt(hInp.value) : p.homeScore;
     const as = aInp ? parseInt(aInp.value) : p.awayScore;
-    if (isNaN(hs) || isNaN(as) || hs < 0 || as < 0) { showToast("⚠️ สกอร์ไม่ถูกต้อง", "warning"); return; }
+    if (isNaN(hs) || isNaN(as) || hs < 0 || as < 0) { return; }
 
     const match = (state.matches || []).find(m => m.id === p.matchId);
     if (match) {
@@ -7099,7 +7048,6 @@ function adminApprovePending(pendingId) {
     saveDataToCloud();
     updateAdminPendingBadge();
     renderAdminPendingList();
-    showToast("✅ อนุมัติผลการแข่งขันแล้ว", "success");
 }
 
 function adminRejectPending(pendingId) {
@@ -7109,7 +7057,6 @@ function adminRejectPending(pendingId) {
     saveDataToCloud();
     updateAdminPendingBadge();
     renderAdminPendingList();
-    showToast("❌ ปฏิเสธรายการแล้ว", "warning");
 }
 
 // ════════════════════════════════════════════════════════════════════
@@ -7182,15 +7129,13 @@ function upgradeFlagcdnToCrests() {
         }
     });
     if (upgraded === 0) {
-        showToast('⚠️ ไม่พบทีมชาติที่จะรีเซ็ต', 'warning');
         return;
     }
-    showToast(`🏳️ รีเซ็ตธงชาติ ${upgraded} ทีม — กำลังบันทึก...`, 'loading');
     saveDataToCloud();
     renderLeague();
-    setTimeout(() => showToast(`✅ รีเซ็ตธงชาติ ${upgraded} ทีมสำเร็จ!`, 'success'), 1200);
+    setTimeout(() =>
     if (skipped.length > 0) {
-        setTimeout(() => showToast(`ℹ️ ทีมที่ไม่มีธงชาติ (ใช้ค่าเดิม): ${skipped.join(', ')}`, 'warning'), 2400);
+        setTimeout(() =>
     }
 }
 
@@ -7276,7 +7221,7 @@ function refreshUIState() {
 function adminStartTournament() {
     if (state.isViewOnly) return;
     const approvedTeams = state.teams.filter(t => t.status === 'approved');
-    if (approvedTeams.length < 2) { showAlert("⚠️ ต้องมีทีมที่ผ่านการอนุมัติอย่างน้อย 2 ทีมขึ้นไปครับ"); return; }
+    if (approvedTeams.length < 2) { return; }
     _selectedFormat = 'league';
     document.querySelectorAll('.format-card').forEach(c => c.classList.toggle('selected', c.dataset.format === 'league'));
     document.getElementById('format-picker-modal').classList.add('open');
@@ -7494,10 +7439,9 @@ function saveEditedTeams() {
         }
     });
 
-    if(hasError) { showAlert("⚠️ ห้ามเว้นช่องว่างรหัส,ชื่อ หรือทีมแข่งเด็ดขาดครับ!"); return; }
+    if(hasError) { return; }
 
     closeEditTeamsModal(); renderHeader(); renderLeague(); refreshUIState(); saveDataToCloud();
-    showAlert("💾 อัปเดตบันทึกข้อมูล ข้อความแจ้งกลับ และธีมสีแยกส่วนเรียบร้อยครับ!");
 }
 
 async function resetToNextSeason() {
@@ -7523,7 +7467,6 @@ async function resetToNextSeason() {
         });
 
         renderHeader(); renderAdminDock(); renderLeague(); refreshUIState(); saveDataToCloud();
-        showAlert(`🎉 สลับเข้าสู่ช่วงเตรียมพร้อมเปิดลงทะเบียนประจำซีซั่น SS${state.season} เรียบร้อยแล้ว!`);
     }
 }
 
@@ -7565,13 +7508,11 @@ function confirmMatchScore(matchId) {
     let homeInput = document.getElementById(`score-home-${matchId}`);
     let awayInput = document.getElementById(`score-away-${matchId}`);
     if (!homeInput || !awayInput || homeInput.value === '' || awayInput.value === '') {
-        showAlert('⚠️ กรุณากรอกคะแนนให้ครบทั้งสองทีมก่อนยืนยัน');
         return;
     }
     let homeScore = parseInt(homeInput.value);
     let awayScore = parseInt(awayInput.value);
     if (isNaN(homeScore) || isNaN(awayScore) || homeScore < 0 || awayScore < 0) {
-        showAlert('⚠️ คะแนนไม่ถูกต้อง กรุณากรอกตัวเลขที่ถูกต้อง');
         return;
     }
     match.homeScore = homeScore;
@@ -7761,30 +7702,6 @@ function closeScoreModal() {
 }
 
 // ── Custom Alert (themed, overrides native alert) ──
-function showAlert(msg) {
-    const modal = document.getElementById('custom-alert-modal');
-    const msgEl = document.getElementById('cal-msg');
-    const iconEl = document.getElementById('cal-icon');
-    if (!modal) { console.warn(msg); return; }
-    const s = String(msg || '');
-    const icon = typeof _extractEmoji === 'function' ? _extractEmoji(s) : null;
-    if (icon) {
-        iconEl.textContent = icon;
-        msgEl.textContent = typeof _stripLeadingEmoji === 'function' ? _stripLeadingEmoji(s) : s;
-    } else {
-        msgEl.textContent = s;
-        if (s.includes('⚠️') || s.includes('ล้มเหลว') || s.includes('ไม่ถูกต้อง') || s.includes('ไม่ครบ') || s.includes('ห้าม')) iconEl.textContent = '⚠️';
-        else if (s.includes('🏆') || s.includes('แชมป์')) iconEl.textContent = '🏆';
-        else if (s.includes('🎉') || s.includes('สำเร็จ') || s.includes('เรียบร้อย') || s.includes('💾') || s.includes('✅')) iconEl.textContent = '✅';
-        else if (s.includes('❌')) iconEl.textContent = '❌';
-        else iconEl.textContent = 'ℹ️';
-    }
-    modal.style.display = 'flex';
-}
-function closeCustomAlert() {
-    const modal = document.getElementById('custom-alert-modal');
-    if (modal) modal.style.display = 'none';
-}
 
 function toggleChangelog() {
     const body = document.getElementById('changelog-body');
@@ -8032,7 +7949,6 @@ function openChangeRequestModal() {
         c => c.playerId === state.playerTeamId && c.status === "pending"
     );
     if (existing) {
-        showToast("⏳ มีคำขอที่รอดำเนินการอยู่แล้ว กรุณารอแอดมินอนุมัติก่อน", "warning");
         return;
     }
 
@@ -8068,11 +7984,9 @@ function submitChangeRequest() {
     const note      = (document.getElementById("cr-note-inp").value   || "").trim();
 
     if (!newPlayer && !newTeam) {
-        showToast("⚠️ กรุณากรอกอย่างน้อยหนึ่งช่องที่ต้องการแก้ไข", "warning");
         return;
     }
     if (newPlayer && newPlayer === t.player && newTeam === t.team) {
-        showToast("⚠️ ข้อมูลใหม่เหมือนเดิม ไม่จำเป็นต้องแก้ไข", "warning");
         return;
     }
 
@@ -8091,7 +8005,6 @@ function submitChangeRequest() {
     state.changeRequests.push(entry);
     closeChangeRequestModal();
     saveDataToCloud(true);
-    showToast("📨 ส่งคำขอแล้ว รอแอดมินอนุมัติ", "success");
     // Re-open player info to show pending status
     openLoginModal();
 }
@@ -8169,7 +8082,6 @@ function adminApproveChangeRequest(reqId) {
     saveDataToCloud();
     updateAdminPendingBadge();
     renderAdminChangeRequestList();
-    showToast("✅ อนุมัติและอัปเดตข้อมูลผู้เล่นแล้ว", "success");
 }
 
 function adminRejectChangeRequest(reqId) {
@@ -8179,7 +8091,6 @@ function adminRejectChangeRequest(reqId) {
     saveDataToCloud();
     updateAdminPendingBadge();
     renderAdminChangeRequestList();
-    showToast("❌ ปฏิเสธคำขอแล้ว", "warning");
 }
 
 // ════════════════════════════════════════════════════════════════════
@@ -8247,8 +8158,6 @@ function _renderAHExplain(m, hInfo, aInfo, targetId) {
         </div>
     </div>`;
 }
-// Override native alert globally
-window.alert = showAlert;
 
 function openMatchViewModal(matchId) {
     let m = state.matches.find(x => x.id === matchId);
@@ -8361,13 +8270,11 @@ function confirmScoreFromModal() {
     let homeVal = document.getElementById('se-home-inp').value;
     let awayVal = document.getElementById('se-away-inp').value;
     if (homeVal === '' || awayVal === '') {
-        showAlert('⚠️ กรุณากรอกคะแนนให้ครบทั้งสองทีมก่อนยืนยัน');
         return;
     }
     let homeScore = parseInt(homeVal);
     let awayScore = parseInt(awayVal);
     if (isNaN(homeScore) || isNaN(awayScore) || homeScore < 0 || awayScore < 0) {
-        showAlert('⚠️ คะแนนไม่ถูกต้อง กรุณากรอกตัวเลขที่ถูกต้อง');
         return;
     }
     let match = state.matches.find(m => m.id === _seMatchId);
@@ -8477,7 +8384,6 @@ function uploadMatchEvidence(matchId) {
     if (!match) return;
 
     if (!IMGBB_API_KEY || IMGBB_API_KEY === "ใส่_API_KEY_ของคุณตรงนี้") {
-        showAlert("⚠️ ยังไม่ได้ใส่ IMGBB_API_KEY ในโค้ด!\n\nสมัครฟรีที่ https://api.imgbb.com แล้วใส่ API Key ของคุณแทนคำว่า 'ใส่_API_KEY_ของคุณตรงนี้' ในไฟล์ HTML ครับ");
         return;
     }
 
@@ -8510,8 +8416,6 @@ function uploadMatchEvidence(matchId) {
 
                 const base64 = canvas.toDataURL("image/jpeg", 0.75).split(",")[1];
 
-                showStatus("⏳ กำลังอัปโหลด...", true);
-
                 const formData = new FormData();
                 formData.append("key", IMGBB_API_KEY);
                 formData.append("image", base64);
@@ -8536,11 +8440,9 @@ function uploadMatchEvidence(matchId) {
                 })
                 .then(res => res.json())
                 .then(() => {
-                    showStatus("📸 อัปโหลดหลักฐานสำเร็จ 🎉");
                     renderLeague();
                 })
                 .catch(() => {
-                    showStatus("❌ อัปโหลดไม่สำเร็จ");
                 });
             };
 
@@ -8555,7 +8457,7 @@ function uploadMatchEvidence(matchId) {
 
 function viewMatchEvidence(matchId) {
     let match = state.matches.find(m => m.id === matchId);
-    if (!match || !match.evidenceImg) { showAlert("⚠️ คู่นี้ยังไม่มีผู้เล่นส่งรูปหลักฐานเข้ามาครับ"); return; }
+    if (!match || !match.evidenceImg) { return; }
     closeScoreModal();
     _currentEvidenceMatchId = matchId;
     const lb = document.getElementById("evidence-lightbox");
@@ -8582,7 +8484,6 @@ async function deleteMatchEvidence() {
     saveDataToCloud();
     closeEvidenceLightbox();
     renderLeague();
-    showToast("🗑️ ลบรูปหลักฐานแล้ว", "success");
 }
 
 function closeEvidenceLightbox() {
@@ -8609,11 +8510,11 @@ function saveDataToCloud(allowPlayerSubmit) {
     // แต่การ "ส่งผลการแข่งขัน" และ "ส่งคำขอแก้ไขข้อมูล" เป็นการกระทำที่ผู้เล่นทำได้
     // จึงต้องส่งค่า allowPlayerSubmit = true เพื่อให้บันทึกขึ้นคลาวด์จริง ไม่ใช่แค่ค้างอยู่ในเครื่อง
     if (state.isViewOnly && !allowPlayerSubmit) return;
-    if (window._READONLY_MODE) { showToast('🔒 Readonly Mode — ไม่บันทึกข้อมูล', 'info'); return; }
+    if (window._READONLY_MODE) { return; }
     // สำรองข้อมูลไว้ในเครื่องทันที เผื่อบันทึกขึ้นคลาวด์ไม่สำเร็จแล้วต้องรีเฟรชหน้า
     _saveLocalDraft();
     clearTimeout(_pendingSaveRetryTimer);
-    showStatus("⏳ กำลังบันทึก...", true); clearTimeout(debounceTimer);
+     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => { _performCloudSave(); }, 1000);
 }
 
@@ -8650,11 +8551,8 @@ function _performCloudSave() {
             _lastBinVersion = putResData.metadata.version;
         }
         _updateSyncedSnapshot(); // ค่าที่เพิ่งบันทึกสำเร็จ กลายเป็นค่าฐานใหม่สำหรับเทียบครั้งถัดไป
-        showStatus("☁️ บันทึกขึ้นคลาวด์แล้ว");
     })
     .catch(() => {
-        showStatus("❌ บันทึกล้มเหลว — จะลองใหม่ให้อัตโนมัติ");
-        showToast('⚠️ บันทึกขึ้นคลาวด์ไม่สำเร็จ ระบบเก็บสำรองไว้ในเครื่องแล้ว และจะลองบันทึกซ้ำให้ อย่าเพิ่งปิดหน้านี้', 'warning');
         // ลองบันทึกซ้ำอัตโนมัติอีกครั้งใน 15 วินาที แทนที่จะปล่อยให้ข้อมูลค้าง
         _pendingSaveRetryTimer = setTimeout(_performCloudSave, 15000);
     });
@@ -8796,8 +8694,6 @@ async function saveCurrentChampToHistory() {
         
         state.hallOfFame[winner.id].trophies += 1;
         state.defendingChampId = winner.id;
-
-        showAlert(`💾 บันทึกสถิติลง Hall of Fame เรียบร้อยแล้ว!`);
         if (document.getElementById("champion-action-bar")) document.getElementById("champion-action-bar").style.display = "none";
         renderLeague(); saveDataToCloud();
     }
@@ -9193,8 +9089,10 @@ function _buildMatchRowDiv(m, fmt) {
 
 
     let isBigMatch = Array.isArray(state.bigMatchIds) && state.bigMatchIds.includes(m.id);
+    const decisiveInfo = _decisiveMatchMap[m.id] || null;
+    const isDecisive = !!decisiveInfo && !isBigMatch; // big-match takes priority
     let divMatch = document.createElement("div");
-    divMatch.className = "match-row" + (isBigMatch ? " big-match-row" : "");
+    divMatch.className = "match-row" + (isBigMatch ? " big-match-row" : "") + (isDecisive ? " decisive-match-row" : "");
     divMatch.innerHTML = `
         <div class="match-row-main">
             <div class="match-team home ${draggableClass}" data-team-id="${hInfo.id}" ${dragAttrs}>
@@ -9230,6 +9128,19 @@ function _buildMatchRowDiv(m, fmt) {
         let banner = document.createElement("div");
         banner.className = "big-match-banner";
         banner.innerHTML = `<span class="bm-fire">🔥</span><span class="bm-fire">🔥</span><span>&nbsp;BIG MATCH OF THE WEEK&nbsp;</span><span class="bm-fire">🔥</span><span class="bm-fire">🔥</span>`;
+        wrapper.appendChild(banner);
+        wrapper.appendChild(divMatch);
+        return wrapper;
+    }
+    if (isDecisive) {
+        const { rank, isClinch } = decisiveInfo;
+        const rankLabel = rank === 1 ? '#1' : rank === 2 ? '#2' : '#3';
+        const clinchTag = isClinch ? `<span class="dm-clinch-tag">🏆 CLINCHER</span>` : '';
+        let wrapper = document.createElement("div");
+        wrapper.className = "decisive-match-wrapper";
+        let banner = document.createElement("div");
+        banner.className = "decisive-match-banner";
+        banner.innerHTML = `<span class="dm-sword">⚔️</span><span class="dm-rank-badge">${rankLabel}</span><span>&nbsp;DECISIVE MATCH — ชี้ชะตา&nbsp;</span>${clinchTag}<span class="dm-rank-badge">${rankLabel}</span><span class="dm-sword">⚔️</span>`;
         wrapper.appendChild(banner);
         wrapper.appendChild(divMatch);
         return wrapper;
@@ -9274,13 +9185,115 @@ function _scoreMatchForBigPick(m, ptMap, rankMap) {
     return combinedPts * 1.5 + rankCloseness + topTierBonus + topClashBonus + hofPrestige;
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+// DECISIVE MATCH AUTO-DETECTION — ชี้ชะตาอัตโนมัติ
+// ══════════════════════════════════════════════════════════════════════════════
+
+function _computeDecisiveMatches(roundMatches) {
+    _decisiveMatchMap = {};
+    if (!roundMatches || roundMatches.length === 0) return;
+    const fmt = state.tournamentFormat || 'league';
+    if (fmt !== 'league') return;
+
+    const standings = calculateStandings();
+    if (standings.length < 2) return;
+
+    const n = standings.length;
+    const standMap = {};
+    standings.forEach((s, i) => { standMap[s.id] = { ...s, rank: i + 1 }; });
+
+    const scored = [];
+
+    roundMatches.forEach(m => {
+        if (m.homeId === 'BYE' || m.awayId === 'BYE') return;
+        if (m.homeScore !== null && m.awayScore !== null) return; // played already
+
+        const hSt = standMap[m.homeId];
+        const aSt = standMap[m.awayId];
+        if (!hSt || !aSt) return;
+
+        let score = 0;
+        const hRank = hSt.rank, aRank = aSt.rank;
+        const minRank = Math.min(hRank, aRank);
+        const maxRank = Math.max(hRank, aRank);
+        const rankDiff = maxRank - minRank;
+        const ptsDiff = Math.abs(hSt.pts - aSt.pts);
+        const avgRem  = (hSt.rem + aSt.rem) / 2;
+
+        // ── 1. ตำแหน่งในตาราง ──
+        if (minRank === 1 && maxRank === 2) score += 65; // แชมป์ vs รองแชมป์
+        else if (minRank === 1)             score += 38; // แชมป์อยู่ด้วย
+        else if (minRank <= 2)              score += 25;
+        else if (minRank <= 4)              score += 12;
+
+        // ── 2. ความใกล้ชิดของอันดับ (ยิ่งใกล้ = ยิ่งชิงกัน) ──
+        if (rankDiff === 0) score += 32;
+        else if (rankDiff === 1) score += 26;
+        else if (rankDiff === 2) score += 16;
+        else if (rankDiff === 3) score +=  8;
+        else score -= 4 * (rankDiff - 3);
+
+        // ── 3. ช่องว่างคะแนน ──
+        if (ptsDiff === 0)      score += 50;
+        else if (ptsDiff <= 1)  score += 42;
+        else if (ptsDiff <= 2)  score += 34;
+        else if (ptsDiff <= 3)  score += 24;
+        else if (ptsDiff <= 6)  score += 12;
+        else if (ptsDiff > 9)   score -= 12;
+
+        // ── 4. ความเร่งด่วน (นัดเหลือน้อย = สูง) ──
+        if (avgRem <= 1)      score += 50;
+        else if (avgRem <= 2) score += 35;
+        else if (avgRem <= 3) score += 20;
+        else if (avgRem <= 4) score +=  8;
+
+        // ── 5. โอกาส clinch ตำแหน่ง 1 ──
+        let isClinch = false;
+        const leader = standings[0];
+        const second = standings[1];
+        if (hRank === 1 || aRank === 1) {
+            score += 18;
+            const leaderSt  = hRank === 1 ? hSt : aSt;
+            const chalSt    = hRank === 1 ? aSt : hSt;
+            const leaderWin = leaderSt.pts + 3;
+            // คะแนนสูงสุดที่ challenger หรือทีมอื่นทำได้
+            const maxChaser = standings
+                .filter(s => s.id !== leaderSt.id)
+                .reduce((mx, s) => Math.max(mx, s.pts + s.rem * 3), 0);
+            if (leaderWin > maxChaser) { score += 70; isClinch = true; }
+        }
+        // ผู้ตามทำลายได้: ถ้า away ชนะ จะแซงผู้นำ?
+        const underdog = hRank > aRank ? hSt : aSt;
+        const frontrun = hRank < aRank ? hSt : aSt;
+        if (underdog.pts + 3 > frontrun.pts && minRank <= 3) score += 24;
+
+        // ── 6. HoF prestige ──
+        score += (_getTeamHofScore(m.homeId) + _getTeamHofScore(m.awayId)) * 0.35;
+
+        scored.push({ m, score, isClinch });
+    });
+
+    if (scored.length === 0) return;
+    scored.sort((a, b) => b.score - a.score);
+
+    // เลือกแมชที่เข้าข่าย (score >= 60 สูงสุด 3 อันดับ)
+    const threshold = 60;
+    let rank = 1;
+    scored.forEach(({ m, score, isClinch }) => {
+        if (score >= threshold && rank <= 3) {
+            _decisiveMatchMap[m.id] = { rank, isClinch };
+            rank++;
+        }
+    });
+}
+
 function autoPickBigMatch() {
     if (state.isViewOnly) return;
     let unplayed = state.matches.filter(m =>
         m.homeScore === null && m.awayScore === null &&
         m.homeId !== 'BYE' && m.awayId !== 'BYE' &&
         m.homeId !== 'Bye' && m.awayId !== 'Bye');
-    if (unplayed.length === 0) { showAlert("⚠️ ไม่มีแมชที่ยังไม่ได้เล่นแล้ว"); return; }
+    if (unplayed.length === 0) { return; }
 
     let standingsArr = calculateStandings();
     let ptMap = {}, rankMap = {};
@@ -9310,7 +9323,6 @@ function autoPickBigMatch() {
     renderLeague();
     closeBigMatchPickerModal();
     _renderBigMatchPickerList();
-    showToast(`🔥 AI เลือก ${newBigMatchIds.length} บิ๊กแมชจาก HoF + ตาราง`, 'info');
 }
 
 function openBigMatchPickerModal() {
@@ -9392,8 +9404,8 @@ function toggleBigMatch(matchId, fromModal) {
     if (m) {
         let hT = state.teams.find(t => t.id === m.homeId);
         let aT = state.teams.find(t => t.id === m.awayId);
-        if (added) showToast(`🔥 บิ๊กแมช: ${hT ? hT.team : '?'} vs ${aT ? aT.team : '?'}`, 'info');
-        else showToast(`✅ ยกเลิกบิ๊กแมช: ${hT ? hT.team : '?'} vs ${aT ? aT.team : '?'}`, 'info');
+        if (added)
+        else
     }
 }
 
@@ -9403,7 +9415,6 @@ function clearBigMatch() {
     saveDataToCloud();
     renderLeague();
     closeBigMatchPickerModal();
-    showToast('✅ ยกเลิกบิ๊กแมชทั้งหมดแล้ว', 'info');
 }
 
 // Refresh big-match button state inside the open score modal
@@ -9535,7 +9546,6 @@ function saveTrophyImg() {
     closeTrophyEditor();
     saveDataToCloud();
     renderLeague();
-    showToast(url ? '🏆 บันทึกรูปถ้วยแล้ว!' : '🏆 รีเซ็ตถ้วยเป็น emoji แล้ว', 'success');
 }
 
 // ── GIF Playlist Editor (admin UI) ───────────────────────────────────────────
@@ -9564,19 +9574,18 @@ function addGifPlaylistTrack() {
     var url  = urlInp.value.trim();
     var name = nameInp.value.trim();
     var vid  = _ytExtractId(url);
-    if (!vid) { showToast('⚠️ URL YouTube ไม่ถูกต้อง กรุณาตรวจสอบ link อีกครั้ง', 'warning'); return; }
+    if (!vid) { return; }
     if (!name) name = 'Track ' + (_gifPlaylistEditorData.length + 1);
     _gifPlaylistEditorData.push({ id: vid, name: name });
     nameInp.value = '';
     urlInp.value  = '';
     _renderGifPlaylistEditor();
-    showToast('✅ เพิ่ม "' + name + '" เข้าเพลยลิสต์แล้ว', 'success');
 }
 
 function removeGifPlaylistTrack(idx) {
     var removed = _gifPlaylistEditorData.splice(idx, 1);
     _renderGifPlaylistEditor();
-    if (removed.length) showToast('🗑️ ลบ "' + (removed[0].name || 'เพลง') + '" ออกแล้ว', 'info');
+    if (removed.length)
 }
 
 function openAdBannerEditor() {
@@ -9769,7 +9778,6 @@ function saveAdBanner() {
     saveDataToCloud();
     renderAdBanner();
     closeAdBannerEditor();
-    showToast('📢 บันทึก Ad Banner เรียบร้อยแล้ว!', 'success');
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -9778,6 +9786,7 @@ function saveAdBanner() {
 let _fxTab = 'current';        // 'current' | 'pending' | 'history'
 let _fxRoundPointer = null;    // currently viewed round number in the "current" tab
 let _fxHistoryOpenRounds = {}; // { [round]: true } which history rounds are expanded
+let _decisiveMatchMap = {};    // { [matchId]: { rank, isClinch } } — recomputed each render
 
 function _fxIsMatchUnfinished(m) {
     return m.homeId !== 'BYE' && m.awayId !== 'BYE' &&
@@ -9842,17 +9851,20 @@ function renderLeague() {
             pagerEl.style.display = "flex"; searchWrapEl.style.display = "none";
             if (_fxRoundPointer === null) _fxRoundPointer = _fxDefaultRound(maxRound);
             _fxRoundPointer = Math.min(maxRound, Math.max(1, _fxRoundPointer));
-            document.getElementById("fx-round-label").innerHTML = `<span class="rl-round">ROUND ${_fxRoundPointer}</span><span class="rl-stage">${_fxRoundPointer <= maxRound/2 ? 'STAGE 1' : 'STAGE 2'}</span>`;
+            const stageLabel = _fxRoundPointer <= maxRound/2 ? 'STAGE 1' : 'STAGE 2';
+            document.getElementById("fx-round-label").innerHTML = `<span class="rl-round">ROUND ${_fxRoundPointer}</span><span class="rl-stage-wrap"><span class="rl-deco"></span><span class="rl-stage">${stageLabel}</span><span class="rl-deco r"></span></span>`;
             document.querySelectorAll('.fx-pager-btn')[0].disabled = _fxRoundPointer <= 1;
             document.querySelectorAll('.fx-pager-btn')[1].disabled = _fxRoundPointer >= maxRound;
 
             const roundMatches = state.matches.filter(m => m.round === _fxRoundPointer);
+            _computeDecisiveMatches(roundMatches); // auto-detect decisive matches for this round
             if (roundMatches.length === 0) {
                 fixturesArea.innerHTML = `<div class="fx-empty-msg">ไม่มีคู่แข่งขันในรอบนี้</div>`;
             } else {
                 roundMatches.forEach(m => fixturesArea.appendChild(_buildMatchRowDiv(m, fmt)));
             }
         } else if (_fxTab === 'pending') {
+            _decisiveMatchMap = {}; // clear — decisive only shown in current-round tab
             pagerEl.style.display = "none"; searchWrapEl.style.display = "none";
             if (pendingMatches.length === 0) {
                 fixturesArea.innerHTML = `<div class="fx-empty-msg">🎉 ไม่มีนัดตกค้าง แข่งกันครบทุกคู่ที่ถึงกำหนดแล้ว</div>`;
@@ -10023,7 +10035,6 @@ async function resetLeagueHard() {
                 colors: state.colors || { w1: "#ffffff", w2: "#F2C24E", w3: "#ffffff", h2Standings: "#F2C24E", h2Fixtures: "#F2C24E", h2Fame: "#F2C24E", h2Details: "#F2C24E", bgColor: "#020710" },
                 h2h: state.h2h || {}  // ✅ รักษาประวัติ H2H ไว้เสมอ แม้จะ reset ฤดูกาล
             };
-            showStatus("⏳ กำลังล้างข้อมูล...", true);
             fetch(`https://api.jsonbin.io/v3/b/${state.binId}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json", "X-Master-Key": BIN_MASTER_KEY },
@@ -10046,12 +10057,10 @@ function userCopyShareLink() {
     }
     if (linkPath) {
         navigator.clipboard.writeText(linkPath).then(() => {
-            showAlert("📤 คัดลอกลิงก์หน้าทัวร์นาเมนต์เรียบร้อยแล้ว! สามารถนำไปแชร์ต่อให้เพื่อนๆ สมัครเข้าร่วมได้เลยครับ");
         }).catch(() => {
             showPrompt("📋 คัดลอกลิงก์นี้ไปแชร์ให้เพื่อน:", linkPath);
         });
     } else {
-        showAlert("⚠️ ตัวระบุยังดึงคีย์ลิงก์ออนไลน์ไม่สมบูรณ์ กรุณารอสักครู่แล้วกดใหม่อีกครั้งครับ");
     }
 }
 
@@ -10069,7 +10078,6 @@ function initFirstTimeCloudBin() {
 function _loadBinData(idToLoad) {
     state.binId = idToLoad;
     localStorage.setItem('wc_online_bin_id', idToLoad);
-    showStatus("⏳ กำลังโหลด...", true);
     fetchWithRetry(`https://api.jsonbin.io/v3/b/${idToLoad}/latest`, { headers: { "X-Master-Key": BIN_MASTER_KEY } })
     .then(resData => {
         let r = resData.record;
@@ -10114,7 +10122,7 @@ function _loadBinData(idToLoad) {
             ? (window.location.origin + window.location.pathname)
             : (window.location.origin + window.location.pathname + "?id=" + state.binId);
         document.getElementById("spectator-link-path").textContent = shareBase;
-        showStatus("☁️ โหลดข้อมูลแล้ว"); renderHeader(); renderLeague(); refreshUIState(); renderAnnouncement(); renderChangelog();
+         renderHeader(); renderLeague(); refreshUIState(); renderAnnouncement(); renderChangelog();
         _hideInitialLoadOverlay();
         // เก็บสำเนาไว้ในเครื่อง เพื่อให้ครั้งหน้าที่เข้าเว็บ แสดงข้อมูลนี้ได้ทันทีโดยไม่ต้องรอโหลด
         _saveLastKnownCache(state.binId);
@@ -10123,8 +10131,6 @@ function _loadBinData(idToLoad) {
         // ถ้ามีข้อมูลที่เคยบันทึกขึ้นคลาวด์ไม่สำเร็จค้างไว้ในเครื่องนี้ ถามว่าจะกู้คืนไหม
         _offerLocalDraftRestore();
     }).catch(() => {
-        showStatus("❌ โหลดไม่สำเร็จ — ตรวจสอบอินเทอร์เน็ตแล้วลองกด \"รีเฟรชข้อมูล\" อีกครั้ง");
-        showToast('⚠️ โหลดข้อมูลจากคลาวด์ไม่สำเร็จ (ลองใหม่ให้อัตโนมัติแล้วแต่ยังไม่สำเร็จ)', 'warning');
         // ถึงจะโหลดไม่สำเร็จ ก็ต้องปิดหน้าจอโหลดอยู่ดี ไม่งั้นผู้ใช้จะติดอยู่ที่หน้าเปล่าตลอดไป
         _hideInitialLoadOverlay();
     });
@@ -10141,7 +10147,6 @@ function _offerLocalDraftRestore() {
             Object.assign(state, draft.data);
             renderHeader(); renderLeague(); refreshUIState(); renderAnnouncement();
             saveDataToCloud();
-            showToast('✅ กู้คืนข้อมูลแล้ว กำลังบันทึกขึ้นคลาวด์อีกครั้ง', 'success');
         } else {
             _clearLocalDraft();
         }
@@ -10238,7 +10243,6 @@ async function removePlayerFromHof(id) {
 
 function saveAdminHofData() {
     saveDataToCloud();
-    showAlert("💾 บันทึกข้อมูล Hall of Fame เรียบร้อยแล้ว");
     renderHallOfFame();
 }
 
@@ -10285,7 +10289,6 @@ function saveHofManageData() {
     saveDataToCloud();
     renderHallOfFame();
     closeHofManageModal();
-    showStatus('💾 บันทึก HOF แล้ว');
 }
 
 async function resetAllHofData() {
@@ -10413,12 +10416,10 @@ function confirmBracketScore() {
     let homeInp = document.getElementById('bk-inp-home');
     let awayInp = document.getElementById('bk-inp-away');
     if (!homeInp || !awayInp || homeInp.value === '' || awayInp.value === '') {
-        showAlert('⚠️ กรุณากรอกคะแนนให้ครบทั้งสองทีมก่อนยืนยัน');
         return;
     }
     let hs = parseInt(homeInp.value), as_ = parseInt(awayInp.value);
     if (isNaN(hs) || isNaN(as_) || hs < 0 || as_ < 0) {
-        showAlert('⚠️ คะแนนไม่ถูกต้อง กรุณากรอกตัวเลขที่ถูกต้อง');
         return;
     }
     let m = state.matches.find(x => x.id === _bkModalMatchId);
@@ -10704,10 +10705,9 @@ function saveOdds() {
     let d = dRaw !== '' ? parseFloat(dRaw) : null;
     let a = aRaw !== '' ? parseFloat(aRaw) : null;
     if ((h !== null && (isNaN(h) || h < 1.01)) || (a !== null && (isNaN(a) || a < 1.01))) {
-        showStatus('❌ อัตราชนะต้องมีค่า ≥ 1.01');
         return;
     }
-    if (d !== null && isNaN(d)) { showStatus('❌ ค่าแฮนดิแคปไม่ถูกต้อง'); return; }
+    if (d !== null && isNaN(d)) {  return; }
     m.odds = {
         home: h !== null ? h.toFixed(2) : null,
         handicap: d !== null ? d.toFixed(2) : null,
@@ -10716,7 +10716,6 @@ function saveOdds() {
     closeOddsModal();
     renderLeague();
     saveDataToCloud();
-    showStatus('✅ บันทึกอัตราต่อรองแล้ว');
 }
 
 async function clearOdds() {
@@ -10728,7 +10727,6 @@ async function clearOdds() {
     closeOddsModal();
     renderLeague();
     saveDataToCloud();
-    showStatus('✅ ล้างอัตราต่อรองแล้ว');
 }
 
 // ─── Match Status Functions ──────────────────────────────────────────────────
@@ -10741,7 +10739,6 @@ function startMatch(matchId) {
     if (m.homeScore === null) m.homeScore = 0;
     if (m.awayScore === null) m.awayScore = 0;
     renderLeague(); saveDataToCloud();
-    showStatus('🔴 เริ่มการแข่งขันแล้ว!');
 }
 
 function finishMatch(matchId) {
@@ -10752,7 +10749,6 @@ function finishMatch(matchId) {
     // บันทึก scoredAt ถ้ายังไม่มี (กรณีกด finish โดยไม่ผ่าน confirmMatchScore)
     if (!m.scoredAt) m.scoredAt = Date.now();
     renderLeague(); saveDataToCloud();
-    showStatus('✅ ยืนยันจบการแข่งขันแล้ว!');
 }
 
 // ─── Auto-Fill Odds from Handicap ────────────────────────────────────────────
@@ -10878,7 +10874,6 @@ function autoCalcHandicap() {
     let whoGivesHcap = hcap < 0 ? homeTeam : (hcap > 0 ? awayTeam : 'เสมอกัน');
     let h2hNote = h2hGames > 0 ? ` + H2H(${h2hGames}เกม)` : '';
     let dataSource = (homeStr === 0 && awayStr === 0) ? 'ไม่มีสถิติ' : `HoF+ฤดูกาล${h2hNote}`;
-    showStatus(`🤖 แฮนดิแคป ${hcapLabel} (${whoGivesHcap}ต่อ) — ${dataSource}`);
 }
 
 // ─── H2H Manager (Standalone) ────────────────────────────────────────────────
@@ -10915,11 +10910,11 @@ function hmgrOnTeamChange() {
 function hmgrSaveRecord() {
     let hId = document.getElementById('hmgr-home').value;
     let aId = document.getElementById('hmgr-away').value;
-    if (!hId || !aId) { showStatus('❌ เลือกทีมทั้งสองทีมก่อน'); return; }
-    if (hId === aId) { showStatus('❌ ทีมเหย้าและเยือนต้องไม่ใช่ทีมเดียวกัน'); return; }
+    if (!hId || !aId) {  return; }
+    if (hId === aId) {  return; }
     let hs = parseInt(document.getElementById('hmgr-hs').value);
     let as_ = parseInt(document.getElementById('hmgr-as').value);
-    if (isNaN(hs) || isNaN(as_) || hs < 0 || as_ < 0) { showStatus('❌ กรุณากรอกสกอร์ให้ครบ'); return; }
+    if (isNaN(hs) || isNaN(as_) || hs < 0 || as_ < 0) {  return; }
     let season = parseInt(document.getElementById('hmgr-season').value) || state.season;
     let note = document.getElementById('hmgr-note').value.trim();
     let key = _h2hKey(hId, aId);
@@ -10933,7 +10928,6 @@ function hmgrSaveRecord() {
     hmgrOnTeamChange();
     _hmgrRenderAllPairs();
     saveDataToCloud();
-    showStatus('✅ บันทึก H2H แล้ว');
 }
 
 function hmgrDeleteRecord(key, idx) {
@@ -10942,7 +10936,6 @@ function hmgrDeleteRecord(key, idx) {
     if (state.h2h[key].length === 0) delete state.h2h[key];
     _hmgrRenderAllPairs();
     saveDataToCloud();
-    showStatus('✅ ลบข้อมูล H2H แล้ว');
 }
 
 // ── Sync all existing match results into H2H automatically ──────────────────
@@ -10964,8 +10957,8 @@ function hmgrSyncAllMatches() {
     });
     _hmgrRenderAllPairs();
     saveDataToCloud();
-    if (added > 0) showStatus(`✅ ซิงค์แล้ว ${added} เกม`);
-    else showStatus('ℹ️ ไม่มีข้อมูลใหม่ที่ต้องซิงค์');
+    if (added > 0) 
+    else 
 }
 
 function _hmgrRenderAllPairs() {
@@ -11227,7 +11220,7 @@ function saveH2HRecord() {
     if (!_h2hHomeId || !_h2hAwayId) return;
     let hs = parseInt(document.getElementById('h2h-hs').value);
     let as_ = parseInt(document.getElementById('h2h-as').value);
-    if (isNaN(hs) || isNaN(as_) || hs < 0 || as_ < 0) { showStatus('❌ กรุณาใส่สกอให้ครบ'); return; }
+    if (isNaN(hs) || isNaN(as_) || hs < 0 || as_ < 0) {  return; }
     let season = parseInt(document.getElementById('h2h-season').value) || state.season;
     let note = document.getElementById('h2h-note').value.trim();
     let key = _h2hKey(_h2hHomeId, _h2hAwayId);
@@ -11239,7 +11232,6 @@ function saveH2HRecord() {
     document.getElementById('h2h-note').value = '';
     _renderH2HModal();
     saveDataToCloud();
-    showStatus('✅ บันทึก H2H แล้ว');
 }
 
 function deleteH2HRecord(key, idx) {
@@ -11248,7 +11240,6 @@ function deleteH2HRecord(key, idx) {
     if (state.h2h[key].length === 0) delete state.h2h[key];
     _renderH2HModal();
     saveDataToCloud();
-    showStatus('✅ ลบข้อมูล H2H แล้ว');
 }
 
 // ─── Data Dropdown (Export / Import) ──────────────────────────────────────
@@ -11514,7 +11505,7 @@ function _calcAHResult(homeScore, awayScore, handicap) {
 
 function exportBackup() {
     if (!state.binId && state.teams.length === 0) {
-        showToast('❌ ไม่มีข้อมูลให้ backup', 'error'); return;
+        return;
     }
     const backupData = {
         _backupMeta: {
@@ -11559,11 +11550,10 @@ function exportBackup() {
     const a = document.createElement('a');
     a.href = url; a.download = filename; a.click();
     URL.revokeObjectURL(url);
-    showToast('💾 Export สำเร็จ! ได้ไฟล์ ' + filename, 'success');
 }
 
 function importBackup(event) {
-    if (state.isViewOnly) { showToast('❌ ต้อง login admin ก่อน', 'error'); return; }
+    if (state.isViewOnly) { return; }
     const file = event.target.files && event.target.files[0];
     event.target.value = '';
     if (!file) return;
@@ -11574,12 +11564,12 @@ function importBackup(event) {
         try {
             data = JSON.parse(e.target.result);
         } catch(err) {
-            showToast('❌ ไฟล์ไม่ถูกต้อง (JSON เสีย)', 'error'); return;
+            return;
         }
 
         // ตรวจว่าเป็น backup จริง
         if (!data._backupMeta || (!data.teams && !data.matches)) {
-            showToast('❌ ไฟล์นี้ไม่ใช่ backup ของระบบ', 'error'); return;
+            return;
         }
 
         const meta = data._backupMeta;
@@ -11617,8 +11607,6 @@ function confirmImportBackup() {
     const modal = document.getElementById('import-confirm-modal');
     if (modal) modal.style.display = 'none';
     if (!data) return;
-
-    showToast('⏳ กำลัง import และบันทึก...', 'loading');
 
     // นำข้อมูลเข้า state (ไม่แตะ binId — ใช้ binId เดิม)
     state.teams               = data.teams               || [];
@@ -11670,10 +11658,9 @@ function confirmImportBackup() {
             body: JSON.stringify(payload)
         })
         .then(res => res.json())
-        .then(() => { showToast('✅ Import สำเร็จ! อัปโหลด cloud แล้ว', 'success'); })
-        .catch(() => { showToast('⚠️ Import ได้ แต่ save cloud ไม่สำเร็จ — ลอง save อีกครั้ง', 'error'); });
+        .then(() => { })
+        .catch(() => { });
     } else {
-        showToast('✅ Import สำเร็จ! (ยังไม่มี Bin ID)', 'success');
     }
 
     // render ใหม่ทั้งหมด
@@ -12052,8 +12039,8 @@ function plAddTrack() {
     var url = (urlEl ? urlEl.value : '').trim();
     var name = (nameEl ? nameEl.value : '').trim();
     var vid = _ytExtractId(url);
-    if (!vid) { showToast('❌ URL ไม่ถูกต้อง — ใช้ลิงก์ YouTube', 'error'); return; }
-    if (!name) { showToast('❌ กรุณาใส่ชื่อเพลง', 'error'); return; }
+    if (!vid) { return; }
+    if (!name) { return; }
     if (!state.customPlaylist) state.customPlaylist = [];
     if (state.customPlaylist.length === 0) {
         state.customPlaylist = _ytDefaultPlaylist.map(function(id, i) {
@@ -12066,7 +12053,6 @@ function plAddTrack() {
     _applyCustomPlaylist(true);
     saveDataToCloud();
     _renderPlList();
-    showToast('✅ เพิ่ม "' + name + '" เรียบร้อย!', 'success');
 }
 function plRemoveTrack(idx) {
     if (!state.customPlaylist || !state.customPlaylist[idx]) return;
@@ -12075,14 +12061,12 @@ function plRemoveTrack(idx) {
     _applyCustomPlaylist(true);
     saveDataToCloud();
     _renderPlList();
-    showToast('🗑️ ลบ "' + name + '" แล้ว', 'success');
 }
 function plResetDefault() {
     state.customPlaylist = [];
     _applyCustomPlaylist(true);
     saveDataToCloud();
     _renderPlList();
-    showToast('🔄 คืนค่า playlist เป็นค่าเริ่มต้นแล้ว', 'success');
 }
 </script>
 </body>
