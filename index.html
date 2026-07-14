@@ -2056,6 +2056,17 @@
             font-size: 11px; font-weight: 900; color: #c4b5fd; flex-shrink: 0;
             box-shadow: 0 0 8px rgba(167,139,250,0.4);
         }
+        .dm-title-row {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .dm-title-text { letter-spacing: 3px; }
+        .dm-reason-row {
+            margin-top: 5px;
+            font-size: 12.5px; font-weight: 700; letter-spacing: 0.5px;
+            color: #e9d5ff; text-shadow: 0 0 10px rgba(216,180,254,0.8);
+            font-family: 'Prompt', 'Sarabun', sans-serif;
+            text-transform: none;
+        }
         .decisive-match-row {
             border: 2px solid #7c3aed !important;
             animation: decisivePulse 2.8s ease-in-out infinite, decisiveBorderColor 5s linear infinite;
@@ -9132,14 +9143,21 @@ function _buildMatchRowDiv(m, fmt) {
         return wrapper;
     }
     if (isDecisive) {
-        const { rank, isClinch } = decisiveInfo;
+        const { rank, isClinch, reason } = decisiveInfo;
         const rankLabel = rank === 1 ? '#1' : rank === 2 ? '#2' : '#3';
-        const clinchTag = isClinch ? `<span class="dm-clinch-tag">🏆 CLINCHER</span>` : '';
         let wrapper = document.createElement("div");
         wrapper.className = "decisive-match-wrapper";
         let banner = document.createElement("div");
         banner.className = "decisive-match-banner";
-        banner.innerHTML = `<span class="dm-sword">⚔️</span><span class="dm-rank-badge">${rankLabel}</span><span>&nbsp;DECISIVE MATCH — ชี้ชะตา&nbsp;</span>${clinchTag}<span class="dm-rank-badge">${rankLabel}</span><span class="dm-sword">⚔️</span>`;
+        banner.innerHTML = `
+            <div class="dm-title-row">
+                <span class="dm-sword">⚔️</span>
+                <span class="dm-rank-badge">${rankLabel}</span>
+                <span class="dm-title-text">DECISIVE MATCH</span>
+                <span class="dm-rank-badge">${rankLabel}</span>
+                <span class="dm-sword">⚔️</span>
+            </div>
+            <div class="dm-reason-row">${reason || '⚡ นัดชี้ชะตา'}</div>`;
         wrapper.appendChild(banner);
         wrapper.appendChild(divMatch);
         return wrapper;
@@ -9269,7 +9287,30 @@ function _computeDecisiveMatches(roundMatches) {
         // ── 6. HoF prestige ──
         score += (_getTeamHofScore(m.homeId) + _getTeamHofScore(m.awayId)) * 0.35;
 
-        scored.push({ m, score, isClinch });
+        // ── 7. สร้าง reason label อธิบายว่าชี้ชะตาอะไร ──
+        let reason = '';
+        const canOvertake = underdog.pts + 3 > frontrun.pts;
+        if (isClinch) {
+            reason = '🏆 ชนะ = คว้าแชมป์ได้เลย!';
+        } else if (minRank === 1 && maxRank === 2) {
+            reason = ptsDiff === 0
+                ? '👑 ยอดตาราง — แต้มเท่ากันทุกประการ!'
+                : `👑 อันดับ 1 ปะทะ 2 — ห่างกันแค่ ${ptsDiff} แต้ม`;
+        } else if (minRank === 1) {
+            reason = canOvertake
+                ? `⚡ ชนะแล้วแซงขึ้นนำตาราง!`
+                : `⚡ ผู้นำลงสนาม — ห่างอันดับถัดไป ${ptsDiff} แต้ม`;
+        } else if (ptsDiff === 0) {
+            reason = `⚡ อันดับ ${minRank} & ${maxRank} — แต้มเท่ากัน ชนะ = แซง!`;
+        } else if (canOvertake) {
+            reason = `⚡ ชนะแล้วขึ้นอันดับ ${minRank}!`;
+        } else if (ptsDiff <= 3) {
+            reason = `⚡ ห่างกันแค่ ${ptsDiff} แต้ม — ชิงอันดับ ${minRank}`;
+        } else {
+            reason = `⚡ ชิงอันดับ ${minRank}–${maxRank} ในตาราง`;
+        }
+
+        scored.push({ m, score, isClinch, reason });
     });
 
     if (scored.length === 0) return;
@@ -9278,9 +9319,9 @@ function _computeDecisiveMatches(roundMatches) {
     // เลือกแมชที่เข้าข่าย (score >= 60 สูงสุด 3 อันดับ)
     const threshold = 60;
     let rank = 1;
-    scored.forEach(({ m, score, isClinch }) => {
+    scored.forEach(({ m, score, isClinch, reason }) => {
         if (score >= threshold && rank <= 3) {
-            _decisiveMatchMap[m.id] = { rank, isClinch };
+            _decisiveMatchMap[m.id] = { rank, isClinch, reason };
             rank++;
         }
     });
