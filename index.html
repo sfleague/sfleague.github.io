@@ -9209,7 +9209,11 @@ function renderAdBanner() {
         var gifPl = Array.isArray(ad.gifPlaylist) && ad.gifPlaylist.length > 0
             ? ad.gifPlaylist
             : (ad.gifMusicUrl ? [{ id: _ytExtractId(ad.gifMusicUrl) || '', name: 'GIF Music' }].filter(function(s){ return s.id; }) : []);
-        _playAdBannerGifPlaylist(gifPl);
+        if (gifPl.length > 0) {
+            _playAdBannerGifPlaylist(gifPl);
+        } else {
+            _stopAdBannerMusic(); // ไม่มีเพลง GIF → หยุดเพลง GIF และ resume background playlist
+        }
     } else {
         /* ── Normal mode ── */
         banner.innerHTML = closeBtn + `
@@ -9512,6 +9516,7 @@ function saveAdBanner() {
         gifUrl:    (fi('ad-gif-inp')   || {}).value || '',
         gifShowLabel: !!(fi('ad-gif-show-label') || {}).checked,
         gifPlaylist:    _gifPlaylistEditorData.slice(),
+        gifMusicUrl:    '',   // เคลียร์ legacy field เสมอ (ป้องกัน fallback หลัง save)
         mode:      (fi('ad-mode-normal') || {}).checked ? 'normal' : 'gif',
         btnText:   (fi('ad-btn-inp')   || {}).value || '',
         linkUrl:   (fi('ad-link-inp')  || {}).value || '',
