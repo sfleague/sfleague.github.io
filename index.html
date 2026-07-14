@@ -5159,7 +5159,7 @@ function manualRefresh() {
         } else {
         }
     })
-    .catch(() => 
+    .catch(() => {})
 }
 
 function _checkForCloudUpdates() {
@@ -7133,9 +7133,8 @@ function upgradeFlagcdnToCrests() {
     }
     saveDataToCloud();
     renderLeague();
-    setTimeout(() =>
     if (skipped.length > 0) {
-        setTimeout(() =>
+        // skipped teams logged silently (notifications removed)
     }
 }
 
@@ -9404,8 +9403,6 @@ function toggleBigMatch(matchId, fromModal) {
     if (m) {
         let hT = state.teams.find(t => t.id === m.homeId);
         let aT = state.teams.find(t => t.id === m.awayId);
-        if (added)
-        else
     }
 }
 
@@ -9585,7 +9582,6 @@ function addGifPlaylistTrack() {
 function removeGifPlaylistTrack(idx) {
     var removed = _gifPlaylistEditorData.splice(idx, 1);
     _renderGifPlaylistEditor();
-    if (removed.length)
 }
 
 function openAdBannerEditor() {
@@ -10957,8 +10953,6 @@ function hmgrSyncAllMatches() {
     });
     _hmgrRenderAllPairs();
     saveDataToCloud();
-    if (added > 0) 
-    else 
 }
 
 function _hmgrRenderAllPairs() {
