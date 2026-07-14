@@ -4763,8 +4763,14 @@ window.addEventListener('beforeunload', function (e) {
 });
 
 // fetch พร้อมลองใหม่อัตโนมัติเมื่อเครือข่ายสะดุดหรือเซิร์ฟเวอร์ตอบช้า/พลาด
+// หมายเหตุ: เพิ่ม cache:'no-store' ให้กับ GET request ทุกครั้ง เพื่อป้องกัน browser มือถือ cache ผลลัพธ์จาก jsonbin.io
+// (ไม่ใส่ cache:'no-store' กับ PUT/POST เพราะ request เหล่านั้นไม่ถูก cache อยู่แล้ว)
 function fetchWithRetry(url, options, retries = 3, delayMs = 1200) {
-    return fetch(url, options).then(res => {
+    const method = (options && options.method) ? options.method.toUpperCase() : 'GET';
+    const mergedOptions = (method === 'GET' || method === 'HEAD')
+        ? Object.assign({ cache: 'no-store' }, options)
+        : options;
+    return fetch(url, mergedOptions).then(res => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.json();
     }).catch(err => {
@@ -4847,10 +4853,11 @@ function _startAutoRefresh() {
 }
 
 // หยุดโหลดอัตโนมัติเมื่อสลับแท็บ/ย่อหน้าต่างไปทำอย่างอื่น ลดโอกาสโดนจำกัดโควต้าฟรีของ jsonbin.io
+// แก้ไข: ให้ทำงานทั้ง view-only และ admin mode เพื่อให้แอดมินก็ได้รับข้อมูลล่าสุดจากอุปกรณ์อื่น
 document.addEventListener('visibilitychange', function () {
     if (document.hidden) {
         if (_autoRefreshTimer) { clearInterval(_autoRefreshTimer); _autoRefreshTimer = null; }
-    } else if (state.isViewOnly && state.binId && !_autoRefreshTimer) {
+    } else if (state.binId && !_autoRefreshTimer) {
         _checkForCloudUpdates();
         _startAutoRefresh();
     }
@@ -4877,7 +4884,9 @@ function manualRefresh() {
 }
 
 function _checkForCloudUpdates() {
-    if (!state.binId || !state.isViewOnly) return;
+    // แก้ไข: ให้ทำงานทั้ง view-only และ admin mode
+    // (เดิมมี !state.isViewOnly กัน ทำให้แอดมินไม่ได้รับข้อมูลอัปเดตจากอุปกรณ์อื่น)
+    if (!state.binId) return;
     fetchWithRetry(`https://api.jsonbin.io/v3/b/${state.binId}/latest`, {
         headers: { 'X-Master-Key': BIN_MASTER_KEY }
     }, 1)
@@ -4886,7 +4895,7 @@ function _checkForCloudUpdates() {
         if (newVer && _lastBinVersion !== null && newVer !== _lastBinVersion) {
             _lastBinVersion = newVer;
             _applyCloudData(resData.record);
-            showToast('🔔 มีการอัปเดตผลการแข่งขัน!', 'info');
+            showToast('🔔 มีการอัปเดตข้อมูลล่าสุด!', 'info');
         } else if (_lastBinVersion === null && newVer) {
             _lastBinVersion = newVer;
         }
@@ -9800,8 +9809,8 @@ function _loadBinData(idToLoad) {
         _hideInitialLoadOverlay();
         // เก็บสำเนาไว้ในเครื่อง เพื่อให้ครั้งหน้าที่เข้าเว็บ แสดงข้อมูลนี้ได้ทันทีโดยไม่ต้องรอโหลด
         _saveLastKnownCache(state.binId);
-        // เริ่ม auto-refresh สำหรับ viewer
-        if (state.isViewOnly) _startAutoRefresh();
+        // เริ่ม auto-refresh สำหรับทุก mode (แก้ไข: เดิมทำงานแค่ view-only)
+        _startAutoRefresh();
         // ถ้ามีข้อมูลที่เคยบันทึกขึ้นคลาวด์ไม่สำเร็จค้างไว้ในเครื่องนี้ ถามว่าจะกู้คืนไหม
         _offerLocalDraftRestore();
     }).catch(() => {
