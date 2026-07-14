@@ -4728,6 +4728,68 @@ let _autoRefreshTimer = null;
 let _lastBinVersion = null;
 const AUTO_REFRESH_INTERVAL = 30000; // 30 วินาที
 
+// ─── Safe Cloud Merge (ป้องกันข้อมูลถูกเขียนทับหาย) ──────────────────────────
+// ปัญหาเดิม: ทุกครั้งที่บันทึก ระบบจะเขียนทับข้อมูลทั้งก้อนบนคลาวด์ด้วยสำเนาที่มีอยู่ในเครื่องตัวเอง
+// ถ้าอีกเครื่องหนึ่ง (เช่น ผู้เล่นที่เพิ่งส่งผลแข่ง) มีสำเนาข้อมูลเก่ากว่า (ยังไม่เห็นว่าแอดมินอนุมัติไปแล้ว)
+// แล้วบันทึกทับ ก็จะทำให้การอนุมัติของแอดมินหายไปทันที โดยไม่มีการแจ้งเตือนใดๆ
+// วิธีแก้: ก่อนบันทึกทุกครั้ง ต้องดึงข้อมูลล่าสุดจากคลาวด์มาก่อน แล้ว "ผสาน" (merge) ทีละรายการ
+// โดยเทียบกับ "ค่าฐาน" ที่เครื่องนี้เคยซิงค์ไว้ล่าสุด — รายการไหนที่เครื่องนี้ไม่ได้แก้ไขจริง จะใช้ค่าจากคลาวด์เสมอ
+// (ไม่เขียนทับของคนอื่น) ส่วนรายการที่เครื่องนี้แก้ไขจริง จะใช้ค่าของเครื่องนี้ (เพราะเป็นความตั้งใจของผู้ใช้ตรงๆ)
+let _syncedSnapshot = null;
+const _HOT_COLLECTIONS = ['matches', 'teams', 'pendingResults', 'changeRequests'];
+
+function _snapshotHotCollections(source) {
+    const snap = {};
+    _HOT_COLLECTIONS.forEach(key => {
+        snap[key] = JSON.parse(JSON.stringify((source && source[key]) || []));
+    });
+    return snap;
+}
+
+function _updateSyncedSnapshot(partial) {
+    if (!_syncedSnapshot) _syncedSnapshot = _snapshotHotCollections(state);
+    if (!partial) { _syncedSnapshot = _snapshotHotCollections(state); return; }
+    partial.forEach(key => {
+        _syncedSnapshot[key] = JSON.parse(JSON.stringify(state[key] || []));
+    });
+}
+
+// ผสานรายการในคอลเล็กชันเดียว (คีย์ด้วย id) ระหว่างข้อมูลบนคลาวด์ (remote) กับข้อมูลเครื่องนี้ (local)
+// โดยเทียบกับ "ค่าฐาน" (base = ข้อมูลล่าสุดที่เครื่องนี้เคยซิงค์กับคลาวด์สำเร็จ) เพื่อแยกแยะ 3 กรณี:
+//   1) รายการที่เครื่องนี้แก้ไขจริง (ต่างจาก base)        → ใช้ค่าของเครื่องนี้ (ตั้งใจแก้)
+//   2) รายการที่เครื่องนี้ไม่ได้แตะ                        → ใช้ค่าจากคลาวด์ (ไม่เขียนทับของคนอื่น)
+//   3) รายการที่เคยอยู่ใน base แต่หายไปจากเครื่องนี้แล้ว    → ถือว่าตั้งใจลบ ไม่ต้องเอากลับมาจากคลาวด์
+function _mergeCollection(remoteArr, localArr, baseArr) {
+    remoteArr = Array.isArray(remoteArr) ? remoteArr : [];
+    localArr  = Array.isArray(localArr)  ? localArr  : [];
+    baseArr   = Array.isArray(baseArr)   ? baseArr   : [];
+    const baseById   = new Map(baseArr.map(x => [x.id, x]));
+    const remoteById = new Map(remoteArr.map(x => [x.id, x]));
+    const localById  = new Map(localArr.map(x => [x.id, x]));
+    const allIds = new Set([...remoteById.keys(), ...localById.keys(), ...baseById.keys()]);
+    const byId = new Map();
+
+    allIds.forEach(id => {
+        const inLocal  = localById.has(id);
+        const inRemote = remoteById.has(id);
+        const inBase   = baseById.has(id);
+        if (inLocal) {
+            if (!inRemote) { byId.set(id, localById.get(id)); return; } // รายการใหม่จากเครื่องนี้ ยังไม่มีบนคลาวด์
+            const changed = JSON.stringify(localById.get(id)) !== JSON.stringify(baseById.get(id));
+            byId.set(id, changed ? localById.get(id) : remoteById.get(id));
+            return;
+        }
+        // ไม่มีในเครื่องนี้
+        if (inBase) return; // เคยมี แต่เครื่องนี้ลบไปแล้วตั้งแต่ซิงค์ครั้งล่าสุด → ตั้งใจลบ ไม่ต้องเอากลับมา
+        if (inRemote) byId.set(id, remoteById.get(id)); // เครื่องนี้ไม่เคยรู้จักมาก่อน (คนอื่นเพิ่งเพิ่มจากที่อื่น) → เก็บไว้
+    });
+
+    // รักษาลำดับเดิมของคลาวด์ก่อน แล้วค่อยต่อท้ายด้วยรายการใหม่จากเครื่องนี้ที่ยังไม่เคยอยู่บนคลาวด์
+    const order = remoteArr.map(x => x.id);
+    localArr.forEach(x => { if (!order.includes(x.id)) order.push(x.id); });
+    return order.filter(id => byId.has(id)).map(id => byId.get(id));
+}
+
 function _startAutoRefresh() {
     if (_autoRefreshTimer) clearInterval(_autoRefreshTimer);
     _autoRefreshTimer = setInterval(_checkForCloudUpdates, AUTO_REFRESH_INTERVAL);
@@ -4836,6 +4898,8 @@ function _applyCloudData(r) {
     if (r.trophyImg !== undefined) state.trophyImg = r.trophyImg;
     if (Array.isArray(r.customPlaylist)) { state.customPlaylist = r.customPlaylist; _applyCustomPlaylist(); }
     _restoreEvidenceFromLocal();
+    // ข้อมูลชุดนี้เพิ่งซิงค์มาจากคลาวด์สดๆ ใช้เป็นค่าฐานใหม่สำหรับเทียบตอนบันทึกครั้งถัดไป
+    _updateSyncedSnapshot();
     renderHeader();
     renderLeague();
     refreshUIState();
@@ -6620,6 +6684,8 @@ function adminRefreshPending() {
         if (resData.record && Array.isArray(resData.record.changeRequests)) {
             state.changeRequests = resData.record.changeRequests;
         }
+        // เพิ่งดึงมาสดๆ จากคลาวด์ ใช้เป็นค่าฐานใหม่ของ 2 คอลเล็กชันนี้ กันไม่ให้การบันทึกครั้งถัดไปเข้าใจผิดว่าเครื่องนี้แก้ไขเอง
+        _updateSyncedSnapshot(['pendingResults', 'changeRequests']);
         renderAdminPendingList();
         renderAdminChangeRequestList();
         updateAdminPendingBadge();
@@ -8232,20 +8298,50 @@ function saveDataToCloud(allowPlayerSubmit) {
     _saveLocalDraft();
     clearTimeout(_pendingSaveRetryTimer);
     showStatus("⏳ กำลังบันทึก...", true); clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-        fetchWithRetry(`https://api.jsonbin.io/v3/b/${state.binId}`, {
+    debounceTimer = setTimeout(() => { _performCloudSave(); }, 1000);
+}
+
+// บันทึกขึ้นคลาวด์จริง — ดึงข้อมูลล่าสุดจากคลาวด์มาก่อนเสมอ แล้ว "ผสาน" กับข้อมูลเครื่องนี้
+// แทนที่จะเขียนทับดะทั้งก้อนแบบเดิม (ต้นเหตุที่ทำให้ผลที่แอดมินอนุมัติแล้วหายกลับไปเป็นค่าเก่า
+// เวลามีอีกเครื่องหนึ่ง เช่น ผู้เล่นที่ถือข้อมูลเก่ากว่า บันทึกทับเข้ามาซ้อน)
+function _performCloudSave() {
+    if (!state.binId) return;
+    fetchWithRetry(`https://api.jsonbin.io/v3/b/${state.binId}/latest`, {
+        headers: { "X-Master-Key": BIN_MASTER_KEY }
+    })
+    .then(resData => {
+        const remote = resData.record || {};
+        const base = _syncedSnapshot || _snapshotHotCollections(state);
+
+        // ผสานทีละคอลเล็กชันที่อาจถูกแก้จากหลายเครื่องพร้อมกัน (ผลแข่ง/ทีม/ผลรอตรวจ/คำขอแก้ไข)
+        state.matches        = _mergeCollection(remote.matches,        state.matches,        base.matches);
+        state.teams          = _mergeCollection(remote.teams,          state.teams,          base.teams);
+        state.pendingResults = _mergeCollection(remote.pendingResults, state.pendingResults, base.pendingResults);
+        state.changeRequests = _mergeCollection(remote.changeRequests, state.changeRequests, base.changeRequests);
+
+        // อัปเดตหน้าจอให้ตรงกับสิ่งที่ผสานแล้ว (เผื่อมีของคนอื่นที่เพิ่งเพิ่มเข้ามาระหว่างนี้)
+        renderLeague(); refreshUIState(); updateAdminPendingBadge();
+
+        return fetchWithRetry(`https://api.jsonbin.io/v3/b/${state.binId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json", "X-Master-Key": BIN_MASTER_KEY },
             body: JSON.stringify(_getStateForCloud())
-        })
-        .then(() => { _clearLocalDraft(); showStatus("☁️ บันทึกขึ้นคลาวด์แล้ว"); })
-        .catch(() => {
-            showStatus("❌ บันทึกล้มเหลว — จะลองใหม่ให้อัตโนมัติ");
-            showToast('⚠️ บันทึกขึ้นคลาวด์ไม่สำเร็จ ระบบเก็บสำรองไว้ในเครื่องแล้ว และจะลองบันทึกซ้ำให้ อย่าเพิ่งปิดหน้านี้', 'warning');
-            // ลองบันทึกซ้ำอัตโนมัติอีกครั้งใน 15 วินาที แทนที่จะปล่อยให้ข้อมูลค้าง
-            _pendingSaveRetryTimer = setTimeout(saveDataToCloud, 15000);
         });
-    }, 1000);
+    })
+    .then(putResData => {
+        _clearLocalDraft();
+        if (putResData && putResData.metadata && putResData.metadata.version) {
+            _lastBinVersion = putResData.metadata.version;
+        }
+        _updateSyncedSnapshot(); // ค่าที่เพิ่งบันทึกสำเร็จ กลายเป็นค่าฐานใหม่สำหรับเทียบครั้งถัดไป
+        showStatus("☁️ บันทึกขึ้นคลาวด์แล้ว");
+    })
+    .catch(() => {
+        showStatus("❌ บันทึกล้มเหลว — จะลองใหม่ให้อัตโนมัติ");
+        showToast('⚠️ บันทึกขึ้นคลาวด์ไม่สำเร็จ ระบบเก็บสำรองไว้ในเครื่องแล้ว และจะลองบันทึกซ้ำให้ อย่าเพิ่งปิดหน้านี้', 'warning');
+        // ลองบันทึกซ้ำอัตโนมัติอีกครั้งใน 15 วินาที แทนที่จะปล่อยให้ข้อมูลค้าง
+        _pendingSaveRetryTimer = setTimeout(_performCloudSave, 15000);
+    });
 }
 
 function calculateStandings() {
@@ -9639,6 +9735,8 @@ function _loadBinData(idToLoad) {
         if (resData.metadata && resData.metadata.version) {
             _lastBinVersion = resData.metadata.version;
         }
+        // ข้อมูลชุดนี้เพิ่งโหลดสดจากคลาวด์ ใช้เป็นค่าฐานสำหรับเทียบตอนบันทึกครั้งถัดไป
+        _updateSyncedSnapshot();
         _restoreEvidenceFromLocal();
         const shareBase = FIXED_BIN_ID
             ? (window.location.origin + window.location.pathname)
