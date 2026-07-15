@@ -5181,7 +5181,8 @@ let state = {
         gifPlaylist: [],
         mode: "normal",
         width: 280
-    }
+    },
+    adBannerHistory: []
 };
 
 let draggedTeamId = null;
@@ -10094,6 +10095,7 @@ function openAdBannerEditor() {
     const widthRow = fi('ad-width-row');
     if (widthRow) widthRow.style.display = curPos === 'center' ? 'none' : '';
     updateAdImgPreview();
+    _renderAdBannerHistory();
     const modal = fi('ad-editor-modal');
     if (modal) modal.classList.add('open');
 }
@@ -10247,25 +10249,96 @@ async function uploadAdImageFromFile(input) {
 function saveAdBanner() {
     if (state.isViewOnly) return;
     const fi = id => document.getElementById(id);
+
+    // ── บันทึก config ปัจจุบันลง history ก่อนเขียนทับ ──
+    if (state.adBanner && state.adBanner.enabled !== undefined) {
+        const snap = Object.assign({}, state.adBanner, { _savedAt: Date.now() });
+        if (!Array.isArray(state.adBannerHistory)) state.adBannerHistory = [];
+        state.adBannerHistory.unshift(snap);          // ใส่หัวสุด (ล่าสุดก่อน)
+        if (state.adBannerHistory.length > 8) state.adBannerHistory.length = 8;  // เก็บสูงสุด 8 ตัว
+    }
+
     state.adBanner = {
-        enabled:   (fi('ad-enabled-toggle') || {}).checked !== false,
-        labelText: (fi('ad-label-inp') || {}).value || '',
-        title:     (fi('ad-title-inp') || {}).value || '',
-        desc:      (fi('ad-desc-inp')  || {}).value || '',
-        imgUrl:    (fi('ad-img-inp')   || {}).value || '',
-        gifUrl:    (fi('ad-gif-inp')   || {}).value || '',
+        enabled:      (fi('ad-enabled-toggle') || {}).checked !== false,
+        labelText:    (fi('ad-label-inp') || {}).value || '',
+        title:        (fi('ad-title-inp') || {}).value || '',
+        desc:         (fi('ad-desc-inp')  || {}).value || '',
+        imgUrl:       (fi('ad-img-inp')   || {}).value || '',
+        gifUrl:       (fi('ad-gif-inp')   || {}).value || '',
         gifShowLabel: !!(fi('ad-gif-show-label') || {}).checked,
-        gifPlaylist:    _gifPlaylistEditorData.slice(),
-        gifMusicUrl:    '',   // เคลียร์ legacy field เสมอ (ป้องกัน fallback หลัง save)
-        mode:      (fi('ad-mode-normal') || {}).checked ? 'normal' : 'gif',
-        btnText:   (fi('ad-btn-inp')   || {}).value || '',
-        linkUrl:   (fi('ad-link-inp')  || {}).value || '',
-        width:     parseInt((fi('ad-width-slider') || {}).value) || 280,
-        position:  (document.querySelector('.ad-pos-dot.active') || {}).dataset?.pos || 'bottom-left'
+        gifPlaylist:  _gifPlaylistEditorData.slice(),
+        gifMusicUrl:  '',
+        mode:         (fi('ad-mode-normal') || {}).checked ? 'normal' : 'gif',
+        btnText:      (fi('ad-btn-inp')   || {}).value || '',
+        linkUrl:      (fi('ad-link-inp')  || {}).value || '',
+        width:        parseInt((fi('ad-width-slider') || {}).value) || 280,
+        position:     (document.querySelector('.ad-pos-dot.active') || {}).dataset?.pos || 'bottom-left'
     };
     saveDataToCloud();
     renderAdBanner();
     closeAdBannerEditor();
+}
+
+// ── Ad Banner History helpers ──────────────────────────────────────────────────
+function _renderAdBannerHistory() {
+    const list = document.getElementById('ad-history-list');
+    if (!list) return;
+    const hist = Array.isArray(state.adBannerHistory) ? state.adBannerHistory : [];
+    if (!hist.length) {
+        list.innerHTML = '<div style="font-size:12px;color:#475569;text-align:center;padding:12px 0;">ยังไม่มีประวัติ — กด บันทึก แล้วจะเก็บไว้ที่นี่</div>';
+        return;
+    }
+    list.innerHTML = hist.map(function(h, i) {
+        const dt = h._savedAt ? new Date(h._savedAt).toLocaleString('th-TH', { dateStyle:'short', timeStyle:'short' }) : '—';
+        const thumb = h.imgUrl
+            ? `<img src="${_htmlEsc(h.imgUrl)}" style="width:48px;height:36px;object-fit:cover;border-radius:5px;border:1px solid rgba(212,175,55,0.3);flex-shrink:0;" onerror="this.style.opacity='0.2'">`
+            : `<div style="width:48px;height:36px;border-radius:5px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">${h.mode==='gif'?'🎞️':'🖼️'}</div>`;
+        const posLabel = {'bottom-left':'↙','bottom-right':'↘','top-left':'↖','top-right':'↗','center':'⬤'}[h.position||'bottom-left']||'↙';
+        const previewTitle = h.title || h.labelText || (h.mode==='gif' ? 'GIF mode' : '(ไม่มีชื่อ)');
+        return `<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:9px;">
+            ${thumb}
+            <div style="flex:1;min-width:0;">
+                <div style="font-size:12px;font-weight:700;color:#e2e8f0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${_htmlEsc(previewTitle)}</div>
+                <div style="font-size:10px;color:#64748b;margin-top:1px;">${posLabel} &nbsp;·&nbsp; ${dt}</div>
+            </div>
+            <button onclick="_restoreAdBannerHistory(${i})" style="flex-shrink:0;padding:4px 10px;border-radius:6px;border:1px solid rgba(242,194,78,0.45);background:rgba(242,194,78,0.1);color:#F2C24E;font-family:'Prompt',sans-serif;font-size:11px;font-weight:700;cursor:pointer;" title="เรียกคืน config นี้">เรียกคืน</button>
+            <button onclick="_deleteAdBannerHistory(${i})" style="flex-shrink:0;padding:4px 8px;border-radius:6px;border:1px solid rgba(239,68,68,0.3);background:rgba(239,68,68,0.08);color:#f87171;font-family:'Prompt',sans-serif;font-size:11px;cursor:pointer;" title="ลบออกจากประวัติ">✕</button>
+        </div>`;
+    }).join('');
+}
+
+function _restoreAdBannerHistory(idx) {
+    const h = (state.adBannerHistory || [])[idx];
+    if (!h) return;
+    const fi = id => document.getElementById(id);
+    // เติมค่าทุก field กลับเข้า editor
+    if (fi('ad-enabled-toggle')) fi('ad-enabled-toggle').checked = h.enabled !== false;
+    if (fi('ad-label-inp'))  fi('ad-label-inp').value  = h.labelText || '';
+    if (fi('ad-title-inp'))  fi('ad-title-inp').value  = h.title     || '';
+    if (fi('ad-desc-inp'))   fi('ad-desc-inp').value   = h.desc      || '';
+    if (fi('ad-img-inp'))    fi('ad-img-inp').value    = h.imgUrl    || '';
+    if (fi('ad-gif-inp'))    fi('ad-gif-inp').value    = h.gifUrl    || '';
+    if (fi('ad-gif-show-label')) fi('ad-gif-show-label').checked = h.gifShowLabel || false;
+    if (fi('ad-btn-inp'))    fi('ad-btn-inp').value    = h.btnText   || '';
+    if (fi('ad-link-inp'))   fi('ad-link-inp').value   = h.linkUrl   || '';
+    const slider = fi('ad-width-slider');
+    if (slider) { slider.value = h.width || 280; fi('ad-width-val').textContent = slider.value; }
+    _gifPlaylistEditorData = Array.isArray(h.gifPlaylist) ? h.gifPlaylist.map(s => Object.assign({},s)) : [];
+    _renderGifPlaylistEditor();
+    _switchAdMode(h.mode || 'normal');
+    updateAdImgPreview(); updateAdGifPreview();
+    // position picker
+    const rPos = h.position || 'bottom-left';
+    document.querySelectorAll('.ad-pos-dot[data-pos]').forEach(b => b.classList.toggle('active', b.dataset.pos === rPos));
+    const widthRow = fi('ad-width-row');
+    if (widthRow) widthRow.style.display = rPos === 'center' ? 'none' : '';
+}
+
+function _deleteAdBannerHistory(idx) {
+    if (!Array.isArray(state.adBannerHistory)) return;
+    state.adBannerHistory.splice(idx, 1);
+    saveDataToCloud();
+    _renderAdBannerHistory();
 }
 
 
@@ -10598,6 +10671,7 @@ function _loadBinData(idToLoad) {
         if (Array.isArray(r.changeRequests)) state.changeRequests = r.changeRequests;
         // สำคัญ: ต้องโหลด "ผลที่ผู้เล่นส่งมารอตรวจสอบ" กลับมาด้วย ไม่งั้นแอดมินเปิดหน้าใหม่แล้วจะไม่เห็นเลย
         state.pendingResults = Array.isArray(r.pendingResults) ? r.pendingResults : [];
+        if (Array.isArray(r.adBannerHistory)) state.adBannerHistory = r.adBannerHistory;
         if (r.announcement !== undefined) state.announcement = r.announcement || "";
         if (Array.isArray(r.customPlaylist)) { state.customPlaylist = r.customPlaylist; _applyCustomPlaylist(); }
         renderAdBanner(); renderCenterBanner();
@@ -11155,6 +11229,12 @@ async function resetBracketMatchScore(matchId) {
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
             <button onclick="saveAdBanner()" style="flex:1;background:linear-gradient(135deg,#F2C24E,#c49520);color:#020710;border:none;padding:10px 16px;border-radius:10px;font-family:'Prompt',sans-serif;font-weight:700;font-size:13px;cursor:pointer;">💾 บันทึก</button>
             <button onclick="closeAdBannerEditor()" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:#a1b7d6;padding:10px 16px;border-radius:8px;font-family:'Prompt',sans-serif;font-size:13px;cursor:pointer;width:auto;">✕ ปิด</button>
+        </div>
+
+        <!-- ── ประวัติ Banner ── -->
+        <div style="margin-top:22px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.08);">
+            <div style="font-size:12px;font-weight:700;color:#64748b;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px;">🕓 ประวัติ Banner (กดเรียกคืนเมื่อต้องการสลับกลับ)</div>
+            <div id="ad-history-list" style="display:flex;flex-direction:column;gap:7px;max-height:280px;overflow-y:auto;"></div>
         </div>
     </div>
 </div>
