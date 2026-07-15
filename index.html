@@ -9390,14 +9390,28 @@ function _buildMatchRowDiv(m, fmt) {
                 </div>
                 <div class="dm-clinch-row">${reason || '🏆 ยืนยันแชมป์ได้ทันที'}</div>`;
         } else if (zone === 'podium') {
-            // โหมดบรอนซ์ — ชิงอันดับ 3
+            // โหมดบรอนซ์ — ชิงโพเดียม
             divMatch.classList.add('podium-row');
             banner.className = "decisive-match-banner dm-podium-banner";
+            // เลือกหัวข้อตามสถานการณ์จริง
+            const _isPodiumClinch = decisiveInfo.isPodiumClinch;
+            const _minRank = decisiveInfo.minRank;
+            const _maxRank = decisiveInfo.maxRank;
+            let podiumTitle, podiumEmoji;
+            if (_isPodiumClinch && _minRank === 2) {
+                podiumTitle = 'ศึกโพเดียม'; podiumEmoji = '🥈';
+            } else if (_isPodiumClinch && _minRank === 3) {
+                podiumTitle = 'ศึกโพเดียม'; podiumEmoji = '🥉';
+            } else if (_minRank <= 3 && _maxRank <= 3) {
+                podiumTitle = 'ศึกโพเดียม'; podiumEmoji = '🥉';
+            } else {
+                podiumTitle = 'ชิงอันดับ 3'; podiumEmoji = '🥉';
+            }
             banner.innerHTML = `
                 <div class="dm-title-row">
-                    <span class="dm-podium-medal">🥉</span>
-                    <span class="dm-title-text">ศึกชิงอันดับ 3</span>
-                    <span class="dm-podium-medal">🥉</span>
+                    <span class="dm-podium-medal">${podiumEmoji}</span>
+                    <span class="dm-title-text">${podiumTitle}</span>
+                    <span class="dm-podium-medal">${podiumEmoji}</span>
                 </div>
                 <div class="dm-podium-row">${reason || '🥉 ชนะนัดนี้ขึ้นรับรางวัล'}</div>`;
         } else {
@@ -9493,18 +9507,28 @@ function _computeDecisiveMatches(roundMatches) {
 
         // ── ตรวจ clinch แชมป์ (อันดับ 1) ──
         let isClinch = false;
+        let isConditionalClinch = false; // ชนะนัดนี้ = แชมป์ (แม้ทีมอื่นต้องแพ้/เสมอด้วย)
+        let leaderStRef = null, maxChaserRef = 0;
         if (hRank === 1 || aRank === 1) {
             const leaderSt = hRank === 1 ? hSt : aSt;
+            leaderStRef = leaderSt;
             const leaderWin = leaderSt.pts + 3;
             const maxChaser = standings
                 .filter(s => s.id !== leaderSt.id)
                 .reduce((mx, s) => Math.max(mx, s.pts + s.rem * 3), 0);
-            if (leaderWin > maxChaser) isClinch = true;
+            maxChaserRef = maxChaser;
+            if (leaderWin > maxChaser) {
+                isClinch = true; // ชนะนัดนี้ = แชมป์โดยไม่ต้องรอผลอื่น
+            } else if (leaderWin >= maxChaser && leaderSt.rem === 1) {
+                // นัดสุดท้าย: ชนะแล้วอาจเสมอแต้มจ่าฝูง แต่ไม่มีทีมแซงได้ → ถือว่า clinch (ตัดสินด้วยสถิติ)
+                isClinch = true;
+                isConditionalClinch = true;
+            }
         }
 
-        // ── ตรวจ clinch อันดับ 3 ──
+        // ── ตรวจ clinch อันดับ 3 — เฉพาะทีมที่ไม่ใช่อันดับ 1 ──
         let isPodiumClinch = false;
-        if (minRank <= PODIUM && !isClinch) {
+        if (minRank > 1 && minRank <= PODIUM && !isClinch) {
             const podiumTeam = hRank <= PODIUM ? hSt : aSt;
             const podiumWin = podiumTeam.pts + 3;
             // ทีมนอกอันดับ 3 ที่ตามมาใกล้ที่สุด
@@ -9520,13 +9544,27 @@ function _computeDecisiveMatches(roundMatches) {
         const canEnterPodium     = underdog.pts + 3 > frontrun.pts && frontrun.rank === PODIUM && underdog.rank > PODIUM;
         const isDirectPodiumClash = minRank <= PODIUM && maxRank <= PODIUM + 1 && (canEnterPodium || ptsDiff <= 4);
 
+        // ช่องว่างในการแข่งขันแชมป์จริงๆ (อันดับ 1 vs อันดับ 2) — ไม่ใช่ช่องว่างระหว่างสองทีมที่เล่น
+        const rank2St = standings[1]; // อันดับ 2 จริงๆ ในตาราง
+        const titleRaceGap = (hRank === 1 || aRank === 1) && rank2St
+            ? Math.abs((hRank === 1 ? hSt : aSt).pts - rank2St.pts)
+            : ptsDiff;
+
         // ══ HARD GATE — เฉพาะแมชที่มีผลต่อตำแหน่งรางวัล (Top 3) ══
         const zone = (() => {
-            if (isClinch)                                    return 'clinch';    // ยืนยันแชมป์
-            if (minRank === 1 && maxRank === 2)             return 'title';     // ศึกจ่าฝูง
-            if (minRank === 1 && ptsDiff <= 6)              return 'title';     // ผู้นำลงสนาม
+            if (isClinch)                                    return 'clinch';    // ยืนยันแชมป์ / ชนะ = แชมป์
+            // เมื่ออันดับ 1 ลงสนาม → ต้องไม่เป็น 'podium' เด็ดขาด
+            // ใช้ช่องว่างในการแข่งแชมป์จริง (อันดับ 1 vs อันดับ 2) แทน ptsDiff ของคู่แข่ง
+            if (hRank === 1 || aRank === 1) {
+                if (maxRank === 2)                           return 'title';     // ศึกจ่าฝูง
+                if (titleRaceGap <= 6)                       return 'title';     // ผู้นำลงสนาม แชมป์ยังลุ้นได้
+                if (canOvertakeLeader)                       return 'title';     // ทีมอื่นแซงขึ้นอันดับ 1 ได้
+                return null; // อันดับ 1 นำห่าง ไม่ใช่แมชชี้ชะตา
+            }
+            if (minRank === 1 && maxRank === 2)             return 'title';     // (fallback)
+            if (minRank === 1 && ptsDiff <= 6)              return 'title';
             if (canOvertakeLeader)                           return 'title';     // แซงขึ้นอันดับ 1
-            if (isPodiumClinch)                              return 'podium';    // ยืนยันโพเดียม
+            if (isPodiumClinch)                              return 'podium';    // ยืนยันโพเดียม (ไม่ใช่อันดับ 1)
             if (isDirectPodiumClash)                         return 'podium';    // ชิงอันดับ 3
             return null;
         })();
@@ -9548,13 +9586,14 @@ function _computeDecisiveMatches(roundMatches) {
             else                 score += 40;
         }
 
-        // 2. ช่องว่างคะแนน
-        if (ptsDiff === 0)      score += 50;
-        else if (ptsDiff <= 1)  score += 42;
-        else if (ptsDiff <= 2)  score += 32;
-        else if (ptsDiff <= 3)  score += 20;
-        else if (ptsDiff <= 6)  score +=  8;
-        else                    score -=  8;
+        // 2. ช่องว่างคะแนน — สำหรับแมชที่มีอันดับ 1 ใช้ช่องว่างในการแข่งแชมป์จริง
+        const gapForScore = (hRank === 1 || aRank === 1) ? titleRaceGap : ptsDiff;
+        if (gapForScore === 0)      score += 50;
+        else if (gapForScore <= 1)  score += 42;
+        else if (gapForScore <= 2)  score += 32;
+        else if (gapForScore <= 3)  score += 20;
+        else if (gapForScore <= 6)  score +=  8;
+        else                        score -=  8;
 
         // 3. ความเร่งด่วน
         if (avgRem <= 1)      score += 55;
@@ -9567,22 +9606,37 @@ function _computeDecisiveMatches(roundMatches) {
 
         // ── reason label — โทนจริงจัง ไม่เกรียน ──
         let reason = '';
-        if (isClinch) {
-            reason = ptsDiff === 0
+        if (isClinch && isConditionalClinch) {
+            // นัดสุดท้าย ชนะแล้วเป็นแชมป์ (อาจต้องรอผลทีมอื่นด้วย)
+            reason = titleRaceGap === 0
+                ? `🏆 นัดสุดท้าย — ชนะนัดนี้และผลอื่นเป็นใจ = แชมป์ทันที`
+                : `🏆 นัดสุดท้าย — ชนะนัดนี้รับรางวัลแชมป์ได้เลย`;
+        } else if (isClinch) {
+            reason = titleRaceGap === 0
                 ? '🏆 ยืนยันแชมป์ได้ทันที — ชนะนัดนี้ปิดฉากฤดูกาล'
                 : `🏆 ชนะนัดนี้ปิดดีลแชมป์ — ไม่มีทีมใดตามทันอีกแล้ว`;
-        } else if (minRank === 1 && maxRank === 2 && ptsDiff === 0) {
-            reason = '👑 อันดับ 1 ปะทะ อันดับ 2 — แต้มเท่ากันทุกประการ นัดนี้ตัดสินจ่าฝูง';
-        } else if (minRank === 1 && maxRank === 2) {
-            reason = `👑 อันดับ 1 ปะทะ อันดับ 2 — ห่างกัน ${ptsDiff} แต้ม นัดชี้ทิศทางลีก`;
+        } else if (hRank === 1 || aRank === 1) {
+            // อันดับ 1 ลงสนาม — ใช้ช่องว่างในการแข่งแชมป์จริง (vs อันดับ 2)
+            if (maxRank === 2 && titleRaceGap === 0) {
+                reason = '👑 อันดับ 1 ปะทะ อันดับ 2 — แต้มเท่ากันทุกประการ นัดนี้ตัดสินจ่าฝูง';
+            } else if (maxRank === 2) {
+                reason = `👑 อันดับ 1 ปะทะ อันดับ 2 — ห่างกัน ${titleRaceGap} แต้ม นัดชี้ทิศทางลีก`;
+            } else if (canOvertakeLeader && titleRaceGap === 0) {
+                reason = `⚡ แต้มเท่ากับอันดับ 1 — ชนะนัดนี้ขึ้นจ่าฝูงได้ทันที`;
+            } else if (canOvertakeLeader) {
+                reason = `⚡ ห่างอันดับ 1 อยู่ ${ptsDiff} แต้ม — ชนะนัดนี้แซงขึ้นจ่าฝูงได้`;
+            } else {
+                reason = `⚡ อันดับ 1 ลงสนาม — ห่างอันดับ 2 อยู่ ${titleRaceGap} แต้ม`;
+            }
         } else if (canOvertakeLeader && ptsDiff === 0) {
             reason = `⚡ แต้มเท่ากับอันดับ 1 — ชนะนัดนี้ขึ้นจ่าฝูงได้ทันที`;
         } else if (canOvertakeLeader) {
             reason = `⚡ ห่างอันดับ 1 อยู่ ${ptsDiff} แต้ม — ชนะนัดนี้แซงขึ้นจ่าฝูงได้`;
-        } else if (minRank === 1) {
-            reason = `⚡ อันดับ 1 ลงสนาม — ห่างอันดับ 2 อยู่ ${ptsDiff} แต้ม`;
         } else if (isPodiumClinch) {
-            reason = `🥉 ยืนยันอันดับ 3 — ชนะนัดนี้การันตีรางวัลได้เลย`;
+            const podiumTeamRank = Math.min(hRank, aRank);
+            reason = podiumTeamRank === 2
+                ? `🥈 ยืนยันติดท็อป 3 — ชนะนัดนี้ล็อกอันดับ ${podiumTeamRank} `
+                : `🥉 ยืนยันติดท็อป 3 — ชนะนัดนี้การันตีติดท๊อป3ได้เลย`;
         } else if (canEnterPodium && ptsDiff === 0) {
             reason = `🥉 แต้มเท่ากับอันดับ 3 — ชนะนัดนี้ขึ้นที่ 3 ได้ทันที`;
         } else if (canEnterPodium) {
@@ -9591,7 +9645,7 @@ function _computeDecisiveMatches(roundMatches) {
             reason = `🥉 ชิงอันดับ 3 — ห่างกัน ${ptsDiff} แต้ม ยังลุ้นได้`;
         }
 
-        scored.push({ m, score, isClinch, isPodiumClinch, zone, reason });
+        scored.push({ m, score, isClinch, isPodiumClinch, zone, reason, minRank, maxRank });
     });
 
     if (scored.length === 0) return;
@@ -9602,7 +9656,7 @@ function _computeDecisiveMatches(roundMatches) {
     let titleShown  = false;
     let podiumShown = false;
     let slot = 1;
-    for (const { m, score, isClinch, zone, reason } of scored) {
+    for (const { m, score, isClinch, isPodiumClinch, zone, reason, minRank, maxRank } of scored) {
         if (score < threshold) break;
         if (zone === 'clinch' || zone === 'title') {
             if (!titleShown) {
@@ -9611,7 +9665,7 @@ function _computeDecisiveMatches(roundMatches) {
             }
         } else if (zone === 'podium') {
             if (!podiumShown) {
-                _decisiveMatchMap[m.id] = { rank: slot, isClinch: false, zone, reason };
+                _decisiveMatchMap[m.id] = { rank: slot, isClinch: false, zone, reason, isPodiumClinch, minRank, maxRank };
                 podiumShown = true; slot++;
             }
         }
