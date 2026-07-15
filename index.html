@@ -1458,70 +1458,61 @@
         .bk-modal-reset { width: 100%; padding: 8px; background: transparent; border: 1px solid rgba(239,68,68,0.28); border-radius: 8px; color: #f87171; font-size: 11px; font-weight: 600; cursor: pointer; font-family: 'Prompt', sans-serif; }
 
         /* --- แบนเนอร์โฆษณาเพื่อนธีมน้ำเงิน-ทอง --- */
+/* ── Ad Banner (Corner) ── */
 #friend-ad-banner {
     position: fixed;
-    bottom: 20px;
-    left: 20px;
+    z-index: 9999;
     width: 280px;
     background: linear-gradient(135deg, #001f3f 0%, #003366 100%);
     border: 3px solid #d4af37;
     border-radius: 15px;
-    box-shadow: 0 15px 35px rgba(0, 31, 63, 0.4);
-    z-index: 9999;
+    box-shadow: 0 15px 35px rgba(0,31,63,0.5), 0 0 0 1px rgba(212,175,55,0.15);
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275), opacity 0.3s ease;
     animation: bounceInBanner 1s;
 }
+/* ── Position classes ── */
+#friend-ad-banner.ad-pos-bl { bottom: 20px; left: 20px; }
+#friend-ad-banner.ad-pos-br { bottom: 20px; right: 20px; }
+#friend-ad-banner.ad-pos-tl { top: 80px; left: 20px; }
+#friend-ad-banner.ad-pos-tr { top: 80px; right: 20px; }
 
 @keyframes bounceInBanner {
-    0% { transform: scale(0.3) translateY(100px); opacity: 0; }
+    0% { transform: scale(0.3) translateY(80px); opacity: 0; }
     70% { transform: scale(1.05); }
     100% { transform: scale(1); opacity: 1; }
 }
 
 #close-ad {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    background: rgba(255, 255, 255, 0.1);
+    top: 5px; right: 5px;
+    background: rgba(255,255,255,0.1);
     border: 2px solid #d4af37;
-    width: 28px;
-    height: 28px;
+    width: 28px; height: 28px;
     border-radius: 50%;
     cursor: pointer;
     font-weight: bold;
     color: #d4af37;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10; font-size: 16px; line-height: 1; padding: 0;
+    transition: all 0.2s;
 }
-
 #close-ad:hover { background: #d4af37; color: #001f3f; transform: rotate(90deg); }
 
 .ad-image-container {
-    width: 100%;
-    height: 180px;
-    background-color: #001529;
-    overflow: hidden;
-    position: relative;
-    border-bottom: 2px solid #d4af37;
+    width: 100%; max-height: 320px;
+    background-color: #001529; overflow: hidden;
+    position: relative; border-bottom: 2px solid #d4af37;
+    display: flex; align-items: center; justify-content: center;
 }
-
-.ad-image-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-.ad-image-container:hover img { transform: scale(1.1); }
+.ad-image-container img { width: 100%; height: auto; max-height: 320px; object-fit: contain; display: block; transition: opacity 0.3s; }
+.ad-image-container:hover img { opacity: 0.9; }
 
 .ad-label {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: #d4af37;
-    color: #001f3f;
-    padding: 2px 8px;
-    font-size: 10px;
-    font-weight: bold;
-    border-radius: 4px;
-    text-transform: uppercase;
+    position: absolute; top: 10px; left: 10px;
+    background: #d4af37; color: #001f3f;
+    padding: 2px 8px; font-size: 10px; font-weight: bold;
+    border-radius: 4px; text-transform: uppercase;
 }
 
 .ad-content { padding: 15px; text-align: center; }
@@ -1531,24 +1522,39 @@
 .ad-button {
     display: block;
     background: linear-gradient(to bottom, #f9d976 0%, #d4af37 100%);
-    color: #001f3f;
-    text-decoration: none;
-    padding: 10px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 14px;
-    transition: all 0.3s;
-    border: none;
-    box-shadow: 0 4px 0 #b8860b;
+    color: #001f3f; text-decoration: none;
+    padding: 10px; border-radius: 8px;
+    font-weight: bold; font-size: 14px;
+    transition: all 0.3s; border: none;
+    box-shadow: 0 4px 0 #b8860b; cursor: pointer;
+    font-family: 'Prompt', sans-serif;
 }
-
 .ad-button:hover { background: linear-gradient(to bottom, #ffe48a 0%, #e5c158 100%); transform: translateY(-1px); }
 .ad-button:active { transform: translateY(2px); box-shadow: 0 2px 0 #b8860b; }
 
-.ad-hidden { transform: scale(0) rotate(20deg); opacity: 0; pointer-events: none; }
+.ad-hidden { transform: scale(0) rotate(20deg) !important; opacity: 0 !important; pointer-events: none !important; }
 
 .ad-gif-wrap { width: 100%; overflow: hidden; border-bottom: 2px solid #d4af37; background: #000; display: flex; align-items: center; justify-content: center; }
 .ad-gif-wrap img { width: 100%; max-height: 160px; object-fit: contain; display: block; }
+
+/* ── Ad Banner Position Picker (screen diagram) ── */
+.ad-pos-screen {
+    display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+    gap: 5px; aspect-ratio: 16/9; width: 100%; max-width: 260px; margin: 0 auto 16px;
+    background: rgba(0,0,0,0.45); border: 1.5px solid rgba(255,255,255,0.18);
+    border-radius: 10px; padding: 6px; box-sizing: border-box;
+}
+.ad-pos-dot {
+    border-radius: 6px; border: 1.5px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.18s; font-size: 12px; color: transparent;
+}
+.ad-pos-dot:hover { background: rgba(242,194,78,0.18); border-color: rgba(242,194,78,0.5); }
+.ad-pos-dot.active { background: rgba(242,194,78,0.28); border-color: #F2C24E; box-shadow: 0 0 0 2px rgba(242,194,78,0.3); }
+.ad-pos-dot.active::after { content: '●'; color: #F2C24E; font-size: 14px; }
+.ad-pos-dot.pos-empty { cursor: default; pointer-events: none; }
+.ad-pos-dot.pos-empty:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); }
 
         /* ── Ad Banner Editor Modal ── */
         #ad-editor-modal { display:none; position:fixed; inset:0; z-index:4500; background:rgba(0,0,0,0.82); align-items:center; justify-content:center; }
@@ -1569,44 +1575,64 @@
         .ad-music-section .ad-editor-label { color:#4ade80; }
         .ad-music-hint { font-size:11px; color:#4ade80; opacity:0.7; margin:5px 0 0; line-height:1.5; }
 
-        /* ── Center Ad Banner ── */
-        @keyframes centerAdIn {
-            from { opacity:0; transform:translateY(-10px) scale(0.97); }
-            to   { opacity:1; transform:translateY(0) scale(1); }
+        /* ── Center Ad Banner (Popup Overlay) ── */
+        @keyframes cadPopIn {
+            0%   { transform: scale(0.8) translateY(24px); opacity: 0; }
+            65%  { transform: scale(1.03); opacity: 1; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
         }
         #center-ad-banner {
-            display:none; position:relative; width:100%; margin:0 0 22px;
-            border-radius:16px; overflow:hidden;
-            border:2px solid rgba(242,194,78,0.22);
-            box-shadow:0 10px 40px rgba(0,0,0,0.5);
-            animation:centerAdIn 0.45s cubic-bezier(0.16,1,0.3,1) both;
+            display:none; position:fixed; inset:0; z-index:9800;
+            background:rgba(0,0,0,0.78); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+            align-items:center; justify-content:center;
+            padding:20px; box-sizing:border-box;
         }
-        .center-ad-label {
+        #center-ad-banner.cad-open { display:flex; }
+        .cad-card {
+            position:relative; width:min(440px,92vw);
+            background:linear-gradient(145deg,#020e26,#021c44);
+            border:2px solid #d4af37; border-radius:18px; overflow:hidden;
+            box-shadow:0 30px 80px rgba(0,0,0,0.75),0 0 0 1px rgba(242,194,78,0.1);
+            animation:cadPopIn 0.5s cubic-bezier(0.16,1,0.3,1) both;
+        }
+        .cad-img {
+            width:100%; height:220px; object-fit:cover; display:block;
+            cursor:pointer; transition:transform 0.4s;
+            border-bottom:2px solid rgba(212,175,55,0.4);
+        }
+        .cad-img:hover { transform:scale(1.02); }
+        .cad-no-img { width:100%; height:60px; background:rgba(255,255,255,0.03); border-bottom:1px solid rgba(255,255,255,0.07); }
+        .cad-label {
             position:absolute; top:10px; left:12px; z-index:2;
-            background:rgba(10,10,20,0.72); border:1px solid rgba(242,194,78,0.45);
-            color:#F2C24E; font-size:10px; font-weight:800; letter-spacing:1.5px;
+            background:rgba(212,175,55,0.9); color:#020e26;
+            font-size:10px; font-weight:800; letter-spacing:1.5px;
             padding:3px 10px; border-radius:99px; text-transform:uppercase;
-            backdrop-filter:blur(6px); pointer-events:none;
+            pointer-events:none;
         }
-        .center-ad-close {
-            position:absolute; top:8px; right:10px; z-index:3;
-            background:rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.18);
-            color:#fff; width:30px; height:30px; border-radius:50%;
+        .cad-close {
+            position:absolute; top:10px; right:10px; z-index:3;
+            background:rgba(0,0,0,0.55); border:1.5px solid rgba(255,255,255,0.3);
+            color:#fff; width:32px; height:32px; border-radius:50%;
             cursor:pointer; font-size:18px; line-height:1;
             display:flex; align-items:center; justify-content:center;
             transition:all 0.2s; backdrop-filter:blur(6px); padding:0;
         }
-        .center-ad-close:hover { background:rgba(255,255,255,0.18); transform:scale(1.12) rotate(90deg); }
-        #center-ad-banner img {
-            width:100%; display:block; object-fit:cover;
-            max-height:520px; cursor:zoom-in; transition:transform 0.4s;
+        .cad-close:hover { background:rgba(255,255,255,0.2); transform:scale(1.12) rotate(90deg); }
+        .cad-body { padding:18px 20px 22px; text-align:center; }
+        .cad-title { font-weight:800; font-size:19px; color:#f2c24e; margin-bottom:8px; line-height:1.3; }
+        .cad-desc { font-size:14px; color:#c7d8ef; margin-bottom:16px; line-height:1.55; }
+        .cad-btn {
+            display:inline-block; background:linear-gradient(135deg,#f9d976,#d4af37);
+            color:#020e26; padding:11px 28px; border-radius:10px;
+            font-weight:800; font-size:14px; border:none; cursor:pointer;
+            box-shadow:0 4px 16px rgba(212,175,55,0.4); font-family:'Prompt',sans-serif;
+            transition:all 0.25s; text-decoration:none;
         }
-        #center-ad-banner img:hover { transform:scale(1.015); }
-        .center-ad-caption {
-            padding:10px 16px; background:rgba(6,16,44,0.88);
-            font-size:13px; color:#94a3b8; text-align:center;
-            border-top:1px solid rgba(255,255,255,0.07); line-height:1.5;
-        }
+        .cad-btn:hover { filter:brightness(1.1); transform:translateY(-2px); }
+        /* legacy aliases kept for backward-compat (not used in new render) */
+        .center-ad-label { display:none; }
+        .center-ad-close { display:none; }
+        .center-ad-caption { display:none; }
         /* lightbox */
         #center-ad-lightbox {
             display:none; position:fixed; inset:0; z-index:9500;
@@ -5134,10 +5160,15 @@ let state = {
     centerBanner: {
         enabled: false,
         imgUrl: "",
-        caption: ""
+        labelText: "📸 ปั่นๆ เพื่อน",
+        title: "",
+        desc: "",
+        btnText: "",
+        linkUrl: ""
     },
     adBanner: {
         enabled: true,
+        position: "bottom-left",
         labelText: "โฆษณาต้าวเพื่อนใหม่",
         title: "ต้าวเพื่อนใหม่: เพื่อนซี้ระดับตำนาน",
         desc: "ขอเชิญพบกับเพื่อนผู้ทรงเกียรติ ผู้มีบารมีมากที่สุดในกลุ่ม",
@@ -7291,7 +7322,6 @@ function renderAdminDock() {
         <button onclick="openTrophyEditor()" style="background:linear-gradient(135deg,rgba(255,215,0,0.18),rgba(180,130,0,0.12));border:1px solid rgba(255,215,0,0.55);color:#F2C24E;">🏆 ถ้วยรางวัล</button>
         <button onclick="openAdminPendingModal()" id="admin-pending-btn" style="position:relative;overflow:visible;background:linear-gradient(135deg,rgba(29,78,216,0.25),rgba(30,64,175,0.15));border:1px solid rgba(96,165,250,0.5);color:#60a5fa;font-weight:700;">📋 รอตรวจสอบ<span id="admin-pending-count" style="display:none;position:absolute;top:-7px;right:-7px;background:#ef4444;color:#fff;border-radius:99px;font-size:10px;font-weight:900;min-width:18px;height:18px;line-height:18px;text-align:center;padding:0 4px;font-family:'Prompt',sans-serif;"></span></button>
         <button onclick="openBigMatchPickerModal()" style="background:linear-gradient(135deg,#7c2d00,#c2410c);border:1px solid rgba(249,115,22,0.4);color:#fed7aa;">🔥 บิ๊กแมช</button>
-        <button onclick="openCenterBannerEditor()" style="background:linear-gradient(135deg,#2d1060,#4a1090);border:1px solid rgba(167,139,250,0.45);color:#c4b5fd;">📸 แบนเนอร์ปั่น</button>
         <button onclick="openAdBannerEditor()" style="background:linear-gradient(135deg,#1e3a5f,#0f2640);border:1px solid rgba(242,194,78,0.35);color:#F2C24E;">📢 Ad Banner</button>
         <button onclick="openEditTeamsModal()" style="background:linear-gradient(135deg,#F2C24E,#c49520);color:#020710;border:none;">✏️ จัดการผู้สมัคร</button>
         <button onclick="upgradeFlagcdnToCrests()" style="background:linear-gradient(135deg,#134e4a,#0f766e);border:1px solid rgba(20,184,166,0.4);color:#99f6e4;" title="รีเซ็ตทุกทีมให้แสดงธงชาติ">🏳️ รีเซ็ตธง</button>
@@ -9728,51 +9758,78 @@ function renderAdBanner() {
     const banner = document.getElementById('friend-ad-banner');
     if (!banner) return;
     const ad = state.adBanner || {};
-    if (!ad.enabled) {
-        banner.style.display = 'none';
-        return;
-    }
-    banner.style.display = '';
-    banner.style.width = (ad.width || 280) + 'px';
-    banner.classList.remove('ad-hidden');
+    if (!ad.enabled) { banner.style.display = 'none'; return; }
 
-    const linkUrl = (ad.linkUrl || '').trim();
-    const clickAction = linkUrl
-        ? `window.open(${JSON.stringify(linkUrl)},'_blank')`
-        : `openAdPopup()`;
+    const pos = ad.position || 'bottom-left';
+    const isCenter = pos === 'center';
 
-    const closeBtn = `<button style="position:absolute;top:5px;right:5px;background:rgba(255,255,255,0.1);border:2px solid #d4af37;width:28px;height:28px;border-radius:50%;cursor:pointer;font-weight:bold;color:#d4af37;display:flex;align-items:center;justify-content:center;z-index:10;font-size:14px;line-height:1;padding:0;width:auto;padding:0 8px;height:28px;" onclick="this.closest('#friend-ad-banner').classList.add('ad-hidden')" title="ปิด">&times;</button>`;
+    if (isCenter) {
+        // ── กลางจอ: popup overlay ──
+        banner.className = '';
+        banner.style.cssText = 'display:flex;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;background:rgba(0,0,0,0.78);backdrop-filter:blur(8px);padding:20px;box-sizing:border-box;';
+        banner.onclick = function(e) { if (e.target === banner) banner.classList.add('ad-hidden'); };
 
-    if (ad.mode === 'gif') {
-        /* GIF mode */
-        const _gifLabelHtml = (ad.gifShowLabel && ad.labelText)
-            ? `<div style="padding:8px;text-align:center;"><span class="ad-label" style="position:static;display:inline-block;margin-bottom:6px;">${_htmlEsc(ad.labelText)}</span></div>`
+        const linkUrl = (ad.linkUrl || '').trim();
+        const clickAction = linkUrl ? `window.open(${JSON.stringify(linkUrl)},'_blank')` : `openAdPopup()`;
+        const imgHtml = ad.imgUrl
+            ? `<div class="ad-image-container" style="cursor:pointer;border-radius:0;" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}"><span class="ad-label">${_htmlEsc(ad.labelText||'โฆษณา')}</span><img src="${_htmlEsc(ad.imgUrl)}" alt="" onerror="this.style.opacity='0.15'"></div>`
             : '';
-        banner.innerHTML = closeBtn + _gifLabelHtml +
-            `<div id="_ad_gif_wrap" class="ad-gif-wrap" style="border-bottom:none;"></div>`;
-        _injectGifInto(banner.querySelector('#_ad_gif_wrap'), ad.gifUrl || '', 220);
-        // เล่น GIF playlist (ถ้ามี) หรือ fallback ไปใช้ gifMusicUrl เดิม (backward compat)
-        var gifPl = Array.isArray(ad.gifPlaylist) && ad.gifPlaylist.length > 0
-            ? ad.gifPlaylist
-            : (ad.gifMusicUrl ? [{ id: _ytExtractId(ad.gifMusicUrl) || '', name: 'GIF Music' }].filter(function(s){ return s.id; }) : []);
-        if (gifPl.length > 0) {
-            _playAdBannerGifPlaylist(gifPl);
-        } else {
-            _stopAdBannerMusic(); // ไม่มีเพลง GIF → หยุดเพลง GIF และ resume background playlist
+        const closeOverlay = `onclick="document.getElementById('friend-ad-banner').classList.add('ad-hidden')"`;
+        banner.innerHTML = `<div style="position:relative;width:min(420px,92vw);background:linear-gradient(145deg,#020e26,#021c44);border:2px solid #d4af37;border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.75);animation:bounceInBanner 0.5s cubic-bezier(0.16,1,0.3,1) both;">
+            <button id="close-ad" ${closeOverlay} title="ปิด">&#xd7;</button>
+            ${imgHtml}
+            <div class="ad-content">
+                <div class="ad-title">${_htmlEsc(ad.title||'')}</div>
+                <div class="ad-desc">${_htmlEsc(ad.desc||'')}</div>
+                ${ad.btnText ? `<button class="ad-button" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}">${_htmlEsc(ad.btnText)}</button>` : ''}
+            </div>
+        </div>`;
+
+        if (ad.mode === 'gif') {
+            const _gifLabelHtml = (ad.gifShowLabel && ad.labelText)
+                ? `<div style="padding:8px;text-align:center;"><span class="ad-label" style="position:static;display:inline-block;">${_htmlEsc(ad.labelText)}</span></div>` : '';
+            banner.innerHTML = `<div style="position:relative;width:min(420px,92vw);background:#020e26;border:2px solid #d4af37;border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.75);">
+                <button id="close-ad" ${closeOverlay} title="ปิด">&#xd7;</button>
+                ${_gifLabelHtml}<div id="_ad_gif_wrap" class="ad-gif-wrap"></div>
+            </div>`;
+            _injectGifInto(banner.querySelector('#_ad_gif_wrap'), ad.gifUrl||'', 300);
+            var gifPl = Array.isArray(ad.gifPlaylist)&&ad.gifPlaylist.length ? ad.gifPlaylist
+                : (ad.gifMusicUrl ? [{id:_ytExtractId(ad.gifMusicUrl)||'',name:'GIF Music'}].filter(s=>s.id) : []);
+            gifPl.length ? _playAdBannerGifPlaylist(gifPl) : _stopAdBannerMusic();
         }
     } else {
-        /* ── Normal mode ── */
-        banner.innerHTML = closeBtn + `
-            <div class="ad-image-container" style="cursor:pointer;" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}">
-                <span class="ad-label">${_htmlEsc(ad.labelText || 'โฆษณา')}</span>
-                <img src="${_htmlEsc(ad.imgUrl || '')}" alt="banner" onerror="this.style.opacity='0.15'">
-            </div>
-            <div class="ad-content">
-                <div class="ad-title">${_htmlEsc(ad.title || '')}</div>
-                <div class="ad-desc">${_htmlEsc(ad.desc || '')}</div>
-                <button class="ad-button" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}">${_htmlEsc(ad.btnText || 'ดูเพิ่มเติม')}</button>
-            </div>`;
+        // ── มุม: corner banner ──
+        const posMap = {'bottom-left':'ad-pos-bl','bottom-right':'ad-pos-br','top-left':'ad-pos-tl','top-right':'ad-pos-tr'};
+        banner.className = posMap[pos] || 'ad-pos-bl';
+        banner.style.cssText = '';
+        banner.style.width = (ad.width||280) + 'px';
+        banner.onclick = null;
+
+        const linkUrl = (ad.linkUrl||'').trim();
+        const clickAction = linkUrl ? `window.open(${JSON.stringify(linkUrl)},'_blank')` : `openAdPopup()`;
+        const closeBtn = `<button id="close-ad" onclick="document.getElementById('friend-ad-banner').classList.add('ad-hidden')" title="ปิด">&#xd7;</button>`;
+
+        if (ad.mode === 'gif') {
+            const _gifLabelHtml = (ad.gifShowLabel && ad.labelText)
+                ? `<div style="padding:8px;text-align:center;"><span class="ad-label" style="position:static;display:inline-block;">${_htmlEsc(ad.labelText)}</span></div>` : '';
+            banner.innerHTML = closeBtn + _gifLabelHtml + `<div id="_ad_gif_wrap" class="ad-gif-wrap"></div>`;
+            _injectGifInto(banner.querySelector('#_ad_gif_wrap'), ad.gifUrl||'', 220);
+            var gifPl2 = Array.isArray(ad.gifPlaylist)&&ad.gifPlaylist.length ? ad.gifPlaylist
+                : (ad.gifMusicUrl ? [{id:_ytExtractId(ad.gifMusicUrl)||'',name:'GIF Music'}].filter(s=>s.id) : []);
+            gifPl2.length ? _playAdBannerGifPlaylist(gifPl2) : _stopAdBannerMusic();
+        } else {
+            banner.innerHTML = closeBtn + `
+                <div class="ad-image-container" style="cursor:pointer;" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}">
+                    <span class="ad-label">${_htmlEsc(ad.labelText||'โฆษณา')}</span>
+                    <img src="${_htmlEsc(ad.imgUrl||'')}" alt="" onerror="this.style.opacity='0.15'">
+                </div>
+                <div class="ad-content">
+                    <div class="ad-title">${_htmlEsc(ad.title||'')}</div>
+                    <div class="ad-desc">${_htmlEsc(ad.desc||'')}</div>
+                    <button class="ad-button" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}">${_htmlEsc(ad.btnText||'ดูเพิ่มเติม')}</button>
+                </div>`;
         }
+    }
 }
 
 function openAdPopup() {
@@ -9800,21 +9857,36 @@ function renderCenterBanner() {
     const el = document.getElementById('center-ad-banner');
     if (!el) return;
     const cb = state.centerBanner || {};
-    if (!cb.enabled || !cb.imgUrl) { el.style.display = 'none'; return; }
-    el.style.display = 'block';
-    const cap = cb.caption ? `<div class="center-ad-caption">${_htmlEsc(cb.caption)}</div>` : '';
-    el.innerHTML = `
-        <span class="center-ad-label">📸 ปั่นๆ เพื่อน</span>
-        <button class="center-ad-close" onclick="dismissCenterAd()" title="ปิด">&#xd7;</button>
-        <img src="${_htmlEsc(cb.imgUrl)}" alt="center-ad"
-             onclick="openCenterAdLightbox()"
-             onerror="this.style.opacity='0.15'">
-        ${cap}`;
+    if (!cb.enabled) { el.classList.remove('cad-open'); el.style.display = 'none'; return; }
+    el.style.display = 'flex';
+    el.onclick = function(e) { if (e.target === el) dismissCenterAd(); };
+
+    const linkUrl = (cb.linkUrl || '').trim();
+    const imgHtml = cb.imgUrl
+        ? `<img class="cad-img" src="${_htmlEsc(cb.imgUrl)}" alt="" onclick="${linkUrl ? `window.open('${_htmlEsc(linkUrl)}','_blank')` : `openCenterAdLightbox()`}" onerror="this.style.opacity='0.15'">`
+        : '';
+    const titleHtml = cb.title ? `<div class="cad-title">${_htmlEsc(cb.title)}</div>` : '';
+    const descHtml  = cb.desc  ? `<div class="cad-desc">${_htmlEsc(cb.desc)}</div>`   : '';
+    const btnHtml   = cb.btnText
+        ? `<button class="cad-btn" onclick="${linkUrl ? `window.open('${_htmlEsc(linkUrl)}','_blank')` : `openCenterAdLightbox()`}">${_htmlEsc(cb.btnText)}</button>`
+        : '';
+    const hasBody = titleHtml || descHtml || btnHtml;
+
+    el.innerHTML = `<div class="cad-card">
+        <button class="cad-close" onclick="dismissCenterAd()" title="ปิด">&#xd7;</button>
+        ${cb.labelText ? `<span class="cad-label">${_htmlEsc(cb.labelText)}</span>` : ''}
+        ${imgHtml}
+        ${hasBody ? `<div class="cad-body">${titleHtml}${descHtml}${btnHtml}</div>` : ''}
+    </div>`;
+    requestAnimationFrame(() => el.classList.add('cad-open'));
 }
 
 function dismissCenterAd() {
     const el = document.getElementById('center-ad-banner');
-    if (el) { el.style.animation = 'none'; el.style.opacity = '0'; el.style.transform = 'scale(0.95)'; el.style.transition = 'all 0.3s'; setTimeout(() => el.style.display = 'none', 280); }
+    if (!el) return;
+    el.style.transition = 'opacity 0.25s';
+    el.style.opacity = '0';
+    setTimeout(() => { el.style.display = 'none'; el.style.opacity = ''; el.classList.remove('cad-open'); }, 260);
 }
 
 function openCenterAdLightbox() {
@@ -9844,27 +9916,32 @@ function _cbUpdateToggleUI() {
     const thumb = document.getElementById('cb-toggle-thumb');
     if (!wrap || !thumb) return;
     if (_cbEnabled) {
-        wrap.style.background    = 'rgba(124,58,237,0.75)';
-        wrap.style.borderColor   = '#a78bfa';
-        thumb.style.background   = '#c4b5fd';
-        thumb.style.transform    = 'translateX(20px)';
+        wrap.style.background  = 'rgba(124,58,237,0.75)';
+        wrap.style.borderColor = '#a78bfa';
+        thumb.style.background = '#c4b5fd';
+        thumb.style.transform  = 'translateX(20px)';
     } else {
-        wrap.style.background    = '#1e293b';
-        wrap.style.borderColor   = 'rgba(167,139,250,0.3)';
-        thumb.style.background   = '#64748b';
-        thumb.style.transform    = 'none';
+        wrap.style.background  = '#1e293b';
+        wrap.style.borderColor = 'rgba(167,139,250,0.3)';
+        thumb.style.background = '#64748b';
+        thumb.style.transform  = 'none';
     }
 }
 
 function openCenterBannerEditor() {
     if (state.isViewOnly) return;
     const cb = state.centerBanner || {};
-    document.getElementById('cb-img-inp').value     = cb.imgUrl  || '';
-    document.getElementById('cb-caption-inp').value = cb.caption || '';
+    const fi = id => document.getElementById(id);
+    if (fi('cb-img-inp'))    fi('cb-img-inp').value    = cb.imgUrl    || '';
+    if (fi('cb-label-inp'))  fi('cb-label-inp').value  = cb.labelText || '📸 ปั่นๆ เพื่อน';
+    if (fi('cb-title-inp'))  fi('cb-title-inp').value  = cb.title     || '';
+    if (fi('cb-desc-inp'))   fi('cb-desc-inp').value   = cb.desc      || '';
+    if (fi('cb-btn-inp'))    fi('cb-btn-inp').value    = cb.btnText   || '';
+    if (fi('cb-link-inp'))   fi('cb-link-inp').value   = cb.linkUrl   || '';
     _cbEnabled = cb.enabled !== false;
     _cbUpdateToggleUI();
     _previewCenterBannerImg();
-    document.getElementById('center-banner-modal').classList.add('open');
+    fi('center-banner-modal').classList.add('open');
 }
 
 function closeCenterBannerEditor() {
@@ -9876,16 +9953,21 @@ function _previewCenterBannerImg() {
     const prev = document.getElementById('cb-img-preview');
     if (!prev) return;
     prev.innerHTML = url
-        ? `<img src="${url}" style="max-width:100%;max-height:200px;border-radius:8px;object-fit:contain;" onerror="this.outerHTML='<span style=\\'color:#f87171;font-size:12px;\\'>โหลดรูปไม่สำเร็จ</span>'">`
+        ? `<img src="${url}" style="max-width:100%;max-height:180px;border-radius:8px;object-fit:contain;" onerror="this.outerHTML='<span style=\\'color:#f87171;font-size:12px;\\'>โหลดรูปไม่สำเร็จ</span>'">`
         : `<span style="color:#475569;font-size:13px;">ยังไม่มีรูป</span>`;
 }
 
 function saveCenterBanner() {
     if (state.isViewOnly) return;
+    const fi = id => (document.getElementById(id) || {}).value || '';
     state.centerBanner = {
-        enabled: _cbEnabled,
-        imgUrl:  (document.getElementById('cb-img-inp')?.value  || '').trim(),
-        caption: (document.getElementById('cb-caption-inp')?.value || '').trim()
+        enabled:   _cbEnabled,
+        imgUrl:    fi('cb-img-inp').trim(),
+        labelText: fi('cb-label-inp').trim() || '📸 ปั่นๆ เพื่อน',
+        title:     fi('cb-title-inp').trim(),
+        desc:      fi('cb-desc-inp').trim(),
+        btnText:   fi('cb-btn-inp').trim(),
+        linkUrl:   fi('cb-link-inp').trim()
     };
     closeCenterBannerEditor();
     renderCenterBanner();
@@ -10001,6 +10083,13 @@ function openAdBannerEditor() {
     if (fi('ad-link-inp'))  fi('ad-link-inp').value  = ad.linkUrl || '';
     const slider = fi('ad-width-slider');
     if (slider) { slider.value = ad.width || 280; fi('ad-width-val').textContent = slider.value; }
+    // position picker
+    const curPos = ad.position || 'bottom-left';
+    document.querySelectorAll('.ad-pos-dot[data-pos]').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.pos === curPos);
+    });
+    const widthRow = fi('ad-width-row');
+    if (widthRow) widthRow.style.display = curPos === 'center' ? 'none' : '';
     updateAdImgPreview();
     const modal = fi('ad-editor-modal');
     if (modal) modal.classList.add('open');
@@ -10009,6 +10098,14 @@ function openAdBannerEditor() {
 function closeAdBannerEditor() {
     const modal = document.getElementById('ad-editor-modal');
     if (modal) modal.classList.remove('open');
+}
+
+function _adPosSelect(el) {
+    document.querySelectorAll('.ad-pos-dot[data-pos]').forEach(function(b) { b.classList.remove('active'); });
+    el.classList.add('active');
+    // ซ่อน width slider เมื่อเลือกกลางจอ (popup ไม่ต้องกำหนดความกว้าง)
+    const widthRow = document.getElementById('ad-width-row');
+    if (widthRow) widthRow.style.display = el.dataset.pos === 'center' ? 'none' : '';
 }
 
 /* รองรับ: tenor.com/view/... | media.tenor.com | c.tenor.com | Giphy | URL .gif ทั่วไป
@@ -10160,7 +10257,8 @@ function saveAdBanner() {
         mode:      (fi('ad-mode-normal') || {}).checked ? 'normal' : 'gif',
         btnText:   (fi('ad-btn-inp')   || {}).value || '',
         linkUrl:   (fi('ad-link-inp')  || {}).value || '',
-        width:     parseInt((fi('ad-width-slider') || {}).value) || 280
+        width:     parseInt((fi('ad-width-slider') || {}).value) || 280,
+        position:  (document.querySelector('.ad-pos-dot.active') || {}).dataset?.pos || 'bottom-left'
     };
     saveDataToCloud();
     renderAdBanner();
@@ -10489,6 +10587,7 @@ function _loadBinData(idToLoad) {
         // backward-compat: old data used bigMatchId (single), new uses bigMatchIds (array)
         state.bigMatchIds = Array.isArray(r.bigMatchIds) ? r.bigMatchIds : (r.bigMatchId ? [r.bigMatchId] : []);
         if (r.adBanner !== undefined) state.adBanner = Object.assign({}, state.adBanner, r.adBanner);
+        if (r.centerBanner !== undefined) state.centerBanner = Object.assign({}, state.centerBanner, r.centerBanner);
         state.trophyImg = r.trophyImg || "";
         // ── load fields that were missing from _loadBinData ──
         if (r.no1History) state.no1History = r.no1History;
@@ -10862,10 +10961,10 @@ async function resetBracketMatchScore(matchId) {
 
 <!-- Center Ad Banner Editor Modal -->
 <div id="center-banner-modal" onclick="if(event.target===this)closeCenterBannerEditor()">
-    <div style="background:linear-gradient(145deg,rgba(6,12,40,0.98),rgba(2,6,20,0.98));border:1px solid rgba(167,139,250,0.35);border-radius:18px;padding:26px 24px;width:min(480px,94vw);max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 24px 70px rgba(0,0,0,0.85);">
+    <div style="background:linear-gradient(145deg,rgba(6,12,40,0.98),rgba(2,6,20,0.98));border:1px solid rgba(167,139,250,0.35);border-radius:18px;padding:26px 24px;width:min(500px,94vw);max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 24px 70px rgba(0,0,0,0.85);">
         <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#a78bfa,transparent);border-radius:18px 18px 0 0;"></div>
-        <div style="font-size:18px;font-weight:900;color:#c4b5fd;margin-bottom:4px;letter-spacing:0.5px;">📸 แบนเนอร์ปั่นๆ เพื่อน</div>
-        <div style="font-size:12px;color:#64748b;margin-bottom:20px;">ใส่รูปเพื่อนแล้วแปะกลางหน้าเว็บ — ทุกคนเห็นเลย 😂</div>
+        <div style="font-size:18px;font-weight:900;color:#c4b5fd;margin-bottom:4px;letter-spacing:0.5px;">📸 แบนเนอร์กลางจอ</div>
+        <div style="font-size:12px;color:#64748b;margin-bottom:18px;">popup โฆษณากลางหน้าจอ — เปิดมาก็เจอเลย 😂</div>
 
         <!-- Enable toggle -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;">
@@ -10876,19 +10975,41 @@ async function resetBracketMatchScore(matchId) {
         </div>
 
         <!-- Image URL -->
-        <label style="font-size:11px;color:#94a3b8;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:5px;">URL รูปภาพ</label>
+        <label style="font-size:11px;color:#94a3b8;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:5px;">URL รูปภาพ <span style="opacity:0.5;">(ไม่บังคับ)</span></label>
         <input id="cb-img-inp" type="url" placeholder="https://i.imgur.com/..." oninput="_previewCenterBannerImg()"
-            style="width:100%;box-sizing:border-box;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:9px 12px;border-radius:8px;font-family:'Prompt',sans-serif;font-size:13px;margin-bottom:12px;outline:none;">
-
-        <!-- Preview -->
-        <div id="cb-img-preview" style="min-height:60px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);border-radius:10px;border:1px dashed rgba(255,255,255,0.1);padding:12px;margin-bottom:14px;">
+            style="width:100%;box-sizing:border-box;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:9px 12px;border-radius:8px;font-family:'Prompt',sans-serif;font-size:13px;margin-bottom:10px;outline:none;">
+        <div id="cb-img-preview" style="min-height:54px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);border-radius:10px;border:1px dashed rgba(255,255,255,0.1);padding:10px;margin-bottom:14px;">
             <span style="color:#475569;font-size:13px;">ยังไม่มีรูป</span>
         </div>
 
-        <!-- Caption -->
-        <label style="font-size:11px;color:#94a3b8;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:5px;">คำบรรยายใต้รูป <span style="opacity:0.5;">(ไม่บังคับ)</span></label>
-        <input id="cb-caption-inp" type="text" placeholder="ขอเชิญพบกับ... 😂"
-            style="width:100%;box-sizing:border-box;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:9px 12px;border-radius:8px;font-family:'Prompt',sans-serif;font-size:13px;margin-bottom:20px;outline:none;">
+        <!-- Label -->
+        <label style="font-size:11px;color:#94a3b8;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:5px;">ป้าย Label <span style="opacity:0.5;">(มุมรูป)</span></label>
+        <input id="cb-label-inp" type="text" placeholder="📸 ปั่นๆ เพื่อน"
+            style="width:100%;box-sizing:border-box;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:9px 12px;border-radius:8px;font-family:'Prompt',sans-serif;font-size:13px;margin-bottom:12px;outline:none;">
+
+        <!-- Title -->
+        <label style="font-size:11px;color:#94a3b8;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:5px;">หัวเรื่อง <span style="opacity:0.5;">(ไม่บังคับ)</span></label>
+        <input id="cb-title-inp" type="text" placeholder="ต้าวเพื่อนใหม่: ตำนานแห่งกลุ่ม"
+            style="width:100%;box-sizing:border-box;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:9px 12px;border-radius:8px;font-family:'Prompt',sans-serif;font-size:13px;margin-bottom:12px;outline:none;">
+
+        <!-- Desc -->
+        <label style="font-size:11px;color:#94a3b8;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:5px;">คำอธิบาย <span style="opacity:0.5;">(ไม่บังคับ)</span></label>
+        <textarea id="cb-desc-inp" rows="2" placeholder="ขอเชิญพบกับเพื่อนผู้ทรงเกียรติ..."
+            style="width:100%;box-sizing:border-box;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:9px 12px;border-radius:8px;font-family:'Prompt',sans-serif;font-size:13px;margin-bottom:12px;outline:none;resize:vertical;"></textarea>
+
+        <!-- Button text + link -->
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
+            <div style="flex:1;min-width:130px;">
+                <label style="font-size:11px;color:#94a3b8;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:5px;">ข้อความปุ่ม <span style="opacity:0.5;">(ไม่บังคับ)</span></label>
+                <input id="cb-btn-inp" type="text" placeholder="ดูเพิ่มเติม"
+                    style="width:100%;box-sizing:border-box;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:9px 12px;border-radius:8px;font-family:'Prompt',sans-serif;font-size:13px;outline:none;">
+            </div>
+            <div style="flex:1;min-width:130px;">
+                <label style="font-size:11px;color:#94a3b8;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:5px;">ลิงก์ปุ่ม <span style="opacity:0.5;">(ว่าง = เด้งรูป)</span></label>
+                <input id="cb-link-inp" type="url" placeholder="https://..."
+                    style="width:100%;box-sizing:border-box;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:9px 12px;border-radius:8px;font-family:'Prompt',sans-serif;font-size:13px;outline:none;">
+            </div>
+        </div>
 
         <!-- Buttons -->
         <div style="display:flex;gap:10px;">
@@ -11010,7 +11131,23 @@ async function resetBracketMatchScore(matchId) {
             </div>
         </div>
 
-        <div style="margin-bottom:18px;"><label class="ad-editor-label">ขนาดแบนเนอร์: <span id="ad-width-val">280</span>px</label><input type="range" id="ad-width-slider" min="200" max="420" step="10" oninput="document.getElementById('ad-width-val').textContent=this.value" style="width:100%;accent-color:#dfb44b;"></div>
+        <!-- Position picker -->
+        <div style="margin-bottom:18px;">
+            <label class="ad-editor-label" style="text-align:center;display:block;margin-bottom:8px;">ตำแหน่งแบนเนอร์ — กดจุดบนแผนผังหน้าจอ</label>
+            <div class="ad-pos-screen">
+                <div class="ad-pos-dot" data-pos="top-left"     onclick="_adPosSelect(this)"></div>
+                <div class="ad-pos-dot pos-empty"></div>
+                <div class="ad-pos-dot" data-pos="top-right"    onclick="_adPosSelect(this)"></div>
+                <div class="ad-pos-dot pos-empty"></div>
+                <div class="ad-pos-dot" data-pos="center"       onclick="_adPosSelect(this)" title="กลางจอ (popup)"></div>
+                <div class="ad-pos-dot pos-empty"></div>
+                <div class="ad-pos-dot" data-pos="bottom-left"  onclick="_adPosSelect(this)"></div>
+                <div class="ad-pos-dot pos-empty"></div>
+                <div class="ad-pos-dot" data-pos="bottom-right" onclick="_adPosSelect(this)"></div>
+            </div>
+        </div>
+
+        <div id="ad-width-row" style="margin-bottom:18px;"><label class="ad-editor-label">ขนาดแบนเนอร์: <span id="ad-width-val">280</span>px</label><input type="range" id="ad-width-slider" min="200" max="420" step="10" oninput="document.getElementById('ad-width-val').textContent=this.value" style="width:100%;accent-color:#dfb44b;"></div>
 
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
             <button onclick="saveAdBanner()" style="flex:1;background:linear-gradient(135deg,#F2C24E,#c49520);color:#020710;border:none;padding:10px 16px;border-radius:10px;font-family:'Prompt',sans-serif;font-weight:700;font-size:13px;cursor:pointer;">💾 บันทึก</button>
@@ -11958,6 +12095,7 @@ function exportBackup() {
         bigMatchIds: state.bigMatchIds,
         no1History: state.no1History,
         adBanner: state.adBanner,
+        centerBanner: state.centerBanner,
         changelog: state.changelog,
         colors: state.colors,
         titleW1: state.titleW1,
@@ -12054,6 +12192,7 @@ function confirmImportBackup() {
     state.bigMatchIds         = data.bigMatchIds         || [];
     state.no1History          = data.no1History          || { teamId: null, since: null };
     if (data.adBanner)        state.adBanner            = Object.assign({}, state.adBanner, data.adBanner);
+    if (data.centerBanner)    state.centerBanner        = Object.assign({}, state.centerBanner, data.centerBanner);
     if (data.colors)          state.colors              = Object.assign({}, state.colors, data.colors);
     if (data.titleW1)         state.titleW1             = data.titleW1;
     if (data.titleW2)         state.titleW2             = data.titleW2;
@@ -12076,7 +12215,7 @@ function confirmImportBackup() {
             consolationChampionId: state.consolationChampionId,
             announcement: state.announcement, changelog: state.changelog,
             bigMatchIds: state.bigMatchIds, no1History: state.no1History,
-            adBanner: state.adBanner, colors: state.colors,
+            adBanner: state.adBanner, centerBanner: state.centerBanner, colors: state.colors,
             titleW1: state.titleW1, titleW2: state.titleW2, titleW3: state.titleW3,
             tournamentDetails: state.tournamentDetails,
             discordUrl: state.discordUrl, socialLinks: state.socialLinks, bgImageUrl: state.bgImageUrl,
