@@ -9831,12 +9831,38 @@ function closeCenterAdLightbox() {
     if (lb) lb.classList.remove('open');
 }
 
+// toggle helpers — div-based, ไม่ใช้ checkbox
+var _cbEnabled = false;
+
+function _cbToggle() {
+    _cbEnabled = !_cbEnabled;
+    _cbUpdateToggleUI();
+}
+
+function _cbUpdateToggleUI() {
+    const wrap  = document.getElementById('cb-toggle-wrap');
+    const thumb = document.getElementById('cb-toggle-thumb');
+    if (!wrap || !thumb) return;
+    if (_cbEnabled) {
+        wrap.style.background    = 'rgba(124,58,237,0.75)';
+        wrap.style.borderColor   = '#a78bfa';
+        thumb.style.background   = '#c4b5fd';
+        thumb.style.transform    = 'translateX(20px)';
+    } else {
+        wrap.style.background    = '#1e293b';
+        wrap.style.borderColor   = 'rgba(167,139,250,0.3)';
+        thumb.style.background   = '#64748b';
+        thumb.style.transform    = 'none';
+    }
+}
+
 function openCenterBannerEditor() {
     if (state.isViewOnly) return;
     const cb = state.centerBanner || {};
-    document.getElementById('cb-img-inp').value = cb.imgUrl || '';
+    document.getElementById('cb-img-inp').value     = cb.imgUrl  || '';
     document.getElementById('cb-caption-inp').value = cb.caption || '';
-    document.getElementById('cb-enabled-chk').checked = cb.enabled !== false;
+    _cbEnabled = cb.enabled !== false;
+    _cbUpdateToggleUI();
     _previewCenterBannerImg();
     document.getElementById('center-banner-modal').classList.add('open');
 }
@@ -9846,7 +9872,7 @@ function closeCenterBannerEditor() {
 }
 
 function _previewCenterBannerImg() {
-    const url = (document.getElementById('cb-img-inp')?.value || '').trim();
+    const url  = (document.getElementById('cb-img-inp')?.value || '').trim();
     const prev = document.getElementById('cb-img-preview');
     if (!prev) return;
     prev.innerHTML = url
@@ -9857,8 +9883,8 @@ function _previewCenterBannerImg() {
 function saveCenterBanner() {
     if (state.isViewOnly) return;
     state.centerBanner = {
-        enabled: document.getElementById('cb-enabled-chk')?.checked ?? true,
-        imgUrl:  (document.getElementById('cb-img-inp')?.value || '').trim(),
+        enabled: _cbEnabled,
+        imgUrl:  (document.getElementById('cb-img-inp')?.value  || '').trim(),
         caption: (document.getElementById('cb-caption-inp')?.value || '').trim()
     };
     closeCenterBannerEditor();
@@ -10844,24 +10870,10 @@ async function resetBracketMatchScore(matchId) {
         <!-- Enable toggle -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;">
             <span style="font-size:13px;font-weight:700;color:#e2e8f0;">เปิดใช้แบนเนอร์</span>
-            <label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer;">
-                <input type="checkbox" id="cb-enabled-chk" style="opacity:0;width:0;height:0;position:absolute;">
-                <span onclick="this.previousElementSibling.click()" style="position:absolute;inset:0;background:#1e293b;border-radius:99px;transition:0.3s;border:1px solid rgba(167,139,250,0.3);" id="cb-toggle-track"></span>
-                <span onclick="this.previousElementSibling.previousElementSibling.click()" style="position:absolute;top:3px;left:3px;width:18px;height:18px;background:#64748b;border-radius:50%;transition:0.3s;" id="cb-toggle-thumb"></span>
-            </label>
+            <div id="cb-toggle-wrap" onclick="_cbToggle()" style="cursor:pointer;position:relative;width:44px;height:24px;background:#1e293b;border-radius:99px;border:1px solid rgba(167,139,250,0.3);transition:background 0.25s,border-color 0.25s;flex-shrink:0;">
+                <div id="cb-toggle-thumb" style="position:absolute;top:3px;left:3px;width:18px;height:18px;background:#64748b;border-radius:50%;transition:transform 0.25s,background 0.25s;"></div>
+            </div>
         </div>
-        <script>
-        (function(){
-            var chk = document.getElementById('cb-enabled-chk');
-            var track = document.getElementById('cb-toggle-track');
-            var thumb = document.getElementById('cb-toggle-thumb');
-            if(chk && track && thumb) chk.addEventListener('change', function(){
-                track.style.background = this.checked ? 'rgba(139,92,246,0.6)' : '#1e293b';
-                thumb.style.background = this.checked ? '#a78bfa' : '#64748b';
-                thumb.style.transform = this.checked ? 'translateX(20px)' : 'none';
-            });
-        })();
-        </script>
 
         <!-- Image URL -->
         <label style="font-size:11px;color:#94a3b8;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:5px;">URL รูปภาพ</label>
