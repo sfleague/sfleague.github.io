@@ -9279,13 +9279,13 @@ function _buildMatchRowDiv(m, fmt) {
                 </div>
                 <div class="dm-clinch-row">${reason || '🏆 ยืนยันแชมป์ได้ทันที'}</div>`;
         } else if (zone === 'podium') {
-            // โหมดบรอนซ์ — ชิงโพเดียม
+            // โหมดบรอนซ์ — ชิงอันดับ 3
             divMatch.classList.add('podium-row');
             banner.className = "decisive-match-banner dm-podium-banner";
             banner.innerHTML = `
                 <div class="dm-title-row">
                     <span class="dm-podium-medal">🥉</span>
-                    <span class="dm-title-text">ศึกชิงโพเดียม</span>
+                    <span class="dm-title-text">ศึกชิงอันดับ 3</span>
                     <span class="dm-podium-medal">🥉</span>
                 </div>
                 <div class="dm-podium-row">${reason || '🥉 ชนะนัดนี้ขึ้นรับรางวัล'}</div>`;
@@ -9363,7 +9363,7 @@ function _computeDecisiveMatches(roundMatches) {
 
     const scored = [];
 
-    // โพเดียม = ตำแหน่งที่ได้รางวัล (อันดับ 1-3)
+    // ตำแหน่งที่ได้รางวัล = อันดับ 1-3
     const PODIUM = 3;
 
     roundMatches.forEach(m => {
@@ -9391,12 +9391,12 @@ function _computeDecisiveMatches(roundMatches) {
             if (leaderWin > maxChaser) isClinch = true;
         }
 
-        // ── ตรวจ clinch โพเดียม (อันดับ 3) ──
+        // ── ตรวจ clinch อันดับ 3 ──
         let isPodiumClinch = false;
         if (minRank <= PODIUM && !isClinch) {
             const podiumTeam = hRank <= PODIUM ? hSt : aSt;
             const podiumWin = podiumTeam.pts + 3;
-            // ทีมนอกโพเดียมที่ตามมาใกล้ที่สุด
+            // ทีมนอกอันดับ 3 ที่ตามมาใกล้ที่สุด
             const closestOutsider = standings
                 .filter(s => s.rank > PODIUM)
                 .reduce((mx, s) => Math.max(mx, s.pts + s.rem * 3), 0);
@@ -9461,23 +9461,23 @@ function _computeDecisiveMatches(roundMatches) {
                 ? '🏆 ยืนยันแชมป์ได้ทันที — ชนะนัดนี้ปิดฉากฤดูกาล'
                 : `🏆 ชนะนัดนี้ปิดดีลแชมป์ — ไม่มีทีมใดตามทันอีกแล้ว`;
         } else if (minRank === 1 && maxRank === 2 && ptsDiff === 0) {
-            reason = '👑 ยอดตาราง — แต้มเท่ากันทุกประการ นัดนี้ตัดสินตำแหน่งผู้นำ';
+            reason = '👑 อันดับ 1 ปะทะ อันดับ 2 — แต้มเท่ากันทุกประการ นัดนี้ตัดสินจ่าฝูง';
         } else if (minRank === 1 && maxRank === 2) {
-            reason = `👑 ผู้นำ ปะทะ ผู้ตาม — ห่างกัน ${ptsDiff} แต้ม นัดชี้ทิศทางลีก`;
+            reason = `👑 อันดับ 1 ปะทะ อันดับ 2 — ห่างกัน ${ptsDiff} แต้ม นัดชี้ทิศทางลีก`;
         } else if (canOvertakeLeader && ptsDiff === 0) {
-            reason = `⚡ แต้มเท่ากับผู้นำ — ชนะนัดนี้ขึ้นยอดตารางได้ทันที`;
+            reason = `⚡ แต้มเท่ากับอันดับ 1 — ชนะนัดนี้ขึ้นจ่าฝูงได้ทันที`;
         } else if (canOvertakeLeader) {
-            reason = `⚡ ห่างผู้นำ ${ptsDiff} แต้ม — ชนะนัดนี้แซงขึ้นนำตารางได้`;
+            reason = `⚡ ห่างอันดับ 1 อยู่ ${ptsDiff} แต้ม — ชนะนัดนี้แซงขึ้นจ่าฝูงได้`;
         } else if (minRank === 1) {
-            reason = `⚡ ผู้นำลงสนาม — ห่างอันดับ 2 อยู่ ${ptsDiff} แต้ม`;
+            reason = `⚡ อันดับ 1 ลงสนาม — ห่างอันดับ 2 อยู่ ${ptsDiff} แต้ม`;
         } else if (isPodiumClinch) {
-            reason = `🥉 ยืนยันโพเดียม — ชนะนัดนี้การันตีรางวัลได้เลย`;
+            reason = `🥉 ยืนยันอันดับ 3 — ชนะนัดนี้การันตีรางวัลได้เลย`;
         } else if (canEnterPodium && ptsDiff === 0) {
-            reason = `🥉 แต้มเท่ากับโพเดียม — ชนะนัดนี้ขึ้นไปรับรางวัลได้`;
+            reason = `🥉 แต้มเท่ากับอันดับ 3 — ชนะนัดนี้ขึ้นที่ 3 ได้ทันที`;
         } else if (canEnterPodium) {
-            reason = `🥉 ห่างโพเดียม ${ptsDiff} แต้ม — ชนะนัดนี้ขึ้นรับรางวัลได้`;
+            reason = `🥉 ห่างอันดับ 3 อยู่ ${ptsDiff} แต้ม — ชนะนัดนี้ขึ้นที่ 3 ได้`;
         } else {
-            reason = `🥉 ชิงโพเดียม — ห่างกัน ${ptsDiff} แต้ม ยังลุ้นได้`;
+            reason = `🥉 ชิงอันดับ 3 — ห่างกัน ${ptsDiff} แต้ม ยังลุ้นได้`;
         }
 
         scored.push({ m, score, isClinch, isPodiumClinch, zone, reason });
