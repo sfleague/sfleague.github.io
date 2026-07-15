@@ -5183,6 +5183,7 @@ let state = {
         gifShowLabel: false,
         gifMusicUrl: "",
         gifPlaylist: [],
+        imgPlaylist: [],
         mode: "normal",
         width: 280
     },
@@ -9859,6 +9860,8 @@ function renderAdBanner() {
             gifPl.length ? _playAdBannerGifPlaylist(gifPl) : _stopAdBannerMusic();
         } else {
             // normal mode — รูปกลางจอ + ปุ่มปิด
+            var imgPlCenter = Array.isArray(ad.imgPlaylist) && ad.imgPlaylist.length ? ad.imgPlaylist : [];
+            imgPlCenter.length ? _playAdBannerGifPlaylist(imgPlCenter) : _stopAdBannerMusic();
             const imgStyle = _openLink ? `cursor:pointer;` : `cursor:default;`;
             const imgClick = _openLink ? `onclick="${_htmlEsc(_openLink).replace(/"/g,"'")}"` : '';
             const imgBlock = ad.imgUrl
@@ -9898,6 +9901,8 @@ function renderAdBanner() {
                 : (ad.gifMusicUrl ? [{id:_ytExtractId(ad.gifMusicUrl)||'',name:'GIF Music'}].filter(s=>s.id) : []);
             gifPl2.length ? _playAdBannerGifPlaylist(gifPl2) : _stopAdBannerMusic();
         } else {
+            var imgPl = Array.isArray(ad.imgPlaylist) && ad.imgPlaylist.length ? ad.imgPlaylist : [];
+            imgPl.length ? _playAdBannerGifPlaylist(imgPl) : _stopAdBannerMusic();
             banner.innerHTML = closeBtn + `
                 <div class="ad-image-container" style="cursor:pointer;" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}">
                     <span class="ad-label">${_htmlEsc(ad.labelText||'โฆษณา')}</span>
@@ -10102,6 +10107,7 @@ function saveTrophyImg() {
 
 // ── GIF Playlist Editor (admin UI) ───────────────────────────────────────────
 var _gifPlaylistEditorData = []; // working copy ขณะเปิด editor
+var _imgPlaylistEditorData = []; // working copy (image mode) ขณะเปิด editor
 
 function _renderGifPlaylistEditor() {
     var list = document.getElementById('gif-playlist-list');
@@ -10139,6 +10145,43 @@ function removeGifPlaylistTrack(idx) {
     _renderGifPlaylistEditor();
 }
 
+// ── Image Playlist Editor ──
+function _renderImgPlaylistEditor() {
+    var list = document.getElementById('img-playlist-list');
+    if (!list) return;
+    if (_imgPlaylistEditorData.length === 0) {
+        list.innerHTML = '<div class="gif-pl-empty">ยังไม่มีเพลงในเพลยลิสต์รูป</div>';
+        return;
+    }
+    list.innerHTML = _imgPlaylistEditorData.map(function(s, i) {
+        return '<div class="gif-pl-item">' +
+            '<span class="gif-pl-num">' + (i + 1) + '.</span>' +
+            '<span class="gif-pl-name" title="' + (s.name || s.id) + '">' + (s.name || s.id) + '</span>' +
+            '<button class="gif-pl-del" onclick="removeImgPlaylistTrack(' + i + ')">&#x2715;</button>' +
+        '</div>';
+    }).join('');
+}
+
+function addImgPlaylistTrack() {
+    var nameInp = document.getElementById('ad-img-music-name');
+    var urlInp  = document.getElementById('ad-img-music-inp');
+    if (!nameInp || !urlInp) return;
+    var url  = urlInp.value.trim();
+    var name = nameInp.value.trim();
+    var vid  = _ytExtractId(url);
+    if (!vid) return;
+    if (!name) name = 'Track ' + (_imgPlaylistEditorData.length + 1);
+    _imgPlaylistEditorData.push({ id: vid, name: name });
+    nameInp.value = '';
+    urlInp.value  = '';
+    _renderImgPlaylistEditor();
+}
+
+function removeImgPlaylistTrack(idx) {
+    _imgPlaylistEditorData.splice(idx, 1);
+    _renderImgPlaylistEditor();
+}
+
 function openAdBannerEditor() {
     if (state.isViewOnly) return;
     const ad = state.adBanner || {};
@@ -10159,6 +10202,10 @@ function openAdBannerEditor() {
             ? (function(){ var vid = _ytExtractId(ad.gifMusicUrl); return vid ? [{ id: vid, name: 'GIF Music' }] : []; })()
             : []);
     _renderGifPlaylistEditor();
+    _imgPlaylistEditorData = Array.isArray(ad.imgPlaylist) && ad.imgPlaylist.length > 0
+        ? ad.imgPlaylist.map(function(s){ return Object.assign({}, s); })
+        : [];
+    _renderImgPlaylistEditor();
     _switchAdMode(ad.mode || 'normal');
     updateAdGifPreview();
     if (fi('ad-btn-inp'))   fi('ad-btn-inp').value   = ad.btnText || '';
@@ -10346,6 +10393,7 @@ function saveAdBanner() {
         gifShowLabel: !!(fi('ad-gif-show-label') || {}).checked,
         gifPlaylist:  _gifPlaylistEditorData.slice(),
         gifMusicUrl:  '',
+        imgPlaylist:  _imgPlaylistEditorData.slice(),
         mode:         (fi('ad-mode-normal') || {}).checked ? 'normal' : 'gif',
         btnText:      (fi('ad-btn-inp')   || {}).value || '',
         linkUrl:      (fi('ad-link-inp')  || {}).value || '',
@@ -10403,6 +10451,8 @@ function _restoreAdBannerHistory(idx) {
     if (slider) { slider.value = h.width || 280; fi('ad-width-val').textContent = slider.value; }
     _gifPlaylistEditorData = Array.isArray(h.gifPlaylist) ? h.gifPlaylist.map(s => Object.assign({},s)) : [];
     _renderGifPlaylistEditor();
+    _imgPlaylistEditorData = Array.isArray(h.imgPlaylist) ? h.imgPlaylist.map(s => Object.assign({},s)) : [];
+    _renderImgPlaylistEditor();
     _switchAdMode(h.mode || 'normal');
     updateAdImgPreview(); updateAdGifPreview();
     // position picker
@@ -11251,6 +11301,17 @@ async function resetBracketMatchScore(matchId) {
             <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
                 <div style="flex:1;min-width:130px;"><label class="ad-editor-label">ข้อความปุ่ม</label><input type="text" id="ad-btn-inp" class="ad-editor-inp" placeholder="ดูเพิ่มเติม"></div>
                 <div style="flex:1;min-width:130px;"><label class="ad-editor-label">ลิงก์ปุ่ม <span style="color:#64748b;font-weight:400;">(ว่าง = เด้งรูป)</span></label><input type="text" id="ad-link-inp" class="ad-editor-inp" placeholder="https://... หรือเว้นว่าง"></div>
+            </div>
+            <!-- Image Playlist Music -->
+            <div class="ad-music-section">
+                <label class="ad-editor-label">🎵 เพลยลิสต์ประกอบแบนเนอร์รูป</label>
+                <div id="img-playlist-list" style="margin:8px 0 6px;max-height:150px;overflow-y:auto;display:flex;flex-direction:column;gap:5px;"></div>
+                <div style="display:flex;flex-direction:column;gap:5px;margin-top:4px;">
+                    <input type="text" id="ad-img-music-name" class="ad-editor-inp" placeholder="ชื่อเพลง เช่น สุดที่รัก - ศิลปิน" style="margin:0;">
+                    <input type="text" id="ad-img-music-inp" class="ad-editor-inp" placeholder="URL YouTube เช่น https://youtu.be/xxxxxxxx" style="margin:0;">
+                    <button onclick="addImgPlaylistTrack()" class="gif-pl-add-btn">➕ เพิ่มเพลงเข้าเพลยลิสต์รูป</button>
+                </div>
+                <p class="ad-music-hint">⚡ เพลงเล่นพร้อมแบนเนอร์รูป ขึ้น Now Playing ทุกเพลง • ถ้าเพลง BG กำลังเล่นจะหยุดก่อนอัตโนมัติ</p>
             </div>
         </div>
 
