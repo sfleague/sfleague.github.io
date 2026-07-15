@@ -2014,70 +2014,185 @@
         }
 
         /* ══════════════════════════════════════════
-           DECISIVE MATCH — ชี้ชะตา
+           DECISIVE MATCH — ชี้ชะตา (เฉพาะคู่ใหญ่จริงๆ)
         ══════════════════════════════════════════ */
+
+        /* — โหมด 1: CLINCH (ชิงแชมป์) — ทอง/ไฟ — */
+        @keyframes clinchPulse {
+            0%,100% { box-shadow: 0 0 18px rgba(242,194,78,0.7), 0 0 40px rgba(232,16,43,0.28), inset 0 0 22px rgba(242,194,78,0.1); }
+            50%      { box-shadow: 0 0 38px rgba(255,220,80,0.95), 0 0 70px rgba(232,16,43,0.45), inset 0 0 35px rgba(242,194,78,0.18); }
+        }
+        @keyframes clinchBorderColor {
+            0%   { border-color: #F2C24E; }
+            30%  { border-color: #ff4444; }
+            60%  { border-color: #F2C24E; }
+            80%  { border-color: #ffdd55; }
+            100% { border-color: #F2C24E; }
+        }
+        @keyframes clinchShimmer {
+            0%   { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        @keyframes trophySpin {
+            0%,100% { transform: scale(1) rotate(-4deg); filter: drop-shadow(0 0 6px rgba(242,194,78,0.8)); }
+            50%      { transform: scale(1.22) rotate(4deg); filter: drop-shadow(0 0 18px rgba(255,220,80,1)); }
+        }
+        @keyframes flameFlicker {
+            0%,100% { transform: scaleY(1) rotate(-3deg); opacity: 0.9; }
+            33%      { transform: scaleY(1.15) rotate(2deg); opacity: 1; }
+            66%      { transform: scaleY(0.92) rotate(-1deg); opacity: 0.85; }
+        }
+
+        /* — โหมด 2: TOP CLASH (ยอดตาราง ปะทะ กัน) — แดง/ม่วง — */
         @keyframes decisivePulse {
-            0%,100% { box-shadow: 0 0 14px rgba(139,92,246,0.55), 0 0 34px rgba(99,102,241,0.22), inset 0 0 18px rgba(139,92,246,0.07); }
-            50%      { box-shadow: 0 0 30px rgba(167,139,250,0.85), 0 0 56px rgba(99,102,241,0.38), inset 0 0 28px rgba(139,92,246,0.14); }
+            0%,100% { box-shadow: 0 0 14px rgba(220,38,38,0.6), 0 0 34px rgba(139,92,246,0.2), inset 0 0 18px rgba(220,38,38,0.08); }
+            50%      { box-shadow: 0 0 32px rgba(248,80,80,0.9), 0 0 58px rgba(139,92,246,0.35), inset 0 0 28px rgba(220,38,38,0.15); }
         }
         @keyframes decisiveBorderColor {
-            0%   { border-color: #7c3aed; }
-            25%  { border-color: #a78bfa; }
-            50%  { border-color: #6366f1; }
-            75%  { border-color: #c4b5fd; }
-            100% { border-color: #7c3aed; }
+            0%   { border-color: #dc2626; }
+            30%  { border-color: #a78bfa; }
+            60%  { border-color: #ef4444; }
+            85%  { border-color: #7c3aed; }
+            100% { border-color: #dc2626; }
         }
         @keyframes decisiveShimmer {
             0%   { background-position: -200% 0; }
             100% { background-position: 200% 0; }
         }
         @keyframes swordSpin {
-            0%,100% { transform: rotate(-8deg) scale(1); }
-            50%      { transform: rotate(8deg) scale(1.12); }
+            0%,100% { transform: rotate(-10deg) scale(1); }
+            50%      { transform: rotate(10deg) scale(1.18); }
         }
+
+        /* wrappers */
         .decisive-match-wrapper { position: relative; margin: 4px 0 18px; }
+
+        /* — banner ทั่วไป (shared base) — */
         .decisive-match-banner {
-            background: linear-gradient(90deg, #160030 0%, #3b0764 22%, #7c3aed 50%, #3b0764 78%, #160030 100%);
-            background-size: 200% 100%;
-            animation: decisiveShimmer 3.2s linear infinite;
-            border-left: 4px solid #7c3aed;
-            padding: 9px 18px;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 10px 18px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
             font-family: 'Orbitron', 'Prompt', sans-serif;
-            font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 2.5px;
-            color: #ede9fe; text-shadow: 0 0 12px rgba(167,139,250,0.95), 0 0 24px rgba(139,92,246,0.6);
+            font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 2.5px;
         }
-        .dm-sword { font-size: 16px; display: inline-block; animation: swordSpin 1.2s ease-in-out infinite; }
-        .dm-sword:last-child { animation-delay: 0.6s; }
-        .dm-rank-badge {
-            background: rgba(167,139,250,0.22); border: 1px solid rgba(167,139,250,0.6);
-            border-radius: 50%; width: 22px; height: 22px;
-            display: inline-flex; align-items: center; justify-content: center;
-            font-size: 11px; font-weight: 900; color: #c4b5fd; flex-shrink: 0;
-            box-shadow: 0 0 8px rgba(167,139,250,0.4);
+
+        /* — clinch banner (ทอง) — */
+        .dm-clinch-banner {
+            background: linear-gradient(90deg, #1a0800 0%, #3d1500 18%, #8b4800 38%, #F2C24E 50%, #8b4800 62%, #3d1500 82%, #1a0800 100%);
+            background-size: 200% 100%;
+            animation: clinchShimmer 2.8s linear infinite;
+            border-left: 4px solid #F2C24E;
+            color: #fff8e0; text-shadow: 0 0 14px rgba(255,220,80,1), 0 0 30px rgba(242,194,78,0.7);
         }
-        .dm-title-row {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+        .dm-clinch-trophy {
+            font-size: 22px; display: inline-block;
+            animation: trophySpin 1.5s ease-in-out infinite;
         }
-        .dm-title-text { letter-spacing: 3px; }
+        .dm-clinch-flame {
+            font-size: 18px; display: inline-block;
+            animation: flameFlicker 0.7s ease-in-out infinite;
+        }
+        .dm-clinch-flame:nth-child(2) { animation-delay: 0.15s; }
+        .dm-clinch-flame:nth-child(4) { animation-delay: 0.3s; }
+        .dm-clinch-row {
+            background: rgba(255,160,0,0.18); border: 1px solid rgba(255,200,60,0.4);
+            border-radius: 4px; padding: 3px 14px; margin-top: 5px;
+            font-size: 13px; font-weight: 800; letter-spacing: 0.5px;
+            color: #ffe570; font-family: 'Prompt', sans-serif; text-transform: none;
+            text-shadow: 0 0 12px rgba(255,230,80,0.9);
+        }
+        .decisive-match-row.clinch-row {
+            border: 2px solid #F2C24E !important;
+            animation: clinchPulse 2.2s ease-in-out infinite, clinchBorderColor 4s linear infinite;
+            background: linear-gradient(135deg, rgba(180,110,0,0.18) 0%, rgba(16,6,0,0.6) 50%, rgba(200,80,0,0.12) 100%) !important;
+        }
+
+        /* — top clash banner (แดง) — */
+        .dm-topclash-banner {
+            background: linear-gradient(90deg, #1a0008 0%, #4a0012 20%, #991b1b 42%, #c0392b 50%, #991b1b 58%, #4a0012 80%, #1a0008 100%);
+            background-size: 200% 100%;
+            animation: decisiveShimmer 3s linear infinite;
+            border-left: 4px solid #dc2626;
+            color: #fee2e2; text-shadow: 0 0 12px rgba(248,113,113,0.9), 0 0 28px rgba(220,38,38,0.6);
+        }
+        .dm-sword {
+            font-size: 18px; display: inline-block;
+            animation: swordSpin 1.1s ease-in-out infinite;
+        }
+        .dm-sword:last-of-type { animation-delay: 0.55s; }
         .dm-reason-row {
             margin-top: 5px;
-            font-size: 12.5px; font-weight: 700; letter-spacing: 0.5px;
-            color: #e9d5ff; text-shadow: 0 0 10px rgba(216,180,254,0.8);
-            font-family: 'Prompt', 'Sarabun', sans-serif;
-            text-transform: none;
+            background: rgba(220,38,38,0.15); border: 1px solid rgba(248,113,113,0.35);
+            border-radius: 4px; padding: 3px 14px;
+            font-size: 13px; font-weight: 700; letter-spacing: 0.5px;
+            color: #fca5a5; font-family: 'Prompt', 'Sarabun', sans-serif; text-transform: none;
+            text-shadow: 0 0 10px rgba(252,165,165,0.8);
         }
+        .dm-title-row {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .dm-title-text { letter-spacing: 3px; }
         .decisive-match-row {
-            border: 2px solid #7c3aed !important;
-            animation: decisivePulse 2.8s ease-in-out infinite, decisiveBorderColor 5s linear infinite;
-            background: linear-gradient(135deg, rgba(109,40,217,0.14) 0%, rgba(8,4,22,0.55) 50%, rgba(99,102,241,0.1) 100%) !important;
+            border: 2px solid #dc2626 !important;
+            animation: decisivePulse 2.6s ease-in-out infinite, decisiveBorderColor 5s linear infinite;
+            background: linear-gradient(135deg, rgba(185,28,28,0.15) 0%, rgba(8,2,14,0.58) 50%, rgba(109,40,217,0.1) 100%) !important;
             position: relative; overflow: hidden;
         }
         .decisive-match-row::before {
             content: ''; position: absolute; inset: 0;
-            background: linear-gradient(120deg, transparent 30%, rgba(139,92,246,0.08) 50%, transparent 70%);
+            background: linear-gradient(120deg, transparent 30%, rgba(220,38,38,0.07) 50%, transparent 70%);
             background-size: 200% 100%;
-            animation: decisiveShimmer 3.5s linear infinite;
+            animation: decisiveShimmer 3.2s linear infinite;
+            pointer-events: none;
+        }
+        /* — โหมด 3: PODIUM CLASH (ชิงอันดับ 3) — บรอนซ์ — */
+        @keyframes podiumPulse {
+            0%,100% { box-shadow: 0 0 14px rgba(180,100,30,0.55), 0 0 32px rgba(140,80,20,0.2), inset 0 0 16px rgba(180,100,30,0.07); }
+            50%      { box-shadow: 0 0 28px rgba(210,130,50,0.8), 0 0 52px rgba(180,100,30,0.35), inset 0 0 26px rgba(180,100,30,0.13); }
+        }
+        @keyframes podiumBorderColor {
+            0%   { border-color: #b46a1e; }
+            35%  { border-color: #d4892a; }
+            65%  { border-color: #9a5510; }
+            100% { border-color: #b46a1e; }
+        }
+        @keyframes podiumShimmer {
+            0%   { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        @keyframes medalBob {
+            0%,100% { transform: translateY(0) scale(1); }
+            50%      { transform: translateY(-3px) scale(1.12); }
+        }
+        .dm-podium-banner {
+            background: linear-gradient(90deg, #160900 0%, #3b1800 20%, #7a3800 40%, #cd7f32 50%, #7a3800 60%, #3b1800 80%, #160900 100%);
+            background-size: 200% 100%;
+            animation: podiumShimmer 3.4s linear infinite;
+            border-left: 4px solid #cd7f32;
+            color: #fde8c8; text-shadow: 0 0 12px rgba(210,150,70,0.9), 0 0 26px rgba(180,100,30,0.55);
+        }
+        .dm-podium-medal {
+            font-size: 20px; display: inline-block;
+            animation: medalBob 1.6s ease-in-out infinite;
+        }
+        .dm-podium-medal:last-of-type { animation-delay: 0.8s; }
+        .dm-podium-row {
+            margin-top: 5px;
+            background: rgba(180,100,30,0.16); border: 1px solid rgba(210,140,60,0.38);
+            border-radius: 4px; padding: 3px 14px;
+            font-size: 13px; font-weight: 700; letter-spacing: 0.5px;
+            color: #fcd9a0; font-family: 'Prompt', 'Sarabun', sans-serif; text-transform: none;
+            text-shadow: 0 0 10px rgba(252,200,120,0.75);
+        }
+        .decisive-match-row.podium-row {
+            border: 2px solid #cd7f32 !important;
+            animation: podiumPulse 2.8s ease-in-out infinite, podiumBorderColor 5s linear infinite;
+            background: linear-gradient(135deg, rgba(140,70,15,0.16) 0%, rgba(10,5,0,0.58) 50%, rgba(100,50,10,0.1) 100%) !important;
+        }
+        .decisive-match-row.podium-row::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(120deg, transparent 30%, rgba(180,100,30,0.07) 50%, transparent 70%);
+            background-size: 200% 100%;
+            animation: podiumShimmer 3.6s linear infinite;
             pointer-events: none;
         }
         .dm-clinch-tag {
@@ -9143,21 +9258,49 @@ function _buildMatchRowDiv(m, fmt) {
         return wrapper;
     }
     if (isDecisive) {
-        const { rank, isClinch, reason } = decisiveInfo;
-        const rankLabel = rank === 1 ? '#1' : rank === 2 ? '#2' : '#3';
+        const { isClinch, zone, reason } = decisiveInfo;
         let wrapper = document.createElement("div");
         wrapper.className = "decisive-match-wrapper";
         let banner = document.createElement("div");
-        banner.className = "decisive-match-banner";
-        banner.innerHTML = `
-            <div class="dm-title-row">
-                <span class="dm-sword">⚔️</span>
-                <span class="dm-rank-badge">${rankLabel}</span>
-                <span class="dm-title-text">DECISIVE MATCH</span>
-                <span class="dm-rank-badge">${rankLabel}</span>
-                <span class="dm-sword">⚔️</span>
-            </div>
-            <div class="dm-reason-row">${reason || '⚡ นัดชี้ชะตา'}</div>`;
+
+        if (isClinch || zone === 'clinch') {
+            // โหมดทอง — ยืนยันแชมป์
+            divMatch.classList.add('clinch-row');
+            banner.className = "decisive-match-banner dm-clinch-banner";
+            banner.innerHTML = `
+                <div class="dm-title-row">
+                    <span class="dm-clinch-flame">🔥</span>
+                    <span class="dm-clinch-flame">🔥</span>
+                    <span class="dm-clinch-trophy">🏆</span>
+                    <span class="dm-title-text">ยืนยันแชมป์</span>
+                    <span class="dm-clinch-trophy">🏆</span>
+                    <span class="dm-clinch-flame">🔥</span>
+                    <span class="dm-clinch-flame">🔥</span>
+                </div>
+                <div class="dm-clinch-row">${reason || '🏆 ยืนยันแชมป์ได้ทันที'}</div>`;
+        } else if (zone === 'podium') {
+            // โหมดบรอนซ์ — ชิงโพเดียม
+            divMatch.classList.add('podium-row');
+            banner.className = "decisive-match-banner dm-podium-banner";
+            banner.innerHTML = `
+                <div class="dm-title-row">
+                    <span class="dm-podium-medal">🥉</span>
+                    <span class="dm-title-text">ศึกชิงโพเดียม</span>
+                    <span class="dm-podium-medal">🥉</span>
+                </div>
+                <div class="dm-podium-row">${reason || '🥉 ชนะนัดนี้ขึ้นรับรางวัล'}</div>`;
+        } else {
+            // โหมดแดง — ศึกจ่าฝูง
+            banner.className = "decisive-match-banner dm-topclash-banner";
+            banner.innerHTML = `
+                <div class="dm-title-row">
+                    <span class="dm-sword">⚔️</span>
+                    <span class="dm-title-text">ศึกชี้ชะตา</span>
+                    <span class="dm-sword">⚔️</span>
+                </div>
+                <div class="dm-reason-row">${reason || '⚡ นัดชี้ชะตา'}</div>`;
+        }
+
         wrapper.appendChild(banner);
         wrapper.appendChild(divMatch);
         return wrapper;
@@ -9215,116 +9358,154 @@ function _computeDecisiveMatches(roundMatches) {
     const standings = calculateStandings();
     if (standings.length < 2) return;
 
-    const n = standings.length;
     const standMap = {};
     standings.forEach((s, i) => { standMap[s.id] = { ...s, rank: i + 1 }; });
 
     const scored = [];
 
+    // โพเดียม = ตำแหน่งที่ได้รางวัล (อันดับ 1-3)
+    const PODIUM = 3;
+
     roundMatches.forEach(m => {
         if (m.homeId === 'BYE' || m.awayId === 'BYE') return;
-        if (m.homeScore !== null && m.awayScore !== null) return; // played already
+        if (m.homeScore !== null && m.awayScore !== null) return; // เล่นจบแล้ว
 
         const hSt = standMap[m.homeId];
         const aSt = standMap[m.awayId];
         if (!hSt || !aSt) return;
 
-        let score = 0;
         const hRank = hSt.rank, aRank = aSt.rank;
         const minRank = Math.min(hRank, aRank);
         const maxRank = Math.max(hRank, aRank);
-        const rankDiff = maxRank - minRank;
         const ptsDiff = Math.abs(hSt.pts - aSt.pts);
         const avgRem  = (hSt.rem + aSt.rem) / 2;
 
-        // ── 1. ตำแหน่งในตาราง ──
-        if (minRank === 1 && maxRank === 2) score += 65; // แชมป์ vs รองแชมป์
-        else if (minRank === 1)             score += 38; // แชมป์อยู่ด้วย
-        else if (minRank <= 2)              score += 25;
-        else if (minRank <= 4)              score += 12;
-
-        // ── 2. ความใกล้ชิดของอันดับ (ยิ่งใกล้ = ยิ่งชิงกัน) ──
-        if (rankDiff === 0) score += 32;
-        else if (rankDiff === 1) score += 26;
-        else if (rankDiff === 2) score += 16;
-        else if (rankDiff === 3) score +=  8;
-        else score -= 4 * (rankDiff - 3);
-
-        // ── 3. ช่องว่างคะแนน ──
-        if (ptsDiff === 0)      score += 50;
-        else if (ptsDiff <= 1)  score += 42;
-        else if (ptsDiff <= 2)  score += 34;
-        else if (ptsDiff <= 3)  score += 24;
-        else if (ptsDiff <= 6)  score += 12;
-        else if (ptsDiff > 9)   score -= 12;
-
-        // ── 4. ความเร่งด่วน (นัดเหลือน้อย = สูง) ──
-        if (avgRem <= 1)      score += 50;
-        else if (avgRem <= 2) score += 35;
-        else if (avgRem <= 3) score += 20;
-        else if (avgRem <= 4) score +=  8;
-
-        // ── 5. โอกาส clinch ตำแหน่ง 1 ──
+        // ── ตรวจ clinch แชมป์ (อันดับ 1) ──
         let isClinch = false;
-        const leader = standings[0];
-        const second = standings[1];
         if (hRank === 1 || aRank === 1) {
-            score += 18;
-            const leaderSt  = hRank === 1 ? hSt : aSt;
-            const chalSt    = hRank === 1 ? aSt : hSt;
+            const leaderSt = hRank === 1 ? hSt : aSt;
             const leaderWin = leaderSt.pts + 3;
-            // คะแนนสูงสุดที่ challenger หรือทีมอื่นทำได้
             const maxChaser = standings
                 .filter(s => s.id !== leaderSt.id)
                 .reduce((mx, s) => Math.max(mx, s.pts + s.rem * 3), 0);
-            if (leaderWin > maxChaser) { score += 70; isClinch = true; }
+            if (leaderWin > maxChaser) isClinch = true;
         }
-        // ผู้ตามทำลายได้: ถ้า away ชนะ จะแซงผู้นำ?
+
+        // ── ตรวจ clinch โพเดียม (อันดับ 3) ──
+        let isPodiumClinch = false;
+        if (minRank <= PODIUM && !isClinch) {
+            const podiumTeam = hRank <= PODIUM ? hSt : aSt;
+            const podiumWin = podiumTeam.pts + 3;
+            // ทีมนอกโพเดียมที่ตามมาใกล้ที่สุด
+            const closestOutsider = standings
+                .filter(s => s.rank > PODIUM)
+                .reduce((mx, s) => Math.max(mx, s.pts + s.rem * 3), 0);
+            if (podiumWin > closestOutsider) isPodiumClinch = true;
+        }
+
         const underdog = hRank > aRank ? hSt : aSt;
         const frontrun = hRank < aRank ? hSt : aSt;
-        if (underdog.pts + 3 > frontrun.pts && minRank <= 3) score += 24;
+        const canOvertakeLeader  = underdog.pts + 3 > frontrun.pts && frontrun.rank === 1;
+        const canEnterPodium     = underdog.pts + 3 > frontrun.pts && frontrun.rank === PODIUM && underdog.rank > PODIUM;
+        const isDirectPodiumClash = minRank <= PODIUM && maxRank <= PODIUM + 1 && (canEnterPodium || ptsDiff <= 4);
 
-        // ── 6. HoF prestige ──
-        score += (_getTeamHofScore(m.homeId) + _getTeamHofScore(m.awayId)) * 0.35;
+        // ══ HARD GATE — เฉพาะแมชที่มีผลต่อตำแหน่งรางวัล (Top 3) ══
+        const zone = (() => {
+            if (isClinch)                                    return 'clinch';    // ยืนยันแชมป์
+            if (minRank === 1 && maxRank === 2)             return 'title';     // ศึกจ่าฝูง
+            if (minRank === 1 && ptsDiff <= 6)              return 'title';     // ผู้นำลงสนาม
+            if (canOvertakeLeader)                           return 'title';     // แซงขึ้นอันดับ 1
+            if (isPodiumClinch)                              return 'podium';    // ยืนยันโพเดียม
+            if (isDirectPodiumClash)                         return 'podium';    // ชิงอันดับ 3
+            return null;
+        })();
 
-        // ── 7. สร้าง reason label อธิบายว่าชี้ชะตาอะไร ──
-        let reason = '';
-        const canOvertake = underdog.pts + 3 > frontrun.pts;
-        if (isClinch) {
-            reason = '🏆 ชนะ = คว้าแชมป์ได้เลย!';
-        } else if (minRank === 1 && maxRank === 2) {
-            reason = ptsDiff === 0
-                ? '👑 ยอดตาราง — แต้มเท่ากันทุกประการ!'
-                : `👑 อันดับ 1 ปะทะ 2 — ห่างกันแค่ ${ptsDiff} แต้ม`;
-        } else if (minRank === 1) {
-            reason = canOvertake
-                ? `⚡ ชนะแล้วแซงขึ้นนำตาราง!`
-                : `⚡ ผู้นำลงสนาม — ห่างอันดับถัดไป ${ptsDiff} แต้ม`;
-        } else if (ptsDiff === 0) {
-            reason = `⚡ อันดับ ${minRank} & ${maxRank} — แต้มเท่ากัน ชนะ = แซง!`;
-        } else if (canOvertake) {
-            reason = `⚡ ชนะแล้วขึ้นอันดับ ${minRank}!`;
-        } else if (ptsDiff <= 3) {
-            reason = `⚡ ห่างกันแค่ ${ptsDiff} แต้ม — ชิงอันดับ ${minRank}`;
-        } else {
-            reason = `⚡ ชิงอันดับ ${minRank}–${maxRank} ในตาราง`;
+        if (!zone) return; // ตัดทิ้ง — ไม่กระทบตำแหน่งรางวัล
+
+        // ── คะแนนความสำคัญ ──
+        let score = 0;
+
+        // 1. zone weight
+        if (zone === 'clinch')  score += 100;
+        else if (zone === 'title') {
+            if (minRank === 1 && maxRank === 2) score += 85;
+            else if (canOvertakeLeader)          score += 65;
+            else                                 score += 50;
+        } else { // podium
+            if (isPodiumClinch)  score += 70;
+            else if (canEnterPodium) score += 55;
+            else                 score += 40;
         }
 
-        scored.push({ m, score, isClinch, reason });
+        // 2. ช่องว่างคะแนน
+        if (ptsDiff === 0)      score += 50;
+        else if (ptsDiff <= 1)  score += 42;
+        else if (ptsDiff <= 2)  score += 32;
+        else if (ptsDiff <= 3)  score += 20;
+        else if (ptsDiff <= 6)  score +=  8;
+        else                    score -=  8;
+
+        // 3. ความเร่งด่วน
+        if (avgRem <= 1)      score += 55;
+        else if (avgRem <= 2) score += 38;
+        else if (avgRem <= 3) score += 22;
+        else if (avgRem <= 4) score += 10;
+
+        // 4. HoF prestige (น้ำหนักเบา — ไม่ดันแมชชั้น 2 ขึ้นมา)
+        score += (_getTeamHofScore(m.homeId) + _getTeamHofScore(m.awayId)) * 0.18;
+
+        // ── reason label — โทนจริงจัง ไม่เกรียน ──
+        let reason = '';
+        if (isClinch) {
+            reason = ptsDiff === 0
+                ? '🏆 ยืนยันแชมป์ได้ทันที — ชนะนัดนี้ปิดฉากฤดูกาล'
+                : `🏆 ชนะนัดนี้ปิดดีลแชมป์ — ไม่มีทีมใดตามทันอีกแล้ว`;
+        } else if (minRank === 1 && maxRank === 2 && ptsDiff === 0) {
+            reason = '👑 ยอดตาราง — แต้มเท่ากันทุกประการ นัดนี้ตัดสินตำแหน่งผู้นำ';
+        } else if (minRank === 1 && maxRank === 2) {
+            reason = `👑 ผู้นำ ปะทะ ผู้ตาม — ห่างกัน ${ptsDiff} แต้ม นัดชี้ทิศทางลีก`;
+        } else if (canOvertakeLeader && ptsDiff === 0) {
+            reason = `⚡ แต้มเท่ากับผู้นำ — ชนะนัดนี้ขึ้นยอดตารางได้ทันที`;
+        } else if (canOvertakeLeader) {
+            reason = `⚡ ห่างผู้นำ ${ptsDiff} แต้ม — ชนะนัดนี้แซงขึ้นนำตารางได้`;
+        } else if (minRank === 1) {
+            reason = `⚡ ผู้นำลงสนาม — ห่างอันดับ 2 อยู่ ${ptsDiff} แต้ม`;
+        } else if (isPodiumClinch) {
+            reason = `🥉 ยืนยันโพเดียม — ชนะนัดนี้การันตีรางวัลได้เลย`;
+        } else if (canEnterPodium && ptsDiff === 0) {
+            reason = `🥉 แต้มเท่ากับโพเดียม — ชนะนัดนี้ขึ้นไปรับรางวัลได้`;
+        } else if (canEnterPodium) {
+            reason = `🥉 ห่างโพเดียม ${ptsDiff} แต้ม — ชนะนัดนี้ขึ้นรับรางวัลได้`;
+        } else {
+            reason = `🥉 ชิงโพเดียม — ห่างกัน ${ptsDiff} แต้ม ยังลุ้นได้`;
+        }
+
+        scored.push({ m, score, isClinch, isPodiumClinch, zone, reason });
     });
 
     if (scored.length === 0) return;
     scored.sort((a, b) => b.score - a.score);
 
-    // เลือกแมชที่เข้าข่าย (score >= 60 สูงสุด 3 อันดับ)
-    const threshold = 60;
-    let rank = 1;
-    scored.forEach(({ m, score, isClinch, reason }) => {
-        if (score >= threshold && rank <= 3) {
-            _decisiveMatchMap[m.id] = { rank, isClinch, reason };
-            rank++;
+    // ── แสดงสูงสุด 2 แมช: 1 จาก title zone + 1 จาก podium zone (ถ้ามี) ──
+    const threshold = 65;
+    let titleShown  = false;
+    let podiumShown = false;
+    let slot = 1;
+    for (const { m, score, isClinch, zone, reason } of scored) {
+        if (score < threshold) break;
+        if (zone === 'clinch' || zone === 'title') {
+            if (!titleShown) {
+                _decisiveMatchMap[m.id] = { rank: slot, isClinch, zone, reason };
+                titleShown = true; slot++;
+            }
+        } else if (zone === 'podium') {
+            if (!podiumShown) {
+                _decisiveMatchMap[m.id] = { rank: slot, isClinch: false, zone, reason };
+                podiumShown = true; slot++;
+            }
         }
-    });
+        if (titleShown && podiumShown) break;
+    }
 }
 
 function autoPickBigMatch() {
