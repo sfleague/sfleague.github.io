@@ -1557,7 +1557,7 @@
 .ad-pos-dot.pos-empty:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); }
 
         /* ── Ad Banner Editor Modal ── */
-        #ad-editor-modal { display:none; position:fixed; inset:0; z-index:4500; background:rgba(0,0,0,0.82); align-items:center; justify-content:center; }
+        #ad-editor-modal { display:none; position:fixed; inset:0; z-index:10500; background:rgba(0,0,0,0.82); align-items:center; justify-content:center; }
         #ad-editor-modal.open { display:flex; }
         .ad-editor-box { background:rgba(4,12,34,0.98); backdrop-filter:blur(24px); border:1px solid rgba(242,194,78,0.3); border-radius:18px; padding:24px; width:min(500px,94vw); max-height:90vh; overflow-y:auto; position:relative; box-shadow:0 25px 70px rgba(0,0,0,0.8); }
         .ad-editor-label { font-size:11px; color:var(--wc-text-sub); font-weight:700; letter-spacing:0.5px; text-transform:uppercase; display:block; margin-bottom:5px; }
@@ -5460,7 +5460,11 @@ function _applyCloudData(r) {
     if (r.no1History) state.no1History = r.no1History;
     if (Array.isArray(r.pendingResults)) state.pendingResults = r.pendingResults;
     if (r.centerBanner !== undefined) state.centerBanner = Object.assign({}, state.centerBanner, r.centerBanner);
-    if (r.adBanner !== undefined) state.adBanner = Object.assign({}, state.adBanner, r.adBanner);
+    // ถ้าเปิด ad editor อยู่ → ห้ามเขียนทับ state.adBanner เด็ดขาด
+    // (ป้องกันข้อมูลที่กำลังแก้ไขอยู่ถูก reset และป้องกัน renderAdBanner สร้าง overlay ทับ editor)
+    const _adEditorIsOpen = document.getElementById('ad-editor-modal')?.classList.contains('open');
+    if (r.adBanner !== undefined && !_adEditorIsOpen) state.adBanner = Object.assign({}, state.adBanner, r.adBanner);
+    if (Array.isArray(r.adBannerHistory) && !_adEditorIsOpen) state.adBannerHistory = r.adBannerHistory;
     if (r.trophyImg !== undefined) state.trophyImg = r.trophyImg;
     if (Array.isArray(r.customPlaylist)) { state.customPlaylist = r.customPlaylist; _applyCustomPlaylist(); }
     _restoreEvidenceFromLocal();
@@ -5470,7 +5474,7 @@ function _applyCloudData(r) {
     renderLeague();
     refreshUIState();
     renderAnnouncement();
-    renderAdBanner();
+    if (!_adEditorIsOpen) renderAdBanner();  // ห้าม re-render banner ขณะ editor เปิดอยู่
     renderCenterBanner();
     renderChangelog();
     updateAdminPendingBadge();
@@ -11127,7 +11131,7 @@ async function resetBracketMatchScore(matchId) {
 
 <!-- Ad Banner Editor Modal -->
 <div id="ad-editor-modal" onclick="if(event.target===this)closeAdBannerEditor()">
-    <div class="ad-editor-box">
+    <div class="ad-editor-box" onclick="event.stopPropagation()">
         <div style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;color:#F2C24E;margin-bottom:18px;letter-spacing:1px;">📢 แก้ไข Ad Banner</div>
 
         <div class="ad-toggle-wrap">
