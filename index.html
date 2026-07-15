@@ -9802,6 +9802,7 @@ function renderAdBanner() {
         const posMap = {'bottom-left':'ad-pos-bl','bottom-right':'ad-pos-br','top-left':'ad-pos-tl','top-right':'ad-pos-tr'};
         banner.className = posMap[pos] || 'ad-pos-bl';
         banner.style.cssText = '';
+        banner.style.display = 'block';
         banner.style.width = (ad.width||280) + 'px';
         banner.onclick = null;
 
@@ -9854,8 +9855,10 @@ function closeAdPopup() {
 
 // ─── Center Ad Banner ─────────────────────────────────────────────────────────
 function renderCenterBanner() {
+    // ฟังก์ชันนี้ถูกรวมเข้า renderAdBanner แล้ว — ซ่อน element เสมอ
     const el = document.getElementById('center-ad-banner');
-    if (!el) return;
+    if (el) { el.style.display = 'none'; el.classList.remove('cad-open'); }
+    return;
     const cb = state.centerBanner || {};
     if (!cb.enabled) { el.classList.remove('cad-open'); el.style.display = 'none'; return; }
     el.style.display = 'flex';
