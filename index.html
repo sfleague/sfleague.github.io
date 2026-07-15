@@ -1568,6 +1568,67 @@
         .ad-music-section { margin-bottom:12px; padding:10px 12px; background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.22); border-radius:10px; }
         .ad-music-section .ad-editor-label { color:#4ade80; }
         .ad-music-hint { font-size:11px; color:#4ade80; opacity:0.7; margin:5px 0 0; line-height:1.5; }
+
+        /* ── Center Ad Banner ── */
+        @keyframes centerAdIn {
+            from { opacity:0; transform:translateY(-10px) scale(0.97); }
+            to   { opacity:1; transform:translateY(0) scale(1); }
+        }
+        #center-ad-banner {
+            display:none; position:relative; width:100%; margin:0 0 22px;
+            border-radius:16px; overflow:hidden;
+            border:2px solid rgba(242,194,78,0.22);
+            box-shadow:0 10px 40px rgba(0,0,0,0.5);
+            animation:centerAdIn 0.45s cubic-bezier(0.16,1,0.3,1) both;
+        }
+        .center-ad-label {
+            position:absolute; top:10px; left:12px; z-index:2;
+            background:rgba(10,10,20,0.72); border:1px solid rgba(242,194,78,0.45);
+            color:#F2C24E; font-size:10px; font-weight:800; letter-spacing:1.5px;
+            padding:3px 10px; border-radius:99px; text-transform:uppercase;
+            backdrop-filter:blur(6px); pointer-events:none;
+        }
+        .center-ad-close {
+            position:absolute; top:8px; right:10px; z-index:3;
+            background:rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.18);
+            color:#fff; width:30px; height:30px; border-radius:50%;
+            cursor:pointer; font-size:18px; line-height:1;
+            display:flex; align-items:center; justify-content:center;
+            transition:all 0.2s; backdrop-filter:blur(6px); padding:0;
+        }
+        .center-ad-close:hover { background:rgba(255,255,255,0.18); transform:scale(1.12) rotate(90deg); }
+        #center-ad-banner img {
+            width:100%; display:block; object-fit:cover;
+            max-height:520px; cursor:zoom-in; transition:transform 0.4s;
+        }
+        #center-ad-banner img:hover { transform:scale(1.015); }
+        .center-ad-caption {
+            padding:10px 16px; background:rgba(6,16,44,0.88);
+            font-size:13px; color:#94a3b8; text-align:center;
+            border-top:1px solid rgba(255,255,255,0.07); line-height:1.5;
+        }
+        /* lightbox */
+        #center-ad-lightbox {
+            display:none; position:fixed; inset:0; z-index:9500;
+            background:rgba(0,0,0,0.92); align-items:center; justify-content:center;
+            cursor:zoom-out;
+        }
+        #center-ad-lightbox.open { display:flex; }
+        #center-ad-lightbox img {
+            max-width:94vw; max-height:92vh; object-fit:contain;
+            border-radius:10px; box-shadow:0 0 80px rgba(0,0,0,0.8);
+        }
+        #center-ad-lightbox .lb-close {
+            position:absolute; top:16px; right:18px;
+            color:#fff; font-size:32px; cursor:pointer; line-height:1;
+            background:rgba(0,0,0,0.4); border-radius:50%; width:44px; height:44px;
+            display:flex; align-items:center; justify-content:center;
+            border:1px solid rgba(255,255,255,0.2); transition:all 0.2s;
+        }
+        #center-ad-lightbox .lb-close:hover { background:rgba(255,255,255,0.15); }
+        /* center banner editor modal */
+        #center-banner-modal { display:none; position:fixed; inset:0; z-index:4600; background:rgba(0,0,0,0.85); backdrop-filter:blur(12px); align-items:center; justify-content:center; }
+        #center-banner-modal.open { display:flex; }
         .gif-pl-item { display:flex; align-items:center; gap:6px; background:rgba(34,197,94,0.07); border:1px solid rgba(34,197,94,0.2); border-radius:8px; padding:6px 10px; }
         .gif-pl-num { font-size:11px; color:#4ade80; font-weight:700; flex-shrink:0; }
         .gif-pl-name { flex:1; font-size:11px; color:#e2e8f0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -3641,6 +3702,9 @@
 
 <div class="container">
 
+    <!-- ── Center Ad Banner ── -->
+    <div id="center-ad-banner"></div>
+
     <!-- ── Announcement Banner ── -->
     <div id="announcement-banner">
         <div style="display:flex; align-items:flex-start; gap:10px;">
@@ -5067,6 +5131,11 @@ let state = {
     trophyImg: "",
     customPlaylist: [],
     pendingResults: [],
+    centerBanner: {
+        enabled: false,
+        imgUrl: "",
+        caption: ""
+    },
     adBanner: {
         enabled: true,
         labelText: "โฆษณาต้าวเพื่อนใหม่",
@@ -5143,7 +5212,7 @@ function _renderFromCacheInstantly(binId) {
     Object.assign(state, cached.data);
     state.binId = binId;
     try {
-        renderHeader(); renderLeague(); refreshUIState(); renderAnnouncement(); renderAdBanner(); renderChangelog();
+        renderHeader(); renderLeague(); refreshUIState(); renderAnnouncement(); renderAdBanner(); renderCenterBanner(); renderChangelog();
     } catch (e) { return false; }
     _hideInitialLoadOverlay();
     return true;
@@ -5358,6 +5427,7 @@ function _applyCloudData(r) {
     state.bigMatchIds = Array.isArray(r.bigMatchIds) ? r.bigMatchIds : (r.bigMatchId ? [r.bigMatchId] : state.bigMatchIds || []);
     if (r.no1History) state.no1History = r.no1History;
     if (Array.isArray(r.pendingResults)) state.pendingResults = r.pendingResults;
+    if (r.centerBanner !== undefined) state.centerBanner = Object.assign({}, state.centerBanner, r.centerBanner);
     if (r.adBanner !== undefined) state.adBanner = Object.assign({}, state.adBanner, r.adBanner);
     if (r.trophyImg !== undefined) state.trophyImg = r.trophyImg;
     if (Array.isArray(r.customPlaylist)) { state.customPlaylist = r.customPlaylist; _applyCustomPlaylist(); }
@@ -5369,6 +5439,7 @@ function _applyCloudData(r) {
     refreshUIState();
     renderAnnouncement();
     renderAdBanner();
+    renderCenterBanner();
     renderChangelog();
     updateAdminPendingBadge();
     _hideInitialLoadOverlay();
@@ -7220,6 +7291,7 @@ function renderAdminDock() {
         <button onclick="openTrophyEditor()" style="background:linear-gradient(135deg,rgba(255,215,0,0.18),rgba(180,130,0,0.12));border:1px solid rgba(255,215,0,0.55);color:#F2C24E;">🏆 ถ้วยรางวัล</button>
         <button onclick="openAdminPendingModal()" id="admin-pending-btn" style="position:relative;overflow:visible;background:linear-gradient(135deg,rgba(29,78,216,0.25),rgba(30,64,175,0.15));border:1px solid rgba(96,165,250,0.5);color:#60a5fa;font-weight:700;">📋 รอตรวจสอบ<span id="admin-pending-count" style="display:none;position:absolute;top:-7px;right:-7px;background:#ef4444;color:#fff;border-radius:99px;font-size:10px;font-weight:900;min-width:18px;height:18px;line-height:18px;text-align:center;padding:0 4px;font-family:'Prompt',sans-serif;"></span></button>
         <button onclick="openBigMatchPickerModal()" style="background:linear-gradient(135deg,#7c2d00,#c2410c);border:1px solid rgba(249,115,22,0.4);color:#fed7aa;">🔥 บิ๊กแมช</button>
+        <button onclick="openCenterBannerEditor()" style="background:linear-gradient(135deg,#2d1060,#4a1090);border:1px solid rgba(167,139,250,0.45);color:#c4b5fd;">📸 แบนเนอร์ปั่น</button>
         <button onclick="openAdBannerEditor()" style="background:linear-gradient(135deg,#1e3a5f,#0f2640);border:1px solid rgba(242,194,78,0.35);color:#F2C24E;">📢 Ad Banner</button>
         <button onclick="openEditTeamsModal()" style="background:linear-gradient(135deg,#F2C24E,#c49520);color:#020710;border:none;">✏️ จัดการผู้สมัคร</button>
         <button onclick="upgradeFlagcdnToCrests()" style="background:linear-gradient(135deg,#134e4a,#0f766e);border:1px solid rgba(20,184,166,0.4);color:#99f6e4;" title="รีเซ็ตทุกทีมให้แสดงธงชาติ">🏳️ รีเซ็ตธง</button>
@@ -9723,6 +9795,77 @@ function closeAdPopup() {
     if (modal) modal.classList.remove('open');
 }
 
+// ─── Center Ad Banner ─────────────────────────────────────────────────────────
+function renderCenterBanner() {
+    const el = document.getElementById('center-ad-banner');
+    if (!el) return;
+    const cb = state.centerBanner || {};
+    if (!cb.enabled || !cb.imgUrl) { el.style.display = 'none'; return; }
+    el.style.display = 'block';
+    const cap = cb.caption ? `<div class="center-ad-caption">${_htmlEsc(cb.caption)}</div>` : '';
+    el.innerHTML = `
+        <span class="center-ad-label">📸 ปั่นๆ เพื่อน</span>
+        <button class="center-ad-close" onclick="dismissCenterAd()" title="ปิด">&#xd7;</button>
+        <img src="${_htmlEsc(cb.imgUrl)}" alt="center-ad"
+             onclick="openCenterAdLightbox()"
+             onerror="this.style.opacity='0.15'">
+        ${cap}`;
+}
+
+function dismissCenterAd() {
+    const el = document.getElementById('center-ad-banner');
+    if (el) { el.style.animation = 'none'; el.style.opacity = '0'; el.style.transform = 'scale(0.95)'; el.style.transition = 'all 0.3s'; setTimeout(() => el.style.display = 'none', 280); }
+}
+
+function openCenterAdLightbox() {
+    const cb = state.centerBanner || {};
+    if (!cb.imgUrl) return;
+    const lb = document.getElementById('center-ad-lightbox');
+    if (!lb) return;
+    lb.querySelector('img').src = cb.imgUrl;
+    lb.classList.add('open');
+}
+
+function closeCenterAdLightbox() {
+    const lb = document.getElementById('center-ad-lightbox');
+    if (lb) lb.classList.remove('open');
+}
+
+function openCenterBannerEditor() {
+    if (state.isViewOnly) return;
+    const cb = state.centerBanner || {};
+    document.getElementById('cb-img-inp').value = cb.imgUrl || '';
+    document.getElementById('cb-caption-inp').value = cb.caption || '';
+    document.getElementById('cb-enabled-chk').checked = cb.enabled !== false;
+    _previewCenterBannerImg();
+    document.getElementById('center-banner-modal').classList.add('open');
+}
+
+function closeCenterBannerEditor() {
+    document.getElementById('center-banner-modal').classList.remove('open');
+}
+
+function _previewCenterBannerImg() {
+    const url = (document.getElementById('cb-img-inp')?.value || '').trim();
+    const prev = document.getElementById('cb-img-preview');
+    if (!prev) return;
+    prev.innerHTML = url
+        ? `<img src="${url}" style="max-width:100%;max-height:200px;border-radius:8px;object-fit:contain;" onerror="this.outerHTML='<span style=\\'color:#f87171;font-size:12px;\\'>โหลดรูปไม่สำเร็จ</span>'">`
+        : `<span style="color:#475569;font-size:13px;">ยังไม่มีรูป</span>`;
+}
+
+function saveCenterBanner() {
+    if (state.isViewOnly) return;
+    state.centerBanner = {
+        enabled: document.getElementById('cb-enabled-chk')?.checked ?? true,
+        imgUrl:  (document.getElementById('cb-img-inp')?.value || '').trim(),
+        caption: (document.getElementById('cb-caption-inp')?.value || '').trim()
+    };
+    closeCenterBannerEditor();
+    renderCenterBanner();
+    saveDataToCloud();
+}
+
 function openTrophyEditor() {
     if (state.isViewOnly) return;
     const modal = document.getElementById('trophy-editor-modal');
@@ -9997,6 +10140,7 @@ function saveAdBanner() {
     renderAdBanner();
     closeAdBannerEditor();
 }
+
 
 // ══════════════════════════════════════════════════════════════════════════════
 
@@ -10328,7 +10472,7 @@ function _loadBinData(idToLoad) {
         state.pendingResults = Array.isArray(r.pendingResults) ? r.pendingResults : [];
         if (r.announcement !== undefined) state.announcement = r.announcement || "";
         if (Array.isArray(r.customPlaylist)) { state.customPlaylist = r.customPlaylist; _applyCustomPlaylist(); }
-        renderAdBanner();
+        renderAdBanner(); renderCenterBanner();
         // บันทึก version เพื่อใช้ตรวจสอบการอัปเดต
         if (resData.metadata && resData.metadata.version) {
             _lastBinVersion = resData.metadata.version;
@@ -10684,6 +10828,64 @@ async function resetBracketMatchScore(matchId) {
 <!-- Ad Banner (dynamic — rendered by renderAdBanner()) -->
 <div id="friend-ad-banner" style="display:none;"></div>
 
+<!-- Center Ad Lightbox -->
+<div id="center-ad-lightbox" onclick="if(event.target===this||event.target.classList.contains('lb-close'))closeCenterAdLightbox()">
+    <span class="lb-close" onclick="closeCenterAdLightbox()">&#xd7;</span>
+    <img src="" alt="full">
+</div>
+
+<!-- Center Ad Banner Editor Modal -->
+<div id="center-banner-modal" onclick="if(event.target===this)closeCenterBannerEditor()">
+    <div style="background:linear-gradient(145deg,rgba(6,12,40,0.98),rgba(2,6,20,0.98));border:1px solid rgba(167,139,250,0.35);border-radius:18px;padding:26px 24px;width:min(480px,94vw);max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 24px 70px rgba(0,0,0,0.85);">
+        <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#a78bfa,transparent);border-radius:18px 18px 0 0;"></div>
+        <div style="font-size:18px;font-weight:900;color:#c4b5fd;margin-bottom:4px;letter-spacing:0.5px;">📸 แบนเนอร์ปั่นๆ เพื่อน</div>
+        <div style="font-size:12px;color:#64748b;margin-bottom:20px;">ใส่รูปเพื่อนแล้วแปะกลางหน้าเว็บ — ทุกคนเห็นเลย 😂</div>
+
+        <!-- Enable toggle -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;">
+            <span style="font-size:13px;font-weight:700;color:#e2e8f0;">เปิดใช้แบนเนอร์</span>
+            <label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer;">
+                <input type="checkbox" id="cb-enabled-chk" style="opacity:0;width:0;height:0;position:absolute;">
+                <span onclick="this.previousElementSibling.click()" style="position:absolute;inset:0;background:#1e293b;border-radius:99px;transition:0.3s;border:1px solid rgba(167,139,250,0.3);" id="cb-toggle-track"></span>
+                <span onclick="this.previousElementSibling.previousElementSibling.click()" style="position:absolute;top:3px;left:3px;width:18px;height:18px;background:#64748b;border-radius:50%;transition:0.3s;" id="cb-toggle-thumb"></span>
+            </label>
+        </div>
+        <script>
+        (function(){
+            var chk = document.getElementById('cb-enabled-chk');
+            var track = document.getElementById('cb-toggle-track');
+            var thumb = document.getElementById('cb-toggle-thumb');
+            if(chk && track && thumb) chk.addEventListener('change', function(){
+                track.style.background = this.checked ? 'rgba(139,92,246,0.6)' : '#1e293b';
+                thumb.style.background = this.checked ? '#a78bfa' : '#64748b';
+                thumb.style.transform = this.checked ? 'translateX(20px)' : 'none';
+            });
+        })();
+        </script>
+
+        <!-- Image URL -->
+        <label style="font-size:11px;color:#94a3b8;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:5px;">URL รูปภาพ</label>
+        <input id="cb-img-inp" type="url" placeholder="https://i.imgur.com/..." oninput="_previewCenterBannerImg()"
+            style="width:100%;box-sizing:border-box;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:9px 12px;border-radius:8px;font-family:'Prompt',sans-serif;font-size:13px;margin-bottom:12px;outline:none;">
+
+        <!-- Preview -->
+        <div id="cb-img-preview" style="min-height:60px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);border-radius:10px;border:1px dashed rgba(255,255,255,0.1);padding:12px;margin-bottom:14px;">
+            <span style="color:#475569;font-size:13px;">ยังไม่มีรูป</span>
+        </div>
+
+        <!-- Caption -->
+        <label style="font-size:11px;color:#94a3b8;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:5px;">คำบรรยายใต้รูป <span style="opacity:0.5;">(ไม่บังคับ)</span></label>
+        <input id="cb-caption-inp" type="text" placeholder="ขอเชิญพบกับ... 😂"
+            style="width:100%;box-sizing:border-box;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:9px 12px;border-radius:8px;font-family:'Prompt',sans-serif;font-size:13px;margin-bottom:20px;outline:none;">
+
+        <!-- Buttons -->
+        <div style="display:flex;gap:10px;">
+            <button onclick="saveCenterBanner()" style="flex:1;padding:11px;border-radius:10px;border:none;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;font-family:'Prompt',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">💾 บันทึก</button>
+            <button onclick="closeCenterBannerEditor()" style="padding:11px 18px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);color:#94a3b8;font-family:'Prompt',sans-serif;font-size:14px;cursor:pointer;">ยกเลิก</button>
+        </div>
+    </div>
+</div>
+
 <!-- Trophy Editor Modal -->
 <div id="trophy-editor-modal" onclick="if(event.target===this)closeTrophyEditor()" style="display:none;position:fixed;inset:0;z-index:4600;background:rgba(0,0,0,0.88);backdrop-filter:blur(12px);align-items:center;justify-content:center;">
     <div style="background:linear-gradient(145deg,rgba(6,16,44,0.97),rgba(2,7,16,0.97));border:1px solid rgba(255,215,0,0.35);border-radius:20px;padding:30px 28px;width:100%;max-width:440px;box-shadow:0 0 60px rgba(255,215,0,0.12),0 24px 64px rgba(0,0,0,0.7);position:relative;overflow:hidden;">
@@ -10821,7 +11023,7 @@ async function resetBracketMatchScore(matchId) {
 
 <script>
     // initialise ad banner once DOM is ready
-    document.addEventListener('DOMContentLoaded', function() { renderAdBanner(); });
+    document.addEventListener('DOMContentLoaded', function() { renderAdBanner(); renderCenterBanner(); });
 
 // ─── อัตราการต่อรอง (Odds System) ─────────────────────────────────────────
 
@@ -11885,6 +12087,7 @@ function confirmImportBackup() {
     refreshUIState();
     renderAnnouncement();
     renderAdBanner();
+    renderCenterBanner();
     renderChangelog();
     applyColors();
 }
