@@ -1482,6 +1482,10 @@
     70% { transform: scale(1.05); }
     100% { transform: scale(1); opacity: 1; }
 }
+@keyframes _adPopIn {
+    0%   { transform: scale(0.82) translateY(24px); opacity: 0; }
+    100% { transform: scale(1)    translateY(0);    opacity: 1; }
+}
 
 #close-ad {
     position: absolute;
@@ -9769,38 +9773,54 @@ function renderAdBanner() {
     const isCenter = pos === 'center';
 
     if (isCenter) {
-        // ── กลางจอ: popup overlay ──
-        banner.className = '';
-        banner.style.cssText = 'display:flex;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;background:rgba(0,0,0,0.78);backdrop-filter:blur(8px);padding:20px;box-sizing:border-box;';
-        banner.onclick = function(e) { if (e.target === banner) banner.classList.add('ad-hidden'); };
+        // ── กลางจอ: popup โฆษณาแบบเว็บทั่วไป ──
+        // รีเซ็ท class และ style ฐานทั้งหมดออก แล้วใช้ inline style 100% (ป้องกัน base CSS เข้ามายุ่ง)
+        banner.removeAttribute('class');
+        banner.style.cssText = [
+            'display:flex','position:fixed','top:0','left:0','right:0','bottom:0',
+            'width:100%','height:100%','max-width:none','border:none','border-radius:0',
+            'background:rgba(0,0,0,0.82)','backdrop-filter:blur(6px)',
+            'z-index:10000','align-items:center','justify-content:center',
+            'overflow:visible','box-shadow:none','animation:none','transition:none',
+            'padding:16px','box-sizing:border-box'
+        ].join(';');
+        banner.onclick = function(e) { if (e.target === banner) banner.style.display = 'none'; };
 
         const linkUrl = (ad.linkUrl || '').trim();
-        const clickAction = linkUrl ? `window.open(${JSON.stringify(linkUrl)},'_blank')` : `openAdPopup()`;
-        const imgHtml = ad.imgUrl
-            ? `<div class="ad-image-container" style="cursor:pointer;border-radius:0;" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}"><span class="ad-label">${_htmlEsc(ad.labelText||'โฆษณา')}</span><img src="${_htmlEsc(ad.imgUrl)}" alt="" onerror="this.style.opacity='0.15'"></div>`
-            : '';
-        const closeOverlay = `onclick="document.getElementById('friend-ad-banner').classList.add('ad-hidden')"`;
-        banner.innerHTML = `<div style="position:relative;width:min(420px,92vw);background:linear-gradient(145deg,#020e26,#021c44);border:2px solid #d4af37;border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.75);animation:bounceInBanner 0.5s cubic-bezier(0.16,1,0.3,1) both;">
-            <button id="close-ad" ${closeOverlay} title="ปิด">&#xd7;</button>
-            ${imgHtml}
-            <div class="ad-content">
-                <div class="ad-title">${_htmlEsc(ad.title||'')}</div>
-                <div class="ad-desc">${_htmlEsc(ad.desc||'')}</div>
-                ${ad.btnText ? `<button class="ad-button" onclick="${_htmlEsc(clickAction).replace(/"/g,"'")}">${_htmlEsc(ad.btnText)}</button>` : ''}
-            </div>
-        </div>`;
+        const _closeFn = "document.getElementById('friend-ad-banner').style.display='none'";
+        const _openLink = linkUrl ? `window.open(${JSON.stringify(linkUrl)},'_blank')` : '';
 
         if (ad.mode === 'gif') {
             const _gifLabelHtml = (ad.gifShowLabel && ad.labelText)
-                ? `<div style="padding:8px;text-align:center;"><span class="ad-label" style="position:static;display:inline-block;">${_htmlEsc(ad.labelText)}</span></div>` : '';
-            banner.innerHTML = `<div style="position:relative;width:min(420px,92vw);background:#020e26;border:2px solid #d4af37;border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,0.75);">
-                <button id="close-ad" ${closeOverlay} title="ปิด">&#xd7;</button>
-                ${_gifLabelHtml}<div id="_ad_gif_wrap" class="ad-gif-wrap"></div>
+                ? `<div style="text-align:center;padding:8px 0 0;"><span style="background:#d4af37;color:#001f3f;padding:2px 10px;font-size:11px;font-weight:700;border-radius:4px;">${_htmlEsc(ad.labelText)}</span></div>` : '';
+            banner.innerHTML = `
+            <div style="position:relative;width:min(360px,90vw);border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,0.85);background:#020e26;animation:_adPopIn .35s cubic-bezier(.16,1,.3,1) both;">
+                <button onclick="${_closeFn}" style="position:absolute;top:8px;right:8px;z-index:5;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.7);border:2px solid rgba(255,255,255,0.5);color:#fff;font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0;transition:background .2s;" onmouseover="this.style.background='rgba(220,38,38,0.85)'" onmouseout="this.style.background='rgba(0,0,0,0.7)'">&#xd7;</button>
+                ${_gifLabelHtml}
+                <div id="_ad_gif_wrap" class="ad-gif-wrap" style="min-height:160px;"></div>
             </div>`;
-            _injectGifInto(banner.querySelector('#_ad_gif_wrap'), ad.gifUrl||'', 300);
+            _injectGifInto(banner.querySelector('#_ad_gif_wrap'), ad.gifUrl||'', 340);
             var gifPl = Array.isArray(ad.gifPlaylist)&&ad.gifPlaylist.length ? ad.gifPlaylist
                 : (ad.gifMusicUrl ? [{id:_ytExtractId(ad.gifMusicUrl)||'',name:'GIF Music'}].filter(s=>s.id) : []);
             gifPl.length ? _playAdBannerGifPlaylist(gifPl) : _stopAdBannerMusic();
+        } else {
+            // normal mode — รูปกลางจอ + ปุ่มปิด
+            const imgStyle = _openLink ? `cursor:pointer;` : `cursor:default;`;
+            const imgClick = _openLink ? `onclick="${_htmlEsc(_openLink).replace(/"/g,"'")}"` : '';
+            const imgBlock = ad.imgUrl
+                ? `<img src="${_htmlEsc(ad.imgUrl)}" alt="" ${imgClick} style="${imgStyle}width:100%;height:auto;display:block;max-height:80vh;object-fit:contain;" onerror="this.style.opacity='.15'">`
+                : `<div style="height:120px;display:flex;align-items:center;justify-content:center;color:#475569;font-size:13px;">ไม่มีรูป</div>`;
+            const textBlock = (ad.title || ad.desc || ad.btnText) ? `
+                <div style="padding:14px 16px 16px;text-align:center;background:#020e26;">
+                    ${ad.title ? `<div style="font-weight:700;font-size:16px;color:#d4af37;margin-bottom:4px;">${_htmlEsc(ad.title)}</div>` : ''}
+                    ${ad.desc  ? `<div style="font-size:13px;color:#cbd5e1;margin-bottom:10px;line-height:1.4;">${_htmlEsc(ad.desc)}</div>` : ''}
+                    ${ad.btnText && _openLink ? `<button onclick="${_htmlEsc(_openLink).replace(/"/g,"'")}" style="background:linear-gradient(to bottom,#f9d976,#d4af37);color:#001f3f;border:none;padding:9px 22px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;font-family:'Prompt',sans-serif;">${_htmlEsc(ad.btnText)}</button>` : ''}
+                </div>` : '';
+            banner.innerHTML = `
+            <div style="position:relative;width:min(400px,90vw);border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,0.85);animation:_adPopIn .35s cubic-bezier(.16,1,.3,1) both;">
+                <button onclick="${_closeFn}" style="position:absolute;top:8px;right:8px;z-index:5;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.7);border:2px solid rgba(255,255,255,0.5);color:#fff;font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0;transition:background .2s;" onmouseover="this.style.background='rgba(220,38,38,0.85)'" onmouseout="this.style.background='rgba(0,0,0,0.7)'">&#xd7;</button>
+                ${imgBlock}${textBlock}
+            </div>`;
         }
     } else {
         // ── มุม: corner banner ──
