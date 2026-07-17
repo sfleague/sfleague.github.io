@@ -9243,14 +9243,8 @@ function renderStandings() {
             <div class="champ-pulse-ring champ-pulse-ring-2"></div>
             <div class="champ-pulse-ring champ-pulse-ring-3"></div>
             <div class="champ-season-banner">⚽ SEASON ${state.season} ⚽</div>
-            <div class="cup-champion-trophy-wrap" style="position:relative;">
-                ${_fwHtml}
-                <div class="cup-champion-rings3"></div>
-                <div class="cup-champion-rings"></div>
-                <div class="cup-champion-rings2"></div>
-                ${trophyHtml}
-            </div>
             <div class="cup-champion-label-big">🏆 CHAMPION 🏆</div>
+            ${logoHtml}
             <div class="cup-champion-name">${champ ? champ.team : currentCrownedChampId}</div>
             <div class="cup-champion-divider"></div>
             ${_statsHtml}
