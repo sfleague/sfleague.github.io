@@ -9162,7 +9162,7 @@ function renderStandings() {
     const _prevSeason = (state.season || 1) - 1;
     sorted.forEach((team, index) => {
         const isDefending = _computedDefId && team.id === _computedDefId && !team.isChampion;
-        const isRankOne   = (index === 0) && !team.isChampion;
+        const isRankOne   = (index === 0);
         const isRankTwo   = (index === 1) && !team.isChampion;
         const isRankThree = (index === 2) && !team.isChampion;
         let tr = document.createElement("tr");
@@ -9193,7 +9193,7 @@ function renderStandings() {
                         <div class="no1-team-label">
                             <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                                 <span class="no1-shimmer-name">${team.team}</span>
-                                <span class="no1-days-badge">${daysLabel}</span>
+                                ${team.isChampion ? '<span class="champion-badge">🏆 CHAMPION</span>' : `<span class="no1-days-badge">${daysLabel}</span>`}
                                 ${isDefending ? defendingBadge : ''}
                             </div>
                             <div style="display:flex;align-items:center;gap:6px;margin-top:2px;">
