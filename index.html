@@ -8820,7 +8820,7 @@ function calculateStandings() {
     if (allMatchesDone) {
         currentCrownedChampId = actualSorted[0].id;
         actualSorted[0].isChampion = true;
-    } else if (actualSorted.length > 1 && actualSorted[0].p > 0 && actualSorted[0].pts > (actualSorted[1].pts + (actualSorted[1].rem * 3))) {
+    } else if (actualSorted.length > 1 && actualSorted[0].p > 0 && actualSorted.slice(1).every(t => actualSorted[0].pts > (t.pts + t.rem * 3))) {
         currentCrownedChampId = actualSorted[0].id;
         actualSorted[0].isChampion = true;
     } else {
