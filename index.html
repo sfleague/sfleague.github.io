@@ -8842,9 +8842,14 @@ function calculateStandings() {
     // เช็ค allMatchesDone จาก match จริงๆ โดยตรง (ไม่พึ่ง rem ที่อาจคำนวณผิด)
     let leagueMatches = (state.matches || []).filter(m => m.homeId !== 'BYE' && m.awayId !== 'BYE');
     let allMatchesDone = leagueMatches.length > 0 && actualSorted[0] && actualSorted[0].p > 0 && leagueMatches.every(m => m.status === 'finished');
-    // เช็ค mathematical clinch — ที่ 1 มีคะแนนห่างจนทีมอื่น max pts ก็ไม่ทัน
+    // เช็ค mathematical clinch — คำนวณ rem จาก state.matches โดยตรง และใช้ >= (เสมอแต้มก็ไม่แซง)
     let leaderClinched = actualSorted.length > 1 && actualSorted[0] && actualSorted[0].p > 0 &&
-        actualSorted.slice(1).every(t => actualSorted[0].pts > (t.pts + t.rem * 3));
+        actualSorted.slice(1).every(team => {
+            let remMatches = leagueMatches.filter(m =>
+                (m.homeId === team.id || m.awayId === team.id) && m.status !== 'finished'
+            ).length;
+            return actualSorted[0].pts >= (team.pts + remMatches * 3);
+        });
     if (allMatchesDone || leaderClinched) {
         currentCrownedChampId = actualSorted[0].id;
         actualSorted[0].isChampion = true;
