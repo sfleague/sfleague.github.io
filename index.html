@@ -9069,10 +9069,6 @@ function renderStandings() {
     const standingsH2 = document.querySelector('h2.title-standings');
     if (standingsH2) standingsH2.textContent = '📊 TOURNAMENT STANDINGS';
 
-    // Clean up cup banner if switching back
-    let bannerArea = document.getElementById("cup-champion-banner-area");
-    if (bannerArea) bannerArea.innerHTML = "";
-
     // Restore league thead
     const thead = document.getElementById("standings-table").querySelector("thead");
     if (thead) {
@@ -9096,6 +9092,47 @@ function renderStandings() {
     let sorted = calculateStandings(); renderHallOfFame();
     var tbody = document.getElementById("standings-table").querySelector("tbody"); tbody.innerHTML = "";
     document.getElementById("champion-action-bar").style.display = (!state.isViewOnly && currentCrownedChampId) ? "block" : "none";
+
+    // ── League champion banner — แสดงอัตโนมัติเมื่อคะแนนขาดแล้ว ──────────────
+    let bannerArea = document.getElementById("cup-champion-banner-area");
+    if (!bannerArea) {
+        bannerArea = document.createElement("div");
+        bannerArea.id = "cup-champion-banner-area";
+        const champBar = document.getElementById("champion-action-bar");
+        champBar.parentNode.insertBefore(bannerArea, champBar);
+    }
+    if (currentCrownedChampId) {
+        let champ = state.teams.find(t => t.id === currentCrownedChampId);
+        let logoHtml = champ && champ.logo ? `<div class="cup-champion-logo-wrap"><img src="${champ.logo}" onerror="this.onerror=null;this.style.display='none';"></div>` : '';
+        let saveBtn = !state.isViewOnly ? `<div style="margin-top:20px;"><button onclick="saveCurrentChampToHistory()" style="background:linear-gradient(135deg,#ffd700,#e07832);color:#000;font-weight:900;padding:12px 32px;border-radius:10px;cursor:pointer;font-size:15px;width:auto;font-family:'Orbitron',sans-serif;letter-spacing:1px;border:none;box-shadow:0 4px 20px rgba(255,215,0,0.4);">🏅 บันทึกแชมป์ลง Hall of Fame</button></div>` : '';
+        let trophyHtml = state.trophyImg
+            ? `<img src="${state.trophyImg}" style="width:80px;height:80px;object-fit:contain;display:block;filter:drop-shadow(0 0 20px rgba(255,215,0,0.7));animation:champFloat 2.8s ease-in-out infinite;" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span class="cup-champion-trophy-emoji" style="display:none;">🏆</span>`
+            : `<span class="cup-champion-trophy-emoji">🏆</span>`;
+        bannerArea.innerHTML = `<div class="cup-champion-banner">
+            <div class="cup-champion-stars">
+                <span class="cup-champion-star" style="top:8%;left:6%;animation-delay:0s;">✦</span>
+                <span class="cup-champion-star" style="top:12%;right:7%;animation-delay:0.4s;">✧</span>
+                <span class="cup-champion-star" style="top:55%;left:4%;animation-delay:0.8s;">✦</span>
+                <span class="cup-champion-star" style="top:70%;right:5%;animation-delay:1.2s;">✧</span>
+                <span class="cup-champion-star" style="top:30%;left:12%;animation-delay:0.6s;font-size:10px;">★</span>
+                <span class="cup-champion-star" style="top:40%;right:11%;animation-delay:1s;font-size:10px;">★</span>
+            </div>
+            <div class="cup-champion-season">FC 26 SF LEAGUE — SEASON ${state.season}</div>
+            <div class="cup-champion-trophy-wrap">
+                <div class="cup-champion-rings"></div>
+                <div class="cup-champion-rings2"></div>
+                ${trophyHtml}
+            </div>
+            <div class="cup-champion-label-big">⚽ Champion ⚽</div>
+            ${logoHtml}
+            <div class="cup-champion-name">${champ ? champ.team : currentCrownedChampId}</div>
+            <div class="cup-champion-divider"></div>
+            <div class="cup-champion-player">👤 Manager: ${champ ? champ.player : ''}</div>
+            ${saveBtn}
+        </div>`;
+    } else {
+        bannerArea.innerHTML = "";
+    }
 
     // ── Track #1 history ──────────────────────────────────────────
     if (sorted.length > 0) {
