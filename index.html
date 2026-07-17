@@ -5436,11 +5436,23 @@ function _migrateTeamCrestsFromFlags() {
     });
 }
 
+// ── Migration: แมตช์ที่มีคะแนนแต่ไม่มี status='finished' ให้แก้ให้ถูกต้อง ──
+function _migrateMatchStatus() {
+    (state.matches || []).forEach(m => {
+        if (m.homeScore !== null && m.homeScore !== undefined &&
+            m.awayScore !== null && m.awayScore !== undefined &&
+            m.status !== 'finished') {
+            m.status = 'finished';
+        }
+    });
+}
+
 function _applyCloudData(r) {
     if (!r) return;
     state.teams = r.teams || state.teams;
     _migrateTeamCrestsFromFlags();
     state.matches = r.matches || state.matches;
+    _migrateMatchStatus();
     state.hallOfFame = r.hallOfFame || state.hallOfFame;
     state.h2h = r.h2h || state.h2h;
     state.defendingChampId = r.defendingChampId !== undefined ? r.defendingChampId : state.defendingChampId;
@@ -7755,6 +7767,7 @@ function confirmMatchScore(matchId) {
     match.homeScore = homeScore;
     match.awayScore = awayScore;
     match.scoredAt = Date.now(); // บันทึกเวลากรอกผลจริง เพื่อ sort ฟอร์มตามลำดับที่เล่นจริง
+    match.status = 'finished';
     _autoRecordH2H(match); // ✅ บันทึก H2H อัตโนมัติ
     let fmt = state.tournamentFormat || 'league';
     if (fmt !== 'league') renderAdminDock();
@@ -8519,6 +8532,7 @@ function confirmScoreFromModal() {
     match.homeScore = homeScore;
     match.awayScore = awayScore;
     match.scoredAt = Date.now(); // บันทึกเวลากรอกผลจริง เพื่อ sort ฟอร์มตามลำดับที่เล่นจริง
+    match.status = 'finished';
     _autoRecordH2H(match); // ✅ บันทึก H2H อัตโนมัติ
     closeScoreModal();
     let fmt = state.tournamentFormat || 'league';
@@ -10811,6 +10825,7 @@ function _loadBinData(idToLoad) {
         state.teams = r.teams || [];
         _migrateTeamCrestsFromFlags();
         state.matches = r.matches || [];
+        _migrateMatchStatus();
         state.hallOfFame = r.hallOfFame || {};
         state.h2h = r.h2h || {};
         state.defendingChampId = r.defendingChampId || null;
