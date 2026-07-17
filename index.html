@@ -8812,8 +8812,17 @@ function _performCloudSave() {
 function calculateStandings() {
     let standings = {};
     let approvedTeams = state.teams.filter(t => t.status === 'approved');
-    let totalMatchesPerTeam = (approvedTeams.length - 1) * 2;
-    approvedTeams.forEach(t => standings[t.id] = { id: t.id, player: t.player, team: t.team, logo: t.logo, isFlag: t.isFlag, p:0, w:0, d:0, l:0, gf:0, ga:0, gd:0, pts:0, rem: totalMatchesPerTeam });
+    // นับจำนวน match จริงๆ ที่จัดตารางไว้ (ไม่ใช่คำนวณจากจำนวนทีมปัจจุบัน)
+    // เพื่อป้องกันกรณีที่ทีมถูกเพิ่ม/ลบหลัง START ทำให้ rem ไม่ตรงกับ match จริง
+    let scheduledPerTeam = {};
+    approvedTeams.forEach(t => { scheduledPerTeam[t.id] = 0; });
+    state.matches.forEach(m => {
+        if (m.homeId !== 'BYE' && m.awayId !== 'BYE') {
+            if (scheduledPerTeam[m.homeId] !== undefined) scheduledPerTeam[m.homeId]++;
+            if (scheduledPerTeam[m.awayId] !== undefined) scheduledPerTeam[m.awayId]++;
+        }
+    });
+    approvedTeams.forEach(t => standings[t.id] = { id: t.id, player: t.player, team: t.team, logo: t.logo, isFlag: t.isFlag, p:0, w:0, d:0, l:0, gf:0, ga:0, gd:0, pts:0, rem: scheduledPerTeam[t.id] || 0 });
 
     state.matches.forEach(m => {
         if (m.homeScore !== null && m.awayScore !== null && m.status === 'finished') {
