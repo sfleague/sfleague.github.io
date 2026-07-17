@@ -8839,11 +8839,13 @@ function calculateStandings() {
     });
 
     let actualSorted = Object.values(standings).sort((a,b) => b.pts !== a.pts ? b.pts - a.pts : b.gd !== a.gd ? b.gd - a.gd : b.gf - a.gf);
-    let allMatchesDone = actualSorted.length > 0 && actualSorted[0].p > 0 && actualSorted.every(t => t.rem === 0);
-    if (allMatchesDone) {
-        currentCrownedChampId = actualSorted[0].id;
-        actualSorted[0].isChampion = true;
-    } else if (actualSorted.length > 1 && actualSorted[0].p > 0 && actualSorted.slice(1).every(t => actualSorted[0].pts > (t.pts + t.rem * 3))) {
+    // เช็ค allMatchesDone จาก match จริงๆ โดยตรง (ไม่พึ่ง rem ที่อาจคำนวณผิด)
+    let leagueMatches = (state.matches || []).filter(m => m.homeId !== 'BYE' && m.awayId !== 'BYE');
+    let allMatchesDone = leagueMatches.length > 0 && actualSorted[0] && actualSorted[0].p > 0 && leagueMatches.every(m => m.status === 'finished');
+    // เช็ค mathematical clinch — ที่ 1 มีคะแนนห่างจนทีมอื่น max pts ก็ไม่ทัน
+    let leaderClinched = actualSorted.length > 1 && actualSorted[0] && actualSorted[0].p > 0 &&
+        actualSorted.slice(1).every(t => actualSorted[0].pts > (t.pts + t.rem * 3));
+    if (allMatchesDone || leaderClinched) {
         currentCrownedChampId = actualSorted[0].id;
         actualSorted[0].isChampion = true;
     } else {
