@@ -5709,6 +5709,35 @@ function _cmPromptClose() {
 // ─────────────────────────────────────────────────────────────────────────────
 
 
+function _updateRowLogoFromTeam(teamInput) {
+    const row = teamInput.closest('.edit-team-row');
+    if (!row) return;
+    const cell = row.querySelector('.logo-url-cell');
+    if (!cell) return;
+    const img    = cell.querySelector('img.logo-preview-mini');
+    const urlInp = cell.querySelector('.edit-input-logo');
+    const name   = teamInput.value.trim();
+    if (!name) return;
+    const media = generateLogoAndFlag(name);
+    if (!media.logoUrl) return;
+    if (img) {
+        img.style.opacity = '1';
+        img.className = 'logo-preview-mini' + (media.isFlag ? ' is-flag' : '');
+        img.onerror = function() { this.style.opacity = '0.25'; this.onerror = null; };
+        img.src = media.logoUrl;
+    }
+    if (urlInp) urlInp.value = media.logoUrl;
+}
+
+function _adminToast(msg, color) {
+    color = color || '#22c55e';
+    var t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:rgba(6,16,44,0.97);border:1px solid ' + color + ';color:#fff;padding:11px 24px;border-radius:10px;font-size:13px;font-family:"Prompt",sans-serif;font-weight:600;z-index:99999;box-shadow:0 4px 24px rgba(0,0,0,0.5);pointer-events:none;opacity:1;transition:opacity 0.4s;white-space:nowrap;';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.style.opacity = '0'; setTimeout(function() { t.remove(); }, 420); }, 3000);
+}
+
 function initTeamAutocomplete() {
     setupAutocompleteLogic("reg-team", "autocomplete-list");
     setupAutocompleteLogic("admin-add-team", "admin-autocomplete-list");
@@ -5781,6 +5810,7 @@ function setupAutocompleteOnElement(input, listContainer) {
                 input.value = item.name;
                 listContainer.innerHTML = "";
                 listContainer.style.display = "none";
+                _updateRowLogoFromTeam(input);
             });
             listContainer.appendChild(div);
         });
@@ -7405,8 +7435,10 @@ function renderAdminDock() {
     `;
 }
 
-function upgradeFlagcdnToCrests() {
+async function upgradeFlagcdnToCrests() {
     if (state.isViewOnly) return;
+    const ok = await showConfirm('🏳️ รีเซ็ตธงชาติ?\nระบบจะเปลี่ยนโลโก้ทุกทีมที่ตรงกับฐานข้อมูลธงชาติให้ใช้รูปธง\n(ทีมที่ไม่พบจะไม่ถูกเปลี่ยน)', 'ยืนยัน', 'ยกเลิก');
+    if (!ok) return;
     let upgraded = 0;
     let skipped = [];
     state.teams.forEach(t => {
@@ -7420,13 +7452,14 @@ function upgradeFlagcdnToCrests() {
         }
     });
     if (upgraded === 0) {
+        _adminToast('ไม่พบทีมที่ตรงกับฐานข้อมูลธงชาติ', '#f59e0b');
         return;
     }
     saveDataToCloud();
     renderLeague();
-    if (skipped.length > 0) {
-        // skipped teams logged silently (notifications removed)
-    }
+    _renderEditTeamsModalUI();
+    const skipMsg = skipped.length > 0 ? ` (ไม่พบ ${skipped.length} ทีม)` : '';
+    _adminToast(`✅ รีเซ็ตธงสำเร็จ ${upgraded} ทีม${skipMsg}`, '#22c55e');
 }
 
 function refreshUIState() {
@@ -7639,6 +7672,7 @@ function _renderEditTeamsModalUI() {
             const teamInput = div.querySelector('.edit-input-team');
             const acList    = div.querySelector('.edit-team-ac-list');
             if (teamInput && acList) setupAutocompleteOnElement(teamInput, acList);
+            if (teamInput) teamInput.addEventListener('change', function() { _updateRowLogoFromTeam(this); });
         });
     }
 }
