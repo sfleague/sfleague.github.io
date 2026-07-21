@@ -2372,6 +2372,63 @@
         }
 
         /* ══════════════════════════════════════════
+           CUSTOM PREVIEW BANNER (admin-defined text)
+        ══════════════════════════════════════════ */
+        @keyframes cpShimmer {
+            0%   { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        @keyframes cpPulse {
+            0%,100% { box-shadow: 0 0 14px rgba(139,92,246,0.5), 0 0 32px rgba(99,102,241,0.2), inset 0 0 18px rgba(139,92,246,0.07); }
+            50%      { box-shadow: 0 0 28px rgba(167,139,250,0.85), 0 0 52px rgba(99,102,241,0.38), inset 0 0 26px rgba(139,92,246,0.14); }
+        }
+        @keyframes cpBorderColor {
+            0%   { border-color: #8b5cf6; }
+            33%  { border-color: #06b6d4; }
+            66%  { border-color: #a78bfa; }
+            100% { border-color: #8b5cf6; }
+        }
+        @keyframes cpIconBounce {
+            0%,100% { transform: scale(1) rotate(-8deg); filter: drop-shadow(0 0 4px rgba(167,139,250,0.7)); }
+            50%      { transform: scale(1.22) rotate(8deg); filter: drop-shadow(0 0 12px rgba(167,139,250,1)); }
+        }
+        .custom-preview-wrapper { position: relative; margin: 4px 0 18px; }
+        .custom-preview-banner {
+            background: linear-gradient(90deg, #150830 0%, #3b0e8c 25%, #6d28d9 50%, #3b0e8c 75%, #150830 100%);
+            background-size: 200% 100%;
+            animation: cpShimmer 3.5s linear infinite;
+            border-left: 4px solid #8b5cf6;
+            padding: 9px 18px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            font-family: 'Prompt', sans-serif;
+            font-weight: 800; font-size: 13px; letter-spacing: 1.5px;
+            color: #fff; text-shadow: 0 0 10px rgba(196,167,255,0.95), 0 0 22px rgba(139,92,246,0.6);
+            position: relative;
+        }
+        .cp-icon { font-size: 17px; display: inline-block; animation: cpIconBounce 1.3s ease-in-out infinite; flex-shrink: 0; }
+        .cp-icon:last-of-type { animation-delay: 0.65s; }
+        .cp-text { flex: 1; text-align: center; white-space: pre-wrap; word-break: break-word; line-height: 1.4; }
+        .cp-edit-btn {
+            flex-shrink: 0; background: none; border: none;
+            color: rgba(196,167,255,0.55); font-size: 13px; cursor: pointer;
+            padding: 0 2px; transition: color 0.2s; line-height: 1;
+        }
+        .cp-edit-btn:hover { color: #c4b5fd; }
+        .custom-preview-row {
+            border: 2px solid #8b5cf6 !important;
+            animation: cpPulse 2.6s ease-in-out infinite, cpBorderColor 5s linear infinite;
+            background: linear-gradient(135deg, rgba(109,40,217,0.14) 0%, rgba(8,4,20,0.58) 50%, rgba(99,102,241,0.1) 100%) !important;
+            position: relative; overflow: hidden;
+        }
+        .custom-preview-row::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(120deg, transparent 30%, rgba(139,92,246,0.08) 50%, transparent 70%);
+            background-size: 200% 100%;
+            animation: cpShimmer 3.2s linear infinite;
+            pointer-events: none;
+        }
+
+        /* ══════════════════════════════════════════
            DECISIVE MATCH — ชี้ชะตา (เฉพาะคู่ใหญ่จริงๆ)
         ══════════════════════════════════════════ */
 
@@ -10648,17 +10705,6 @@ function _buildMatchRowDiv(m, fmt) {
         ${bottomRowHTML}
     `;
 
-    // ── Match Preview Note strip ──────────────────────────────────
-    if (m.note && m.note.trim()) {
-        const noteStrip = document.createElement('div');
-        noteStrip.className = 'match-note-strip';
-        const editPart = !state.isViewOnly
-            ? `<button class="match-note-edit-btn" title="แก้ไข preview" onclick="openScoreModal(${m.id})">✏️</button>`
-            : '';
-        noteStrip.innerHTML = `<span class="match-note-icon">📝</span><span class="match-note-text">${_htmlEsc(m.note.trim())}</span>${editPart}`;
-        divMatch.appendChild(noteStrip);
-    }
-
     if (isBigMatch) {
         let wrapper = document.createElement("div");
         wrapper.className = "big-match-wrapper";
@@ -10731,6 +10777,23 @@ function _buildMatchRowDiv(m, fmt) {
         wrapper.appendChild(divMatch);
         return wrapper;
     }
+
+    // ── Custom Preview Banner (admin-typed text) ──────────────────
+    if (m.note && m.note.trim()) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'custom-preview-wrapper';
+        const banner = document.createElement('div');
+        banner.className = 'custom-preview-banner';
+        const editBtn = !state.isViewOnly
+            ? `<button class="cp-edit-btn" title="แก้ไข preview" onclick="openScoreModal(${m.id})">✏️</button>`
+            : '';
+        banner.innerHTML = `<span class="cp-icon">⭐</span><span class="cp-text">${_htmlEsc(m.note.trim())}</span><span class="cp-icon">⭐</span>${editBtn}`;
+        divMatch.classList.add('custom-preview-row');
+        wrapper.appendChild(banner);
+        wrapper.appendChild(divMatch);
+        return wrapper;
+    }
+
     return divMatch;
 }
 
