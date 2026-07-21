@@ -707,6 +707,26 @@
         .evidence-btn:hover { background: var(--wc-gold); color: #000; }
         .evidence-btn.has-img { background: rgba(34, 197, 94, 0.1); border-color: #22c55e; color: #22c55e; }
         .evidence-btn.has-img:hover { background: #22c55e; color: #fff; }
+
+        /* ── Match Preview Note ── */
+        .match-note-strip { display: flex; align-items: flex-start; gap: 8px; padding: 7px 14px 8px; background: rgba(59,130,246,0.07); border-top: 1px solid rgba(59,130,246,0.18); font-size: 12px; color: #93c5fd; line-height: 1.5; }
+        .match-note-icon { flex-shrink: 0; font-size: 13px; margin-top: 1px; }
+        .match-note-text { flex: 1; white-space: pre-wrap; word-break: break-word; }
+        .match-note-edit-btn { flex-shrink: 0; background: none; border: none; color: rgba(148,163,184,0.5); font-size: 12px; cursor: pointer; padding: 0 2px; transition: color 0.2s; }
+        .match-note-edit-btn:hover { color: #93c5fd; }
+
+        /* Note editor inside score modal */
+        .se-note-area { margin-top: 10px; }
+        .se-note-toggle { display: flex; align-items: center; gap: 6px; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25); color: #93c5fd; border-radius: 8px; padding: 7px 14px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Prompt', sans-serif; width: 100%; text-align: left; transition: background 0.2s; }
+        .se-note-toggle:hover { background: rgba(59,130,246,0.18); }
+        .se-note-toggle.has-note { border-color: rgba(59,130,246,0.55); color: #60a5fa; }
+        .se-note-body { display: none; margin-top: 6px; }
+        .se-note-body.open { display: block; }
+        .se-note-inp { width: 100%; min-height: 72px; background: rgba(5,14,28,0.7); border: 1px solid rgba(59,130,246,0.3); border-radius: 8px; color: #cbd5e1; font-size: 12px; padding: 9px 12px; font-family: 'Prompt', sans-serif; resize: vertical; box-sizing: border-box; }
+        .se-note-inp:focus { outline: none; border-color: rgba(96,165,250,0.6); }
+        .se-note-save-btn { margin-top: 6px; width: 100%; padding: 8px; background: rgba(59,130,246,0.22); border: 1px solid rgba(59,130,246,0.4); border-radius: 8px; color: #93c5fd; font-weight: 700; cursor: pointer; font-size: 12px; font-family: 'Prompt', sans-serif; transition: background 0.2s; }
+        .se-note-save-btn:hover { background: rgba(59,130,246,0.38); }
+
         /* legacy hidden ref */
         .sync-badge { display:none !important; }
 
@@ -5865,6 +5885,7 @@ label.apm-menu-item.danger:hover .apm-menu-item-icon,
             <div class="se-match-card" id="se-match-card"></div>
             <div id="se-ah-area"></div>
             <div class="se-evidence-row" id="se-evidence-area"></div>
+            <div id="se-note-area"></div>
             <div id="se-h2h-area"></div>
             <div class="se-btn-grid">
                 <button class="se-btn se-btn-green" id="se-confirm-btn" onclick="confirmScoreFromModal()">✅ บันทึกผล</button>
@@ -9079,6 +9100,24 @@ function openScoreModal(matchId) {
         ${uploaderBadge}
     `;
 
+    // ── Note / Preview editor ──────────────────────────────────────
+    const _seNoteArea = document.getElementById('se-note-area');
+    if (_seNoteArea && m.awayId !== 'BYE' && !state.isViewOnly) {
+        const _hasNote = m.note && m.note.trim();
+        _seNoteArea.innerHTML = `
+            <button class="se-note-toggle${_hasNote ? ' has-note' : ''}" id="se-note-toggle-btn"
+                onclick="document.getElementById('se-note-body').classList.toggle('open');this.classList.toggle('expanded')">
+                📝 ${_hasNote ? 'Preview (' + m.note.trim().slice(0,20) + (_hasNote && m.note.trim().length > 20 ? '…' : '') + ')' : 'เพิ่ม Match Preview'}
+            </button>
+            <div class="se-note-body${_hasNote ? ' open' : ''}" id="se-note-body">
+                <textarea class="se-note-inp" id="se-note-inp" placeholder="เขียน preview, วิเคราะห์, หรือข้อความใดก็ได้สำหรับนัดนี้...">${_htmlEsc(m.note || '')}</textarea>
+                <button class="se-note-save-btn" onclick="saveMatchNote(${matchId})">💾 บันทึก Preview</button>
+            </div>
+        `;
+    } else if (_seNoteArea) {
+        _seNoteArea.innerHTML = '';
+    }
+
     // AH explanation banner
     _renderAHExplain(m, hInfo, aInfo, 'se-ah-area');
 
@@ -10359,9 +10398,11 @@ function renderStandings() {
     const _prevSeason = (state.season || 1) - 1;
     sorted.forEach((team, index) => {
         const isDefending = _computedDefId && team.id === _computedDefId && !team.isChampion;
-        const isRankOne   = (index === 0);
-        const isRankTwo   = (index === 1) && !team.isChampion;
-        const isRankThree = (index === 2) && !team.isChampion;
+        // ยังไม่ได้แข่งขันเลย → ไม่แสดง badge อันดับพิเศษ (ทุกทีมเท่ากัน)
+        const _hasPlayed  = team.p > 0;
+        const isRankOne   = (index === 0) && _hasPlayed;
+        const isRankTwo   = (index === 1) && !team.isChampion && _hasPlayed;
+        const isRankThree = (index === 2) && !team.isChampion && _hasPlayed;
         let tr = document.createElement("tr");
         if (team.isChampion)     tr.className = "champion-row";
         else if (isDefending)    tr.className = "defending-champ-row";
@@ -10607,6 +10648,17 @@ function _buildMatchRowDiv(m, fmt) {
         ${bottomRowHTML}
     `;
 
+    // ── Match Preview Note strip ──────────────────────────────────
+    if (m.note && m.note.trim()) {
+        const noteStrip = document.createElement('div');
+        noteStrip.className = 'match-note-strip';
+        const editPart = !state.isViewOnly
+            ? `<button class="match-note-edit-btn" title="แก้ไข preview" onclick="openScoreModal(${m.id})">✏️</button>`
+            : '';
+        noteStrip.innerHTML = `<span class="match-note-icon">📝</span><span class="match-note-text">${_htmlEsc(m.note.trim())}</span>${editPart}`;
+        divMatch.appendChild(noteStrip);
+    }
+
     if (isBigMatch) {
         let wrapper = document.createElement("div");
         wrapper.className = "big-match-wrapper";
@@ -10747,6 +10799,12 @@ function _computeDecisiveMatches(roundMatches) {
         const hSt = standMap[m.homeId];
         const aSt = standMap[m.awayId];
         if (!hSt || !aSt) return;
+
+        // ── Gate: นัดแรกๆ ไม่ควรชี้ชะตาอะไรทั้งนั้น
+        // ต้องเล่นไปแล้วอย่างน้อย 1/3 ของ schedule ทั้งหมดก่อน ──
+        const totalPerTeam = Math.max(hSt.p + hSt.rem, 1);
+        const minPlayed = Math.min(hSt.p, aSt.p);
+        if (minPlayed < Math.max(1, Math.ceil(totalPerTeam / 3))) return;
 
         const hRank = hSt.rank, aRank = aSt.rank;
         const minRank = Math.min(hRank, aRank);
@@ -11021,6 +11079,28 @@ function _renderBigMatchPickerList() {
 
 // toggleBigMatch: เพิ่มหรือลบ matchId ออกจาก bigMatchIds array
 // fromModal=true เมื่อเรียกจาก picker modal (ไม่ปิด modal)
+function saveMatchNote(matchId) {
+    if (state.isViewOnly) return;
+    const inp = document.getElementById('se-note-inp');
+    if (!inp) return;
+    const note = inp.value.trim();
+    const match = state.matches.find(x => x.id === matchId);
+    if (!match) return;
+    match.note = note;
+    saveDataToCloud();
+    renderLeague();
+    // Update toggle button label inline
+    const toggleBtn = document.getElementById('se-note-toggle-btn');
+    if (toggleBtn) {
+        const hasNote = !!note;
+        toggleBtn.className = 'se-note-toggle' + (hasNote ? ' has-note' : '');
+        toggleBtn.textContent = hasNote
+            ? '📝 Preview (' + note.slice(0, 20) + (note.length > 20 ? '…' : '') + ')'
+            : '📝 เพิ่ม Match Preview';
+    }
+    _adminToast(note ? '💾 บันทึก Preview แล้ว' : '🗑️ ลบ Preview แล้ว', note ? '#3b82f6' : '#64748b');
+}
+
 function toggleBigMatch(matchId, fromModal) {
     if (state.isViewOnly) return;
     let ids = state.bigMatchIds || [];
@@ -13091,14 +13171,25 @@ function _buildH2HCardsHTML(records, refHomeId, hInfo, aInfo) {
     if (!records || records.length === 0) {
         return `<div class="se-h2h-empty">ยังไม่มีประวัติการพบกัน</div>`;
     }
-    function _logoImg(info, cls) {
+    // ── ดึงข้อมูลทีมจาก state.teams ตาม ID จริงของแต่ละ record
+    // เพื่อให้แสดงทีมที่เล่นจริงในซีซั่นนั้น ไม่ใช่ทีมปัจจุบันเสมอ ──
+    function _getTeamInfo(teamId, fallback) {
+        const t = (state.teams || []).find(x => x.id === teamId);
+        return t || fallback;
+    }
+    function _logoImg(info) {
         if (!info || !info.logo) return `<div style="width:24px;height:24px;border-radius:4px;background:rgba(255,255,255,0.06);flex-shrink:0;"></div>`;
         const esc = (info.team||'').replace(/'/g,"\\'");
-        return `<img class="se-h2h-logo${info.isFlag?' flag':''}" src="${info.logo}" onerror="_logoFallback(this,'${esc}')">`;
+        return `<img class="se-h2h-logo${info.isFlag?' flag':''}" src="${info.logo}" onerror="_logoFallback(this,'${esc}')" title="${_htmlEsc(info.team||'')}">`;
     }
     return `<div class="se-h2h-grid">` + records.map(r => {
-        // always show left = home side of this matchup (hInfo), right = aInfo
+        // ใช้ทีมจาก record ตรงๆ — ถ้าหาใน state.teams ไม่เจอค่อย fallback
+        const recHomeInfo = _getTeamInfo(r.homeId, hInfo);
+        const recAwayInfo = _getTeamInfo(r.awayId, aInfo);
+        // left = ฝั่ง refHomeId (ทีม home ของแมตช์ที่กำลังดู), right = ฝั่ง away
         const recordHomeIsRef = r.homeId === refHomeId;
+        const leftInfo   = recordHomeIsRef ? recHomeInfo : recAwayInfo;
+        const rightInfo  = recordHomeIsRef ? recAwayInfo : recHomeInfo;
         const leftScore  = recordHomeIsRef ? r.hs : r.as;
         const rightScore = recordHomeIsRef ? r.as : r.hs;
         const res = leftScore === rightScore ? 'D' : leftScore > rightScore ? 'W' : 'L';
@@ -13106,9 +13197,9 @@ function _buildH2HCardsHTML(records, refHomeId, hInfo, aInfo) {
         return `<div class="se-h2h-card" style="border-color:${res==='W'?'rgba(34,197,94,0.25)':res==='L'?'rgba(239,68,68,0.22)':'rgba(234,179,8,0.22)'}">
             <span class="se-h2h-season">SS${r.season||'?'}</span>
             <div class="se-h2h-logos">
-                ${_logoImg(hInfo)}
+                ${_logoImg(leftInfo)}
                 <span class="se-h2h-vscore">${leftScore}–${rightScore}</span>
-                ${_logoImg(aInfo)}
+                ${_logoImg(rightInfo)}
             </div>
             ${note ? `<span class="se-h2h-note">${note}</span>` : ''}
         </div>`;
