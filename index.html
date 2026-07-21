@@ -5731,12 +5731,24 @@ function initTeamAutocomplete() {
         if (inputCr && listCr && e.target !== inputCr && e.target !== listCr) {
             listCr.style.display = "none";
         }
+        // ปิด dropdown ทุกแถวใน admin edit modal
+        document.querySelectorAll(".edit-team-ac-list").forEach(function(list) {
+            const inp = list.previousElementSibling;
+            if (inp && e.target !== inp && !list.contains(e.target)) {
+                list.style.display = "none";
+            }
+        });
     });
 }
 
 function setupAutocompleteLogic(inputId, listContainerId) {
     const input = document.getElementById(inputId);
     const listContainer = document.getElementById(listContainerId);
+    if (!input || !listContainer) return;
+    setupAutocompleteOnElement(input, listContainer);
+}
+
+function setupAutocompleteOnElement(input, listContainer) {
     if (!input || !listContainer) return;
 
     input.addEventListener("input", function() {
@@ -5765,7 +5777,6 @@ function setupAutocompleteLogic(inputId, listContainerId) {
                 ${imgHtml}
                 <span class="suggestion-name">${item.name}</span>
             `;
-            
             div.addEventListener("click", function() {
                 input.value = item.name;
                 listContainer.innerHTML = "";
@@ -7603,7 +7614,10 @@ function _renderEditTeamsModalUI() {
                 <div>${statusBadge}</div>
                 <input type="text" class="edit-input edit-input-id" value="${t.id}" placeholder="ID">
                 <input type="text" class="edit-input edit-input-player" value="${t.player}" placeholder="ชื่อคนเล่น">
-                <input type="text" class="edit-input edit-input-team" value="${t.team}" placeholder="ชื่อทีม">
+                <div style="position:relative;">
+                    <input type="text" class="edit-input edit-input-team" value="${t.team}" placeholder="ชื่อทีม" autocomplete="off">
+                    <div class="autocomplete-suggestions edit-team-ac-list"></div>
+                </div>
                 <div class="logo-url-cell">
                     <img class="logo-preview-mini${previewFlagClass}" src="${logoSrc}" title="คลิกเปิดรูปในแท็บใหม่"
                          onclick="if(this.src)window.open(this.src,'_blank')"
@@ -7622,6 +7636,9 @@ function _renderEditTeamsModalUI() {
                 </div>
             `;
             container.appendChild(div);
+            const teamInput = div.querySelector('.edit-input-team');
+            const acList    = div.querySelector('.edit-team-ac-list');
+            if (teamInput && acList) setupAutocompleteOnElement(teamInput, acList);
         });
     }
 }
