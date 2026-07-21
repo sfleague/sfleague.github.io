@@ -725,16 +725,35 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.6);
         }
 
+        /* ── Team card (replaces old 7-col grid row) ── */
         .edit-team-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+            background: rgba(3, 10, 23, 0.45);
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(26, 54, 96, 0.55);
+        }
+        .etr-top {
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 8px; flex-wrap: wrap;
+        }
+        .etr-top-left  { display: flex; align-items: center; gap: 7px; min-width: 0; }
+        .etr-top-right { display: flex; gap: 5px; flex-wrap: wrap; flex-shrink: 0; }
+        .etr-fields {
             display: grid;
-            grid-template-columns: 72px 90px 125px 145px 200px 1fr 130px;
-            gap: 10px;
-            margin-bottom: 12px;
-            align-items: center;
-            background: rgba(3, 10, 23, 0.4);
-            padding: 10px 14px;
-            border-radius: 8px;
-            border: 1px solid rgba(26, 54, 96, 0.5);
+            grid-template-columns: 90px 1fr 1fr;
+            gap: 6px;
+        }
+        .etr-logo { display: flex; align-items: center; gap: 8px; }
+        .etr-logo .edit-input { font-size: 11px; padding: 8px 10px; }
+        .etr-comment { display: flex; align-items: flex-start; gap: 6px; flex-wrap: wrap; }
+        .etr-comment-text {
+            font-size: 11px; color: #64748b;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            max-width: 200px; align-self: center;
         }
         .logo-url-cell { display: flex; align-items: center; gap: 5px; }
         .logo-preview-mini { width: 32px; height: 32px; object-fit: contain; border-radius: 4px; flex-shrink: 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
@@ -789,6 +808,122 @@
             box-shadow: 0 0 15px rgba(71, 85, 105, 0.3);
             color: #fff;
         }
+
+        /* ══ Edit Teams Modal — Tab Layout ══════════════════════════════ */
+        .etm-modal-content {
+            padding: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            max-height: 90vh !important;
+            overflow: hidden !important;
+            gap: 0 !important;
+        }
+
+        /* Header */
+        .etm-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 18px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            flex-shrink: 0;
+        }
+        .etm-header-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+        .etm-header-icon { font-size: 22px; flex-shrink: 0; }
+        .etm-header-title {
+            font-size: 15px; font-weight: 800; color: var(--wc-gold);
+            font-family: 'Orbitron', sans-serif; letter-spacing: 1px;
+            white-space: nowrap;
+        }
+        .etm-header-sub {
+            font-size: 11px; color: rgba(255,255,255,0.25);
+            font-family: 'Prompt', sans-serif; letter-spacing: 0.3px;
+        }
+        .etm-close-btn {
+            background: rgba(255,255,255,0.05) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            color: #94a3b8 !important; border-radius: 8px !important;
+            width: 30px !important; height: 30px !important; flex-shrink: 0;
+            cursor: pointer !important; font-size: 13px !important;
+            display: flex !important; align-items: center; justify-content: center;
+            padding: 0 !important; box-shadow: none !important;
+            animation: none !important; transform: none !important;
+            text-transform: none !important; letter-spacing: 0 !important;
+        }
+        .etm-close-btn::before, .etm-close-btn::after { display: none !important; }
+        .etm-close-btn:hover { background: rgba(239,68,68,0.15) !important; color: #f87171 !important; border-color: rgba(239,68,68,0.3) !important; transform: none !important; }
+
+        /* Tab bar */
+        .etm-tabs {
+            display: flex; gap: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            flex-shrink: 0; padding: 0 14px;
+        }
+        .etm-tab {
+            background: transparent !important; border: none !important;
+            border-bottom: 2px solid transparent !important;
+            color: rgba(255,255,255,0.35) !important;
+            padding: 10px 14px !important; font-size: 12px !important;
+            font-weight: 700 !important; cursor: pointer !important;
+            font-family: 'Prompt', sans-serif !important;
+            border-radius: 0 !important; box-shadow: none !important;
+            animation: none !important; text-transform: none !important;
+            letter-spacing: 0 !important; margin: 0 !important;
+            transition: color 0.15s, border-color 0.15s !important;
+        }
+        .etm-tab::before, .etm-tab::after { display: none !important; }
+        .etm-tab:hover { color: rgba(255,255,255,0.7) !important; background: transparent !important; transform: none !important; }
+        .etm-tab.active {
+            color: var(--wc-gold) !important;
+            border-bottom-color: var(--wc-gold) !important;
+        }
+
+        /* Tab panels */
+        .etm-tab-panel {
+            display: none; flex-direction: column;
+            flex: 1; overflow-y: auto; padding: 16px 18px;
+            gap: 0;
+            scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.06) transparent;
+        }
+        .etm-tab-panel.active { display: flex; }
+        .etm-tab-panel::-webkit-scrollbar { width: 3px; }
+        .etm-tab-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.07); border-radius: 99px; }
+
+        /* Section labels inside tabs */
+        .etm-section-label {
+            font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.35);
+            text-transform: uppercase; letter-spacing: 1.5px;
+            margin: 0 0 8px; padding-bottom: 6px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        /* List header row */
+        .etm-list-header {
+            font-weight: 700; color: var(--wc-gold) !important;
+            background: transparent !important; border: none !important;
+            padding-bottom: 4px !important; margin-bottom: 4px;
+            font-size: 11px !important;
+        }
+
+        /* Footer save bar */
+        .etm-footer {
+            display: flex; gap: 10px; padding: 12px 18px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            flex-shrink: 0; background: rgba(0,0,0,0.2);
+        }
+        .etm-save-btn {
+            flex: 1; padding: 10px !important; font-size: 13px !important;
+            white-space: nowrap; width: auto !important;
+        }
+        .etm-cancel-btn {
+            background: rgba(255,255,255,0.05) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            color: #94a3b8 !important; padding: 10px 16px !important;
+            font-size: 13px !important; white-space: nowrap;
+            width: auto !important; box-shadow: none !important;
+            animation: none !important; text-transform: none !important;
+        }
+        .etm-cancel-btn::before, .etm-cancel-btn::after { display: none !important; }
+        .etm-cancel-btn:hover { background: rgba(255,255,255,0.1) !important; color: #fff !important; transform: none !important; }
 
         .admin-add-player-section {
             background: rgba(16, 185, 129, 0.05);
@@ -4850,132 +4985,152 @@ label.apm-menu-item.danger:hover .apm-menu-item-icon,
 </div>
 
 <div id="editTeamsModal" class="modal">
-    <div class="modal-content">
-        <h2 style="margin-top: 0; color: var(--wc-gold);">⚙️ เมนู ZINEDINE ZILENG: จัดการผู้เล่น ตารางสี และกฎกติกา</h2>
+    <div class="modal-content etm-modal-content">
 
-        <h3 style="color: #22c55e; border-bottom: 1px solid rgba(34, 197, 94, 0.3); padding-bottom: 8px; margin-top: 0;">➕ เพิ่มผู้เล่นเข้าร่วมทัวร์นาเมนต์</h3>
-        <div class="admin-add-player-section">
-            <div class="admin-add-player-grid">
+        <!-- ── Compact Header ── -->
+        <div class="etm-header">
+            <div class="etm-header-left">
+                <span class="etm-header-icon">⚙️</span>
                 <div>
-                    <label>ID / รหัสผู้เล่น:</label>
-                    <input type="text" id="admin-add-id" class="edit-input" placeholder="เช่น Mai, Sky">
+                    <div class="etm-header-title">จัดการระบบ</div>
+                    <div class="etm-header-sub">ผู้สมัคร · ตกแต่ง · ระบบ</div>
                 </div>
-                <div>
-                    <label>ชื่อผู้จัดการทีม:</label>
-                    <input type="text" id="admin-add-player" class="edit-input" placeholder="เช่น หมูเด้งพระราม2">
-                </div>
-                <div style="position: relative;">
-                            <label>ทีมที่เลือกเล่น:</label>
-                            <input type="text" id="admin-add-team" class="edit-input" placeholder="เช่น Real Madrid, Thailand" autocomplete="off">
+            </div>
+            <button class="etm-close-btn" onclick="closeEditTeamsModal()">✕</button>
+        </div>
+
+        <!-- ── Tab Bar ── -->
+        <div class="etm-tabs" id="etm-tabs">
+            <button class="etm-tab active" data-tab="players" onclick="etmSwitchTab('players',this)">👤 ผู้สมัคร</button>
+            <button class="etm-tab" data-tab="design" onclick="etmSwitchTab('design',this)">🎨 ตกแต่ง</button>
+            <button class="etm-tab" data-tab="system" onclick="etmSwitchTab('system',this)">🔗 ระบบ</button>
+        </div>
+
+        <!-- ══ TAB 1: ผู้สมัคร ══ -->
+        <div class="etm-tab-panel active" id="etm-panel-players">
+
+            <!-- Add player form -->
+            <div class="etm-section-label">➕ เพิ่มผู้เล่น</div>
+            <div class="admin-add-player-section" style="margin-bottom:16px;">
+                <div class="admin-add-player-grid">
+                    <div>
+                        <label>ID / รหัสผู้เล่น:</label>
+                        <input type="text" id="admin-add-id" class="edit-input" placeholder="เช่น Mai, Sky">
+                    </div>
+                    <div>
+                        <label>ชื่อผู้จัดการทีม:</label>
+                        <input type="text" id="admin-add-player" class="edit-input" placeholder="เช่น หมูเด้งพระราม2">
+                    </div>
+                    <div style="position:relative;">
+                        <label>ทีมที่เลือกเล่น:</label>
+                        <input type="text" id="admin-add-team" class="edit-input" placeholder="เช่น Real Madrid, Thailand" autocomplete="off">
                         <div id="admin-autocomplete-list" class="autocomplete-suggestions"></div>
-                        </div>
-            </div>
-            <button class="admin-add-player-btn" onclick="adminAddPlayerFromModal()">อนุมัติและเพิ่มผู้เล่นเข้าลีคทันที ⚡</button>
-        </div>
-
-        <div style="display:flex; align-items:center; justify-content:space-between; border-bottom: 1px solid var(--wc-border); padding-bottom: 8px; margin-bottom:0;">
-            <h3 style="color: #fff; margin:0;">📥 รายชื่อที่เพื่อนสมัครเข้ามา (รอการยืนยัน/แก้ไข)</h3>
-        </div>
-        <div class="edit-team-row" style="font-weight: bold; color: var(--wc-gold); margin-bottom: 5px; background: transparent; border: none; padding-bottom: 0;">
-            <span>สถานะ</span>
-            <span>ID ผู้เล่น</span>
-            <span>ชื่อผู้จัดการ</span>
-            <span>ทีมที่เลือก</span>
-            <span style="color:#60a5fa;">🖼️ URL โลโก้ (วางลิงก์รูปตรงนี้)</span>
-            <span>ข้อความแจ้งกลับ</span>
-            <span>การจัดการ</span>
-        </div>
-        <div id="edit-teams-container" style="max-height: 240px; overflow-y: auto; margin-bottom: 25px; padding-right: 5px;"></div>
-
-        <h3 style="color: #fff; border-bottom: 1px solid var(--wc-border); padding-bottom: 8px;">🎨 ตกแต่งเฉดสีและข้อมูลระบบ</h3>
-        <div style="background: rgba(223, 180, 75, 0.05); padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px dashed var(--wc-border); display: flex; flex-direction: column; gap: 15px;">
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                <div style="grid-column: span 3;">
-                    <label style="display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; color: var(--wc-gold);">🏆 แก้ไขข้อความหัวข้อหลัก (แยกกรอก 3 คำเด่น):</label>
+                    </div>
                 </div>
-                <div><input type="text" id="edit-title-w1" class="edit-input" placeholder="คำที่ 1"></div>
-                <div><input type="text" id="edit-title-w2" class="edit-input" placeholder="คำที่ 2"></div>
-                <div><input type="text" id="edit-title-w3" class="edit-input" placeholder="คำที่ 3"></div>
+                <button class="admin-add-player-btn" onclick="adminAddPlayerFromModal()">อนุมัติและเพิ่มผู้เล่นเข้าลีค ⚡</button>
             </div>
 
-            <!-- ── Host Flags Editor ── -->
-            <div style="border:1px solid rgba(242,194,78,0.3); border-radius:10px; padding:14px; background:rgba(242,194,78,0.04);">
-                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
-                    <label style="font-weight:700; font-size:13px; color:var(--wc-gold); margin:0;">🏳️ ธงชาติใต้ชื่อทัวร์นาเมนต์ (Host Flags)</label>
-                    <button onclick="adminAddHostFlag()" style="background:rgba(242,194,78,0.15);border:1px solid rgba(242,194,78,0.4);color:#fde68a;border-radius:7px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Prompt',sans-serif;">+ เพิ่มธง</button>
-                </div>
-                <div style="font-size:11px; color:#64748b; margin-bottom:10px; line-height:1.5;">
-                    ใส่รหัสประเทศ 2 ตัวอักษร (เช่น <strong style="color:#94a3b8;">th</strong> = ไทย, <strong style="color:#94a3b8;">jp</strong> = ญี่ปุ่น, <strong style="color:#94a3b8;">us</strong> = อเมริกา) และชื่อที่ต้องการแสดง
+            <!-- Pending list -->
+            <div class="etm-section-label">📥 รายชื่อผู้สมัคร</div>
+            <div id="edit-teams-container" style="overflow-y:auto; padding-right:2px;"></div>
+
+        </div>
+
+        <!-- ══ TAB 2: ตกแต่ง ══ -->
+        <div class="etm-tab-panel" id="etm-panel-design">
+
+            <!-- Title words -->
+            <div class="etm-section-label">🏆 ข้อความหัวข้อหลัก (3 คำ)</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:14px;">
+                <input type="text" id="edit-title-w1" class="edit-input" placeholder="คำที่ 1">
+                <input type="text" id="edit-title-w2" class="edit-input" placeholder="คำที่ 2">
+                <input type="text" id="edit-title-w3" class="edit-input" placeholder="คำที่ 3">
+            </div>
+
+            <!-- Host Flags -->
+            <div class="etm-section-label">🏳️ Host Flags</div>
+            <div style="border:1px solid rgba(242,194,78,0.25); border-radius:10px; padding:12px; background:rgba(242,194,78,0.03); margin-bottom:14px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; gap:8px;">
+                    <span style="font-size:11px; color:#64748b; line-height:1.5;">รหัสประเทศ 2 ตัว (th / jp / us …) และชื่อที่แสดง</span>
+                    <button onclick="adminAddHostFlag()" style="background:rgba(242,194,78,0.15);border:1px solid rgba(242,194,78,0.4);color:#fde68a;border-radius:7px;padding:4px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Prompt',sans-serif;white-space:nowrap;">+ เพิ่มธง</button>
                 </div>
                 <div id="host-flags-editor" style="display:flex; flex-direction:column; gap:8px;"></div>
             </div>
 
-            <div>
-                <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; color: var(--wc-gold);">🎨 พาเนลควบคุมสีแยกตามจุด (Color Picker):</label>
-                <div class="color-picker-grid">
-                    <div class="color-item"><label>🎨 สีคำที่ 1</label><input type="color" id="picker-w1"></div>
-                    <div class="color-item"><label>🎨 สีคำที่ 2</label><input type="color" id="picker-w2"></div>
-                    <div class="color-item"><label>🎨 สีคำที่ 3</label><input type="color" id="picker-w3"></div>
-                    <div class="color-item"><label>📊 สีหัวข้อ Standings</label><input type="color" id="picker-h2-standings"></div>
-                    <div class="color-item"><label>📅 สีหัวข้อ Schedule</label><input type="color" id="picker-h2-fixtures"></div>
-                    <div class="color-item"><label>🏆 สีหัวข้อ ทำเนียบแชมป์</label><input type="color" id="picker-h2-fame"></div>
-                    <div class="color-item"><label>📋 สีหัวข้อ กฎกติกา</label><input type="color" id="picker-h2-details"></div>
-                    <div class="color-item"><label>🖼️ สีพื้นหลังเว็บ (BG)</label><input type="color" id="edit-bg-color"></div>
+            <!-- Color pickers -->
+            <div class="etm-section-label">🎨 Color Picker</div>
+            <div class="color-picker-grid" style="margin-bottom:14px;">
+                <div class="color-item"><label>คำที่ 1</label><input type="color" id="picker-w1"></div>
+                <div class="color-item"><label>คำที่ 2</label><input type="color" id="picker-w2"></div>
+                <div class="color-item"><label>คำที่ 3</label><input type="color" id="picker-w3"></div>
+                <div class="color-item"><label>Standings</label><input type="color" id="picker-h2-standings"></div>
+                <div class="color-item"><label>Schedule</label><input type="color" id="picker-h2-fixtures"></div>
+                <div class="color-item"><label>ทำเนียบแชมป์</label><input type="color" id="picker-h2-fame"></div>
+                <div class="color-item"><label>กฎกติกา</label><input type="color" id="picker-h2-details"></div>
+                <div class="color-item"><label>BG สีพื้นหลัง</label><input type="color" id="edit-bg-color"></div>
+            </div>
+
+            <!-- BG image -->
+            <div class="etm-section-label">🖼️ Background Image URL</div>
+            <input type="text" id="edit-bg-image-url" class="edit-input" style="margin-bottom:4px;" placeholder="https://...">
+
+        </div>
+
+        <!-- ══ TAB 3: ระบบ ══ -->
+        <div class="etm-tab-panel" id="etm-panel-system">
+
+            <!-- Social links -->
+            <div class="etm-section-label">🌐 Social Media</div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
+                <div style="display:grid; grid-template-columns:80px 1fr; align-items:center; gap:8px;">
+                    <span style="font-size:12px;color:#5865F2;font-weight:700;">💬 Discord</span>
+                    <input type="text" id="edit-discord-url" class="edit-input" style="border-color:#5865F2;" placeholder="https://discord.gg/...">
+                </div>
+                <div style="display:grid; grid-template-columns:80px 1fr; align-items:center; gap:8px;">
+                    <span style="font-size:12px;color:#FF0000;font-weight:700;">▶️ YouTube</span>
+                    <input type="text" id="edit-youtube-url" class="edit-input" style="border-color:#FF0000;" placeholder="https://youtube.com/@...">
+                </div>
+                <div style="display:grid; grid-template-columns:80px 1fr; align-items:center; gap:8px;">
+                    <span style="font-size:12px;color:#1877F2;font-weight:700;">📘 Facebook</span>
+                    <input type="text" id="edit-facebook-url" class="edit-input" style="border-color:#1877F2;" placeholder="https://facebook.com/...">
+                </div>
+                <div style="display:grid; grid-template-columns:80px 1fr; align-items:center; gap:8px;">
+                    <span style="font-size:12px;color:#e5e5e5;font-weight:700;">🎵 TikTok</span>
+                    <input type="text" id="edit-tiktok-url" class="edit-input" style="border-color:#555;" placeholder="https://tiktok.com/@...">
+                </div>
+                <div style="display:grid; grid-template-columns:80px 1fr; align-items:center; gap:8px;">
+                    <span style="font-size:12px;color:#9146FF;font-weight:700;">🎮 Twitch</span>
+                    <input type="text" id="edit-twitch-url" class="edit-input" style="border-color:#9146FF;" placeholder="https://twitch.tv/...">
                 </div>
             </div>
 
-            <div style="border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:14px; background:rgba(255,255,255,0.03);">
-                <label style="display: block; margin-bottom: 8px; font-weight: 700; font-size: 13px; color: #fff;">🌐 ลิงก์ Social Media ประจำทัวร์นาเมนต์:</label>
-                <div style="display:flex; flex-direction:column; gap:8px;">
-                    <div>
-                        <label style="display:block; margin-bottom:3px; font-size:12px; color:#5865F2; font-weight:600;">💬 Discord</label>
-                        <input type="text" id="edit-discord-url" class="edit-input" style="border-color: #5865F2;" placeholder="https://discord.gg/...">
-                    </div>
-                    <div>
-                        <label style="display:block; margin-bottom:3px; font-size:12px; color:#FF0000; font-weight:600;">▶️ YouTube</label>
-                        <input type="text" id="edit-youtube-url" class="edit-input" style="border-color: #FF0000;" placeholder="https://youtube.com/@...">
-                    </div>
-                    <div>
-                        <label style="display:block; margin-bottom:3px; font-size:12px; color:#1877F2; font-weight:600;">📘 Facebook</label>
-                        <input type="text" id="edit-facebook-url" class="edit-input" style="border-color: #1877F2;" placeholder="https://facebook.com/...">
-                    </div>
-                    <div>
-                        <label style="display:block; margin-bottom:3px; font-size:12px; color:#e5e5e5; font-weight:600;">🎵 TikTok</label>
-                        <input type="text" id="edit-tiktok-url" class="edit-input" style="border-color: #e5e5e5;" placeholder="https://tiktok.com/@...">
-                    </div>
-                    <div>
-                        <label style="display:block; margin-bottom:3px; font-size:12px; color:#9146FF; font-weight:600;">🎮 Twitch</label>
-                        <input type="text" id="edit-twitch-url" class="edit-input" style="border-color: #9146FF;" placeholder="https://twitch.tv/...">
-                    </div>
-                </div>
+            <!-- Announcement -->
+            <div class="etm-section-label">📢 ประกาศด่วน</div>
+            <div style="border:1px solid rgba(234,179,8,0.3); border-radius:10px; padding:12px; background:rgba(234,179,8,0.04); margin-bottom:14px;">
+                <p style="font-size:11px; color:#94a3b8; margin:0 0 8px; line-height:1.5;">แสดงเป็น banner สีทองบนสุดของหน้า — ว่างไว้ = ซ่อน</p>
+                <textarea id="edit-announcement" class="edit-input" style="height:56px; border-color:rgba(234,179,8,0.4);" placeholder="เช่น: แมตช์วันนี้เริ่ม 20:00 น."></textarea>
+                <button onclick="clearAnnouncement()" style="margin-top:8px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.35);color:#f87171;font-size:12px;padding:4px 12px;border-radius:6px;cursor:pointer;">🗑️ ล้างประกาศ</button>
             </div>
-            <div style="border:1px solid rgba(234,179,8,0.4); border-radius:10px; padding:14px; background:rgba(234,179,8,0.05);">
-                <label style="display:block; margin-bottom:6px; font-weight:700; font-size:13px; color:#fbbf24;">📢 ประกาศด่วน (Announcement Banner)</label>
-                <p style="font-size:12px; color:#94a3b8; margin:0 0 8px 0; line-height:1.5;">ข้อความนี้จะแสดงเป็น banner สีทองบนสุดของหน้าทันทีให้ viewer ทุกคนเห็น (ว่างไว้ = ซ่อน banner)</p>
-                <textarea id="edit-announcement" class="edit-input" style="height:64px; border-color:rgba(234,179,8,0.4);" placeholder="เช่น: แมตช์วันนี้เริ่ม 20:00 น. — ห้ามมาสาย!"></textarea>
-                <button onclick="clearAnnouncement()" style="margin-top:8px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.35); color:#f87171; font-size:12px; padding:5px 12px; border-radius:6px; cursor:pointer;">🗑️ ล้างประกาศ</button>
+
+            <!-- Changelog -->
+            <div class="etm-section-label" style="display:flex;align-items:center;justify-content:space-between;">
+                <span>🔔 Changelog</span>
+                <button onclick="openClEntryModal()" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border:none;border-radius:7px;padding:4px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Prompt',sans-serif;">+ เพิ่ม</button>
             </div>
-            <div style="border:1px solid rgba(167,139,250,0.35); border-radius:10px; padding:14px; background:rgba(167,139,250,0.05);">
-                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
-                    <label style="font-weight:700; font-size:13px; color:#a78bfa; margin:0;">🔔 Changelog (อัปเดตระบบ)</label>
-                    <button onclick="openClEntryModal()" style="background:linear-gradient(135deg,#7c3aed,#6d28d9); color:#fff; border:none; border-radius:7px; padding:5px 14px; font-size:12px; font-weight:700; cursor:pointer; font-family:'Prompt',sans-serif; white-space:nowrap;">+ เพิ่มรายการ</button>
-                </div>
-                <div id="cl-admin-list" style="display:flex; flex-direction:column; gap:6px;"></div>
-            </div>
-            <div>
-                <label style="display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; color: var(--wc-gold);">📋 รายละเอียดทัวร์นาเมนต์ (เงินรางวัล / กฎกติกา / เวลาแข่ง):</label>
-                <textarea id="edit-tournament-details" class="edit-input" style="height: 80px;"></textarea>
-            </div>
-            <div>
-                <label style="display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; color: var(--wc-gold);">🔗 ลิงก์รูปภาพพื้นหลัง (Background Image URL):</label>
-                <input type="text" id="edit-bg-image-url" class="edit-input">
-            </div>
+            <div id="cl-admin-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;"></div>
+
+            <!-- Tournament details -->
+            <div class="etm-section-label">📋 กฎกติกา / เงินรางวัล / เวลาแข่ง</div>
+            <textarea id="edit-tournament-details" class="edit-input" style="height:80px;margin-bottom:4px;"></textarea>
+
         </div>
 
-        <div style="display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;">
-            <button onclick="saveEditedTeams()" style="width:auto; padding:9px 20px; font-size:13px; white-space:nowrap;">💾 บันทึกทั้งหมด</button>
-            <button onclick="closeEditTeamsModal()" style="width:auto; padding:9px 16px; font-size:13px; white-space:nowrap;">✕ ปิด</button>
+        <!-- ── Footer Save Bar ── -->
+        <div class="etm-footer">
+            <button onclick="saveEditedTeams()" class="etm-save-btn">💾 บันทึกทั้งหมด</button>
+            <button onclick="closeEditTeamsModal()" class="etm-cancel-btn">✕ ปิด</button>
         </div>
+
     </div>
 </div>
 
@@ -5995,7 +6150,7 @@ const autocompleteTeamsList = [
     { name: "Borussia M'gladbach", key: "gladbach" }, { name: "Eintracht Frankfurt", key: "eintracht" },
     { name: "VfB Stuttgart", key: "stuttgard" },
     // ── Ligue 1 ──
-    { name: "Paris Saint-Germain", key: "psg" }, { name: "Monaco", key: "monaco" },
+    { name: "PSG", key: "psg" }, { name: "Monaco", key: "monaco" },
     { name: "Marseille", key: "marseille" }, { name: "Lyon", key: "lyon" },
     { name: "Lille", key: "lille" },
     // ── Other Clubs ──
@@ -8471,10 +8626,22 @@ function adminStartTournament() {
     document.getElementById('format-picker-modal').classList.add('open');
 }
 
+function etmSwitchTab(tabId, btn) {
+    // deactivate all tabs & panels
+    document.querySelectorAll('.etm-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.etm-tab-panel').forEach(p => p.classList.remove('active'));
+    // activate chosen
+    if (btn) btn.classList.add('active');
+    var panel = document.getElementById('etm-panel-' + tabId);
+    if (panel) panel.classList.add('active');
+}
+
 function openEditTeamsModal() {
     if (state.isViewOnly) return;
     const container = document.getElementById("edit-teams-container");
     container.innerHTML = `<div style="text-align:center; color:var(--wc-text-sub); padding:18px;">⏳ กำลังโหลดรายชื่อผู้สมัครล่าสุด...</div>`;
+    // Always reset to first tab when opening
+    etmSwitchTab('players', document.querySelector('.etm-tab[data-tab="players"]'));
     document.getElementById("editTeamsModal").style.display = "flex";
 
     fetch(`https://api.jsonbin.io/v3/b/${state.binId}/latest`, { headers: { "X-Master-Key": BIN_MASTER_KEY } })
@@ -8559,38 +8726,42 @@ function _renderEditTeamsModalUI() {
 
         state.teams.forEach((t, idx) => {
             let statusBadge = '';
-            if(t.status === 'approved') statusBadge = `<span style="background:#22c55e; color:#fff; padding:2px 6px; border-radius:4px; font-size:11px; font-weight:bold;">✅ ผ่าน</span>`;
+            if(t.status === 'approved') statusBadge = `<span style="background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.35);padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700;">✅ ผ่าน</span>`;
             else if(t.status === 'rejected') statusBadge = `<span class="rejected-badge">❌ ให้แก้</span>`;
             else statusBadge = `<span class="pending-badge">⏳ รอตรวจ</span>`;
 
             const logoSrc = t.logo || '';
-            const escapedTeam = t.team.replace(/'/g, "\\'").replace(/"/g, '&quot;');
             const previewFlagClass = t.isFlag ? ' is-flag' : '';
             let div = document.createElement("div"); div.className = "edit-team-row"; div.setAttribute("data-index", idx);
             div.innerHTML = `
-                <div>${statusBadge}</div>
-                <input type="text" class="edit-input edit-input-id" value="${t.id}" placeholder="ID">
-                <input type="text" class="edit-input edit-input-player" value="${t.player}" placeholder="ชื่อคนเล่น">
-                <div style="position:relative;">
-                    <input type="text" class="edit-input edit-input-team" value="${t.team}" placeholder="ชื่อทีม" autocomplete="off">
-                    <div class="autocomplete-suggestions edit-team-ac-list"></div>
+                <!-- row 1: status + actions -->
+                <div class="etr-top">
+                    <div class="etr-top-left">${statusBadge}<span style="font-size:12px;color:#64748b;font-weight:600;">#${idx+1}</span></div>
+                    <div class="etr-top-right">
+                        ${t.status !== 'approved' ? `<button onclick="approveTeam(${idx})" style="font-size:11px;padding:4px 10px;width:auto;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#4ade80;border-radius:6px;cursor:pointer;">ผ่าน ✅</button>` : ''}
+                        ${t.status !== 'rejected' && t.status !== 'approved' ? `<button onclick="rejectTeamNode(${idx})" style="font-size:11px;padding:4px 10px;width:auto;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.4);color:#f87171;border-radius:6px;cursor:pointer;">ให้แก้ ❌</button>` : ''}
+                        <button onclick="openCommentPopup(${idx}, this.closest('.edit-team-row').getAttribute('data-index'))" style="font-size:11px;padding:4px 10px;width:auto;background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.35);color:#60a5fa;border-radius:6px;cursor:pointer;" title="แจ้งกลับ">${t.comment ? '💬' : '✏️'}</button>
+                        <button onclick="removeTeamNode(${idx})" style="font-size:11px;padding:4px 8px;width:auto;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:#64748b;border-radius:6px;cursor:pointer;" title="ลบ">🗑️</button>
+                    </div>
                 </div>
-                <div class="logo-url-cell">
-                    <img class="logo-preview-mini${previewFlagClass}" src="${logoSrc}" title="คลิกเปิดรูปในแท็บใหม่"
+                <!-- row 2: ID | ผู้จัดการ | ทีม -->
+                <div class="etr-fields">
+                    <input type="text" class="edit-input edit-input-id" value="${t.id}" placeholder="ID" style="padding:7px 9px;font-size:12px;">
+                    <input type="text" class="edit-input edit-input-player" value="${t.player}" placeholder="ผู้จัดการ" style="padding:7px 9px;font-size:12px;">
+                    <div style="position:relative;">
+                        <input type="text" class="edit-input edit-input-team" value="${t.team}" placeholder="ทีม" autocomplete="off" style="padding:7px 9px;font-size:12px;">
+                        <div class="autocomplete-suggestions edit-team-ac-list"></div>
+                    </div>
+                </div>
+                <!-- row 3: logo -->
+                <div class="etr-logo">
+                    <img class="logo-preview-mini${previewFlagClass}" src="${logoSrc}" title="คลิกเปิดรูป"
                          onclick="if(this.src)window.open(this.src,'_blank')"
-                         onerror="this.style.opacity='0.25';this.onerror=null;">
-                    <input type="text" class="edit-input edit-input-logo" value="${logoSrc}" placeholder="วาง URL รูปโลโก้ตรงนี้" style="font-size:11px;"
-                           oninput="(function(inp){var img=inp.closest('.logo-url-cell').querySelector('img');img.style.opacity='1';img.onerror=function(){img.style.opacity='0.25';img.onerror=null;};img.src=inp.value||'about:blank';})(this)">
+                         onerror="this.style.opacity='0.25';this.onerror=null;" style="flex-shrink:0;">
+                    <input type="text" class="edit-input edit-input-logo" value="${logoSrc}" placeholder="🖼️ วาง URL โลโก้ที่นี่"
+                           oninput="(function(inp){var img=inp.closest('.etr-logo').querySelector('img');img.style.opacity='1';img.onerror=function(){img.style.opacity='0.25';img.onerror=null;};img.src=inp.value||'about:blank';})(this)">
                 </div>
-                <div class="comment-cell" style="display:flex; flex-direction:column; gap:4px;">
-                    <button onclick="openCommentPopup(${idx}, this.closest('.edit-team-row').getAttribute('data-index'))" style="font-size:11px; padding:5px 10px; width:auto; background:rgba(96,165,250,0.15); border:1px solid rgba(96,165,250,0.4); color:#60a5fa; border-radius:5px; cursor:pointer; transition:all 0.2s ease;" onmouseover="this.style.background='rgba(96,165,250,0.3)';this.style.transform='translateY(-1px)';" onmouseout="this.style.background='rgba(96,165,250,0.15)';this.style.transform='';" title="คลิกเพื่อพิมพ์ข้อความแจ้งกลับ">${t.comment ? '💬 แก้ข้อความ' : '✏️ พิมพ์ข้อความ'}</button>
-                    ${t.comment ? `<div style="font-size:11px; color:#94a3b8; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:180px;" title="${t.comment.replace(/"/g,'&quot;')}">💬 ${t.comment}</div>` : ''}
-                </div>
-                <div style="display:flex; gap:4px; flex-wrap:wrap;">
-                    ${t.status !== 'approved' ? `<button onclick="approveTeam(${idx})" title="อนุมัติผ่าน">ผ่าน ✅</button>` : ''}
-                    ${t.status !== 'rejected' && t.status !== 'approved' ? `<button onclick="rejectTeamNode(${idx})" title="ส่งกลับไปแก้ไข" style="background:#b91c1c;">ให้แก้ ❌</button>` : ''}
-                    <button onclick="removeTeamNode(${idx})" title="ลบรายชื่อ" style="background:#374151;">ลบ 🗑️</button>
-                </div>
+                ${t.comment ? `<div style="font-size:11px;color:#64748b;padding:4px 6px;background:rgba(96,165,250,0.05);border-radius:5px;border-left:2px solid rgba(96,165,250,0.3);">💬 ${t.comment.replace(/</g,'&lt;')}</div>` : ''}
             `;
             container.appendChild(div);
             const teamInput = div.querySelector('.edit-input-team');
