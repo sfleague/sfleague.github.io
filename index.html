@@ -6610,6 +6610,8 @@ function _migrateMatchStatus() {
 
 function _applyCloudData(r) {
     if (!r) return;
+    // Guard: ถ้า cloud ส่งข้อมูลซีซั่นเก่ากลับมาหลัง reset (race condition) → ไม่ต้องสนใจ
+    if (r.season !== undefined && state.season !== undefined && r.season < state.season) return;
     state.teams = r.teams || state.teams;
     _migrateTeamCrestsFromFlags();
     state.matches = r.matches || state.matches;
@@ -8982,6 +8984,9 @@ async function resetToNextSeason() {
             return { id: t.id, player: t.player, team: t.team, logo: t.logo, isFlag: t.isFlag, status: 'pending', comment: "" };
         });
 
+        // อัปเดต snapshot และ cache ทันทีหลัง reset ป้องกัน auto-refresh นำข้อมูลซีซั่นเก่ากลับมา
+        _updateSyncedSnapshot();
+        _saveLastKnownCache(state.binId);
         renderHeader(); renderAdminDock(); renderLeague(); refreshUIState(); saveDataToCloud();
     }
 }
