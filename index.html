@@ -726,6 +726,9 @@
         .se-note-inp:focus { outline: none; border-color: rgba(96,165,250,0.6); }
         .se-note-save-btn { margin-top: 6px; width: 100%; padding: 8px; background: rgba(59,130,246,0.22); border: 1px solid rgba(59,130,246,0.4); border-radius: 8px; color: #93c5fd; font-weight: 700; cursor: pointer; font-size: 12px; font-family: 'Prompt', sans-serif; transition: background 0.2s; }
         .se-note-save-btn:hover { background: rgba(59,130,246,0.38); }
+        .se-emoji-bar { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+        .se-emoji-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; font-size: 16px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s, transform 0.1s; line-height: 1; }
+        .se-emoji-btn:hover { background: rgba(255,255,255,0.14); transform: scale(1.18); }
 
         /* legacy hidden ref */
         .sync-badge { display:none !important; }
@@ -9167,6 +9170,11 @@ function openScoreModal(matchId) {
                 📝 ${_hasNote ? 'Preview (' + m.note.trim().slice(0,20) + (_hasNote && m.note.trim().length > 20 ? '…' : '') + ')' : 'เพิ่ม Match Preview'}
             </button>
             <div class="se-note-body${_hasNote ? ' open' : ''}" id="se-note-body">
+                <div class="se-emoji-bar">
+                    ${['🔥','⚽','⚔️','🏆','🥇','🥈','🥉','⭐','💥','🎯','👑','🎉','💪','🔴','🟡','🟢','❗','❓'].map(e =>
+                        `<button class="se-emoji-btn" title="${e}" onclick="_insertNoteEmoji('${e}')">${e}</button>`
+                    ).join('')}
+                </div>
                 <textarea class="se-note-inp" id="se-note-inp" placeholder="เขียน preview, วิเคราะห์, หรือข้อความใดก็ได้สำหรับนัดนี้...">${_htmlEsc(m.note || '')}</textarea>
                 <button class="se-note-save-btn" onclick="saveMatchNote(${matchId})">💾 บันทึก Preview</button>
             </div>
@@ -11142,6 +11150,17 @@ function _renderBigMatchPickerList() {
 
 // toggleBigMatch: เพิ่มหรือลบ matchId ออกจาก bigMatchIds array
 // fromModal=true เมื่อเรียกจาก picker modal (ไม่ปิด modal)
+function _insertNoteEmoji(emoji) {
+    const ta = document.getElementById('se-note-inp');
+    if (!ta) return;
+    const start = ta.selectionStart;
+    const end   = ta.selectionEnd;
+    ta.value = ta.value.slice(0, start) + emoji + ta.value.slice(end);
+    const pos = start + emoji.length;
+    ta.setSelectionRange(pos, pos);
+    ta.focus();
+}
+
 function saveMatchNote(matchId) {
     if (state.isViewOnly) return;
     const inp = document.getElementById('se-note-inp');
