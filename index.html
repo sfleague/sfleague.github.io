@@ -3511,17 +3511,17 @@
 #admin-panel-modal {
     display: none;
     position: fixed; inset: 0; z-index: 10500;
-    background: rgba(0,3,14,0.97);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(0,3,14,0.96);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     align-items: center;
     justify-content: center;
-    padding: 12px;
+    padding: 14px;
 }
 #admin-panel-modal.open { display: flex; }
 
 @keyframes apmFadeIn {
-    from { opacity:0; transform:scale(0.96) translateY(10px); }
+    from { opacity:0; transform:scale(0.97) translateY(12px); }
     to   { opacity:1; transform:scale(1)    translateY(0); }
 }
 
@@ -3529,186 +3529,251 @@
 .apm-layout {
     display: flex;
     flex-direction: column;
-    width: 100%; max-width: 1080px;
-    height: 92vh; max-height: 840px;
-    border-radius: 20px;
+    width: 100%; max-width: 980px;
+    height: 90vh; max-height: 800px;
+    border-radius: 22px;
     overflow: hidden;
     position: relative;
-    background: #060f1d;
+    background: #070f1e;
     box-shadow:
-        0 0 0 1px rgba(242,194,78,0.13),
-        0 0 0 1px rgba(255,255,255,0.03) inset,
-        0 40px 100px rgba(0,0,0,0.92);
-    animation: apmFadeIn 0.22s cubic-bezier(0.16,1,0.3,1) both;
+        0 0 0 1px rgba(255,255,255,0.06),
+        0 0 0 1px rgba(242,194,78,0.08) inset,
+        0 48px 120px rgba(0,0,0,0.95);
+    animation: apmFadeIn 0.2s cubic-bezier(0.16,1,0.3,1) both;
 }
-/* Top accent line */
 .apm-layout::before {
     content: '';
     position: absolute; top: 0; left: 0; right: 0; height: 2px;
     background: linear-gradient(90deg,
         transparent 0%, #0057B8 15%, #F2C24E 50%, #E8102B 85%, transparent 100%);
-    z-index: 10; pointer-events: none; border-radius: 20px 20px 0 0;
+    z-index: 10; pointer-events: none; border-radius: 22px 22px 0 0;
 }
 
-/* ══ HEADER BAR (full-width) ════════════════════════════════════════ */
+/* ══ HEADER BAR ══════════════════════════════════════════════════════ */
 .apm-header-bar {
     display: flex; align-items: center; gap: 12px;
-    padding: 0 18px; height: 58px; flex-shrink: 0;
-    background: linear-gradient(90deg, rgba(5,12,34,0.99) 0%, rgba(4,10,26,0.99) 100%);
-    border-bottom: 1px solid rgba(242,194,78,0.10);
+    padding: 0 20px; height: 56px; flex-shrink: 0;
+    background: rgba(4,10,24,0.98);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
     position: relative; z-index: 2;
 }
 .apm-header-icon {
-    width: 36px; height: 36px; border-radius: 10px;
+    width: 34px; height: 34px; border-radius: 10px;
     background: linear-gradient(135deg, #F2C24E 0%, #c99a1a 100%);
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px; flex-shrink: 0;
-    box-shadow: 0 2px 12px rgba(242,194,78,0.32);
+    font-size: 17px; flex-shrink: 0;
+    box-shadow: 0 2px 10px rgba(242,194,78,0.28);
 }
 .apm-header-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 12.5px; font-weight: 900;
+    font-size: 12px; font-weight: 900;
     color: #F2C24E; letter-spacing: 2.5px; text-transform: uppercase;
 }
 .apm-header-sub {
-    font-size: 9.5px; color: rgba(242,194,78,0.35);
+    font-size: 9px; color: rgba(242,194,78,0.30);
     letter-spacing: 1px; text-transform: uppercase; margin-top: 2px;
 }
 .apm-header-spacer { flex: 1; }
 
-/* Back button (mobile only, shown when content active) */
+/* Back button */
 .apm-back-btn {
     display: none; align-items: center; gap: 5px;
     height: 32px; padding: 0 12px; border-radius: 8px;
-    background: rgba(242,194,78,0.09);
-    border: 1px solid rgba(242,194,78,0.22);
-    color: #F2C24E; font-size: 12px; font-weight: 700;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.10);
+    color: rgba(255,255,255,0.55); font-size: 12px; font-weight: 700;
     font-family: 'Prompt', sans-serif; cursor: pointer;
     transition: all 0.15s; white-space: nowrap;
 }
-.apm-back-btn:hover { background: rgba(242,194,78,0.18); border-color: rgba(242,194,78,0.4); }
+.apm-back-btn:hover { background: rgba(255,255,255,0.09); color: rgba(255,255,255,0.85); }
 
 /* Close button */
 .apm-close-btn {
     display: flex; align-items: center; justify-content: center;
-    width: 34px; height: 34px; border-radius: 9px;
-    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
-    color: rgba(255,255,255,0.35); font-size: 15px; cursor: pointer;
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.28); font-size: 14px; cursor: pointer;
     transition: all 0.15s; padding: 0; line-height: 1; flex-shrink: 0;
 }
 .apm-close-btn:hover {
-    background: rgba(239,68,68,0.16); border-color: rgba(239,68,68,0.38); color: #f87171;
+    background: rgba(239,68,68,0.14); border-color: rgba(239,68,68,0.32); color: #f87171;
 }
 
-/* ══ BODY ═══════════════════════════════════════════════════════════ */
+/* ══ BODY ════════════════════════════════════════════════════════════ */
 .apm-body {
     display: flex; flex: 1; min-height: 0; overflow: hidden;
 }
 
-/* ══ LEFT SIDEBAR ═══════════════════════════════════════════════════ */
+/* ══ LEFT SIDEBAR ════════════════════════════════════════════════════ */
 .apm-sidebar {
-    width: 220px; flex-shrink: 0;
+    width: 230px; flex-shrink: 0;
     display: flex; flex-direction: column;
-    background: linear-gradient(180deg, #040b18 0%, #030a14 100%);
-    border-right: 1px solid rgba(255,255,255,0.05);
+    background: #040b18;
+    border-right: 1px solid rgba(255,255,255,0.04);
     overflow: hidden;
 }
 .apm-sidebar-body {
-    flex: 1; overflow-y: auto; overflow-x: hidden; padding: 8px;
+    flex: 1; overflow-y: auto; overflow-x: hidden; padding: 10px 8px;
 }
 .apm-sidebar-body::-webkit-scrollbar { width: 3px; }
 .apm-sidebar-body::-webkit-scrollbar-thumb {
-    background: rgba(242,194,78,0.15); border-radius: 99px;
+    background: rgba(255,255,255,0.08); border-radius: 99px;
 }
 
 /* Tournament section */
 .apm-tournament-section {
-    padding: 8px; border-bottom: 1px solid rgba(242,194,78,0.08); margin-bottom: 2px;
-    background: linear-gradient(135deg, rgba(242,194,78,0.04) 0%, rgba(0,0,0,0.1) 100%);
+    margin-bottom: 6px;
+    background: linear-gradient(135deg, rgba(242,194,78,0.05) 0%, rgba(0,0,0,0.0) 100%);
+    border: 1px solid rgba(242,194,78,0.10);
+    border-radius: 10px; padding: 8px;
 }
 
 /* Group labels */
 .apm-group-lbl {
-    font-size: 9px; font-weight: 900; text-transform: uppercase;
-    letter-spacing: 2.5px; color: rgba(255,255,255,0.20);
-    padding: 12px 8px 4px; pointer-events: none;
-    display: flex; align-items: center; gap: 6px;
+    font-size: 9px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 2px; color: rgba(255,255,255,0.18);
+    padding: 14px 8px 6px; pointer-events: none;
+    display: flex; align-items: center; gap: 8px;
 }
 .apm-group-lbl::after {
     content: ''; flex: 1; height: 1px;
-    background: linear-gradient(90deg, rgba(255,255,255,0.07) 0%, transparent 100%);
+    background: rgba(255,255,255,0.05);
 }
 
 .apm-separator {
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 30%,
-        rgba(255,255,255,0.06) 70%, transparent);
-    margin: 4px 8px;
+    background: rgba(255,255,255,0.04);
+    margin: 6px 4px;
 }
 
-/* ── Menu Items ── */
-.apm-menu-item {
-    display: flex; align-items: center; gap: 10px;
-    width: 100%; padding: 9px 10px; border-radius: 9px;
-    background: transparent; border: none;
-    color: rgba(255,255,255,0.42); font-size: 13px; font-weight: 600;
-    font-family: 'Prompt', sans-serif; cursor: pointer;
-    transition: all 0.16s ease; position: relative;
-    text-align: left; margin-bottom: 1px; overflow: hidden;
+/* ── Menu Items (button AND label) ── */
+.apm-menu-item,
+label.apm-menu-item {
+    display: flex !important; align-items: center; gap: 10px;
+    width: 100% !important; padding: 9px 10px 9px 8px; border-radius: 10px;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: rgba(255,255,255,0.38); font-size: 13px; font-weight: 600;
+    font-family: 'Prompt', sans-serif !important; cursor: pointer !important;
+    transition: background 0.14s ease, border-color 0.14s ease, color 0.14s ease !important;
+    position: relative; text-align: left; margin-bottom: 2px; overflow: hidden;
+    -webkit-tap-highlight-color: transparent; box-sizing: border-box !important;
+    /* reset ALL global button overrides */
+    animation: none !important;
+    box-shadow: none !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    background-image: none !important;
+    transform: none !important;
+    filter: none !important;
 }
-.apm-menu-item::before {
-    content: ''; position: absolute; left: 0; top: 20%; bottom: 20%;
-    width: 3px; border-radius: 0 2px 2px 0;
-    background: transparent; transition: background 0.16s;
+/* Prevent ::before shimmer and ::after gradient from global button rule */
+.apm-menu-item::before, .apm-menu-item::after,
+label.apm-menu-item::before, label.apm-menu-item::after {
+    display: none !important;
+    content: none !important;
+    animation: none !important;
 }
-.apm-menu-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+.apm-menu-item:hover,
+label.apm-menu-item:hover {
+    background: rgba(255,255,255,0.05) !important;
+    border-color: rgba(255,255,255,0.07) !important;
+    color: rgba(255,255,255,0.82) !important;
+    transform: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+}
 
-.apm-menu-item.cat-blue:hover  { background: rgba(59,130,246,0.13); color: #93c5fd; }
-.apm-menu-item.cat-blue:hover::before { background: #3b82f6; }
-.apm-menu-item.cat-org:hover   { background: rgba(249,115,22,0.12); color: #fdba74; }
-.apm-menu-item.cat-org:hover::before  { background: #f97316; }
-.apm-menu-item.cat-green:hover { background: rgba(34,197,94,0.11); color: #86efac; }
-.apm-menu-item.cat-green:hover::before { background: #22c55e; }
-.apm-menu-item.danger:hover    { background: rgba(239,68,68,0.12); color: #fca5a5; }
-.apm-menu-item.danger:hover::before    { background: #ef4444; }
-.apm-menu-item.season-btn:hover { background: rgba(34,197,94,0.11); color: #86efac; }
-.apm-menu-item.season-btn:hover::before { background: #22c55e; }
+/* Category colors — hover */
+.apm-menu-item.cat-blue:hover,
+label.apm-menu-item.cat-blue:hover  {
+    background: rgba(59,130,246,0.10);
+    border-color: rgba(59,130,246,0.20);
+    color: #93c5fd;
+}
+.apm-menu-item.cat-org:hover,
+label.apm-menu-item.cat-org:hover   {
+    background: rgba(249,115,22,0.09);
+    border-color: rgba(249,115,22,0.18);
+    color: #fdba74;
+}
+.apm-menu-item.cat-green:hover,
+label.apm-menu-item.cat-green:hover {
+    background: rgba(34,197,94,0.09);
+    border-color: rgba(34,197,94,0.18);
+    color: #86efac;
+}
+.apm-menu-item.danger:hover,
+label.apm-menu-item.danger:hover    {
+    background: rgba(239,68,68,0.10);
+    border-color: rgba(239,68,68,0.20);
+    color: #fca5a5;
+}
+.apm-menu-item.season-btn:hover,
+label.apm-menu-item.season-btn:hover {
+    background: rgba(34,197,94,0.09);
+    border-color: rgba(34,197,94,0.18);
+    color: #86efac;
+}
 
 /* Active */
 .apm-menu-item.active,
-.apm-menu-item.cat-blue.active {
-    background: rgba(59,130,246,0.20); color: #bfdbfe;
-    box-shadow: inset 0 0 0 1px rgba(96,165,250,0.16);
+label.apm-menu-item.active,
+.apm-menu-item.cat-blue.active,
+label.apm-menu-item.cat-blue.active {
+    background: rgba(59,130,246,0.14);
+    border-color: rgba(59,130,246,0.22);
+    color: #bfdbfe;
 }
-.apm-menu-item.cat-blue.active::before { background: #60a5fa; }
-.apm-menu-item.cat-org.active {
-    background: rgba(234,88,12,0.20); color: #fed7aa;
-    box-shadow: inset 0 0 0 1px rgba(251,146,60,0.16);
+.apm-menu-item.cat-org.active,
+label.apm-menu-item.cat-org.active {
+    background: rgba(234,88,12,0.14);
+    border-color: rgba(251,146,60,0.22);
+    color: #fed7aa;
 }
-.apm-menu-item.cat-org.active::before { background: #fb923c; }
 .apm-menu-item.cat-green.active,
-.apm-menu-item.season-btn.active {
-    background: rgba(21,128,61,0.20); color: #bbf7d0;
-    box-shadow: inset 0 0 0 1px rgba(74,222,128,0.16);
+label.apm-menu-item.cat-green.active,
+.apm-menu-item.season-btn.active,
+label.apm-menu-item.season-btn.active {
+    background: rgba(21,128,61,0.14);
+    border-color: rgba(74,222,128,0.22);
+    color: #bbf7d0;
 }
-.apm-menu-item.cat-green.active::before,
-.apm-menu-item.season-btn.active::before { background: #4ade80; }
-.apm-menu-item.danger.active {
-    background: rgba(185,28,28,0.20); color: #fecaca;
-    box-shadow: inset 0 0 0 1px rgba(239,68,68,0.16);
+.apm-menu-item.danger.active,
+label.apm-menu-item.danger.active {
+    background: rgba(185,28,28,0.14);
+    border-color: rgba(239,68,68,0.22);
+    color: #fecaca;
 }
-.apm-menu-item.danger.active::before { background: #ef4444; }
 
-/* Icon */
-.apm-menu-item-icon {
+/* Icon badge */
+.apm-menu-item-icon,
+label.apm-menu-item .apm-menu-item-icon {
     font-size: 15px; flex-shrink: 0;
-    width: 28px; height: 28px;
+    width: 30px; height: 30px;
     display: flex; align-items: center; justify-content: center;
-    border-radius: 7px; background: rgba(255,255,255,0.04);
-    transition: all 0.16s;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    transition: all 0.14s;
 }
-.apm-menu-item:hover .apm-menu-item-icon { background: rgba(255,255,255,0.09); transform: scale(1.08); }
-.apm-menu-item.active .apm-menu-item-icon { background: rgba(255,255,255,0.09); }
+.apm-menu-item:hover .apm-menu-item-icon,
+label.apm-menu-item:hover .apm-menu-item-icon { background: rgba(255,255,255,0.09); }
+.apm-menu-item.active .apm-menu-item-icon,
+label.apm-menu-item.active .apm-menu-item-icon { background: rgba(255,255,255,0.09); }
+
+/* Category icon tints */
+.apm-menu-item.cat-blue:hover .apm-menu-item-icon,
+label.apm-menu-item.cat-blue:hover .apm-menu-item-icon,
+.apm-menu-item.cat-blue.active .apm-menu-item-icon { background: rgba(59,130,246,0.18); }
+.apm-menu-item.cat-org:hover .apm-menu-item-icon,
+label.apm-menu-item.cat-org:hover .apm-menu-item-icon,
+.apm-menu-item.cat-org.active .apm-menu-item-icon   { background: rgba(249,115,22,0.18); }
+.apm-menu-item.cat-green:hover .apm-menu-item-icon,
+label.apm-menu-item.cat-green:hover .apm-menu-item-icon,
+.apm-menu-item.cat-green.active .apm-menu-item-icon { background: rgba(34,197,94,0.18); }
+.apm-menu-item.danger:hover .apm-menu-item-icon,
+label.apm-menu-item.danger:hover .apm-menu-item-icon,
+.apm-menu-item.danger.active .apm-menu-item-icon    { background: rgba(239,68,68,0.18); }
 
 /* Pending badge */
 .apm-menu-item .apm-badge {
@@ -3717,111 +3782,169 @@
     color: #fff; border-radius: 99px; font-size: 9px; font-weight: 900;
     min-width: 18px; height: 18px; line-height: 18px;
     text-align: center; padding: 0 4px;
-    box-shadow: 0 2px 8px rgba(239,68,68,0.5);
+    box-shadow: 0 2px 6px rgba(239,68,68,0.45);
     animation: apmBadgePulse 2s ease-in-out infinite;
 }
 @keyframes apmBadgePulse {
-    0%,100% { box-shadow: 0 2px 8px rgba(239,68,68,0.5), 0 0 0 2px rgba(239,68,68,0.15); }
-    50%      { box-shadow: 0 2px 14px rgba(239,68,68,0.7), 0 0 0 4px rgba(239,68,68,0.08); }
+    0%,100% { box-shadow: 0 2px 8px rgba(239,68,68,0.45), 0 0 0 2px rgba(239,68,68,0.12); }
+    50%      { box-shadow: 0 2px 14px rgba(239,68,68,0.65), 0 0 0 4px rgba(239,68,68,0.06); }
 }
 
 /* Sidebar footer */
 .apm-sidebar-footer {
-    padding: 10px 8px; border-top: 1px solid rgba(255,255,255,0.05); flex-shrink: 0;
+    padding: 10px 8px; border-top: 1px solid rgba(255,255,255,0.04); flex-shrink: 0;
 }
 .apm-logout-btn {
     display: flex; align-items: center; justify-content: center; gap: 7px;
     width: 100%; padding: 9px 12px; border-radius: 9px;
-    background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.18);
+    background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.16);
     color: #f87171; font-size: 12px; font-weight: 700;
-    font-family: 'Prompt', sans-serif; cursor: pointer; transition: all 0.16s;
-    letter-spacing: 0.3px;
+    font-family: 'Prompt', sans-serif; cursor: pointer; transition: all 0.15s;
 }
 .apm-logout-btn:hover {
-    background: rgba(239,68,68,0.16); border-color: rgba(239,68,68,0.35);
-    color: #fca5a5; transform: translateY(-1px);
-    box-shadow: 0 4px 14px rgba(239,68,68,0.18);
+    background: rgba(239,68,68,0.14); border-color: rgba(239,68,68,0.30);
+    color: #fca5a5;
 }
 
 /* Tournament buttons */
 .apm-start-btn {
-    width: 100%; padding: 11px; border-radius: 11px;
+    width: 100%; padding: 10px; border-radius: 10px;
     background: linear-gradient(135deg, #F2C24E 0%, #d4a01a 100%);
     border: none; color: #020710;
-    font-size: 12.5px; font-weight: 900; font-family: 'Prompt', sans-serif;
-    cursor: pointer; transition: all 0.18s;
+    font-size: 12px; font-weight: 900; font-family: 'Prompt', sans-serif;
+    cursor: pointer; transition: all 0.16s;
     display: flex; align-items: center; justify-content: center; gap: 7px;
-    box-shadow: 0 4px 18px rgba(242,194,78,0.32); margin-top: 6px;
+    box-shadow: 0 4px 16px rgba(242,194,78,0.28); margin-top: 6px;
 }
-.apm-start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(242,194,78,0.48); }
+.apm-start-btn:hover { box-shadow: 0 6px 22px rgba(242,194,78,0.42); }
 .apm-advance-btn {
-    width: 100%; padding: 9px 12px; border-radius: 10px;
-    background: rgba(99,102,241,0.22); border: 1px solid rgba(129,140,248,0.28);
+    width: 100%; padding: 8px 12px; border-radius: 9px;
+    background: rgba(99,102,241,0.18); border: 1px solid rgba(129,140,248,0.24);
     color: #c7d2fe; font-size: 12px; font-weight: 700;
-    font-family: 'Prompt', sans-serif; cursor: pointer; transition: all 0.16s;
-    display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 5px;
+    font-family: 'Prompt', sans-serif; cursor: pointer; transition: all 0.14s;
+    display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 4px;
 }
-.apm-advance-btn:hover:not(:disabled) {
-    background: rgba(99,102,241,0.38); transform: translateY(-1px);
-    box-shadow: 0 5px 16px rgba(99,102,241,0.28);
-}
-.apm-advance-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+.apm-advance-btn:hover:not(:disabled) { background: rgba(99,102,241,0.32); }
+.apm-advance-btn:disabled { opacity: 0.22; cursor: not-allowed; }
 
 /* ══ RIGHT PANE ══════════════════════════════════════════════════════ */
 .apm-right-pane {
     flex: 1; min-width: 0; display: flex; flex-direction: column;
-    background: linear-gradient(145deg, #07101f 0%, #060d1a 100%);
+    background: #050b18;
     overflow: hidden; position: relative;
 }
 .apm-right-pane::before {
     content: ''; position: absolute; inset: 0;
-    background-image:
-        linear-gradient(rgba(242,194,78,0.018) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(242,194,78,0.018) 1px, transparent 1px);
-    background-size: 38px 38px; pointer-events: none; z-index: 0;
+    background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0,87,184,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 100%, rgba(242,194,78,0.04) 0%, transparent 50%);
+    pointer-events: none; z-index: 0;
 }
 
 /* Content area */
 .apm-content {
     flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden;
     display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 24px; position: relative; z-index: 1;
-    scrollbar-width: thin; scrollbar-color: rgba(242,194,78,0.12) transparent;
+    align-items: stretch; justify-content: flex-start;
+    position: relative; z-index: 1;
+    scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.07) transparent;
 }
-.apm-content::-webkit-scrollbar { width: 5px; }
+.apm-content::-webkit-scrollbar { width: 4px; }
 .apm-content::-webkit-scrollbar-thumb {
-    background: rgba(242,194,78,0.12); border-radius: 99px;
+    background: rgba(255,255,255,0.08); border-radius: 99px;
 }
 
-/* Placeholder */
+/* When empty: center placeholder */
+.apm-content:not(.apm-has-content) {
+    align-items: center; justify-content: center; padding: 24px;
+}
+
+/* When content loaded: top-align */
+.apm-content.apm-has-content {
+    align-items: flex-start; justify-content: flex-start; padding: 16px;
+}
+
+/* All direct children inside content area must scroll properly */
+.apm-content > div:not(.apm-content-placeholder) {
+    width: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    max-height: 100%;
+    box-sizing: border-box;
+}
+
+/* Placeholder — new design */
 .apm-content-placeholder {
-    text-align: center; opacity: 0.14; pointer-events: none; margin: auto;
+    text-align: center; pointer-events: none; margin: auto;
     animation: apmPlaceholderIn 0.4s ease;
+    width: 100%; max-width: 480px;
 }
 @keyframes apmPlaceholderIn {
-    from { opacity:0; transform:translateY(14px); }
-    to   { opacity:0.14; transform:translateY(0); }
-}
-.apm-content-placeholder-icon {
-    font-size: 76px; margin-bottom: 18px; line-height: 1;
-    filter: drop-shadow(0 0 22px rgba(242,194,78,0.28));
-}
-.apm-content-placeholder-text {
-    font-size: 15px; color: #F2C24E; font-family: 'Prompt', sans-serif;
-    line-height: 1.9; font-weight: 500;
+    from { opacity:0; transform:translateY(16px); }
+    to   { opacity:1; transform:translateY(0); }
 }
 
-/* ── Legacy compatibility ── */
+/* Welcome panel inside placeholder */
+.apm-rp-welcome {
+    display: flex; flex-direction: column; align-items: center; gap: 0;
+}
+.apm-rp-logo {
+    font-size: 52px; line-height: 1; margin-bottom: 14px;
+    filter: drop-shadow(0 0 18px rgba(242,194,78,0.22));
+    animation: apmLogoPulse 4s ease-in-out infinite;
+}
+@keyframes apmLogoPulse {
+    0%,100% { filter: drop-shadow(0 0 18px rgba(242,194,78,0.22)); }
+    50%      { filter: drop-shadow(0 0 30px rgba(242,194,78,0.42)); }
+}
+.apm-rp-title {
+    font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 900;
+    color: #F2C24E; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px;
+}
+.apm-rp-sub {
+    font-size: 12px; color: rgba(255,255,255,0.22); font-family: 'Prompt', sans-serif;
+    letter-spacing: 0.5px; margin-bottom: 24px;
+}
+.apm-rp-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%;
+}
+.apm-rp-card {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px; border-radius: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    cursor: pointer; pointer-events: all;
+    transition: all 0.16s ease;
+    text-align: left;
+}
+.apm-rp-card:hover {
+    background: rgba(59,130,246,0.10);
+    border-color: rgba(59,130,246,0.24);
+    transform: translateY(-2px);
+}
+.apm-rp-card-red:hover {
+    background: rgba(239,68,68,0.10) !important;
+    border-color: rgba(239,68,68,0.24) !important;
+}
+.apm-rp-card-icon { font-size: 22px; flex-shrink: 0; }
+.apm-rp-card-label {
+    font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.50);
+    font-family: 'Prompt', sans-serif; line-height: 1.3;
+}
+.apm-rp-card:hover .apm-rp-card-label { color: rgba(255,255,255,0.85); }
+
+/* Divider above the quick-access grid */
+.apm-rp-divider {
+    width: 100%; height: 1px; background: rgba(255,255,255,0.05); margin: 0 0 20px;
+}
+
+/* ── Legacy compat ── */
 .apm-hamburger-btn { display: none !important; }
 .apm-sidebar-backdrop { display: none !important; }
-label.apm-menu-item { display: flex !important; }
 .apm-top-bar { display: none !important; }
-
-/* Mobile card grid — hidden on desktop */
 .apm-mobile-grid-wrap { display: none; }
 
-/* ── Normalize inner modal boxes when shown inline in admin panel ── */
+/* ── Normalize inner modal boxes ── */
 .apm-content .modal-content,
 .apm-content .bmp-box,
 .apm-content .pl-box,
@@ -3830,103 +3953,103 @@ label.apm-menu-item { display: flex !important; }
     border-radius: 12px !important;
     box-shadow: none !important;
 }
-/* Scrollable tables inside admin inline panels */
 .apm-content #edit-teams-container { max-height: 220px; overflow-y: auto; }
 
-/* ══ TABLET ≤ 780px ══════════════════════════════════════════════════ */
+/* ══ TABLET ≤ 780px ══ */
 @media (max-width: 780px) {
     #admin-panel-modal { padding: 8px; }
-    .apm-layout { max-height: 96vh; height: 96vh; border-radius: 16px; }
-    .apm-sidebar { width: 192px; }
+    .apm-layout { max-height: 96vh; height: 96vh; border-radius: 18px; }
+    .apm-sidebar { width: 196px; }
     .apm-header-sub { display: none; }
 }
 
-/* ══ MOBILE ≤ 600px ══════════════════════════════════════════════════ */
+/* ══ MOBILE ≤ 600px ══ */
 @media (max-width: 600px) {
     #admin-panel-modal { padding: 0; }
     .apm-layout { border-radius: 0; height: 100dvh; max-height: 100dvh; }
     .apm-header-bar { height: 52px; padding: 0 14px; gap: 10px; }
-    .apm-close-btn { width: 44px; height: 44px; font-size: 18px; border-radius: 12px; }
+    .apm-close-btn { width: 40px; height: 40px; font-size: 16px; border-radius: 10px; }
     .apm-body { overflow: hidden; position: relative; }
-
-    /* Hide desktop sidebar */
     .apm-sidebar { display: none; }
 
-    /* Mobile grid: default state */
+    /* Mobile grid */
     .apm-mobile-grid-wrap {
         display: flex; flex-direction: column;
-        flex: 1; overflow-y: auto; padding: 14px 14px 0;
+        flex: 1; overflow-y: auto; padding: 12px 12px 0;
         scrollbar-width: thin;
     }
-
-    /* Hide right pane by default on mobile */
     .apm-right-pane { display: none; }
-
-    /* When content is active: show right pane, hide grid */
     .apm-layout.apm-content-active .apm-mobile-grid-wrap { display: none; }
     .apm-layout.apm-content-active .apm-right-pane { display: flex; }
     .apm-layout.apm-content-active .apm-back-btn { display: flex !important; }
-
     .apm-content { padding: 14px; }
 
-    /* Mobile tournament bar */
+    /* Mobile tournament */
     .apm-mobile-tournament { margin-bottom: 10px; }
     .apm-mobile-tourn-inner {
-        background: linear-gradient(135deg, rgba(242,194,78,0.06) 0%, rgba(0,0,0,0.15) 100%);
-        border: 1px solid rgba(242,194,78,0.15); border-radius: 12px;
+        background: rgba(242,194,78,0.05);
+        border: 1px solid rgba(242,194,78,0.12); border-radius: 12px;
         padding: 10px; display: flex; flex-direction: column; gap: 6px;
     }
     .apm-mobile-tourn-label {
-        font-size: 9px; font-weight: 900; letter-spacing: 2px;
-        text-transform: uppercase; color: rgba(242,194,78,0.45);
+        font-size: 9px; font-weight: 800; letter-spacing: 2px;
+        text-transform: uppercase; color: rgba(242,194,78,0.40);
         padding: 0 2px;
     }
 
     /* Group labels */
     .apm-mobile-group-label {
-        font-size: 10px; font-weight: 800;
+        font-size: 9.5px; font-weight: 800;
         text-transform: uppercase; letter-spacing: 1.5px;
-        color: rgba(255,255,255,0.22);
+        color: rgba(255,255,255,0.20);
         padding: 14px 2px 8px;
         display: flex; align-items: center; gap: 8px;
     }
     .apm-mobile-group-label::after {
-        content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08);
+        content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06);
     }
 
     /* Card grid */
     .apm-mobile-grid {
-        display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+        display: grid; grid-template-columns: 1fr 1fr; gap: 9px;
         margin-bottom: 4px;
     }
     .apm-mobile-card {
-        display: flex; flex-direction: column; align-items: center;
+        display: flex !important; flex-direction: column; align-items: center;
         justify-content: center; gap: 9px;
-        padding: 18px 10px 16px; border-radius: 14px;
-        background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-        cursor: pointer; transition: all 0.14s; position: relative;
-        text-align: center; min-height: 88px;
-        -webkit-tap-highlight-color: transparent;
+        padding: 18px 10px 15px; border-radius: 14px;
+        background: rgba(255,255,255,0.03) !important;
+        border: 1px solid rgba(255,255,255,0.07) !important;
+        cursor: pointer !important; transition: background 0.13s, border-color 0.13s;
+        position: relative; text-align: center; min-height: 86px;
+        -webkit-tap-highlight-color: transparent; box-sizing: border-box !important;
+        /* reset global button overrides for label elements */
+        animation: none !important; box-shadow: none !important;
+        text-transform: none !important; letter-spacing: 0 !important;
+        font-size: 14px !important; color: inherit !important;
+        width: 100% !important; transform: none !important; filter: none !important;
     }
-    .apm-mobile-card:active { transform: scale(0.95); opacity: 0.85; }
-    .apm-mobile-card.c-blue  { border-color: rgba(59,130,246,0.22); }
-    .apm-mobile-card.c-blue:hover  { background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.42); }
-    .apm-mobile-card.c-org   { border-color: rgba(249,115,22,0.22); }
-    .apm-mobile-card.c-org:hover   { background: rgba(249,115,22,0.12); border-color: rgba(249,115,22,0.42); }
-    .apm-mobile-card.c-green { border-color: rgba(34,197,94,0.22); }
-    .apm-mobile-card.c-green:hover { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.42); }
-    .apm-mobile-card.c-red   { border-color: rgba(239,68,68,0.22); }
-    .apm-mobile-card.c-red:hover   { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.42); }
-    /* Full-width card */
+    label.apm-mobile-card::before, label.apm-mobile-card::after {
+        display: none !important; content: none !important;
+    }
+    .apm-mobile-card:active { transform: scale(0.94); opacity: 0.82; }
+    .apm-mobile-card.c-blue  { border-color: rgba(59,130,246,0.20); }
+    .apm-mobile-card.c-blue:hover  { background: rgba(59,130,246,0.10); border-color: rgba(59,130,246,0.36); }
+    .apm-mobile-card.c-org   { border-color: rgba(249,115,22,0.20); }
+    .apm-mobile-card.c-org:hover   { background: rgba(249,115,22,0.10); border-color: rgba(249,115,22,0.36); }
+    .apm-mobile-card.c-green { border-color: rgba(34,197,94,0.20); }
+    .apm-mobile-card.c-green:hover { background: rgba(34,197,94,0.10); border-color: rgba(34,197,94,0.36); }
+    .apm-mobile-card.c-red   { border-color: rgba(239,68,68,0.20); }
+    .apm-mobile-card.c-red:hover   { background: rgba(239,68,68,0.10); border-color: rgba(239,68,68,0.36); }
     .apm-mobile-card.c-full  {
         grid-column: 1 / -1; flex-direction: row; min-height: auto;
-        padding: 13px 16px; gap: 12px; justify-content: flex-start;
+        padding: 12px 16px; gap: 12px; justify-content: flex-start;
     }
-    .apm-mobile-card-icon { font-size: 28px; line-height: 1; }
-    .apm-mobile-card.c-full .apm-mobile-card-icon { font-size: 22px; }
+    .apm-mobile-card-icon { font-size: 26px; line-height: 1; }
+    .apm-mobile-card.c-full .apm-mobile-card-icon { font-size: 20px; }
     .apm-mobile-card-label {
         font-size: 12px; font-weight: 700;
-        color: rgba(255,255,255,0.72); font-family: 'Prompt', sans-serif;
+        color: rgba(255,255,255,0.68); font-family: 'Prompt', sans-serif;
         line-height: 1.35;
     }
     .apm-mobile-card.c-full .apm-mobile-card-label { font-size: 13px; }
@@ -3936,7 +4059,7 @@ label.apm-menu-item { display: flex !important; }
         font-size: 9px; font-weight: 900;
         min-width: 18px; height: 18px; line-height: 18px;
         text-align: center; padding: 0 4px;
-        box-shadow: 0 2px 6px rgba(239,68,68,0.5);
+        box-shadow: 0 2px 6px rgba(239,68,68,0.45);
         animation: apmBadgePulse 2s ease-in-out infinite;
     }
 
@@ -3948,7 +4071,6 @@ label.apm-menu-item { display: flex !important; }
         width: 100%; padding: 13px 16px; font-size: 14px; border-radius: 12px;
     }
 }
-
 </style>
 
 <div id="initial-load-overlay" style="position:fixed;inset:0;z-index:99998;overflow:hidden;background:#020710;transition:opacity .4s ease;pointer-events:none;">
@@ -5182,7 +5304,7 @@ label.apm-menu-item { display: flex !important; }
 <div id="admin-panel-modal" onclick="if(event.target===this)closeAdminPanelModal()">
   <div class="apm-layout">
 
-    <!-- ══ HEADER BAR (full-width) ══ -->
+    <!-- ══ HEADER BAR ══ -->
     <div class="apm-header-bar">
       <div class="apm-header-icon">⚽</div>
       <div>
@@ -5245,7 +5367,7 @@ label.apm-menu-item { display: flex !important; }
           <button class="apm-menu-item cat-green" data-action="export" onclick="adminPanelAction('export')">
             <span class="apm-menu-item-icon">💾</span><span>Export Backup</span>
           </button>
-          <label class="apm-menu-item cat-green" style="cursor:pointer;">
+          <label class="apm-menu-item cat-green">
             <span class="apm-menu-item-icon">📂</span><span>Import Backup</span>
             <input type="file" accept=".json" onchange="adminPanelAction('import', this); this.value='';" style="display:none;">
           </label>
@@ -5351,10 +5473,31 @@ label.apm-menu-item { display: flex !important; }
 
       <!-- ══ RIGHT PANE ══ -->
       <div class="apm-right-pane">
-        <div class="apm-content">
+        <div class="apm-content" id="apm-main-content">
           <div class="apm-content-placeholder">
-            <div class="apm-content-placeholder-icon">⚙️</div>
-            <div class="apm-content-placeholder-text">เลือกเมนูทางซ้าย<br>เพื่อเริ่มจัดการระบบ</div>
+            <div class="apm-rp-welcome">
+              <div class="apm-rp-logo">⚽</div>
+              <div class="apm-rp-title">FC 26 SF Admin</div>
+              <div class="apm-rp-sub">เลือกเมนูทางซ้ายเพื่อจัดการระบบ</div>
+              <div class="apm-rp-grid">
+                <div class="apm-rp-card" onclick="adminPanelAction('editTeams')">
+                  <span class="apm-rp-card-icon">✏️</span>
+                  <span class="apm-rp-card-label">จัดการผู้สมัคร</span>
+                </div>
+                <div class="apm-rp-card" onclick="adminPanelAction('pending')">
+                  <span class="apm-rp-card-icon">📋</span>
+                  <span class="apm-rp-card-label">รอตรวจสอบ</span>
+                </div>
+                <div class="apm-rp-card" onclick="adminPanelAction('export')">
+                  <span class="apm-rp-card-icon">💾</span>
+                  <span class="apm-rp-card-label">Export Backup</span>
+                </div>
+                <div class="apm-rp-card apm-rp-card-red" onclick="adminPanelAction('reset')">
+                  <span class="apm-rp-card-icon">🚨</span>
+                  <span class="apm-rp-card-label">รีเซ็ตทั้งหมด</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div><!-- /right-pane -->
@@ -13926,6 +14069,11 @@ function _apmShowInline(modalId, openFn, innerSel) {
     content.style.alignItems    = 'flex-start';
     content.style.justifyContent = 'flex-start';
     content.style.padding       = '12px';
+    content.classList.add('apm-has-content');
+    // ensure inner box scrolls inside the pane instead of overflowing
+    innerBox.style.overflowY    = 'auto';
+    innerBox.style.minHeight    = '0';
+    innerBox.style.flexShrink   = '1';
     content.appendChild(innerBox);
     // Mobile: switch to content view
     var layout = document.querySelector('.apm-layout');
@@ -13963,12 +14111,21 @@ function _apmRestoreInline() {
     // Restore .apm-content placeholder
     var content = document.querySelector('.apm-content');
     if (content) {
-        content.innerHTML = '<div class="apm-content-placeholder">'
-            + '<div class="apm-content-placeholder-icon">⚙️</div>'
-            + '<div class="apm-content-placeholder-text">เลือกเมนูด้านซ้าย<br>เพื่อจัดการระบบ</div></div>';
+        content.classList.remove('apm-has-content');
         content.style.alignItems    = '';
         content.style.justifyContent = '';
         content.style.padding       = '';
+        content.innerHTML = '<div class="apm-content-placeholder">'
+            + '<div class="apm-rp-welcome">'
+            + '<div class="apm-rp-logo">⚽</div>'
+            + '<div class="apm-rp-title">FC 26 SF Admin</div>'
+            + '<div class="apm-rp-sub">เลือกเมนูทางซ้ายเพื่อจัดการระบบ</div>'
+            + '<div class="apm-rp-grid">'
+            + '<div class="apm-rp-card" onclick="adminPanelAction(\'editTeams\')"><span class="apm-rp-card-icon">✏️</span><span class="apm-rp-card-label">จัดการผู้สมัคร</span></div>'
+            + '<div class="apm-rp-card" onclick="adminPanelAction(\'pending\')"><span class="apm-rp-card-icon">📋</span><span class="apm-rp-card-label">รอตรวจสอบ</span></div>'
+            + '<div class="apm-rp-card" onclick="adminPanelAction(\'export\')"><span class="apm-rp-card-icon">💾</span><span class="apm-rp-card-label">Export Backup</span></div>'
+            + '<div class="apm-rp-card apm-rp-card-red" onclick="adminPanelAction(\'reset\')"><span class="apm-rp-card-icon">🚨</span><span class="apm-rp-card-label">รีเซ็ตทั้งหมด</span></div>'
+            + '</div></div></div>';
     }
 }
 
