@@ -844,6 +844,82 @@
             box-shadow: 0 0 30px rgba(242,194,78, 0.65);
         }
 
+        /* ── New Admin Control Panel ── */
+        #admin-control-panel {
+            background: rgba(4,12,34,0.85);
+            border: 1px solid rgba(242,194,78,0.25);
+            border-radius: 16px;
+            padding: 16px 18px;
+            margin-bottom: 10px;
+        }
+        .adm-panel-header {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 14px; padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+        .adm-panel-header-icon { font-size: 18px; }
+        .adm-panel-header-text { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: var(--wc-gold); }
+        .adm-groups { display: flex; flex-direction: column; gap: 10px; }
+        .adm-group { display: flex; flex-direction: column; gap: 6px; }
+        .adm-group-label {
+            font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
+            color: rgba(255,255,255,0.3); padding-left: 2px;
+        }
+        .adm-btns { display: flex; flex-wrap: wrap; gap: 7px; }
+        .adm-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 14px; font-size: 12px; font-weight: 700;
+            border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05); color: #fff;
+            cursor: pointer; white-space: nowrap; font-family: 'Prompt', sans-serif;
+            transition: all 0.18s ease; line-height: 1; animation: none;
+            height: 36px;
+        }
+        .adm-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.4); filter: brightness(1.15); }
+        .adm-btn:active { transform: translateY(1px); }
+        .adm-btn.gold { background: linear-gradient(135deg,#F2C24E,#c49520); color:#020710; border-color:transparent; }
+        .adm-btn.blue { background: linear-gradient(135deg,rgba(29,78,216,0.3),rgba(30,64,175,0.2)); border-color:rgba(96,165,250,0.45); color:#93c5fd; }
+        .adm-btn.green { background: linear-gradient(135deg,rgba(22,163,74,0.25),rgba(16,185,129,0.15)); border-color:rgba(34,197,94,0.4); color:#4ade80; }
+        .adm-btn.orange { background: linear-gradient(135deg,rgba(124,45,0,0.8),rgba(194,65,12,0.7)); border-color:rgba(249,115,22,0.35); color:#fed7aa; }
+        .adm-btn.purple { background: linear-gradient(135deg,rgba(109,28,152,0.5),rgba(124,58,237,0.4)); border-color:rgba(167,139,250,0.4); color:#c4b5fd; }
+        .adm-btn.teal { background: linear-gradient(135deg,rgba(15,118,110,0.6),rgba(20,184,166,0.4)); border-color:rgba(20,184,166,0.4); color:#99f6e4; }
+        .adm-btn.cyan { background: linear-gradient(135deg,rgba(12,74,110,0.7),rgba(3,105,161,0.6)); border-color:rgba(14,165,233,0.4); color:#7dd3fc; }
+        .adm-btn.danger { background: linear-gradient(135deg,rgba(127,29,29,0.7),rgba(185,28,28,0.6)); border-color:rgba(239,68,68,0.4); color:#fca5a5; }
+        .adm-btn.season { background: linear-gradient(135deg,rgba(20,83,45,0.7),rgba(21,128,61,0.6)); border-color:rgba(34,197,94,0.4); color:#86efac; }
+        .adm-btn.trophy { background: linear-gradient(135deg,rgba(255,215,0,0.18),rgba(180,130,0,0.12)); border-color:rgba(255,215,0,0.5); color:#F2C24E; }
+        #admin-pending-btn-new { position: relative; overflow: visible; }
+        #admin-pending-count-new {
+            display: none; position: absolute; top: -7px; right: -7px;
+            background: #ef4444; color: #fff; border-radius: 99px; font-size: 10px;
+            font-weight: 900; min-width: 18px; height: 18px; line-height: 18px;
+            text-align: center; padding: 0 4px; font-family: 'Prompt', sans-serif;
+        }
+        .adm-start-btn {
+            width: 100%; background: linear-gradient(135deg,#F2C24E,#c49520);
+            color: #020710; font-weight: 900; font-size: 13px; border-radius: 12px;
+            padding: 12px 20px; border: none; letter-spacing: 1px; font-family: 'Prompt', sans-serif;
+            cursor: pointer; margin-bottom: 4px; display: flex; align-items: center;
+            justify-content: center; gap: 8px; animation: none;
+            transition: all 0.2s ease;
+        }
+        .adm-start-btn:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(242,194,78,0.4); }
+        .adm-advance-btn {
+            flex: 1; background: linear-gradient(135deg,#22c55e,#16a34a);
+            color: #fff; font-weight: 800; font-size: 12px; border-radius: 10px;
+            padding: 9px 14px; border: none; font-family: 'Prompt', sans-serif;
+            cursor: pointer; display: flex; align-items: center; gap: 6px; animation: none;
+            transition: all 0.2s ease;
+        }
+        .adm-advance-btn:hover:not([disabled]) { filter: brightness(1.1); transform: translateY(-1px); }
+        .adm-advance-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+        /* host flags editor */
+        .hf-editor-row { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: rgba(255,255,255,0.04); border-radius: 8px; border: 1px solid rgba(255,255,255,0.07); }
+        .hf-flag-preview { width: 36px; height: 24px; object-fit: cover; border-radius: 3px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
+        .hf-code-input { width: 70px; padding: 6px 8px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff; font-size: 13px; font-family: 'Prompt', sans-serif; text-align: center; text-transform: lowercase; }
+        .hf-name-input { flex: 1; padding: 6px 10px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; color: #fff; font-size: 13px; font-family: 'Prompt', sans-serif; }
+        .hf-del-btn { width: 28px; height: 28px; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); border-radius: 6px; color: #f87171; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.15s; animation: none; padding: 0; }
+        .hf-del-btn:hover { background: rgba(239,68,68,0.3); }
+
         #admin-actions-dock button {
             padding: 8px 14px; font-size: 12px; border-radius: 10px; width: auto;
             height: 38px; display: inline-flex; align-items: center; gap: 5px;
@@ -3803,8 +3879,8 @@
             <span class="w3" id="title-w3">TOURNAMENT</span>
         </h1>
 
-        <!-- Host flags -->
-        <div class="wc2026-hosts">
+        <!-- Host flags — rendered dynamically by renderHeader() -->
+        <div class="wc2026-hosts" id="wc2026-hosts-container">
             <img src="https://flagcdn.com/w80/us.png" class="host-flag" alt="USA">
             <span class="ht">USA</span>
             <span class="host-sep">·</span>
@@ -4252,6 +4328,18 @@
                 <div><input type="text" id="edit-title-w1" class="edit-input" placeholder="คำที่ 1"></div>
                 <div><input type="text" id="edit-title-w2" class="edit-input" placeholder="คำที่ 2"></div>
                 <div><input type="text" id="edit-title-w3" class="edit-input" placeholder="คำที่ 3"></div>
+            </div>
+
+            <!-- ── Host Flags Editor ── -->
+            <div style="border:1px solid rgba(242,194,78,0.3); border-radius:10px; padding:14px; background:rgba(242,194,78,0.04);">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+                    <label style="font-weight:700; font-size:13px; color:var(--wc-gold); margin:0;">🏳️ ธงชาติใต้ชื่อทัวร์นาเมนต์ (Host Flags)</label>
+                    <button onclick="adminAddHostFlag()" style="background:rgba(242,194,78,0.15);border:1px solid rgba(242,194,78,0.4);color:#fde68a;border-radius:7px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Prompt',sans-serif;">+ เพิ่มธง</button>
+                </div>
+                <div style="font-size:11px; color:#64748b; margin-bottom:10px; line-height:1.5;">
+                    ใส่รหัสประเทศ 2 ตัวอักษร (เช่น <strong style="color:#94a3b8;">th</strong> = ไทย, <strong style="color:#94a3b8;">jp</strong> = ญี่ปุ่น, <strong style="color:#94a3b8;">us</strong> = อเมริกา) และชื่อที่ต้องการแสดง
+                </div>
+                <div id="host-flags-editor" style="display:flex; flex-direction:column; gap:8px;"></div>
             </div>
 
             <div>
@@ -5180,6 +5268,11 @@ let state = {
     titleW1: "WORLD",
     titleW2: "CUP",
     titleW3: "TOURNAMENT",
+    hostFlags: [
+        { code: "us", name: "USA" },
+        { code: "ca", name: "CANADA" },
+        { code: "mx", name: "MEXICO" }
+    ],
     tournamentDetails: "",
     discordUrl: "https://discord.gg/ESMDUce5pf",
     socialLinks: { discord: "https://discord.gg/ESMDUce5pf", youtube: "", facebook: "", tiktok: "", twitch: "" },
@@ -6978,6 +7071,21 @@ function renderHeader() {
         document.body.style.backgroundImage = `radial-gradient(circle at 50% -20%, rgba(26, 58, 109, 0.6) 0%, transparent 60%)`;
     }
     _applyHeaderTrophy(state.trophyImg || '');
+
+    // ── Render host flags dynamically ──
+    var hostsContainer = document.getElementById("wc2026-hosts-container");
+    if (hostsContainer) {
+        var flags = (state.hostFlags && state.hostFlags.length > 0)
+            ? state.hostFlags
+            : [{ code: "us", name: "USA" }, { code: "ca", name: "CANADA" }, { code: "mx", name: "MEXICO" }];
+        var hostsHtml = '';
+        flags.forEach(function(f, i) {
+            if (i > 0) hostsHtml += '<span class="host-sep">·</span>';
+            hostsHtml += '<img src="https://flagcdn.com/w80/' + f.code + '.png" class="host-flag" alt="' + f.name + '" onerror="this.style.display=\'none\'">';
+            if (f.name) hostsHtml += '<span class="ht">' + f.name + '</span>';
+        });
+        hostsContainer.innerHTML = hostsHtml;
+    }
 }
 
 // ════════════════════════════════════════════════════════════════════
@@ -7286,6 +7394,54 @@ function closeAdminPendingModal() {
     document.getElementById("adminPendingModal").style.display = "none";
 }
 
+function _renderHostFlagsEditor() {
+    var container = document.getElementById("host-flags-editor");
+    if (!container) return;
+    var flags = (state.hostFlags && state.hostFlags.length > 0)
+        ? state.hostFlags
+        : [{ code: "us", name: "USA" }, { code: "ca", name: "CANADA" }, { code: "mx", name: "MEXICO" }];
+    container.innerHTML = '';
+    flags.forEach(function(f, i) {
+        var row = document.createElement('div');
+        row.className = 'hf-editor-row';
+        row.innerHTML =
+            '<img class="hf-flag-preview" src="https://flagcdn.com/w80/' + f.code + '.png" alt="" onerror="this.src=\'\';">' +
+            '<input class="hf-code-input" type="text" value="' + (f.code || '') + '" maxlength="3" placeholder="us" title="รหัสประเทศ (2 ตัว)" oninput="adminUpdateHostFlagPreview(this)">' +
+            '<input class="hf-name-input" type="text" value="' + (f.name || '') + '" placeholder="ชื่อที่แสดง เช่น USA" title="ชื่อที่แสดงใต้ธง">' +
+            '<button class="hf-del-btn" onclick="adminDeleteHostFlag(this)" title="ลบธงนี้">✕</button>';
+        container.appendChild(row);
+    });
+}
+
+function adminAddHostFlag() {
+    var container = document.getElementById("host-flags-editor");
+    if (!container) return;
+    var row = document.createElement('div');
+    row.className = 'hf-editor-row';
+    row.innerHTML =
+        '<img class="hf-flag-preview" src="" alt="" style="background:rgba(255,255,255,0.05);">' +
+        '<input class="hf-code-input" type="text" value="" maxlength="3" placeholder="us" title="รหัสประเทศ (2 ตัว)" oninput="adminUpdateHostFlagPreview(this)">' +
+        '<input class="hf-name-input" type="text" value="" placeholder="ชื่อที่แสดง เช่น USA" title="ชื่อที่แสดงใต้ธง">' +
+        '<button class="hf-del-btn" onclick="adminDeleteHostFlag(this)" title="ลบธงนี้">✕</button>';
+    container.appendChild(row);
+    row.querySelector('.hf-code-input').focus();
+}
+
+function adminDeleteHostFlag(btn) {
+    var row = btn.closest('.hf-editor-row');
+    if (row) row.remove();
+}
+
+function adminUpdateHostFlagPreview(input) {
+    var row = input.closest('.hf-editor-row');
+    if (!row) return;
+    var img = row.querySelector('.hf-flag-preview');
+    var code = input.value.trim().toLowerCase();
+    if (img && code.length >= 2) {
+        img.src = 'https://flagcdn.com/w80/' + code + '.png';
+    }
+}
+
 function updateAdminPendingBadge() {
     const results  = (state.pendingResults  || []).filter(p => p.status === "pending").length;
     const changes  = (state.changeRequests  || []).filter(c => c.status === "pending").length;
@@ -7388,50 +7544,77 @@ function renderAdminDock() {
     const dock = document.getElementById("admin-actions-dock");
     if (state.isViewOnly) { dock.innerHTML = ""; return; }
 
-    let startBtnHTML = !state.tournamentStarted ? `<button onclick="adminStartTournament()" style="background: linear-gradient(135deg, #F2C24E, #c49520); color:#020710; font-size:13px; height:38px; padding:0 15px; font-weight:bold; border-radius:10px;">🏆 START TOURNAMENT</button>` : '';
-
-    let advanceHTML = '';
-    let consolAdvanceHTML = '';
-    let fmt = state.tournamentFormat || 'league';
-    if (state.tournamentStarted && (fmt === 'cup' || fmt === 'cup-2leg') && !state.cupChampionId && state.matches.length > 0) {
-        let allCupRounds = [...new Set(state.matches.filter(m => !m.isConsolation).map(m => m.cupRound || m.round))];
-        let currentCupRound = Math.max(...allCupRounds);
-        let canAdvance = currentCupRound > 0 && isCupRoundComplete(currentCupRound);
-        advanceHTML = `<button onclick="advanceKnockoutRound()" style="background: linear-gradient(135deg, #22c55e, #16a34a); color:#fff; font-size:13px; height:38px; padding:0 15px; font-weight:bold; ${!canAdvance ? 'opacity:0.45; cursor:not-allowed;' : ''}">⏭️ ประกาศผล / เปิดรอบถัดไป</button>`;
-        let config = state.cupConfig || {};
-        if (config.consolation && !state.consolationChampionId) {
-            let consolRound = getConsolationCurrentRound();
-            if (consolRound > 0) {
-                let canAdvanceConsol = isConsolationRoundComplete(consolRound);
-                consolAdvanceHTML = `<button onclick="advanceConsolationRound()" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); color:#fff; font-size:13px; height:38px; padding:0 15px; font-weight:bold; ${!canAdvanceConsol ? 'opacity:0.45; cursor:not-allowed;' : ''}">⏭️ ประกาศผล / เปิดรอบสายล่าง</button>`;
+    // ── Tournament Control (Start / Advance round) ──
+    let tournamentControlHTML = '';
+    if (!state.tournamentStarted) {
+        tournamentControlHTML = `<button class="adm-start-btn" onclick="adminStartTournament()">🏆 เริ่มทัวร์นาเมนต์ (START)</button>`;
+    } else {
+        let fmt = state.tournamentFormat || 'league';
+        if ((fmt === 'cup' || fmt === 'cup-2leg') && !state.cupChampionId && state.matches.length > 0) {
+            let allCupRounds = [...new Set(state.matches.filter(m => !m.isConsolation).map(m => m.cupRound || m.round))];
+            let currentCupRound = Math.max(...allCupRounds);
+            let canAdvance = currentCupRound > 0 && isCupRoundComplete(currentCupRound);
+            tournamentControlHTML += `<div class="adm-btns">`;
+            tournamentControlHTML += `<button class="adm-advance-btn" onclick="advanceKnockoutRound()" ${!canAdvance ? 'disabled' : ''}>⏭️ ประกาศผล / เปิดรอบถัดไป</button>`;
+            let config = state.cupConfig || {};
+            if (config.consolation && !state.consolationChampionId) {
+                let consolRound = getConsolationCurrentRound();
+                if (consolRound > 0) {
+                    let canAdvanceConsol = isConsolationRoundComplete(consolRound);
+                    tournamentControlHTML += `<button class="adm-advance-btn" onclick="advanceConsolationRound()" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);" ${!canAdvanceConsol ? 'disabled' : ''}>⏭️ สายล่าง</button>`;
+                }
             }
+            tournamentControlHTML += `</div>`;
         }
     }
 
     dock.innerHTML = `
-        ${startBtnHTML}
-        ${advanceHTML}
-        ${consolAdvanceHTML}
-        <button onclick="openTrophyEditor()" style="background:linear-gradient(135deg,rgba(255,215,0,0.18),rgba(180,130,0,0.12));border:1px solid rgba(255,215,0,0.55);color:#F2C24E;">🏆 ถ้วยรางวัล</button>
-        <button onclick="openAdminPendingModal()" id="admin-pending-btn" style="position:relative;overflow:visible;background:linear-gradient(135deg,rgba(29,78,216,0.25),rgba(30,64,175,0.15));border:1px solid rgba(96,165,250,0.5);color:#60a5fa;font-weight:700;">📋 รอตรวจสอบ<span id="admin-pending-count" style="display:none;position:absolute;top:-7px;right:-7px;background:#ef4444;color:#fff;border-radius:99px;font-size:10px;font-weight:900;min-width:18px;height:18px;line-height:18px;text-align:center;padding:0 4px;font-family:'Prompt',sans-serif;"></span></button>
-        <button onclick="openBigMatchPickerModal()" style="background:linear-gradient(135deg,#7c2d00,#c2410c);border:1px solid rgba(249,115,22,0.4);color:#fed7aa;">🔥 บิ๊กแมช</button>
-        <button onclick="openAdBannerEditor()" style="background:linear-gradient(135deg,#1e3a5f,#0f2640);border:1px solid rgba(242,194,78,0.35);color:#F2C24E;">📢 Ad Banner</button>
-        <button onclick="openEditTeamsModal()" style="background:linear-gradient(135deg,#F2C24E,#c49520);color:#020710;border:none;">✏️ จัดการผู้สมัคร</button>
-        <button onclick="upgradeFlagcdnToCrests()" style="background:linear-gradient(135deg,#134e4a,#0f766e);border:1px solid rgba(20,184,166,0.4);color:#99f6e4;" title="รีเซ็ตทุกทีมให้แสดงธงชาติ">🏳️ รีเซ็ตธง</button>
-        <button onclick="openH2HManager()" style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);border:1px solid rgba(96,165,250,0.4);color:#93c5fd;">📊 H2H</button>
-        <button onclick="openPlaylistManager()" style="background:linear-gradient(135deg,rgba(34,197,94,0.25),rgba(16,185,129,0.15));border:1px solid rgba(34,197,94,0.5);color:#4ade80;">🎵 เพลง</button>
-        <div style="position:relative;display:inline-block;" id="data-btn-wrap">
-            <button onclick="toggleDataDropdown(event)" style="background:linear-gradient(135deg,#0c4a6e,#0369a1);border:1px solid rgba(14,165,233,0.4);color:#7dd3fc;" title="Export / Import ข้อมูล">💾 ข้อมูล ▾</button>
-            <div id="data-dropdown" style="display:none;position:absolute;top:calc(100% + 6px);right:0;z-index:9000;background:rgba(4,12,35,0.97);border:1px solid rgba(14,165,233,0.35);border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.7);overflow:hidden;min-width:160px;">
-                <button onclick="exportBackup();closeDataDropdown()" style="width:100%;background:none;border:none;border-bottom:1px solid rgba(255,255,255,0.07);color:#7dd3fc;padding:11px 16px;font-size:13px;font-weight:700;text-align:left;cursor:pointer;font-family:'Prompt',sans-serif;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='rgba(14,165,233,0.12)'" onmouseout="this.style.background='none'">💾 Export Backup</button>
-                <label id="import-dd-label" style="width:100%;display:flex;align-items:center;gap:8px;color:#6ee7b7;padding:11px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Prompt',sans-serif;transition:background 0.15s;" onmouseover="this.style.background='rgba(52,211,153,0.1)'" onmouseout="this.style.background='none'" onclick="this.classList.add('import-flash');setTimeout(()=>this.classList.remove('import-flash'),500)">
-                    📂 Import Backup
-                    <input type="file" accept=".json" onchange="importBackup(event);closeDataDropdown()" style="display:none;">
-                </label>
-            </div>
+    <div id="admin-control-panel">
+        <div class="adm-panel-header">
+            <span class="adm-panel-header-icon">⚙️</span>
+            <span class="adm-panel-header-text">Admin Control Panel</span>
         </div>
-        <button onclick="resetToNextSeason()" style="background:linear-gradient(135deg,#14532d,#15803d);border:1px solid rgba(34,197,94,0.4);color:#86efac;">🔄 ซีซั่นใหม่</button>
-        <button onclick="resetLeagueHard()" style="background:linear-gradient(135deg,#7f1d1d,#b91c1c);border:1px solid rgba(239,68,68,0.4);color:#fca5a5;">🚨 ลบทั้งหมด</button>
+        ${tournamentControlHTML ? `<div style="margin-bottom:12px;">${tournamentControlHTML}</div>` : ''}
+        <div class="adm-groups">
+
+            <div class="adm-group">
+                <div class="adm-group-label">📋 ผู้สมัคร &amp; ผล</div>
+                <div class="adm-btns">
+                    <button class="adm-btn gold" onclick="openEditTeamsModal()">✏️ จัดการผู้สมัคร</button>
+                    <button class="adm-btn blue" id="admin-pending-btn" onclick="openAdminPendingModal()" style="position:relative;overflow:visible;">
+                        📋 รอตรวจสอบ
+                        <span id="admin-pending-count" style="display:none;position:absolute;top:-7px;right:-7px;background:#ef4444;color:#fff;border-radius:99px;font-size:10px;font-weight:900;min-width:18px;height:18px;line-height:18px;text-align:center;padding:0 4px;font-family:'Prompt',sans-serif;"></span>
+                    </button>
+                    <button class="adm-btn orange" onclick="openBigMatchPickerModal()">🔥 บิ๊กแมช</button>
+                    <button class="adm-btn blue" onclick="openH2HManager()">📊 H2H</button>
+                </div>
+            </div>
+
+            <div class="adm-group">
+                <div class="adm-group-label">🎨 ตกแต่ง &amp; แสดงผล</div>
+                <div class="adm-btns">
+                    <button class="adm-btn trophy" onclick="openTrophyEditor()">🏆 ถ้วยรางวัล</button>
+                    <button class="adm-btn blue" onclick="openAdBannerEditor()">📢 ประกาศ/Ad</button>
+                    <button class="adm-btn teal" onclick="upgradeFlagcdnToCrests()" title="รีเซ็ตทุกทีมให้แสดงธงชาติ">🏳️ รีเซ็ตธง</button>
+                    <button class="adm-btn green" onclick="openPlaylistManager()">🎵 เพลง</button>
+                </div>
+            </div>
+
+            <div class="adm-group">
+                <div class="adm-group-label">💾 ข้อมูล &amp; ระบบ</div>
+                <div class="adm-btns">
+                    <button class="adm-btn cyan" onclick="exportBackup()">💾 Export</button>
+                    <label class="adm-btn cyan" style="cursor:pointer;" onclick="this.querySelector('input').click()">
+                        📂 Import
+                        <input type="file" accept=".json" onchange="importBackup(event)" style="display:none;">
+                    </label>
+                    <button class="adm-btn season" onclick="resetToNextSeason()">🔄 ซีซั่นใหม่</button>
+                    <button class="adm-btn danger" onclick="resetLeagueHard()">🚨 ลบทั้งหมด</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
     `;
 }
 
@@ -7601,6 +7784,9 @@ function _renderEditTeamsModalUI() {
     selectClBadge('new');
     renderChangelogAdmin();
 
+    // ── Render host flags editor ──
+    _renderHostFlagsEditor();
+
     document.getElementById("admin-add-id").value = "";
     document.getElementById("admin-add-player").value = "";
     document.getElementById("admin-add-team").value = "";
@@ -7739,6 +7925,16 @@ function saveEditedTeams() {
     };
     state.announcement = document.getElementById("edit-announcement").value.trim();
     renderAnnouncement();
+
+    // ── Save host flags ──
+    var hfRows = document.querySelectorAll(".hf-editor-row");
+    var newFlags = [];
+    hfRows.forEach(function(row) {
+        var code = (row.querySelector('.hf-code-input').value || '').trim().toLowerCase();
+        var name = (row.querySelector('.hf-name-input').value || '').trim().toUpperCase();
+        if (code) newFlags.push({ code: code, name: name });
+    });
+    state.hostFlags = newFlags.length > 0 ? newFlags : [{ code: "us", name: "USA" }, { code: "ca", name: "CANADA" }, { code: "mx", name: "MEXICO" }];
 
     const rows = document.querySelectorAll("#edit-teams-container .edit-team-row");
     let hasError = false;
@@ -10924,6 +11120,7 @@ function _loadBinData(idToLoad) {
         state.season = r.season || 3;
         state.tournamentStarted = r.tournamentStarted || false;
         state.titleW1 = r.titleW1 || "WORLD"; state.titleW2 = r.titleW2 || "CUP"; state.titleW3 = r.titleW3 || "TOURNAMENT";
+        state.hostFlags = Array.isArray(r.hostFlags) ? r.hostFlags : [{ code: "us", name: "USA" }, { code: "ca", name: "CANADA" }, { code: "mx", name: "MEXICO" }];
         state.tournamentDetails = r.tournamentDetails || ""; state.discordUrl = r.discordUrl || "https://discord.gg/ESMDUce5pf"; state.bgImageUrl = r.bgImageUrl || "";
         state.socialLinks = r.socialLinks || { discord: state.discordUrl, youtube: "", facebook: "", tiktok: "", twitch: "" };
         state.colors = r.colors || { w1: "#ffffff", w2: "#F2C24E", w3: "#ffffff", h2Standings: "#F2C24E", h2Fixtures: "#F2C24E", h2Fame: "#F2C24E", h2Details: "#F2C24E", bgColor: "#020710" };
@@ -12471,7 +12668,8 @@ function exportBackup() {
         discordUrl: state.discordUrl,
         socialLinks: state.socialLinks,
         bgImageUrl: state.bgImageUrl,
-        customPlaylist: state.customPlaylist || []
+        customPlaylist: state.customPlaylist || [],
+        hostFlags: state.hostFlags || []
     };
 
     const dateStr = new Date().toISOString().slice(0,10);
@@ -12568,6 +12766,7 @@ function confirmImportBackup() {
     if (data.socialLinks)     state.socialLinks         = Object.assign({}, state.socialLinks, data.socialLinks);
     if (data.bgImageUrl !== undefined) state.bgImageUrl = data.bgImageUrl;
     if (Array.isArray(data.customPlaylist)) state.customPlaylist = data.customPlaylist;
+    if (Array.isArray(data.hostFlags)) state.hostFlags = data.hostFlags;
 
     // บันทึกขึ้น cloud ทันที
     if (state.binId) {
@@ -12583,6 +12782,7 @@ function confirmImportBackup() {
             bigMatchIds: state.bigMatchIds, no1History: state.no1History,
             adBanner: state.adBanner, centerBanner: state.centerBanner, colors: state.colors,
             titleW1: state.titleW1, titleW2: state.titleW2, titleW3: state.titleW3,
+            hostFlags: state.hostFlags || [],
             tournamentDetails: state.tournamentDetails,
             discordUrl: state.discordUrl, socialLinks: state.socialLinks, bgImageUrl: state.bgImageUrl,
             customPlaylist: state.customPlaylist || []
