@@ -8984,8 +8984,9 @@ async function resetToNextSeason() {
             return { id: t.id, player: t.player, team: t.team, logo: t.logo, isFlag: t.isFlag, status: 'pending', comment: "" };
         });
 
-        // อัปเดต snapshot และ cache ทันทีหลัง reset ป้องกัน auto-refresh นำข้อมูลซีซั่นเก่ากลับมา
-        _updateSyncedSnapshot();
+        // อัปเดต cache ทันทีหลัง reset เพื่อให้ reload เห็นซีซั่นใหม่ได้เลย
+        // หมายเหตุ: ห้ามเรียก _updateSyncedSnapshot() ตรงนี้ — base snapshot ต้องยังจำ old matches
+        // ไว้ เพื่อให้ _performCloudSave() รู้ว่า old remote matches ถูกลบตั้งใจ ไม่ใช่ข้อมูลใหม่
         _saveLastKnownCache(state.binId);
         renderHeader(); renderAdminDock(); renderLeague(); refreshUIState(); saveDataToCloud();
     }
@@ -9212,7 +9213,7 @@ function openScoreModal(matchId) {
         const rankLabel = r => r > 0 ? `อันดับ ${r}` : '—';
 
         // Recent H2H matches (last 5) — oldest→newest (matches form-5 direction)
-        const recentSorted = [...records].sort((a, b) => (a.season || 0) - (b.season || 0)).slice(-5);
+        const recentSorted = [...records].sort((a, b) => (a.season || 0) - (b.season || 0)).slice(-8);
         const h2hCardsHTML = _buildH2HCardsHTML(recentSorted, m.homeId, hInfo, aInfo);
 
         h2hArea.innerHTML = `
@@ -9780,7 +9781,7 @@ function openMatchViewModal(matchId) {
         const rank1 = standings.findIndex(t => t.id === m.homeId) + 1;
         const rank2 = standings.findIndex(t => t.id === m.awayId) + 1;
         const rankLabel = r => r > 0 ? `อันดับ ${r}` : '—';
-        const recentSorted = [...records].sort((a, b) => (a.season || 0) - (b.season || 0)).slice(-5);
+        const recentSorted = [...records].sort((a, b) => (a.season || 0) - (b.season || 0)).slice(-8);
         const h2hCardsHTML = _buildH2HCardsHTML(recentSorted, m.homeId, hInfoV, aInfoV);
 
         h2hArea.innerHTML = `
@@ -13161,10 +13162,13 @@ function hmgrSyncAllMatches() {
         let key = _h2hKey(m.homeId, m.awayId);
         if (!state.h2h) state.h2h = {};
         if (!state.h2h[key]) state.h2h[key] = [];
-        // Skip if already recorded by matchId
-        let alreadyRecorded = state.h2h[key].some(r => r.matchId !== undefined && r.matchId === m.id);
+        // Skip if already recorded by matchId + season (ต้องเช็คทั้งคู่ เพราะ match.id รีเซ็ตทุกซีซั่น)
+        const mSeason = m.season || state.season;
+        let alreadyRecorded = state.h2h[key].some(r =>
+            r.matchId !== undefined && r.matchId === m.id && (r.season || 0) === mSeason
+        );
         if (!alreadyRecorded) {
-            state.h2h[key].push({ matchId: m.id, homeId: m.homeId, awayId: m.awayId, hs: m.homeScore, as: m.awayScore, season: m.season || state.season, note: 'อัตโนมัติ' });
+            state.h2h[key].push({ matchId: m.id, homeId: m.homeId, awayId: m.awayId, hs: m.homeScore, as: m.awayScore, season: mSeason, note: 'อัตโนมัติ' });
             added++;
         }
     });
@@ -13249,7 +13253,8 @@ function _removeH2HRecordForMatch(match) {
     let key = _h2hKey(match.homeId, match.awayId);
     let list = state.h2h[key];
     if (!list) return;
-    state.h2h[key] = list.filter(r => r.matchId !== match.id);
+    const rmSeason = match.season || state.season;
+    state.h2h[key] = list.filter(r => !(r.matchId === match.id && (r.season || 0) === rmSeason));
 }
 
 // ── H2H logo match-cards (shared by score modal + view modal) ─────────────
@@ -13303,11 +13308,19 @@ function _autoRecordH2H(match) {
     if (!state.h2h) state.h2h = {};
     let key = _h2hKey(match.homeId, match.awayId);
     if (!state.h2h[key]) state.h2h[key] = [];
-    // ป้องกันบันทึกซ้ำ — เช็คด้วย matchId
-    let alreadyRecorded = state.h2h[key].some(r => r.matchId !== undefined && r.matchId === match.id);
+    // ป้องกันบันทึกซ้ำ — เช็คด้วย matchId AND season
+    // (match.id รีเซ็ตเป็น 1 ทุกซีซั่น จึงต้องใช้ทั้งสองค่ารวมกัน ไม่งั้น SS4 match#1 จะ
+    //  เขียนทับ SS3 match#1 ของคู่เดิม ทำให้ข้อมูล H2H ซีซั่นเก่าหาย)
+    const matchSeason = match.season || state.season;
+    let alreadyRecorded = state.h2h[key].some(r =>
+        r.matchId !== undefined && r.matchId === match.id &&
+        (r.season || 0) === matchSeason
+    );
     if (alreadyRecorded) {
-        // อัปเดตคะแนนถ้ามีการแก้ไข
-        let existing = state.h2h[key].find(r => r.matchId === match.id);
+        // อัปเดตคะแนนถ้ามีการแก้ไขสกอร์ (เฉพาะซีซั่นเดิม)
+        let existing = state.h2h[key].find(r =>
+            r.matchId === match.id && (r.season || 0) === matchSeason
+        );
         if (existing) { existing.hs = match.homeScore; existing.as = match.awayScore; }
         return;
     }
