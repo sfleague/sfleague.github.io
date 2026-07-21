@@ -710,7 +710,7 @@
         /* legacy hidden ref */
         .sync-badge { display:none !important; }
 
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
+        .modal { display: none; position: fixed; z-index: 11000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
 
         .modal-content {
             background: rgba(4, 12, 34, 0.97);
@@ -958,7 +958,7 @@
         #now-playing-pill .np-text { font-size:11px; font-weight:700; color:#e2e8f0; letter-spacing:0.3px; }
         #now-playing-pill .np-sub { font-size:9px; color:#22c55e; font-weight:600; letter-spacing:0.5px; text-transform:uppercase; }
         #yt-music-frame { position:fixed; left:-9999px; top:-9999px; width:1px; height:1px; pointer-events:none; }
-        #playlist-modal { display:none; position:fixed; inset:0; z-index:6000; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; }
+        #playlist-modal { display:none; position:fixed; inset:0; z-index:11000; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; }
         #playlist-modal.open { display:flex; }
         .pl-box { background:rgba(4,12,34,0.98); backdrop-filter:blur(24px); border:1px solid rgba(34,197,94,0.35); border-radius:18px; padding:24px; width:min(520px,94vw); max-height:88vh; overflow-y:auto; position:relative; box-shadow:0 25px 70px rgba(0,0,0,0.8); }
         .pl-title { font-family:'Orbitron',sans-serif; font-size:14px; font-weight:800; color:#4ade80; margin-bottom:18px; letter-spacing:1px; }
@@ -1673,7 +1673,7 @@
 .ad-pos-dot.pos-empty:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); }
 
         /* ── Ad Banner Editor Modal ── */
-        #ad-editor-modal { display:none; position:fixed; inset:0; z-index:10500; background:rgba(0,0,0,0.82); align-items:center; justify-content:center; }
+        #ad-editor-modal { display:none; position:fixed; inset:0; z-index:11000; background:rgba(0,0,0,0.82); align-items:center; justify-content:center; }
         #ad-editor-modal.open { display:flex; }
         .ad-editor-box { background:rgba(4,12,34,0.98); backdrop-filter:blur(24px); border:1px solid rgba(242,194,78,0.3); border-radius:18px; padding:24px; width:min(500px,94vw); max-height:90vh; overflow-y:auto; position:relative; box-shadow:0 25px 70px rgba(0,0,0,0.8); }
         .ad-editor-label { font-size:11px; color:var(--wc-text-sub); font-weight:700; letter-spacing:0.5px; text-transform:uppercase; display:block; margin-bottom:5px; }
@@ -2408,7 +2408,7 @@
 
         /* ── Big Match Picker Modal ── */
         #big-match-picker-modal {
-            display: none; position: fixed; inset: 0; z-index: 9100;
+            display: none; position: fixed; inset: 0; z-index: 11000;
             background: rgba(5,17,38,0.88); backdrop-filter: blur(8px);
             justify-content: center; align-items: flex-start;
             padding: 40px 16px; overflow-y: auto;
@@ -2663,7 +2663,7 @@
 
         /* ─── Custom Modal (Alert / Confirm / Prompt) ─── */
         .cm-overlay {
-            display: none; position: fixed; inset: 0; z-index: 9999;
+            display: none; position: fixed; inset: 0; z-index: 12000;
             background: rgba(0,0,0,0.82); backdrop-filter: blur(10px);
             align-items: center; justify-content: center; padding: 20px;
         }
@@ -3503,6 +3503,452 @@
 @keyframes ilo-scan        { 0%{top:-4px} 100%{top:110%} }
 @keyframes ilo-star-twink  { 0%,100%{opacity:.15} 50%{opacity:.7} }
 @keyframes ilo-hex-spin    { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
+
+/* ══ Admin Panel — Redesigned 2026 ═══════════════════════════════════ */
+
+/* ── Overlay & Shell ── */
+/* ══ ADMIN PANEL MODAL — REDESIGN ══════════════════════════════════ */
+#admin-panel-modal {
+    display: none;
+    position: fixed; inset: 0; z-index: 10500;
+    background: rgba(0,3,14,0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+}
+#admin-panel-modal.open { display: flex; }
+
+@keyframes apmFadeIn {
+    from { opacity:0; transform:scale(0.96) translateY(10px); }
+    to   { opacity:1; transform:scale(1)    translateY(0); }
+}
+
+/* ── Layout Shell ── */
+.apm-layout {
+    display: flex;
+    flex-direction: column;
+    width: 100%; max-width: 1080px;
+    height: 92vh; max-height: 840px;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    background: #060f1d;
+    box-shadow:
+        0 0 0 1px rgba(242,194,78,0.13),
+        0 0 0 1px rgba(255,255,255,0.03) inset,
+        0 40px 100px rgba(0,0,0,0.92);
+    animation: apmFadeIn 0.22s cubic-bezier(0.16,1,0.3,1) both;
+}
+/* Top accent line */
+.apm-layout::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg,
+        transparent 0%, #0057B8 15%, #F2C24E 50%, #E8102B 85%, transparent 100%);
+    z-index: 10; pointer-events: none; border-radius: 20px 20px 0 0;
+}
+
+/* ══ HEADER BAR (full-width) ════════════════════════════════════════ */
+.apm-header-bar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 0 18px; height: 58px; flex-shrink: 0;
+    background: linear-gradient(90deg, rgba(5,12,34,0.99) 0%, rgba(4,10,26,0.99) 100%);
+    border-bottom: 1px solid rgba(242,194,78,0.10);
+    position: relative; z-index: 2;
+}
+.apm-header-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, #F2C24E 0%, #c99a1a 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+    box-shadow: 0 2px 12px rgba(242,194,78,0.32);
+}
+.apm-header-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12.5px; font-weight: 900;
+    color: #F2C24E; letter-spacing: 2.5px; text-transform: uppercase;
+}
+.apm-header-sub {
+    font-size: 9.5px; color: rgba(242,194,78,0.35);
+    letter-spacing: 1px; text-transform: uppercase; margin-top: 2px;
+}
+.apm-header-spacer { flex: 1; }
+
+/* Back button (mobile only, shown when content active) */
+.apm-back-btn {
+    display: none; align-items: center; gap: 5px;
+    height: 32px; padding: 0 12px; border-radius: 8px;
+    background: rgba(242,194,78,0.09);
+    border: 1px solid rgba(242,194,78,0.22);
+    color: #F2C24E; font-size: 12px; font-weight: 700;
+    font-family: 'Prompt', sans-serif; cursor: pointer;
+    transition: all 0.15s; white-space: nowrap;
+}
+.apm-back-btn:hover { background: rgba(242,194,78,0.18); border-color: rgba(242,194,78,0.4); }
+
+/* Close button */
+.apm-close-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 9px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
+    color: rgba(255,255,255,0.35); font-size: 15px; cursor: pointer;
+    transition: all 0.15s; padding: 0; line-height: 1; flex-shrink: 0;
+}
+.apm-close-btn:hover {
+    background: rgba(239,68,68,0.16); border-color: rgba(239,68,68,0.38); color: #f87171;
+}
+
+/* ══ BODY ═══════════════════════════════════════════════════════════ */
+.apm-body {
+    display: flex; flex: 1; min-height: 0; overflow: hidden;
+}
+
+/* ══ LEFT SIDEBAR ═══════════════════════════════════════════════════ */
+.apm-sidebar {
+    width: 220px; flex-shrink: 0;
+    display: flex; flex-direction: column;
+    background: linear-gradient(180deg, #040b18 0%, #030a14 100%);
+    border-right: 1px solid rgba(255,255,255,0.05);
+    overflow: hidden;
+}
+.apm-sidebar-body {
+    flex: 1; overflow-y: auto; overflow-x: hidden; padding: 8px;
+}
+.apm-sidebar-body::-webkit-scrollbar { width: 3px; }
+.apm-sidebar-body::-webkit-scrollbar-thumb {
+    background: rgba(242,194,78,0.15); border-radius: 99px;
+}
+
+/* Tournament section */
+.apm-tournament-section {
+    padding: 8px; border-bottom: 1px solid rgba(242,194,78,0.08); margin-bottom: 2px;
+    background: linear-gradient(135deg, rgba(242,194,78,0.04) 0%, rgba(0,0,0,0.1) 100%);
+}
+
+/* Group labels */
+.apm-group-lbl {
+    font-size: 9px; font-weight: 900; text-transform: uppercase;
+    letter-spacing: 2.5px; color: rgba(255,255,255,0.20);
+    padding: 12px 8px 4px; pointer-events: none;
+    display: flex; align-items: center; gap: 6px;
+}
+.apm-group-lbl::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.07) 0%, transparent 100%);
+}
+
+.apm-separator {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 30%,
+        rgba(255,255,255,0.06) 70%, transparent);
+    margin: 4px 8px;
+}
+
+/* ── Menu Items ── */
+.apm-menu-item {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; padding: 9px 10px; border-radius: 9px;
+    background: transparent; border: none;
+    color: rgba(255,255,255,0.42); font-size: 13px; font-weight: 600;
+    font-family: 'Prompt', sans-serif; cursor: pointer;
+    transition: all 0.16s ease; position: relative;
+    text-align: left; margin-bottom: 1px; overflow: hidden;
+}
+.apm-menu-item::before {
+    content: ''; position: absolute; left: 0; top: 20%; bottom: 20%;
+    width: 3px; border-radius: 0 2px 2px 0;
+    background: transparent; transition: background 0.16s;
+}
+.apm-menu-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+
+.apm-menu-item.cat-blue:hover  { background: rgba(59,130,246,0.13); color: #93c5fd; }
+.apm-menu-item.cat-blue:hover::before { background: #3b82f6; }
+.apm-menu-item.cat-org:hover   { background: rgba(249,115,22,0.12); color: #fdba74; }
+.apm-menu-item.cat-org:hover::before  { background: #f97316; }
+.apm-menu-item.cat-green:hover { background: rgba(34,197,94,0.11); color: #86efac; }
+.apm-menu-item.cat-green:hover::before { background: #22c55e; }
+.apm-menu-item.danger:hover    { background: rgba(239,68,68,0.12); color: #fca5a5; }
+.apm-menu-item.danger:hover::before    { background: #ef4444; }
+.apm-menu-item.season-btn:hover { background: rgba(34,197,94,0.11); color: #86efac; }
+.apm-menu-item.season-btn:hover::before { background: #22c55e; }
+
+/* Active */
+.apm-menu-item.active,
+.apm-menu-item.cat-blue.active {
+    background: rgba(59,130,246,0.20); color: #bfdbfe;
+    box-shadow: inset 0 0 0 1px rgba(96,165,250,0.16);
+}
+.apm-menu-item.cat-blue.active::before { background: #60a5fa; }
+.apm-menu-item.cat-org.active {
+    background: rgba(234,88,12,0.20); color: #fed7aa;
+    box-shadow: inset 0 0 0 1px rgba(251,146,60,0.16);
+}
+.apm-menu-item.cat-org.active::before { background: #fb923c; }
+.apm-menu-item.cat-green.active,
+.apm-menu-item.season-btn.active {
+    background: rgba(21,128,61,0.20); color: #bbf7d0;
+    box-shadow: inset 0 0 0 1px rgba(74,222,128,0.16);
+}
+.apm-menu-item.cat-green.active::before,
+.apm-menu-item.season-btn.active::before { background: #4ade80; }
+.apm-menu-item.danger.active {
+    background: rgba(185,28,28,0.20); color: #fecaca;
+    box-shadow: inset 0 0 0 1px rgba(239,68,68,0.16);
+}
+.apm-menu-item.danger.active::before { background: #ef4444; }
+
+/* Icon */
+.apm-menu-item-icon {
+    font-size: 15px; flex-shrink: 0;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 7px; background: rgba(255,255,255,0.04);
+    transition: all 0.16s;
+}
+.apm-menu-item:hover .apm-menu-item-icon { background: rgba(255,255,255,0.09); transform: scale(1.08); }
+.apm-menu-item.active .apm-menu-item-icon { background: rgba(255,255,255,0.09); }
+
+/* Pending badge */
+.apm-menu-item .apm-badge {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff; border-radius: 99px; font-size: 9px; font-weight: 900;
+    min-width: 18px; height: 18px; line-height: 18px;
+    text-align: center; padding: 0 4px;
+    box-shadow: 0 2px 8px rgba(239,68,68,0.5);
+    animation: apmBadgePulse 2s ease-in-out infinite;
+}
+@keyframes apmBadgePulse {
+    0%,100% { box-shadow: 0 2px 8px rgba(239,68,68,0.5), 0 0 0 2px rgba(239,68,68,0.15); }
+    50%      { box-shadow: 0 2px 14px rgba(239,68,68,0.7), 0 0 0 4px rgba(239,68,68,0.08); }
+}
+
+/* Sidebar footer */
+.apm-sidebar-footer {
+    padding: 10px 8px; border-top: 1px solid rgba(255,255,255,0.05); flex-shrink: 0;
+}
+.apm-logout-btn {
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    width: 100%; padding: 9px 12px; border-radius: 9px;
+    background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.18);
+    color: #f87171; font-size: 12px; font-weight: 700;
+    font-family: 'Prompt', sans-serif; cursor: pointer; transition: all 0.16s;
+    letter-spacing: 0.3px;
+}
+.apm-logout-btn:hover {
+    background: rgba(239,68,68,0.16); border-color: rgba(239,68,68,0.35);
+    color: #fca5a5; transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(239,68,68,0.18);
+}
+
+/* Tournament buttons */
+.apm-start-btn {
+    width: 100%; padding: 11px; border-radius: 11px;
+    background: linear-gradient(135deg, #F2C24E 0%, #d4a01a 100%);
+    border: none; color: #020710;
+    font-size: 12.5px; font-weight: 900; font-family: 'Prompt', sans-serif;
+    cursor: pointer; transition: all 0.18s;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    box-shadow: 0 4px 18px rgba(242,194,78,0.32); margin-top: 6px;
+}
+.apm-start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 26px rgba(242,194,78,0.48); }
+.apm-advance-btn {
+    width: 100%; padding: 9px 12px; border-radius: 10px;
+    background: rgba(99,102,241,0.22); border: 1px solid rgba(129,140,248,0.28);
+    color: #c7d2fe; font-size: 12px; font-weight: 700;
+    font-family: 'Prompt', sans-serif; cursor: pointer; transition: all 0.16s;
+    display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 5px;
+}
+.apm-advance-btn:hover:not(:disabled) {
+    background: rgba(99,102,241,0.38); transform: translateY(-1px);
+    box-shadow: 0 5px 16px rgba(99,102,241,0.28);
+}
+.apm-advance-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+/* ══ RIGHT PANE ══════════════════════════════════════════════════════ */
+.apm-right-pane {
+    flex: 1; min-width: 0; display: flex; flex-direction: column;
+    background: linear-gradient(145deg, #07101f 0%, #060d1a 100%);
+    overflow: hidden; position: relative;
+}
+.apm-right-pane::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+        linear-gradient(rgba(242,194,78,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(242,194,78,0.018) 1px, transparent 1px);
+    background-size: 38px 38px; pointer-events: none; z-index: 0;
+}
+
+/* Content area */
+.apm-content {
+    flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 24px; position: relative; z-index: 1;
+    scrollbar-width: thin; scrollbar-color: rgba(242,194,78,0.12) transparent;
+}
+.apm-content::-webkit-scrollbar { width: 5px; }
+.apm-content::-webkit-scrollbar-thumb {
+    background: rgba(242,194,78,0.12); border-radius: 99px;
+}
+
+/* Placeholder */
+.apm-content-placeholder {
+    text-align: center; opacity: 0.14; pointer-events: none; margin: auto;
+    animation: apmPlaceholderIn 0.4s ease;
+}
+@keyframes apmPlaceholderIn {
+    from { opacity:0; transform:translateY(14px); }
+    to   { opacity:0.14; transform:translateY(0); }
+}
+.apm-content-placeholder-icon {
+    font-size: 76px; margin-bottom: 18px; line-height: 1;
+    filter: drop-shadow(0 0 22px rgba(242,194,78,0.28));
+}
+.apm-content-placeholder-text {
+    font-size: 15px; color: #F2C24E; font-family: 'Prompt', sans-serif;
+    line-height: 1.9; font-weight: 500;
+}
+
+/* ── Legacy compatibility ── */
+.apm-hamburger-btn { display: none !important; }
+.apm-sidebar-backdrop { display: none !important; }
+label.apm-menu-item { display: flex !important; }
+.apm-top-bar { display: none !important; }
+
+/* Mobile card grid — hidden on desktop */
+.apm-mobile-grid-wrap { display: none; }
+
+/* ── Normalize inner modal boxes when shown inline in admin panel ── */
+.apm-content .modal-content,
+.apm-content .bmp-box,
+.apm-content .pl-box,
+.apm-content .ad-editor-box {
+    max-height: none !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+}
+/* Scrollable tables inside admin inline panels */
+.apm-content #edit-teams-container { max-height: 220px; overflow-y: auto; }
+
+/* ══ TABLET ≤ 780px ══════════════════════════════════════════════════ */
+@media (max-width: 780px) {
+    #admin-panel-modal { padding: 8px; }
+    .apm-layout { max-height: 96vh; height: 96vh; border-radius: 16px; }
+    .apm-sidebar { width: 192px; }
+    .apm-header-sub { display: none; }
+}
+
+/* ══ MOBILE ≤ 600px ══════════════════════════════════════════════════ */
+@media (max-width: 600px) {
+    #admin-panel-modal { padding: 0; }
+    .apm-layout { border-radius: 0; height: 100dvh; max-height: 100dvh; }
+    .apm-header-bar { height: 52px; padding: 0 14px; gap: 10px; }
+    .apm-close-btn { width: 44px; height: 44px; font-size: 18px; border-radius: 12px; }
+    .apm-body { overflow: hidden; position: relative; }
+
+    /* Hide desktop sidebar */
+    .apm-sidebar { display: none; }
+
+    /* Mobile grid: default state */
+    .apm-mobile-grid-wrap {
+        display: flex; flex-direction: column;
+        flex: 1; overflow-y: auto; padding: 14px 14px 0;
+        scrollbar-width: thin;
+    }
+
+    /* Hide right pane by default on mobile */
+    .apm-right-pane { display: none; }
+
+    /* When content is active: show right pane, hide grid */
+    .apm-layout.apm-content-active .apm-mobile-grid-wrap { display: none; }
+    .apm-layout.apm-content-active .apm-right-pane { display: flex; }
+    .apm-layout.apm-content-active .apm-back-btn { display: flex !important; }
+
+    .apm-content { padding: 14px; }
+
+    /* Mobile tournament bar */
+    .apm-mobile-tournament { margin-bottom: 10px; }
+    .apm-mobile-tourn-inner {
+        background: linear-gradient(135deg, rgba(242,194,78,0.06) 0%, rgba(0,0,0,0.15) 100%);
+        border: 1px solid rgba(242,194,78,0.15); border-radius: 12px;
+        padding: 10px; display: flex; flex-direction: column; gap: 6px;
+    }
+    .apm-mobile-tourn-label {
+        font-size: 9px; font-weight: 900; letter-spacing: 2px;
+        text-transform: uppercase; color: rgba(242,194,78,0.45);
+        padding: 0 2px;
+    }
+
+    /* Group labels */
+    .apm-mobile-group-label {
+        font-size: 10px; font-weight: 800;
+        text-transform: uppercase; letter-spacing: 1.5px;
+        color: rgba(255,255,255,0.22);
+        padding: 14px 2px 8px;
+        display: flex; align-items: center; gap: 8px;
+    }
+    .apm-mobile-group-label::after {
+        content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.08);
+    }
+
+    /* Card grid */
+    .apm-mobile-grid {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+        margin-bottom: 4px;
+    }
+    .apm-mobile-card {
+        display: flex; flex-direction: column; align-items: center;
+        justify-content: center; gap: 9px;
+        padding: 18px 10px 16px; border-radius: 14px;
+        background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+        cursor: pointer; transition: all 0.14s; position: relative;
+        text-align: center; min-height: 88px;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .apm-mobile-card:active { transform: scale(0.95); opacity: 0.85; }
+    .apm-mobile-card.c-blue  { border-color: rgba(59,130,246,0.22); }
+    .apm-mobile-card.c-blue:hover  { background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.42); }
+    .apm-mobile-card.c-org   { border-color: rgba(249,115,22,0.22); }
+    .apm-mobile-card.c-org:hover   { background: rgba(249,115,22,0.12); border-color: rgba(249,115,22,0.42); }
+    .apm-mobile-card.c-green { border-color: rgba(34,197,94,0.22); }
+    .apm-mobile-card.c-green:hover { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.42); }
+    .apm-mobile-card.c-red   { border-color: rgba(239,68,68,0.22); }
+    .apm-mobile-card.c-red:hover   { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.42); }
+    /* Full-width card */
+    .apm-mobile-card.c-full  {
+        grid-column: 1 / -1; flex-direction: row; min-height: auto;
+        padding: 13px 16px; gap: 12px; justify-content: flex-start;
+    }
+    .apm-mobile-card-icon { font-size: 28px; line-height: 1; }
+    .apm-mobile-card.c-full .apm-mobile-card-icon { font-size: 22px; }
+    .apm-mobile-card-label {
+        font-size: 12px; font-weight: 700;
+        color: rgba(255,255,255,0.72); font-family: 'Prompt', sans-serif;
+        line-height: 1.35;
+    }
+    .apm-mobile-card.c-full .apm-mobile-card-label { font-size: 13px; }
+    .apm-mobile-card-badge {
+        position: absolute; top: 8px; right: 8px;
+        background: #ef4444; color: #fff; border-radius: 99px;
+        font-size: 9px; font-weight: 900;
+        min-width: 18px; height: 18px; line-height: 18px;
+        text-align: center; padding: 0 4px;
+        box-shadow: 0 2px 6px rgba(239,68,68,0.5);
+        animation: apmBadgePulse 2s ease-in-out infinite;
+    }
+
+    /* Mobile footer */
+    .apm-mobile-footer {
+        padding: 14px 0 16px; margin-top: auto; flex-shrink: 0;
+    }
+    .apm-mobile-footer .apm-logout-btn {
+        width: 100%; padding: 13px 16px; font-size: 14px; border-radius: 12px;
+    }
+}
+
 </style>
 
 <div id="initial-load-overlay" style="position:fixed;inset:0;z-index:99998;overflow:hidden;background:#020710;transition:opacity .4s ease;pointer-events:none;">
@@ -4467,7 +4913,7 @@
 </div>
 
 <!-- ── Import Confirm Popup ── -->
-<div id="import-confirm-modal" onclick="if(event.target===this)cancelImportBackup()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(5,17,38,0.88);backdrop-filter:blur(10px);z-index:10005;justify-content:center;align-items:center;">
+<div id="import-confirm-modal" onclick="if(event.target===this)cancelImportBackup()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(5,17,38,0.88);backdrop-filter:blur(10px);z-index:12000;justify-content:center;align-items:center;">
     <div style="background:var(--wc-card-bg);border:1px solid rgba(52,211,153,0.35);border-radius:14px;padding:24px;width:calc(100% - 32px);max-width:440px;position:relative;box-shadow:0 0 40px rgba(52,211,153,0.1);">
         <div style="font-size:16px;font-weight:800;color:#6ee7b7;margin-bottom:16px;">📂 ยืนยันการ Import Backup</div>
         <div id="import-file-info" style="background:rgba(52,211,153,0.05);border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;line-height:2;color:#cbd5e1;"></div>
@@ -4620,15 +5066,35 @@
 
         <!-- หน้า: Admin logged in -->
         <div id="lm-admin-info" style="display:none;">
-            <div style="font-size:38px; margin-bottom:8px;">🔐</div>
-            <h2 style="margin-top:0; color:var(--wc-gold); border-bottom:1px solid var(--wc-border); padding-bottom:12px; font-family:'Orbitron',sans-serif; letter-spacing:2px; font-size:clamp(15px,5vw,20px);">ADMIN MODE</h2>
-            <div style="background:rgba(242,194,78,0.08); border:1px solid rgba(242,194,78,0.35); border-radius:8px; padding:14px; margin:16px 0;">
-                <div style="font-size:12px; color:#a1b7d6; margin-bottom:4px;">เข้าสู่ระบบในฐานะ</div>
-                <div style="font-size:18px; font-weight:700; color:var(--wc-gold); font-family:'Orbitron',sans-serif;">ADMIN</div>
+            <!-- Hero admin badge -->
+            <div style="display:flex; align-items:center; gap:14px; background:rgba(242,194,78,0.07); border:1px solid rgba(242,194,78,0.3); border-radius:12px; padding:14px 16px; margin-bottom:14px;">
+                <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,rgba(242,194,78,0.25),rgba(242,194,78,0.1));border:1px solid rgba(242,194,78,0.4);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🔐</div>
+                <div style="flex:1;min-width:0;">
+                    <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:var(--wc-gold);letter-spacing:1.5px;">ADMIN</div>
+                    <div style="font-size:11px;color:#64748b;margin-top:2px;">FC 26 SF LEAGUE</div>
+                </div>
+                <div style="text-align:center;flex-shrink:0;">
+                    <div style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;color:var(--wc-gold);">⚙️</div>
+                    <div style="font-size:9px;color:rgba(242,194,78,0.5);letter-spacing:0.5px;">MODE</div>
+                </div>
             </div>
-            <div style="display:flex; gap:12px; margin-top:8px;">
-                <button onclick="closeLoginModal()" style="flex:1; padding:10px; background:linear-gradient(135deg,#334155,#1e293b); color:#cbd5e1; border:none; border-radius:8px; cursor:pointer; font-weight:600;">ปิด</button>
-                <button onclick="logoutAdmin()" style="flex:1; padding:10px; background:linear-gradient(135deg,#dc2626,#b91c1c); color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:700;">ออกจากระบบ</button>
+
+            <!-- Action buttons -->
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+                <button onclick="closeLoginModal(); openAdminPanelModal();"
+                    style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px 16px;background:linear-gradient(135deg,#F2C24E,#c49520);color:#020710;border:none;border-radius:10px;cursor:pointer;font-weight:900;font-size:14px;font-family:'Prompt',sans-serif;box-shadow:0 4px 16px rgba(242,194,78,0.3);transition:all 0.2s;">
+                    <span>⚙️</span><span>เปิด Admin Panel</span>
+                </button>
+                <div style="display:flex;gap:8px;">
+                    <button onclick="closeLoginModal()"
+                        style="flex:1;padding:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;border-radius:9px;cursor:pointer;font-weight:600;font-size:13px;font-family:'Prompt',sans-serif;">
+                        ปิด
+                    </button>
+                    <button onclick="logoutAdmin()"
+                        style="flex:1;padding:10px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.3);color:#f87171;border-radius:9px;cursor:pointer;font-weight:700;font-size:13px;font-family:'Prompt',sans-serif;">
+                        ออกจากระบบ
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -4712,8 +5178,194 @@
   </div>
 </div>
 
+<!-- ══ Admin Panel Modal ══════════════════════════════════════════════ -->
+<div id="admin-panel-modal" onclick="if(event.target===this)closeAdminPanelModal()">
+  <div class="apm-layout">
+
+    <!-- ══ HEADER BAR (full-width) ══ -->
+    <div class="apm-header-bar">
+      <div class="apm-header-icon">⚽</div>
+      <div>
+        <div class="apm-header-title">FC 26 SF</div>
+        <div class="apm-header-sub">Admin Panel</div>
+      </div>
+      <button type="button" class="apm-back-btn" id="apm-back-btn" onclick="_apmRestoreInline()">← กลับ</button>
+      <div class="apm-header-spacer"></div>
+      <button type="button" class="apm-close-btn" onclick="closeAdminPanelModal()" title="ปิด">✕</button>
+    </div>
+
+    <!-- ══ BODY ══ -->
+    <div class="apm-body">
+
+      <!-- ══ LEFT SIDEBAR (Desktop ≥601px) ══ -->
+      <div class="apm-sidebar">
+        <div class="apm-sidebar-body">
+
+          <!-- Tournament Controls -->
+          <div id="apm-tournament-section" class="apm-tournament-section" style="display:none;">
+            <div class="apm-group-lbl">🏆 ทัวร์นาเมนต์</div>
+            <div id="apm-tournament-btns"></div>
+          </div>
+
+          <div class="apm-group-lbl">ทีม &amp; ผลการแข่งขัน</div>
+          <button class="apm-menu-item cat-blue" data-action="editTeams" onclick="adminPanelAction('editTeams')">
+            <span class="apm-menu-item-icon">✏️</span><span>จัดการผู้สมัคร</span>
+          </button>
+          <button class="apm-menu-item cat-blue" id="apm-pending-btn" data-action="pending" onclick="adminPanelAction('pending')">
+            <span class="apm-menu-item-icon">📋</span><span>รอตรวจสอบ</span>
+            <span id="apm-sidebar-pending-badge" class="apm-badge" style="display:none;"></span>
+          </button>
+          <button class="apm-menu-item cat-blue" data-action="bigmatch" onclick="adminPanelAction('bigmatch')">
+            <span class="apm-menu-item-icon">🔥</span><span>บิ๊กแมช</span>
+          </button>
+          <button class="apm-menu-item cat-blue" data-action="h2h" onclick="adminPanelAction('h2h')">
+            <span class="apm-menu-item-icon">📊</span><span>H2H Manager</span>
+          </button>
+          <button class="apm-menu-item cat-blue" data-action="hof" onclick="adminPanelAction('hof')">
+            <span class="apm-menu-item-icon">🏅</span><span>Hall of Fame</span>
+          </button>
+
+          <div class="apm-separator"></div>
+          <div class="apm-group-lbl">ตกแต่ง &amp; มีเดีย</div>
+          <button class="apm-menu-item cat-org" data-action="trophy" onclick="adminPanelAction('trophy')">
+            <span class="apm-menu-item-icon">🏆</span><span>ถ้วยรางวัล</span>
+          </button>
+          <button class="apm-menu-item cat-org" data-action="banner" onclick="adminPanelAction('banner')">
+            <span class="apm-menu-item-icon">📢</span><span>ประกาศ / Ad</span>
+          </button>
+          <button class="apm-menu-item cat-org" data-action="music" onclick="adminPanelAction('music')">
+            <span class="apm-menu-item-icon">🎵</span><span>จัดการเพลง</span>
+          </button>
+          <button class="apm-menu-item cat-org" data-action="flag" onclick="adminPanelAction('flag')">
+            <span class="apm-menu-item-icon">🏳️</span><span>รีเซ็ตธงชาติ</span>
+          </button>
+
+          <div class="apm-separator"></div>
+          <div class="apm-group-lbl">ข้อมูล &amp; ระบบ</div>
+          <button class="apm-menu-item cat-green" data-action="export" onclick="adminPanelAction('export')">
+            <span class="apm-menu-item-icon">💾</span><span>Export Backup</span>
+          </button>
+          <label class="apm-menu-item cat-green" style="cursor:pointer;">
+            <span class="apm-menu-item-icon">📂</span><span>Import Backup</span>
+            <input type="file" accept=".json" onchange="adminPanelAction('import', this); this.value='';" style="display:none;">
+          </label>
+          <button class="apm-menu-item season-btn cat-green" data-action="season" onclick="adminPanelAction('season')">
+            <span class="apm-menu-item-icon">🔄</span><span>เริ่มซีซั่นใหม่</span>
+          </button>
+          <button class="apm-menu-item danger" data-action="reset" onclick="adminPanelAction('reset')">
+            <span class="apm-menu-item-icon">🚨</span><span>รีเซ็ตทั้งหมด</span>
+          </button>
+
+        </div><!-- /sidebar-body -->
+        <div class="apm-sidebar-footer">
+          <button class="apm-logout-btn" onclick="logoutAdmin()">🔓 ออกจากระบบ</button>
+        </div>
+      </div><!-- /sidebar -->
+
+      <!-- ══ MOBILE CARD GRID (≤600px) ══ -->
+      <div class="apm-mobile-grid-wrap">
+
+        <!-- Mobile tournament controls -->
+        <div class="apm-mobile-tournament" id="apm-mobile-tournament-wrap" style="display:none;">
+          <div class="apm-mobile-tourn-inner">
+            <div class="apm-mobile-tourn-label">🏆 ทัวร์นาเมนต์</div>
+            <div id="apm-mobile-tournament-btns"></div>
+          </div>
+        </div>
+
+        <!-- ── ทีม & ผลการแข่งขัน ── -->
+        <div class="apm-mobile-group-label">ทีม &amp; ผลการแข่งขัน</div>
+        <div class="apm-mobile-grid">
+          <div class="apm-mobile-card c-blue" onclick="adminPanelAction('editTeams')">
+            <div class="apm-mobile-card-icon">✏️</div>
+            <div class="apm-mobile-card-label">จัดการ<br>ผู้สมัคร</div>
+          </div>
+          <div class="apm-mobile-card c-blue" onclick="adminPanelAction('pending')">
+            <div class="apm-mobile-card-icon">📋</div>
+            <div class="apm-mobile-card-label">รอตรวจสอบ</div>
+            <span id="apm-mobile-pending-badge" class="apm-mobile-card-badge" style="display:none;"></span>
+          </div>
+          <div class="apm-mobile-card c-blue" onclick="adminPanelAction('bigmatch')">
+            <div class="apm-mobile-card-icon">🔥</div>
+            <div class="apm-mobile-card-label">บิ๊กแมช</div>
+          </div>
+          <div class="apm-mobile-card c-blue" onclick="adminPanelAction('h2h')">
+            <div class="apm-mobile-card-icon">📊</div>
+            <div class="apm-mobile-card-label">H2H Manager</div>
+          </div>
+          <div class="apm-mobile-card c-blue c-full" onclick="adminPanelAction('hof')">
+            <div class="apm-mobile-card-icon">🏅</div>
+            <div class="apm-mobile-card-label">Hall of Fame</div>
+          </div>
+        </div>
+
+        <!-- ── ตกแต่ง & มีเดีย ── -->
+        <div class="apm-mobile-group-label">ตกแต่ง &amp; มีเดีย</div>
+        <div class="apm-mobile-grid">
+          <div class="apm-mobile-card c-org" onclick="adminPanelAction('trophy')">
+            <div class="apm-mobile-card-icon">🏆</div>
+            <div class="apm-mobile-card-label">ถ้วยรางวัล</div>
+          </div>
+          <div class="apm-mobile-card c-org" onclick="adminPanelAction('banner')">
+            <div class="apm-mobile-card-icon">📢</div>
+            <div class="apm-mobile-card-label">ประกาศ / Ad</div>
+          </div>
+          <div class="apm-mobile-card c-org" onclick="adminPanelAction('music')">
+            <div class="apm-mobile-card-icon">🎵</div>
+            <div class="apm-mobile-card-label">จัดการเพลง</div>
+          </div>
+          <div class="apm-mobile-card c-org" onclick="adminPanelAction('flag')">
+            <div class="apm-mobile-card-icon">🏳️</div>
+            <div class="apm-mobile-card-label">รีเซ็ตธงชาติ</div>
+          </div>
+        </div>
+
+        <!-- ── ข้อมูล & ระบบ ── -->
+        <div class="apm-mobile-group-label">ข้อมูล &amp; ระบบ</div>
+        <div class="apm-mobile-grid">
+          <div class="apm-mobile-card c-green" onclick="adminPanelAction('export')">
+            <div class="apm-mobile-card-icon">💾</div>
+            <div class="apm-mobile-card-label">Export Backup</div>
+          </div>
+          <label class="apm-mobile-card c-green" style="cursor:pointer;">
+            <div class="apm-mobile-card-icon">📂</div>
+            <div class="apm-mobile-card-label">Import Backup</div>
+            <input type="file" accept=".json" onchange="adminPanelAction('import', this); this.value='';" style="display:none;">
+          </label>
+          <div class="apm-mobile-card c-green" onclick="adminPanelAction('season')">
+            <div class="apm-mobile-card-icon">🔄</div>
+            <div class="apm-mobile-card-label">เริ่มซีซั่นใหม่</div>
+          </div>
+          <div class="apm-mobile-card c-red" onclick="adminPanelAction('reset')">
+            <div class="apm-mobile-card-icon">🚨</div>
+            <div class="apm-mobile-card-label">รีเซ็ตทั้งหมด</div>
+          </div>
+        </div>
+
+        <!-- Footer logout -->
+        <div class="apm-mobile-footer">
+          <button class="apm-logout-btn" onclick="logoutAdmin()">🔓 ออกจากระบบ</button>
+        </div>
+
+      </div><!-- /mobile-grid-wrap -->
+
+      <!-- ══ RIGHT PANE ══ -->
+      <div class="apm-right-pane">
+        <div class="apm-content">
+          <div class="apm-content-placeholder">
+            <div class="apm-content-placeholder-icon">⚙️</div>
+            <div class="apm-content-placeholder-text">เลือกเมนูทางซ้าย<br>เพื่อเริ่มจัดการระบบ</div>
+          </div>
+        </div>
+      </div><!-- /right-pane -->
+
+    </div><!-- /body -->
+  </div><!-- /layout -->
+</div>
+
+
 <!-- ── Admin Pending Results Modal ── -->
-<div id="adminPendingModal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(5,17,38,0.92);backdrop-filter:blur(10px);justify-content:center;align-items:flex-start;overflow-y:auto;padding:24px 12px;" onclick="if(event.target===this)closeAdminPendingModal()">
+<div id="adminPendingModal" style="display:none;position:fixed;inset:0;z-index:11000;background:rgba(5,17,38,0.92);backdrop-filter:blur(10px);justify-content:center;align-items:flex-start;overflow-y:auto;padding:24px 12px;" onclick="if(event.target===this)closeAdminPendingModal()">
   <div style="background:linear-gradient(145deg,#0d1f3c,#081424);border:2px solid rgba(242,194,78,0.4);border-radius:16px;padding:24px;width:100%;max-width:620px;margin:auto;box-shadow:0 0 50px rgba(242,194,78,0.1);">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
       <div style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#F2C24E;letter-spacing:1.5px;">📋 รอการอนุมัติ</div>
@@ -4737,7 +5389,7 @@
 </div>
 
 <!-- ── HOF Manage Modal (Admin Edit) ── -->
-<div id="hof-manage-modal" style="display:none; position:fixed; inset:0; z-index:1200; background:rgba(0,0,0,0.88); backdrop-filter:blur(10px); align-items:center; justify-content:center; padding:16px;" onclick="if(event.target===this)closeHofManageModal()">
+<div id="hof-manage-modal" style="display:none; position:fixed; inset:0; z-index:11000; background:rgba(0,0,0,0.88); backdrop-filter:blur(10px); align-items:center; justify-content:center; padding:16px;" onclick="if(event.target===this)closeHofManageModal()">
     <div style="background:linear-gradient(145deg,#0d1f3c,#081424); border:1px solid rgba(223,180,75,0.35); border-radius:20px; padding:22px 22px 20px; max-width:720px; width:100%; max-height:88vh; display:flex; flex-direction:column; box-shadow:0 0 60px rgba(223,180,75,0.1), 0 24px 64px rgba(0,0,0,0.6);">
         <!-- Header row: title + all action buttons together -->
         <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-shrink:0; flex-wrap:wrap;">
@@ -4800,7 +5452,7 @@
 </div>
 
 <!-- ── H2H Manager Modal (Standalone) ── -->
-<div id="h2h-manager-modal" onclick="if(event.target===this)closeH2HManager()" style="display:none;position:fixed;inset:0;z-index:1450;background:rgba(0,0,0,0.94);backdrop-filter:blur(12px);align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;">
+<div id="h2h-manager-modal" onclick="if(event.target===this)closeH2HManager()" style="display:none;position:fixed;inset:0;z-index:11000;background:rgba(0,0,0,0.94);backdrop-filter:blur(12px);align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;">
   <div style="background:rgba(11,30,61,0.98);border:1px solid rgba(59,130,246,0.35);border-radius:16px;padding:24px;width:100%;max-width:860px;margin:auto;box-shadow:0 24px 60px rgba(0,0,0,0.7);">
     <!-- Header -->
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
@@ -5928,8 +6580,11 @@ function openLoginModal() {
     const modal = document.getElementById("loginModal");
     modal.style.display = "flex";
     if (!state.isViewOnly) {
+        // Already admin — show admin info panel in modal
         _lmShowStep('admin');
-    } else if (state.playerTeamId) {
+        return;
+    }
+    if (state.playerTeamId) {
         const t = state.teams.find(x => x.id.toLowerCase() === state.playerTeamId.toLowerCase());
 
         // ── Hero: Logo + ชื่อทีม + ผู้จัดการ + ID ──
@@ -5968,8 +6623,10 @@ function openLoginModal() {
             const standings = calculateStandings();
             const ri = standings.findIndex(s => s.id.toLowerCase() === state.playerTeamId.toLowerCase());
             const row = ri >= 0 ? standings[ri] : null;
-            document.getElementById("lm-rank").textContent  = ri >= 0 ? `#${ri + 1}` : "—";
-            document.getElementById("lm-pts").textContent   = row ? row.pts : 0;
+            // Only show rank if the player has played at least 1 match
+            const hasPlayed = row && row.p > 0;
+            document.getElementById("lm-rank").textContent = hasPlayed ? `#${ri + 1}` : "—";
+            document.getElementById("lm-pts").textContent  = row ? row.pts : 0;
         } catch(e) {
             document.getElementById("lm-rank").textContent = "—";
             document.getElementById("lm-pts").textContent  = 0;
@@ -6062,16 +6719,15 @@ function submitLoginPass() {
     const passVal = document.getElementById("lm-pass-input").value.trim();
     if (!passVal) { return; }
     if (passVal === ADMIN_PASS) {
-        if (window._READONLY_MODE) {
-        }
+        if (window._READONLY_MODE) {}
         state.isViewOnly = false;
         closeLoginModal();
-        document.getElementById("control-buttons").style.display = "flex";
         const dragHint = document.getElementById("admin-drag-hint");
         if (dragHint) dragHint.style.display = "inline";
         _setLoginBtn('admin');
         _updateRoleStatusBar();
         renderHeader(); renderAdminDock(); renderLeague(); refreshUIState();
+        _adminToast('🔐 Admin เข้าสู่ระบบสำเร็จ — กด ปุ่ม 🔐 เพื่อเปิด Admin Panel', '#F2C24E');
     } else {
     }
 }
@@ -6117,7 +6773,8 @@ function logoutPlayer() {
 }
 
 function logoutAdmin() {
-    closeLoginModal();   // ปิด modal ก่อนเสมอ
+    closeAdminPanelModal(); // ปิด admin panel ด้วยเสมอ
+    closeLoginModal();   // ปิด login modal ด้วย
     state.isViewOnly = true;
     _setLoginBtn('none');
     const controlButtons = document.getElementById("control-buttons");
@@ -7391,6 +8048,7 @@ function adminRefreshPending() {
 }
 
 function closeAdminPendingModal() {
+    _apmRestoreInline();
     document.getElementById("adminPendingModal").style.display = "none";
 }
 
@@ -7446,11 +8104,19 @@ function updateAdminPendingBadge() {
     const results  = (state.pendingResults  || []).filter(p => p.status === "pending").length;
     const changes  = (state.changeRequests  || []).filter(c => c.status === "pending").length;
     const count    = results + changes;
+    // main dock badge (legacy, kept for compat)
     const badge    = document.getElementById("admin-pending-count");
-    if (!badge) return;
-    if (count > 0) { badge.textContent = count; badge.style.display = "inline-block"; }
-    else           { badge.style.display = "none"; }
-    // update tab counters if visible
+    if (badge) {
+        if (count > 0) { badge.textContent = count; badge.style.display = "inline-block"; }
+        else           { badge.style.display = "none"; }
+    }
+    // sidebar badge in admin panel modal
+    const sidebarBadge = document.getElementById("apm-sidebar-pending-badge");
+    if (sidebarBadge) {
+        if (count > 0) { sidebarBadge.textContent = count; sidebarBadge.style.display = "block"; }
+        else           { sidebarBadge.style.display = "none"; }
+    }
+    // update tab counters if pending modal is visible
     const rc = document.getElementById("apm-results-count");
     const cc = document.getElementById("apm-changes-count");
     if (rc) rc.textContent = results > 0 ? results : "";
@@ -7542,80 +8208,9 @@ function adminRejectPending(pendingId) {
 
 function renderAdminDock() {
     const dock = document.getElementById("admin-actions-dock");
-    if (state.isViewOnly) { dock.innerHTML = ""; return; }
-
-    // ── Tournament Control (Start / Advance round) ──
-    let tournamentControlHTML = '';
-    if (!state.tournamentStarted) {
-        tournamentControlHTML = `<button class="adm-start-btn" onclick="adminStartTournament()">🏆 เริ่มทัวร์นาเมนต์ (START)</button>`;
-    } else {
-        let fmt = state.tournamentFormat || 'league';
-        if ((fmt === 'cup' || fmt === 'cup-2leg') && !state.cupChampionId && state.matches.length > 0) {
-            let allCupRounds = [...new Set(state.matches.filter(m => !m.isConsolation).map(m => m.cupRound || m.round))];
-            let currentCupRound = Math.max(...allCupRounds);
-            let canAdvance = currentCupRound > 0 && isCupRoundComplete(currentCupRound);
-            tournamentControlHTML += `<div class="adm-btns">`;
-            tournamentControlHTML += `<button class="adm-advance-btn" onclick="advanceKnockoutRound()" ${!canAdvance ? 'disabled' : ''}>⏭️ ประกาศผล / เปิดรอบถัดไป</button>`;
-            let config = state.cupConfig || {};
-            if (config.consolation && !state.consolationChampionId) {
-                let consolRound = getConsolationCurrentRound();
-                if (consolRound > 0) {
-                    let canAdvanceConsol = isConsolationRoundComplete(consolRound);
-                    tournamentControlHTML += `<button class="adm-advance-btn" onclick="advanceConsolationRound()" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9);" ${!canAdvanceConsol ? 'disabled' : ''}>⏭️ สายล่าง</button>`;
-                }
-            }
-            tournamentControlHTML += `</div>`;
-        }
-    }
-
-    dock.innerHTML = `
-    <div id="admin-control-panel">
-        <div class="adm-panel-header">
-            <span class="adm-panel-header-icon">⚙️</span>
-            <span class="adm-panel-header-text">Admin Control Panel</span>
-        </div>
-        ${tournamentControlHTML ? `<div style="margin-bottom:12px;">${tournamentControlHTML}</div>` : ''}
-        <div class="adm-groups">
-
-            <div class="adm-group">
-                <div class="adm-group-label">📋 ผู้สมัคร &amp; ผล</div>
-                <div class="adm-btns">
-                    <button class="adm-btn gold" onclick="openEditTeamsModal()">✏️ จัดการผู้สมัคร</button>
-                    <button class="adm-btn blue" id="admin-pending-btn" onclick="openAdminPendingModal()" style="position:relative;overflow:visible;">
-                        📋 รอตรวจสอบ
-                        <span id="admin-pending-count" style="display:none;position:absolute;top:-7px;right:-7px;background:#ef4444;color:#fff;border-radius:99px;font-size:10px;font-weight:900;min-width:18px;height:18px;line-height:18px;text-align:center;padding:0 4px;font-family:'Prompt',sans-serif;"></span>
-                    </button>
-                    <button class="adm-btn orange" onclick="openBigMatchPickerModal()">🔥 บิ๊กแมช</button>
-                    <button class="adm-btn blue" onclick="openH2HManager()">📊 H2H</button>
-                </div>
-            </div>
-
-            <div class="adm-group">
-                <div class="adm-group-label">🎨 ตกแต่ง &amp; แสดงผล</div>
-                <div class="adm-btns">
-                    <button class="adm-btn trophy" onclick="openTrophyEditor()">🏆 ถ้วยรางวัล</button>
-                    <button class="adm-btn blue" onclick="openAdBannerEditor()">📢 ประกาศ/Ad</button>
-                    <button class="adm-btn teal" onclick="upgradeFlagcdnToCrests()" title="รีเซ็ตทุกทีมให้แสดงธงชาติ">🏳️ รีเซ็ตธง</button>
-                    <button class="adm-btn green" onclick="openPlaylistManager()">🎵 เพลง</button>
-                </div>
-            </div>
-
-            <div class="adm-group">
-                <div class="adm-group-label">💾 ข้อมูล &amp; ระบบ</div>
-                <div class="adm-btns">
-                    <button class="adm-btn cyan" onclick="exportBackup()">💾 Export</button>
-                    <label class="adm-btn cyan" style="cursor:pointer;" onclick="this.querySelector('input').click()">
-                        📂 Import
-                        <input type="file" accept=".json" onchange="importBackup(event)" style="display:none;">
-                    </label>
-                    <button class="adm-btn season" onclick="resetToNextSeason()">🔄 ซีซั่นใหม่</button>
-                    <button class="adm-btn danger" onclick="resetLeagueHard()">🚨 ลบทั้งหมด</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    `;
+    if (dock) dock.innerHTML = "";
+    // Refresh sidebar tournament controls inside Admin Panel modal
+    try { _renderApmTournamentControls(); } catch(e) {}
 }
 
 async function upgradeFlagcdnToCrests() {
@@ -7705,7 +8300,7 @@ function refreshUIState() {
         }
     }
 
-    controlButtons.style.display = state.isViewOnly ? "none" : "flex";
+    controlButtons.style.display = "none"; // Admin panel access moved to 🔑 button
 
     const hofEditBtn = document.getElementById('hof-edit-btn');
     if (hofEditBtn) hofEditBtn.style.display = state.isViewOnly ? 'none' : 'inline-block';
@@ -7898,7 +8493,7 @@ async function removeTeamNode(index) {
         _renderEditTeamsModalUI();
     }
 }
-function closeEditTeamsModal() { document.getElementById("editTeamsModal").style.display = "none"; }
+function closeEditTeamsModal() { _apmRestoreInline(); document.getElementById("editTeamsModal").style.display = "none"; }
 
 function saveEditedTeams() {
     if (state.isViewOnly) return;
@@ -10059,6 +10654,7 @@ function openBigMatchPickerModal() {
 }
 
 function closeBigMatchPickerModal() {
+    _apmRestoreInline();
     let modal = document.getElementById('big-match-picker-modal');
     if (modal) modal.classList.remove('open');
 }
@@ -10411,6 +11007,7 @@ function openTrophyEditor() {
 }
 
 function closeTrophyEditor() {
+    _apmRestoreInline();
     const modal = document.getElementById('trophy-editor-modal');
     if (modal) modal.style.display = 'none';
 }
@@ -10565,6 +11162,7 @@ function openAdBannerEditor() {
 }
 
 function closeAdBannerEditor() {
+    _apmRestoreInline();
     const modal = document.getElementById('ad-editor-modal');
     if (modal) modal.classList.remove('open');
 }
@@ -11285,6 +11883,7 @@ function openHofManageModal() {
     document.getElementById('hof-manage-modal').style.display = 'flex';
 }
 function closeHofManageModal() {
+    _apmRestoreInline();
     document.getElementById('hof-manage-modal').style.display = 'none';
     renderHallOfFame();
 }
@@ -11566,7 +12165,7 @@ async function resetBracketMatchScore(matchId) {
 </div>
 
 <!-- Trophy Editor Modal -->
-<div id="trophy-editor-modal" onclick="if(event.target===this)closeTrophyEditor()" style="display:none;position:fixed;inset:0;z-index:4600;background:rgba(0,0,0,0.88);backdrop-filter:blur(12px);align-items:center;justify-content:center;">
+<div id="trophy-editor-modal" onclick="if(event.target===this)closeTrophyEditor()" style="display:none;position:fixed;inset:0;z-index:11000;background:rgba(0,0,0,0.88);backdrop-filter:blur(12px);align-items:center;justify-content:center;">
     <div style="background:linear-gradient(145deg,rgba(6,16,44,0.97),rgba(2,7,16,0.97));border:1px solid rgba(255,215,0,0.35);border-radius:20px;padding:30px 28px;width:100%;max-width:440px;box-shadow:0 0 60px rgba(255,215,0,0.12),0 24px 64px rgba(0,0,0,0.7);position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#F2C24E,transparent);"></div>
         <div style="font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:#F2C24E;letter-spacing:2px;margin-bottom:6px;text-transform:uppercase;">🏆 แก้ไขรูปถ้วยรางวัล</div>
@@ -12027,6 +12626,7 @@ function openH2HManager() {
 }
 
 function closeH2HManager() {
+    _apmRestoreInline();
     document.getElementById('h2h-manager-modal').style.display = 'none';
 }
 
@@ -13141,6 +13741,7 @@ function openPlaylistManager() {
     document.getElementById('playlist-modal').classList.add('open');
 }
 function closePlaylistManager() {
+    _apmRestoreInline();
     document.getElementById('playlist-modal').classList.remove('open');
 }
 function _renderPlList() {
@@ -13271,6 +13872,192 @@ function buildChampionBanner(opts) {
         <div class="cb-corner bl"></div><div class="cb-corner br"></div>
     </div>`;
 }
+// ══ Admin Panel Modal Functions ══════════════════════════════════════
+function openAdminPanelModal() {
+    if (state.isViewOnly) return;
+    _renderApmTournamentControls();
+    _updateApmPendingBadge();
+    document.getElementById('admin-panel-modal').classList.add('open');
+}
+
+function closeAdminPanelModal() {
+    _apmRestoreInline();
+    closeApmSidebar();
+    document.getElementById('admin-panel-modal').classList.remove('open');
+}
+
+/* ── Admin Panel Inline Content Engine ──────────────────────────────
+   Instead of opening sub-modals as full-screen overlays, we move their
+   inner box directly into .apm-content so content appears inline.
+   _apmShowInline: opens the modal (to let its JS initialize data), then
+                   steals its inner box and places it in .apm-content.
+   _apmRestoreInline: moves the inner box back before the close function
+                      hides the modal. ──────────────────────────────── */
+function _apmShowInline(modalId, openFn, innerSel) {
+    _apmRestoreInline(); // clean up any previous inline view first
+    openFn();            // run existing JS to initialize / render content
+    var modal = document.getElementById(modalId);
+    if (!modal) return;
+    var innerBox = innerSel ? modal.querySelector(innerSel) : modal.firstElementChild;
+    if (!innerBox) return;
+    window._apmInlineState = {
+        modal: modal, box: innerBox,
+        parent: innerBox.parentNode, nextSib: innerBox.nextSibling
+    };
+    // Make the outer overlay invisible & non-interactive
+    modal.style.cssText = 'display:block !important; background:transparent !important;'
+        + 'backdrop-filter:none !important; -webkit-backdrop-filter:none !important;'
+        + 'pointer-events:none !important; padding:0 !important; z-index:-1 !important;';
+    // Strip size constraints so box flows naturally inside .apm-content
+    innerBox.style.pointerEvents = 'auto';
+    innerBox.style.maxWidth      = '100%';
+    innerBox.style.maxHeight     = 'none';
+    innerBox.style.margin        = '0';
+    innerBox.style.width         = '100%';
+    innerBox.style.borderRadius  = '12px';
+    innerBox.style.flex          = '1 1 auto';
+    // Override inner box theme to match admin panel dark design
+    innerBox.style.background    = 'linear-gradient(145deg, rgba(7,16,31,0.96), rgba(5,12,22,0.96))';
+    innerBox.style.border        = '1px solid rgba(255,255,255,0.07)';
+    innerBox.style.boxShadow     = 'none';
+    var content = document.querySelector('.apm-content');
+    if (!content) return;
+    content.innerHTML = '';
+    content.style.alignItems    = 'flex-start';
+    content.style.justifyContent = 'flex-start';
+    content.style.padding       = '12px';
+    content.appendChild(innerBox);
+    // Mobile: switch to content view
+    var layout = document.querySelector('.apm-layout');
+    if (layout) layout.classList.add('apm-content-active');
+}
+
+function _apmRestoreInline() {
+    // Mobile: switch back to menu view
+    var layout = document.querySelector('.apm-layout');
+    if (layout) layout.classList.remove('apm-content-active');
+    // Clear active menu item
+    document.querySelectorAll('#admin-panel-modal .apm-menu-item.active')
+        .forEach(function(el){ el.classList.remove('active'); });
+    var st = window._apmInlineState;
+    if (!st) return;
+    window._apmInlineState = null;
+    // Move inner box back to original modal
+    if (st.nextSib && st.nextSib.parentNode === st.parent) st.parent.insertBefore(st.box, st.nextSib);
+    else st.parent.appendChild(st.box);
+    // Remove style overrides
+    st.box.style.pointerEvents = '';
+    st.box.style.maxWidth      = '';
+    st.box.style.maxHeight     = '';
+    st.box.style.margin        = '';
+    st.box.style.width         = '';
+    st.box.style.borderRadius  = '';
+    st.box.style.flex          = '';
+    st.box.style.background    = '';
+    st.box.style.border        = '';
+    st.box.style.boxShadow     = '';
+    // Hide the modal
+    st.modal.style.cssText = '';
+    st.modal.style.display = 'none';
+    st.modal.classList.remove('open');
+    // Restore .apm-content placeholder
+    var content = document.querySelector('.apm-content');
+    if (content) {
+        content.innerHTML = '<div class="apm-content-placeholder">'
+            + '<div class="apm-content-placeholder-icon">⚙️</div>'
+            + '<div class="apm-content-placeholder-text">เลือกเมนูด้านซ้าย<br>เพื่อจัดการระบบ</div></div>';
+        content.style.alignItems    = '';
+        content.style.justifyContent = '';
+        content.style.padding       = '';
+    }
+}
+
+function toggleApmSidebar() { /* no-op — new design uses full-screen menu */ }
+function closeApmSidebar()  { /* no-op — new design uses full-screen menu */ }
+
+function _updateApmPendingBadge() {
+    try {
+        const pendingCount = (state.pendingResults || []).filter(r => !r.approved && !r.rejected).length +
+                             (state.changeRequests  || []).filter(r => !r.approved && !r.rejected).length;
+        // Sidebar badge (desktop)
+        const badge = document.getElementById('apm-sidebar-pending-badge');
+        if (badge) {
+            badge.textContent = pendingCount;
+            badge.style.display = pendingCount > 0 ? 'block' : 'none';
+        }
+        // Mobile card badge
+        const mbadge = document.getElementById('apm-mobile-pending-badge');
+        if (mbadge) {
+            mbadge.textContent = pendingCount;
+            mbadge.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+        }
+    } catch(e) {}
+}
+
+function _renderApmTournamentControls() {
+    const section = document.getElementById('apm-tournament-section');
+    const btnsEl  = document.getElementById('apm-tournament-btns');
+    const mSection = document.getElementById('apm-mobile-tournament-wrap');
+    const mBtnsEl  = document.getElementById('apm-mobile-tournament-btns');
+    if (!section || !btnsEl) return;
+    btnsEl.innerHTML = '';
+    if (mBtnsEl) mBtnsEl.innerHTML = '';
+    let html = '';
+    if (!state.tournamentStarted) {
+        html = `<button class="apm-start-btn" onclick="adminPanelAction('start')">🏆 เริ่มทัวร์นาเมนต์</button>`;
+    } else {
+        let fmt = state.tournamentFormat || 'league';
+        if ((fmt === 'cup' || fmt === 'cup-2leg') && !state.cupChampionId && state.matches.length > 0) {
+            let allRounds = [...new Set(state.matches.filter(m => !m.isConsolation).map(m => m.cupRound || m.round))];
+            let currentRound = Math.max(...allRounds);
+            let canAdvance = currentRound > 0 && (typeof isCupRoundComplete === 'function') && isCupRoundComplete(currentRound);
+            html += `<button class="apm-advance-btn" onclick="adminPanelAction('advance')" ${!canAdvance ? 'disabled' : ''}>⏭️ เปิดรอบถัดไป</button>`;
+            let cfg = state.cupConfig || {};
+            if (cfg.consolation && !state.consolationChampionId) {
+                let cRound = (typeof getConsolationCurrentRound === 'function') ? getConsolationCurrentRound() : 0;
+                if (cRound > 0) {
+                    let canAdv2 = (typeof isConsolationRoundComplete === 'function') && isConsolationRoundComplete(cRound);
+                    html += `<button class="apm-advance-btn" style="background:linear-gradient(135deg,rgba(109,28,152,0.5),rgba(124,58,237,0.4));border-color:rgba(167,139,250,0.4);color:#c4b5fd;" onclick="adminPanelAction('advanceConsol')" ${!canAdv2 ? 'disabled' : ''}>⏭️ สายล่าง</button>`;
+                }
+            }
+        }
+    }
+    btnsEl.innerHTML = html;
+    section.style.display = html ? 'block' : 'none';
+    if (mBtnsEl) mBtnsEl.innerHTML = html;
+    if (mSection) mSection.style.display = html ? 'block' : 'none';
+}
+
+function adminPanelAction(action, fileInput) {
+    // Highlight active menu item
+    document.querySelectorAll('#admin-panel-modal .apm-menu-item').forEach(function(el) {
+        el.classList.toggle('active', el.dataset.action === action);
+    });
+    switch (action) {
+        // ── Modal-based: show content inline inside .apm-content ──
+        case 'editTeams':  _apmShowInline('editTeamsModal',         openEditTeamsModal,    '.modal-content'); break;
+        case 'pending':    _apmShowInline('adminPendingModal',      openAdminPendingModal,  null); break;
+        case 'bigmatch':   _apmShowInline('big-match-picker-modal', openBigMatchPickerModal,'.bmp-box'); break;
+        case 'h2h':        _apmShowInline('h2h-manager-modal',      openH2HManager,         null); break;
+        case 'hof':        _apmShowInline('hof-manage-modal',       openHofManageModal,     null); break;
+        case 'trophy':     _apmShowInline('trophy-editor-modal',    openTrophyEditor,       null); break;
+        case 'banner':     _apmShowInline('ad-editor-modal',        openAdBannerEditor,    '.ad-editor-box'); break;
+        case 'music':      _apmShowInline('playlist-modal',         openPlaylistManager,   '.pl-box'); break;
+        // ── Non-modal actions ──
+        case 'flag':       upgradeFlagcdnToCrests(); break;
+        case 'export':     exportBackup(); break;
+        case 'import':     if (fileInput) { importBackup({ target: fileInput }); } break;
+        // ── Destructive: close admin panel then execute ──
+        case 'season':     closeAdminPanelModal(); resetToNextSeason(); break;
+        case 'reset':      closeAdminPanelModal(); resetLeagueHard(); break;
+        // ── Tournament controls ──
+        case 'start':      adminStartTournament(); break;
+        case 'advance':    advanceKnockoutRound(); break;
+        case 'advanceConsol': advanceConsolationRound(); break;
+    }
+}
+// ════════════════════════════════════════════════════════════════════
+
 function initChampionBannerCanvas(bannerEl) {
     const canvas = bannerEl.querySelector('.cb-particle-canvas');
     if (!canvas) return;
