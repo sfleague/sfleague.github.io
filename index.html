@@ -3313,7 +3313,7 @@
         }
         .cr-title { font-family:'Orbitron',sans-serif; font-size:15px; font-weight:900; color:#a78bfa; margin-bottom:6px; }
         .cr-sub   { font-size:12px; color:#64748b; margin-bottom:18px; line-height:1.5; }
-        .cr-field { margin-bottom:13px; }
+        .cr-field { margin-bottom:13px; position:relative; }
         .cr-field label { display:block; font-size:12px; color:#94a3b8; font-weight:600; margin-bottom:5px; }
         .cr-field input, .cr-field textarea {
             width:100%; padding:10px 12px; font-size:13px; font-family:'Prompt',sans-serif;
@@ -4363,7 +4363,8 @@
         </div>
         <div class="cr-field">
             <label>ชื่อทีมใหม่</label>
-            <input id="cr-team-inp" type="text" placeholder="เว้นว่างถ้าไม่เปลี่ยน">
+            <input id="cr-team-inp" type="text" placeholder="เว้นว่างถ้าไม่เปลี่ยน" autocomplete="off">
+            <div id="cr-autocomplete-list" class="autocomplete-suggestions"></div>
             <div class="cr-current" id="cr-team-current"></div>
         </div>
         <div class="cr-field">
@@ -5711,18 +5712,24 @@ function _cmPromptClose() {
 function initTeamAutocomplete() {
     setupAutocompleteLogic("reg-team", "autocomplete-list");
     setupAutocompleteLogic("admin-add-team", "admin-autocomplete-list");
+    setupAutocompleteLogic("cr-team-inp", "cr-autocomplete-list");
 
     document.addEventListener("click", function(e) {
         const inputReg = document.getElementById("reg-team");
         const listReg = document.getElementById("autocomplete-list");
         const inputAdmin = document.getElementById("admin-add-team");
         const listAdmin = document.getElementById("admin-autocomplete-list");
+        const inputCr = document.getElementById("cr-team-inp");
+        const listCr = document.getElementById("cr-autocomplete-list");
 
         if (inputReg && listReg && e.target !== inputReg && e.target !== listReg) {
             listReg.style.display = "none";
         }
         if (inputAdmin && listAdmin && e.target !== inputAdmin && e.target !== listAdmin) {
             listAdmin.style.display = "none";
+        }
+        if (inputCr && listCr && e.target !== inputCr && e.target !== listCr) {
+            listCr.style.display = "none";
         }
     });
 }
