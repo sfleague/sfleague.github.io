@@ -7893,7 +7893,7 @@ function renderCupStatus() {
 async function saveCupChampToHistory() {
     if (state.isViewOnly || !state.cupChampionId) return;
     let champ = state.teams.find(t => t.id === state.cupChampionId);
-    if (!champ || !await showConfirm(`🏅 ยืนยันบันทึก [ ${champ.player} ] เป็นแชมป์ถ้วย SS${state.season}?`)) return;
+    if (!champ || !await showConfirm(`🏅 ยืนยันบันทึก [ ${champ.player} ] เป็นแชมป์ถ้วย SS${state.season}?\n\n🔄 ระบบจะเปิดซีซั่นใหม่ทันทีหลังบันทึก`)) return;
     if (!state.hallOfFame) state.hallOfFame = {};
     state.teams.filter(t => t.status === 'approved').forEach(t => {
         if (!state.hallOfFame[t.id]) state.hallOfFame[t.id] = { name: t.player, trophies: 0, wins: 0, draws: 0, losses: 0, goalsFor: 0, goalsAgainst: 0 };
@@ -7901,7 +7901,8 @@ async function saveCupChampToHistory() {
     });
     state.hallOfFame[state.cupChampionId].trophies += 1;
     state.defendingChampId = state.cupChampionId;
-    renderLeague(); saveDataToCloud();
+    // เปิดซีซั่นใหม่ทันที — ป้องกันการกดบันทึก HoF ซ้ำ (ถ้วย +2)
+    _doSeasonReset();
 }
 
 function adminDeclareCupWinner(matchId, winnerId) {
@@ -8962,35 +8963,41 @@ function saveEditedTeams() {
     closeEditTeamsModal(); renderHeader(); renderLeague(); refreshUIState(); saveDataToCloud();
 }
 
+// ── Logic ล้วนๆ สำหรับเปิดซีซั่นใหม่ (ไม่มี confirm) ─────────────────────────
+// เรียกจาก resetToNextSeason() และจาก saveCurrentChampToHistory() / saveCupChampToHistory()
+// เพื่อให้หลังบันทึก HoF แล้วซีซั่นเปลี่ยนทันที ป้องกันการกดบันทึก HoF ซ้ำ
+function _doSeasonReset() {
+    // ล้าง localStorage ที่เกี่ยวข้องทั้งหมด (รวม evidence ของซีซั่นนี้)
+    localStorage.removeItem(`my_player_id_ss_${state.season}`);
+    localStorage.removeItem(_getEvidenceLocalKey());                        // key แบบใหม่ (มี _ss#)
+    localStorage.removeItem(`evidence_imgs_${state.binId || 'local'}`);    // key แบบเก่า (backward-compat)
+
+    state.season = parseInt(state.season) ? state.season + 1 : 4;
+    state.tournamentStarted = false;
+    state.matches = [];
+    state.tournamentFormat = 'league';
+    state.cupChampionId = null;
+    state.consolationChampionId = null;
+    state.playerTeamId = null;
+
+    // รีเซ็ท login button กลับเป็นสถานะปกติ
+    _setLoginBtn('none');
+
+    state.teams = state.teams.filter(t => t.id !== "Bye").map(t => {
+        return { id: t.id, player: t.player, team: t.team, logo: t.logo, isFlag: t.isFlag, status: 'pending', comment: "" };
+    });
+
+    // อัปเดต cache ทันทีหลัง reset เพื่อให้ reload เห็นซีซั่นใหม่ได้เลย
+    // หมายเหตุ: ห้ามเรียก _updateSyncedSnapshot() ตรงนี้ — base snapshot ต้องยังจำ old matches
+    // ไว้ เพื่อให้ _performCloudSave() รู้ว่า old remote matches ถูกลบตั้งใจ ไม่ใช่ข้อมูลใหม่
+    _saveLastKnownCache(state.binId);
+    renderHeader(); renderAdminDock(); renderLeague(); refreshUIState(); saveDataToCloud();
+}
+
 async function resetToNextSeason() {
     if (state.isViewOnly) return;
     if (await showConfirm("🔄 ยืนยันการเปิดฉากสู่ซีซั่นถัดไป (Reset SS)?\nระบบจะล้างตารางเดิมทั้งหมดเพื่อเปิดฟอร์มหน้าแรกให้เพื่อนๆ มาลงทะเบียนใหม่อีกครั้ง")) {
-        // ล้าง localStorage ที่เกี่ยวข้องทั้งหมด (รวม evidence)
-        localStorage.removeItem(`my_player_id_ss_${state.season}`);
-        // ลบ evidence ของซีซั่นปัจจุบัน (ทั้ง key แบบใหม่ที่รวม season และแบบเก่า)
-        localStorage.removeItem(_getEvidenceLocalKey());                        // key แบบใหม่ (มี _ss#)
-        localStorage.removeItem(`evidence_imgs_${state.binId || 'local'}`);    // key แบบเก่า (backward-compat)
-
-        state.season = parseInt(state.season) ? state.season + 1 : 4;
-        state.tournamentStarted = false;
-        state.matches = [];
-        state.tournamentFormat = 'league';
-        state.cupChampionId = null;
-        state.consolationChampionId = null;
-        state.playerTeamId = null;
-
-        // รีเซ็ท login button กลับเป็นสถานะปกติ
-        _setLoginBtn('none');
-
-        state.teams = state.teams.filter(t => t.id !== "Bye").map(t => {
-            return { id: t.id, player: t.player, team: t.team, logo: t.logo, isFlag: t.isFlag, status: 'pending', comment: "" };
-        });
-
-        // อัปเดต cache ทันทีหลัง reset เพื่อให้ reload เห็นซีซั่นใหม่ได้เลย
-        // หมายเหตุ: ห้ามเรียก _updateSyncedSnapshot() ตรงนี้ — base snapshot ต้องยังจำ old matches
-        // ไว้ เพื่อให้ _performCloudSave() รู้ว่า old remote matches ถูกลบตั้งใจ ไม่ใช่ข้อมูลใหม่
-        _saveLastKnownCache(state.binId);
-        renderHeader(); renderAdminDock(); renderLeague(); refreshUIState(); saveDataToCloud();
+        _doSeasonReset();
     }
 }
 
@@ -10244,7 +10251,7 @@ async function saveCurrentChampToHistory() {
     let winner = standings.find(t => t.id === currentCrownedChampId);
     if (!winner) return;
     
-    if (await showConfirm(`🏅 ยืนยันบันทึกคุณ [ ${winner.player} ] เป็นแชมป์ซีซั่นนี้?\nสถิติ ชนะ/เสมอ/แพ้ ของทุกคนในซีซั่นนี้จะถูกนำไปสะสมใน Hall of Fame ถาวร`)) {
+    if (await showConfirm(`🏅 ยืนยันบันทึกคุณ [ ${winner.player} ] เป็นแชมป์ SS${state.season}?\nสถิติ ชนะ/เสมอ/แพ้ ของทุกคนจะถูกสะสมใน Hall of Fame ถาวร\n\n🔄 ระบบจะเปิดซีซั่นใหม่ทันทีหลังบันทึก`)) {
         if (!state.hallOfFame) state.hallOfFame = {};
         
         standings.forEach(team => {
@@ -10261,8 +10268,8 @@ async function saveCurrentChampToHistory() {
         
         state.hallOfFame[winner.id].trophies += 1;
         state.defendingChampId = winner.id;
-        if (document.getElementById("champion-action-bar")) document.getElementById("champion-action-bar").style.display = "none";
-        renderLeague(); saveDataToCloud();
+        // เปิดซีซั่นใหม่ทันที — ป้องกันการกดบันทึก HoF ซ้ำซึ่งจะทำให้สถิติพองเกินจริง
+        _doSeasonReset();
     }
 }
 
