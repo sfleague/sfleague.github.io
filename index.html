@@ -8967,7 +8967,9 @@ async function resetToNextSeason() {
     if (await showConfirm("🔄 ยืนยันการเปิดฉากสู่ซีซั่นถัดไป (Reset SS)?\nระบบจะล้างตารางเดิมทั้งหมดเพื่อเปิดฟอร์มหน้าแรกให้เพื่อนๆ มาลงทะเบียนใหม่อีกครั้ง")) {
         // ล้าง localStorage ที่เกี่ยวข้องทั้งหมด (รวม evidence)
         localStorage.removeItem(`my_player_id_ss_${state.season}`);
-        localStorage.removeItem(`evidence_imgs_${state.binId || 'local'}`);
+        // ลบ evidence ของซีซั่นปัจจุบัน (ทั้ง key แบบใหม่ที่รวม season และแบบเก่า)
+        localStorage.removeItem(_getEvidenceLocalKey());                        // key แบบใหม่ (มี _ss#)
+        localStorage.removeItem(`evidence_imgs_${state.binId || 'local'}`);    // key แบบเก่า (backward-compat)
 
         state.season = parseInt(state.season) ? state.season + 1 : 4;
         state.tournamentStarted = false;
@@ -9892,7 +9894,9 @@ function uploadMatchEvidenceFromModal(matchId) {
 }
 
 function _getEvidenceLocalKey() {
-    return `evidence_imgs_${state.binId || 'local'}`;
+    // รวมหมายเลขซีซั่นเข้าไปใน key เพื่อป้องกัน match ID ของซีซั่นใหม่
+    // ไปดึง evidence เก่าของซีซั่นก่อนหน้ามาแสดง (match ID เริ่มต้นซ้ำทุกซีซั่น)
+    return `evidence_imgs_${state.binId || 'local'}_ss${state.season || 0}`;
 }
 
 function _saveEvidenceToLocal() {
@@ -12117,7 +12121,8 @@ async function resetLeagueHard() {
         // 1. ล้าง localStorage ทั้งหมดที่เกี่ยวข้อง (รวม evidence)
         localStorage.removeItem(`my_player_id_ss_${state.season}`);
         localStorage.removeItem('wc_online_bin_id');
-        localStorage.removeItem(`evidence_imgs_${state.binId || 'local'}`);
+        localStorage.removeItem(_getEvidenceLocalKey());                        // key แบบใหม่ (มี _ss#)
+        localStorage.removeItem(`evidence_imgs_${state.binId || 'local'}`);    // key แบบเก่า (backward-compat)
 
         // 2. Wipe ข้อมูลบน cloud ให้ผู้ใช้ทุกคนที่มี URL เดิมก็ได้รับข้อมูลว่างเปล่า
         if (state.binId) {
